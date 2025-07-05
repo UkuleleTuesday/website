@@ -16,6 +16,11 @@ jobs:
   export-and-deploy:
     runs-on: ubuntu-latest
     
+    # Specify environment for Pages deployment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
     # Grant GITHUB_TOKEN write permissions for Pages deployment
     permissions:
       contents: read
