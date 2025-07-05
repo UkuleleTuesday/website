@@ -342,6 +342,14 @@ class StaticExporter:
 
     def run_download(self, output_dir: str) -> bool:
         """Run the complete export and download process"""
+        # Ensure output directory exists
+        try:
+            os.makedirs(output_dir, exist_ok=True)
+            logger.info(f"✓ Output directory ready: {output_dir}")
+        except OSError as e:
+            logger.error(f"✗ Failed to create output directory: {e}")
+            return False
+
         # Step 0: Ensure no export is currently running
         if not self.ensure_no_running_export():
             return False
