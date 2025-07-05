@@ -29,9 +29,12 @@ api_call() {
     local response
     local curl_exit_code
     
+    echo "DEBUG: Inside api_call function"
+    echo "DEBUG: method=$method, endpoint=$endpoint"
     echo "Making $method request to $endpoint..."
     echo "Full URL: $BASE_URL$endpoint"
     
+    echo "DEBUG: About to run curl command"
     set +e  # Temporarily disable exit on error
     response=$(curl --max-time 30 --connect-timeout 10 -s -w "\n%{http_code}" \
         -X "$method" \
@@ -39,6 +42,7 @@ api_call() {
         -H "Content-Type: application/json" \
         "$BASE_URL$endpoint" 2>&1)
     curl_exit_code=$?
+    echo "DEBUG: curl finished with exit code $curl_exit_code"
     set -e  # Re-enable exit on error
     
     if [ $curl_exit_code -ne 0 ]; then
@@ -61,12 +65,15 @@ api_call() {
         exit 1
     fi
     
+    echo "DEBUG: About to return body"
     echo "$body"
 }
 
 # Step 1: Check system status
 echo "Checking system status..."
+echo "DEBUG: About to call api_call"
 status_response=$(api_call "GET" "/system-status/passed")
+echo "DEBUG: api_call returned"
 
 # Parse the response to check if system checks passed
 if echo "$status_response" | grep -q '"passed":"yes"'; then
