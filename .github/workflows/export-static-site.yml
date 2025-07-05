@@ -34,19 +34,14 @@ jobs:
     - name: Setup Pages
       uses: actions/configure-pages@v4
     
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y jq curl
-    
-    - name: Make script executable
-      run: chmod +x ./run-static-export.sh
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
     
     - name: Run static export
       env:
         WP_USERNAME: ${{ secrets.WP_USERNAME }}
         WP_PASSWORD: ${{ secrets.WP_PASSWORD }}
-      run: ./run-static-export.sh
+      run: uv run export.py download -o ./static-export
     
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
