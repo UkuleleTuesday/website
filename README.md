@@ -56,3 +56,7 @@ The script interacts with the Simply Static plugin via these endpoints:
 - `/pause-export` - Pause export process
 - `/resume-export` - Resume paused export
 
+## Usage
+
+### Manual Execution
+
