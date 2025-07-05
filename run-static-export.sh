@@ -4,23 +4,23 @@
 set -e
 
 # Check required environment variables
-if [ -z "$USERNAME" ]; then
-    echo "Error: USERNAME environment variable is required"
+if [ -z "$WP_USERNAME" ]; then
+    echo "Error: WP_USERNAME environment variable is required"
     exit 1
 fi
 
-if [ -z "$PASSWORD" ]; then
-    echo "Error: PASSWORD environment variable is required"
+if [ -z "$WP_PASSWORD" ]; then
+    echo "Error: WP_PASSWORD environment variable is required"
     exit 1
 fi
 
 # Configuration
 BASE_URL="https://ukuleletuesday.ie/wp-json/simplystatic/v1"
-AUTH_HEADER="Authorization: Basic $(echo -n "$USERNAME:$PASSWORD" | base64)"
+AUTH_HEADER="Authorization: Basic $(echo -n "$WP_USERNAME:$WP_PASSWORD" | base64)"
 
 echo "Starting Simply Static export process..."
 echo "Using BASE_URL: $BASE_URL"
-echo "Using USERNAME: $USERNAME"
+echo "Using WP_USERNAME: $WP_USERNAME"
 
 # Function to make authenticated API calls
 api_call() {
