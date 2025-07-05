@@ -85,6 +85,55 @@ class StaticExporter:
             logger.error(f"Error: Request failed: {e}")
             sys.exit(1)
 
+    def check_if_export_running(self) -> bool:
+        """Check if an export is currently running"""
+        logger.info("Checking if export is already running...")
+        
+        api_result = self.api_call("GET", "/is-running")
+        response_data = api_result[0]
+        
+        is_running = response_data.get('running', False)
+        return is_running
+
+    def cancel_running_export(self) -> bool:
+        """Cancel any currently running export"""
+        logger.info("Canceling running export...")
+        
+        api_result = self.api_call("POST", "/cancel-export")
+        response_data = api_result[0]
+        
+        logger.info("✓ Export cancellation requested")
+        return True
+
+    def wait_for_export_to_stop(self, max_wait_time: int = 60) -> bool:
+        """Wait for any running export to stop"""
+        logger.info("Waiting for export to stop...")
+        
+        wait_interval = 5  # Check every 5 seconds
+        elapsed_time = 0
+        
+        while elapsed_time < max_wait_time:
+            if not self.check_if_export_running():
+                logger.info("✓ No export is currently running")
+                return True
+            
+            logger.info(f"Export still running, waiting... (elapsed: {elapsed_time}s)")
+            time.sleep(wait_interval)
+            elapsed_time += wait_interval
+        
+        logger.error(f"✗ Timed out waiting for export to stop after {max_wait_time} seconds")
+        return False
+
+    def ensure_no_running_export(self) -> bool:
+        """Ensure no export is running, cancel if necessary"""
+        if self.check_if_export_running():
+            logger.warning("⚠ An export is already running")
+            self.cancel_running_export()
+            return self.wait_for_export_to_stop()
+        else:
+            logger.info("✓ No export is currently running")
+            return True
+
     def check_system_status(self) -> bool:
         """Check if the system is ready for export"""
         logger.info("Checking system status...")
@@ -236,6 +285,10 @@ class StaticExporter:
 
     def run(self) -> bool:
         """Run the complete export process"""
+        # Step 0: Ensure no export is currently running
+        if not self.ensure_no_running_export():
+            return False
+
         # Step 1: Check system status
         if not self.check_system_status():
             return False
