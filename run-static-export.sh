@@ -48,7 +48,7 @@ api_call() {
     if [ $curl_exit_code -ne 0 ]; then
         echo "Error: curl command failed with exit code $curl_exit_code"
         echo "Response/Error: $response"
-        exit 1
+        return 1
     fi
     
     echo "Raw response: $response"
@@ -62,7 +62,7 @@ api_call() {
     if [ "$status_code" != "200" ]; then
         echo "Error: API call to $endpoint failed with status $status_code"
         echo "Response: $body"
-        exit 1
+        return 1
     fi
     
     echo "DEBUG: About to return body"
@@ -72,8 +72,21 @@ api_call() {
 # Step 1: Check system status
 echo "Checking system status..."
 echo "DEBUG: About to call api_call"
+
+# Call api_call and handle errors
+set +e
 status_response=$(api_call "GET" "/system-status/passed")
-echo "DEBUG: api_call returned"
+api_call_exit_code=$?
+set -e
+
+echo "DEBUG: api_call returned with exit code $api_call_exit_code"
+
+if [ $api_call_exit_code -ne 0 ]; then
+    echo "Error: API call failed"
+    exit 1
+fi
+
+echo "DEBUG: status_response=$status_response"
 
 # Parse the response to check if system checks passed
 if echo "$status_response" | grep -q '"passed":"yes"'; then
