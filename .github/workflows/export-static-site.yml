@@ -1,0 +1,19 @@
+name: Export Static Site
+
+on:
+  # Allow manual triggering
+  workflow_dispatch:
+  
+  # Run on schedule (daily at 2 AM UTC)
+  schedule:
+    - cron: '0 2 * * *'
+  
+  # Run on pushes to main branch (for testing)
+  push:
+    branches: [ main ]
+
+jobs:
+  export-and-deploy:
+    runs-on: ubuntu-latest
+    
+    # Grant
