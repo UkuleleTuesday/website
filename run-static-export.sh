@@ -67,6 +67,19 @@ api_call() {
     echo "$body"
 }
 
+# Function to parse JSON safely
+parse_json() {
+    local json_string="$1"
+    local key_path="$2"
+    
+    if command -v jq >/dev/null 2>&1; then
+        # First try to parse as-is, if that fails, try unescaping the JSON string
+        echo "$json_string" | jq -r "$key_path" 2>/dev/null || echo "$json_string" | jq -r ". | fromjson | $key_path" 2>/dev/null
+    else
+        echo "null"
+    fi
+}
+
 # Step 1: Check system status
 echo "Checking system status..."
 echo "DEBUG: About to call api_call"
@@ -85,26 +98,25 @@ fi
 echo "DEBUG: status_response=$status_response"
 
 # Parse the response to check if system checks passed
-# Use jq if available, otherwise use grep with proper JSON format
-if command -v jq >/dev/null 2>&1; then
-    # First try to parse as-is, if that fails, try unescaping the JSON string
-    passed_status=$(echo "$status_response" | jq -r '.passed' 2>/dev/null || echo "$status_response" | jq -r '. | fromjson | .passed' 2>/dev/null)
-    if [ "$passed_status" = "yes" ]; then
-        echo "✓ System status checks passed"
-    else
+passed_status=$(parse_json "$status_response" ".passed")
+
+if [ "$passed_status" = "yes" ]; then
+    echo "✓ System status checks passed"
+else
+    if command -v jq >/dev/null 2>&1; then
         echo "✗ System status checks failed"
         echo "Response: $status_response"
         echo "Parsed status: $passed_status"
         exit 1
-    fi
-else
-    # Fallback to grep - look for "passed":"yes" (with quotes around yes)
-    if echo "$status_response" | grep -q '"passed":"yes"'; then
-        echo "✓ System status checks passed"
     else
-        echo "✗ System status checks failed"
-        echo "Response: $status_response"
-        exit 1
+        # Fallback to grep - look for "passed":"yes" (with quotes around yes)
+        if echo "$status_response" | grep -q '"passed":"yes"'; then
+            echo "✓ System status checks passed"
+        else
+            echo "✗ System status checks failed"
+            echo "Response: $status_response"
+            exit 1
+        fi
     fi
 fi
 
@@ -122,31 +134,111 @@ fi
 echo "DEBUG: export_response=$export_response"
 
 # Parse the export start response
-if command -v jq >/dev/null 2>&1; then
-    # Try to parse the response to check if export started successfully
-    export_status=$(echo "$export_response" | jq -r '.status' 2>/dev/null || echo "$export_response" | jq -r '. | fromjson | .status' 2>/dev/null)
-    export_message=$(echo "$export_response" | jq -r '.message' 2>/dev/null || echo "$export_response" | jq -r '. | fromjson | .message' 2>/dev/null)
-    
-    if [ "$export_status" != "null" ] && [ "$export_status" != "" ]; then
-        echo "Export status: $export_status"
-    fi
-    
-    if [ "$export_message" != "null" ] && [ "$export_message" != "" ]; then
-        echo "Export message: $export_message"
-    fi
-    
-    echo "✓ Static site export has been started"
-else
-    # Fallback - just check if we got a reasonable response
-    if [ -n "$export_response" ]; then
-        echo "✓ Static site export has been started"
-        echo "Response: $export_response"
-    else
-        echo "✗ Failed to start export - empty response"
-        exit 1
-    fi
+export_status=$(parse_json "$export_response" ".status")
+export_message=$(parse_json "$export_response" ".message")
+
+if [ "$export_status" != "null" ] && [ "$export_status" != "" ]; then
+    echo "Export status: $export_status"
 fi
 
-echo "System is ready for export!"
-echo "Static site export process initiated successfully!"
+if [ "$export_message" != "null" ] && [ "$export_message" != "" ]; then
+    echo "Export message: $export_message"
+fi
+
+echo "✓ Static site export has been started"
+
+# Step 3: Monitor the export process using activity-log
+echo "Monitoring export progress..."
+
+DOWNLOAD_URL=""
+MAX_POLLING_TIME=1800  # 30 minutes
+POLLING_INTERVAL=10    # 10 seconds
+ELAPSED_TIME=0
+LAST_MESSAGE=""
+
+while [ $ELAPSED_TIME -lt $MAX_POLLING_TIME ]; do
+    echo "Checking export status... (elapsed: ${ELAPSED_TIME}s)"
+    
+    activity_response=$(api_call "GET" "/activity-log")
+    if [ $? -ne 0 ]; then
+        echo "Warning: Failed to get activity log, retrying in ${POLLING_INTERVAL}s..."
+        sleep $POLLING_INTERVAL
+        ELAPSED_TIME=$((ELAPSED_TIME + POLLING_INTERVAL))
+        continue
+    fi
+    
+    echo "DEBUG: activity_response=$activity_response"
+    
+    # Check if export is still running
+    is_running=$(parse_json "$activity_response" ".running")
+    echo "Export running: $is_running"
+    
+    # Get the current status messages
+    setup_msg=$(parse_json "$activity_response" ".data.setup.message")
+    fetch_msg=$(parse_json "$activity_response" ".data.fetch_urls.message")
+    create_zip_msg=$(parse_json "$activity_response" ".data.create_zip_archive.message")
+    wrapup_msg=$(parse_json "$activity_response" ".data.wrapup.message")
+    done_msg=$(parse_json "$activity_response" ".data.done.message")
+    
+    # Display current progress
+    current_message=""
+    if [ "$done_msg" != "null" ] && [ "$done_msg" != "" ]; then
+        current_message="✓ $done_msg"
+    elif [ "$wrapup_msg" != "null" ] && [ "$wrapup_msg" != "" ]; then
+        current_message="⏳ $wrapup_msg"
+    elif [ "$create_zip_msg" != "null" ] && [ "$create_zip_msg" != "" ]; then
+        current_message="📦 Creating ZIP archive..."
+    elif [ "$fetch_msg" != "null" ] && [ "$fetch_msg" != "" ]; then
+        current_message="📄 $fetch_msg"
+    elif [ "$setup_msg" != "null" ] && [ "$setup_msg" != "" ]; then
+        current_message="🔧 $setup_msg"
+    fi
+    
+    # Only print if message changed
+    if [ "$current_message" != "$LAST_MESSAGE" ] && [ "$current_message" != "" ]; then
+        echo "$current_message"
+        LAST_MESSAGE="$current_message"
+    fi
+    
+    # Check for download URL in the create_zip_archive message
+    if [ "$create_zip_msg" != "null" ] && [ "$create_zip_msg" != "" ]; then
+        # Extract download URL from the message using grep and sed
+        DOWNLOAD_URL=$(echo "$create_zip_msg" | grep -o 'https://[^"]*\.zip' || echo "")
+        if [ -n "$DOWNLOAD_URL" ]; then
+            echo "✓ ZIP archive created successfully!"
+            echo "Download URL found: $DOWNLOAD_URL"
+        fi
+    fi
+    
+    # Check if export is complete
+    if [ "$is_running" = "false" ]; then
+        if [ "$done_msg" != "null" ] && [ "$done_msg" != "" ]; then
+            echo "✓ Export completed successfully!"
+            echo "Final message: $done_msg"
+            break
+        else
+            echo "✗ Export stopped but no completion message found"
+            echo "Activity response: $activity_response"
+            exit 1
+        fi
+    fi
+    
+    sleep $POLLING_INTERVAL
+    ELAPSED_TIME=$((ELAPSED_TIME + POLLING_INTERVAL))
+done
+
+# Check if we timed out
+if [ $ELAPSED_TIME -ge $MAX_POLLING_TIME ]; then
+    echo "✗ Export process timed out after ${MAX_POLLING_TIME} seconds"
+    exit 1
+fi
+
+# Verify we have a download URL
+if [ -z "$DOWNLOAD_URL" ]; then
+    echo "✗ Export completed but no download URL was found"
+    exit 1
+fi
+
+echo "✓ Export process completed successfully!"
+echo "Download URL: $DOWNLOAD_URL"
 echo "Script completed successfully!"
