@@ -52,30 +52,20 @@ class StaticExporter:
         """Make authenticated API calls to the Simply Static API"""
         url = f"{self.base_url}{endpoint}"
 
-        logger.info(f"DEBUG: Inside api_call function")
-        logger.info(f"DEBUG: method={method}, endpoint={endpoint}")
         logger.info(f"Making {method} request to {endpoint}...")
-        logger.info(f"Full URL: {url}")
 
         try:
-            logger.info("DEBUG: About to run requests call")
             response = requests.request(
                 method=method,
                 url=url,
                 headers=self.headers,
                 timeout=30
             )
-            logger.info(f"DEBUG: requests finished with status code {response.status_code}")
-
-            logger.info(f"Raw response: {response.text}")
-            logger.info(f"Status code: {response.status_code}")
 
             if response.status_code != 200:
                 logger.error(f"Error: API call to {endpoint} failed with status {response.status_code}")
                 logger.error(f"Response: {response.text}")
                 sys.exit(1)
-
-            logger.info("DEBUG: About to return response")
 
             # Parse JSON response
             try:
@@ -98,19 +88,10 @@ class StaticExporter:
     def check_system_status(self) -> bool:
         """Check if the system is ready for export"""
         logger.info("Checking system status...")
-        logger.info("DEBUG: About to call api_call")
 
         api_result = self.api_call("GET", "/system-status/passed")
-        logger.info(f"DEBUG: api_call returned: {api_result}")
-        logger.info(f"DEBUG: api_result type: {type(api_result)}")
-
         status_response = api_result[0]
         status_code = api_result[1]
-
-        logger.info("DEBUG: api_call returned successfully")
-        logger.info(f"DEBUG: status_response={status_response}")
-        logger.info(f"DEBUG: status_response type={type(status_response)}")
-        logger.info(f"DEBUG: status_code={status_code}")
 
         # Parse the response to check if system checks passed
         passed_status = status_response.get('passed')
@@ -131,8 +112,6 @@ class StaticExporter:
         api_result = self.api_call("POST", "/start-export")
         export_response = api_result[0]
         status_code = api_result[1]
-
-        logger.info(f"DEBUG: export_response={export_response}")
 
         # Parse the export start response
         export_status = export_response.get('status')
@@ -170,17 +149,12 @@ class StaticExporter:
                 elapsed_time += polling_interval
                 continue
 
-            logger.info(f"DEBUG: activity_response={activity_response}")
-
             # Check if export is still running
             is_running = activity_response.get('running', False)
             logger.info(f"Export running: {is_running}")
 
             # Check the data structure - it might be an array or object
             data = activity_response.get('data', {})
-            data_type = type(data).__name__
-            logger.info(f"DEBUG: data type is: {data_type}")
-
             current_message = ""
 
             if isinstance(data, dict):
@@ -222,7 +196,6 @@ class StaticExporter:
                     current_message = "⏳ Export in progress... (waiting for activity data)"
             else:
                 # Unknown data format
-                logger.info(f"DEBUG: Unknown data format: {data_type}")
                 if is_running:
                     current_message = "⏳ Export in progress..."
 
