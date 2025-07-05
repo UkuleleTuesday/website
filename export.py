@@ -76,18 +76,15 @@ class StaticExporter:
             
             logger.info("DEBUG: About to return response")
             
-            # Try to parse JSON, but handle escaped JSON strings
+            # Parse JSON response
             try:
                 data = response.json()
-            except json.JSONDecodeError:
-                # Try to handle escaped JSON string
-                try:
-                    data = json.loads(response.text)
-                except json.JSONDecodeError:
-                    logger.error(f"Failed to parse JSON response: {response.text}")
-                    sys.exit(1)
-            
-            return data, response.status_code
+                logger.info(f"DEBUG: Successfully parsed JSON: {data}")
+                return data, response.status_code
+            except json.JSONDecodeError as e:
+                logger.error(f"Failed to parse JSON response: {response.text}")
+                logger.error(f"JSON decode error: {e}")
+                sys.exit(1)
             
         except requests.exceptions.RequestException as e:
             logger.error(f"Error: Request failed: {e}")
