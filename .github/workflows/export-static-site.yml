@@ -48,6 +48,15 @@ jobs:
         WP_PASSWORD: ${{ secrets.WP_PASSWORD }}
       run: uv run export.py download -o ./static-export
     
+    - name: Copy extra assets
+      run: |
+        if [ -d "./extra-assets" ]; then
+          cp -r ./extra-assets/* ./static-export/
+          echo "✓ Copied extra assets to static-export"
+        else
+          echo "No extra-assets directory found, skipping"
+        fi
+    
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
