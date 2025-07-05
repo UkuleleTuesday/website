@@ -13,6 +13,8 @@ import requests
 import json
 import tempfile
 import zipfile
+import shutil
+import click
 from pathlib import Path
 from typing import Dict, Any, Optional, Tuple
 
@@ -290,13 +292,13 @@ class StaticExporter:
 
         return download_url
 
-    def download_and_extract_zip(self, download_url: str) -> Optional[str]:
-        """Download the ZIP file and extract it to a temporary directory"""
+    def download_and_extract_zip(self, download_url: str, output_dir: str) -> bool:
+        """Download the ZIP file and extract it to the specified directory"""
         logger.info("Downloading static site archive...")
         
         try:
-            # Create a temporary directory for extraction
-            temp_dir = tempfile.mkdtemp(prefix='ukulele_tuesday_static_')
+            # Create a temporary directory for the download
+            temp_dir = tempfile.mkdtemp(prefix='ukulele_tuesday_download_')
             logger.info(f"Created temporary directory: {temp_dir}")
             
             # Download the ZIP file
@@ -310,36 +312,36 @@ class StaticExporter:
             
             logger.info(f"✓ Downloaded ZIP file ({len(response.content)} bytes)")
             
-            # Extract the ZIP file
-            extract_dir = os.path.join(temp_dir, 'extracted')
-            os.makedirs(extract_dir, exist_ok=True)
+            # Ensure output directory exists
+            os.makedirs(output_dir, exist_ok=True)
             
+            # Extract the ZIP file directly to the output directory
             with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-                zip_ref.extractall(extract_dir)
+                zip_ref.extractall(output_dir)
             
             # Count extracted files
-            extracted_files = list(Path(extract_dir).rglob('*'))
+            extracted_files = list(Path(output_dir).rglob('*'))
             file_count = len([f for f in extracted_files if f.is_file()])
             
-            logger.info(f"✓ Extracted {file_count} files to {extract_dir}")
+            logger.info(f"✓ Extracted {file_count} files to {output_dir}")
             
-            # Clean up the ZIP file
-            os.remove(zip_path)
+            # Clean up the temporary directory
+            shutil.rmtree(temp_dir)
             
-            return extract_dir
+            return True
             
         except requests.exceptions.RequestException as e:
             logger.error(f"✗ Failed to download ZIP file: {e}")
-            return None
+            return False
         except zipfile.BadZipFile as e:
             logger.error(f"✗ Failed to extract ZIP file: {e}")
-            return None
+            return False
         except Exception as e:
             logger.error(f"✗ Unexpected error during download/extraction: {e}")
-            return None
+            return False
 
-    def run(self) -> bool:
-        """Run the complete export process"""
+    def run_download(self, output_dir: str) -> bool:
+        """Run the complete export and download process"""
         # Step 0: Ensure no export is currently running
         if not self.ensure_no_running_export():
             return False
@@ -360,27 +362,37 @@ class StaticExporter:
 
         # Step 4: Download and extract the static site
         if download_url:
-            extract_dir = self.download_and_extract_zip(download_url)
-            if extract_dir:
-                logger.info("✓ Export process completed successfully!")
-                logger.info(f"Static site extracted to: {extract_dir}")
+            success = self.download_and_extract_zip(download_url, output_dir)
+            if success:
+                logger.info("✓ Export and download process completed successfully!")
+                logger.info(f"Static site extracted to: {output_dir}")
+                return True
             else:
                 logger.error("✗ Failed to download and extract static site")
                 return False
         else:
             logger.warning("⚠ Export completed but no download URL was found")
             logger.warning("This might be normal if the site is configured for direct deployment")
+            return False
 
-        logger.info("Script completed successfully!")
-        return True
 
-def main():
-    """Main entry point"""
+@click.group()
+def cli():
+    """Ukulele Tuesday static site export tool"""
+    pass
+
+
+@cli.command()
+@click.option('-o', '--output', 'output_dir', required=True, 
+              help='Output directory for the extracted static site')
+def download(output_dir: str):
+    """Export the WordPress site and download the static files"""
     exporter = StaticExporter()
-    success = exporter.run()
-
+    success = exporter.run_download(output_dir)
+    
     if not success:
         sys.exit(1)
 
+
 if __name__ == "__main__":
-    main()
+    cli()
