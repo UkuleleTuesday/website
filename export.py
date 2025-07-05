@@ -178,6 +178,10 @@ class StaticExporter:
     def monitor_export_progress(self) -> Optional[str]:
         """Monitor the export process and return download URL when available"""
         logger.info("Monitoring export progress...")
+        
+        # Wait 10 seconds before starting to poll
+        logger.info("Waiting 10 seconds before starting to monitor...")
+        time.sleep(10)
 
         download_url = ""
         max_polling_time = 1800  # 30 minutes
