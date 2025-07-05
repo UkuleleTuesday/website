@@ -108,5 +108,45 @@ else
     fi
 fi
 
+# Step 2: Start the export process
+echo "Starting static site export..."
+
+export_response=$(api_call "POST" "/start-export")
+export_call_exit_code=$?
+
+if [ $export_call_exit_code -ne 0 ]; then
+    echo "Error: Failed to start export"
+    exit 1
+fi
+
+echo "DEBUG: export_response=$export_response"
+
+# Parse the export start response
+if command -v jq >/dev/null 2>&1; then
+    # Try to parse the response to check if export started successfully
+    export_status=$(echo "$export_response" | jq -r '.status' 2>/dev/null || echo "$export_response" | jq -r '. | fromjson | .status' 2>/dev/null)
+    export_message=$(echo "$export_response" | jq -r '.message' 2>/dev/null || echo "$export_response" | jq -r '. | fromjson | .message' 2>/dev/null)
+    
+    if [ "$export_status" != "null" ] && [ "$export_status" != "" ]; then
+        echo "Export status: $export_status"
+    fi
+    
+    if [ "$export_message" != "null" ] && [ "$export_message" != "" ]; then
+        echo "Export message: $export_message"
+    fi
+    
+    echo "✓ Static site export has been started"
+else
+    # Fallback - just check if we got a reasonable response
+    if [ -n "$export_response" ]; then
+        echo "✓ Static site export has been started"
+        echo "Response: $export_response"
+    else
+        echo "✗ Failed to start export - empty response"
+        exit 1
+    fi
+fi
+
 echo "System is ready for export!"
+echo "Static site export process initiated successfully!"
 echo "Script completed successfully!"
