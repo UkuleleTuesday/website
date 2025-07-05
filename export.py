@@ -80,6 +80,7 @@ class StaticExporter:
             try:
                 data = response.json()
                 logger.info(f"DEBUG: Successfully parsed JSON: {data}")
+                logger.info(f"DEBUG: Returning tuple: ({data}, {response.status_code})")
                 return data, response.status_code
             except json.JSONDecodeError as e:
                 logger.error(f"Failed to parse JSON response: {response.text}")
@@ -99,6 +100,7 @@ class StaticExporter:
         
         logger.info("DEBUG: api_call returned successfully")
         logger.info(f"DEBUG: status_response={status_response}")
+        logger.info(f"DEBUG: status_response type={type(status_response)}")
         
         # Parse the response to check if system checks passed
         passed_status = status_response.get('passed')
