@@ -19,7 +19,7 @@ The export process consists of several steps:
 
 ### Scripts
 
-- `run-static-export.sh` - Main script that orchestrates the export process
+- `export.py` - Main script that orchestrates the export process
   - Checks system status via Simply Static API
   - Triggers static site generation
   - Monitors export progress
@@ -60,3 +60,8 @@ The script interacts with the Simply Static plugin via these endpoints:
 
 ### Manual Execution
 
+Run with:
+
+```
+uv run export.py
+```
