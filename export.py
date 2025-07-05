@@ -93,39 +93,39 @@ class StaticExporter:
     def check_if_export_running(self) -> bool:
         """Check if an export is currently running"""
         logger.info("Checking if export is already running...")
-        
+
         api_result = self.api_call("GET", "/is-running")
         response_data = api_result[0]
-        
+
         is_running = response_data.get('running', False)
         return is_running
 
     def cancel_running_export(self) -> bool:
         """Cancel any currently running export"""
         logger.info("Canceling running export...")
-        
+
         api_result = self.api_call("POST", "/cancel-export")
         response_data = api_result[0]
-        
+
         logger.info("✓ Export cancellation requested")
         return True
 
     def wait_for_export_to_stop(self, max_wait_time: int = 60) -> bool:
         """Wait for any running export to stop"""
         logger.info("Waiting for export to stop...")
-        
+
         wait_interval = 5  # Check every 5 seconds
         elapsed_time = 0
-        
+
         while elapsed_time < max_wait_time:
             if not self.check_if_export_running():
                 logger.info("✓ No export is currently running")
                 return True
-            
+
             logger.info(f"Export still running, waiting... (elapsed: {elapsed_time}s)")
             time.sleep(wait_interval)
             elapsed_time += wait_interval
-        
+
         logger.error(f"✗ Timed out waiting for export to stop after {max_wait_time} seconds")
         return False
 
@@ -183,7 +183,7 @@ class StaticExporter:
     def monitor_export_progress(self) -> Optional[str]:
         """Monitor the export process and return download URL when available"""
         logger.info("Monitoring export progress...")
-        
+
         # Wait 10 seconds before starting to poll
         logger.info("Waiting 10 seconds before starting to monitor...")
         time.sleep(10)
@@ -295,41 +295,41 @@ class StaticExporter:
     def download_and_extract_zip(self, download_url: str, output_dir: str) -> bool:
         """Download the ZIP file and extract it to the specified directory"""
         logger.info("Downloading static site archive...")
-        
+
         try:
             # Create a temporary directory for the download
             temp_dir = tempfile.mkdtemp(prefix='ukulele_tuesday_download_')
             logger.info(f"Created temporary directory: {temp_dir}")
-            
+
             # Download the ZIP file
             response = requests.get(download_url, timeout=300)  # 5 minute timeout for download
             response.raise_for_status()
-            
+
             # Save to a temporary ZIP file
             zip_path = os.path.join(temp_dir, 'static_site.zip')
             with open(zip_path, 'wb') as f:
                 f.write(response.content)
-            
+
             logger.info(f"✓ Downloaded ZIP file ({len(response.content)} bytes)")
-            
+
             # Ensure output directory exists
             os.makedirs(output_dir, exist_ok=True)
-            
+
             # Extract the ZIP file directly to the output directory
             with zipfile.ZipFile(zip_path, 'r') as zip_ref:
                 zip_ref.extractall(output_dir)
-            
+
             # Count extracted files
             extracted_files = list(Path(output_dir).rglob('*'))
             file_count = len([f for f in extracted_files if f.is_file()])
-            
+
             logger.info(f"✓ Extracted {file_count} files to {output_dir}")
-            
+
             # Clean up the temporary directory
             shutil.rmtree(temp_dir)
-            
+
             return True
-            
+
         except requests.exceptions.RequestException as e:
             logger.error(f"✗ Failed to download ZIP file: {e}")
             return False
@@ -383,13 +383,13 @@ def cli():
 
 
 @cli.command()
-@click.option('-o', '--output', 'output_dir', required=True, 
+@click.option('-o', '--output', 'output_dir', required=True,
               help='Output directory for the extracted static site')
 def download(output_dir: str):
     """Export the WordPress site and download the static files"""
     exporter = StaticExporter()
     success = exporter.run_download(output_dir)
-    
+
     if not success:
         sys.exit(1)
 
