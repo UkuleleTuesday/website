@@ -80,8 +80,12 @@ class StaticExporter:
             try:
                 data = response.json()
                 logger.info(f"DEBUG: Successfully parsed JSON: {data}")
-                logger.info(f"DEBUG: Returning tuple: ({data}, {response.status_code})")
-                return data, response.status_code
+                logger.info(f"DEBUG: data type: {type(data)}")
+                result_tuple = (data, response.status_code)
+                logger.info(f"DEBUG: Returning tuple: {result_tuple}")
+                logger.info(f"DEBUG: Tuple type: {type(result_tuple)}")
+                logger.info(f"DEBUG: First element type: {type(result_tuple[0])}")
+                return result_tuple
             except json.JSONDecodeError as e:
                 logger.error(f"Failed to parse JSON response: {response.text}")
                 logger.error(f"JSON decode error: {e}")
@@ -96,11 +100,17 @@ class StaticExporter:
         logger.info("Checking system status...")
         logger.info("DEBUG: About to call api_call")
         
-        status_response, status_code = self.api_call("GET", "/system-status/passed")
+        api_result = self.api_call("GET", "/system-status/passed")
+        logger.info(f"DEBUG: api_call returned: {api_result}")
+        logger.info(f"DEBUG: api_result type: {type(api_result)}")
+        
+        status_response = api_result[0]
+        status_code = api_result[1]
         
         logger.info("DEBUG: api_call returned successfully")
         logger.info(f"DEBUG: status_response={status_response}")
         logger.info(f"DEBUG: status_response type={type(status_response)}")
+        logger.info(f"DEBUG: status_code={status_code}")
         
         # Parse the response to check if system checks passed
         passed_status = status_response.get('passed')
@@ -118,7 +128,9 @@ class StaticExporter:
         """Start the static site export process"""
         logger.info("Starting static site export...")
         
-        export_response, status_code = self.api_call("POST", "/start-export")
+        api_result = self.api_call("POST", "/start-export")
+        export_response = api_result[0]
+        status_code = api_result[1]
         
         logger.info(f"DEBUG: export_response={export_response}")
         
@@ -149,7 +161,9 @@ class StaticExporter:
             logger.info(f"Checking export status... (elapsed: {elapsed_time}s)")
             
             try:
-                activity_response, status_code = self.api_call("GET", "/activity-log")
+                api_result = self.api_call("GET", "/activity-log")
+                activity_response = api_result[0]
+                status_code = api_result[1]
             except SystemExit:
                 logger.warning(f"Warning: Failed to get activity log, retrying in {polling_interval}s...")
                 time.sleep(polling_interval)
