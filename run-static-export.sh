@@ -26,11 +26,16 @@ api_call() {
     local endpoint="$2"
     local response
     
-    response=$(curl -s -w "\n%{http_code}" \
+    echo "Making $method request to $endpoint..."
+    
+    response=$(curl --max-time 30 --connect-timeout 10 -s -w "\n%{http_code}" \
         -X "$method" \
         -H "$AUTH_HEADER" \
         -H "Content-Type: application/json" \
-        "$BASE_URL$endpoint")
+        "$BASE_URL$endpoint" || {
+        echo "Error: curl command failed"
+        exit 1
+    })
     
     local body=$(echo "$response" | head -n -1)
     local status_code=$(echo "$response" | tail -n 1)
