@@ -10,7 +10,7 @@ The Ukulele Tuesday website (https://ukuleletuesday.ie) is a WordPress site that
 
 The export process consists of several steps:
 
-1. **Export**: Uses the Simply Static WordPress plugin's REST API to generate a static version of the site
+1. **Export**: Uses the [Simply Static](https://docs.simplystatic.com/) WordPress plugin's REST API to generate a static version of the site
 2. **Download**: Retrieves the generated static files from the WordPress server
 3. **Clean**: Processes and optimizes the static files (removes WordPress-specific elements, optimizes assets, etc.)
 4. **Publish**: Deploys the cleaned static files to GitHub Pages
@@ -37,7 +37,7 @@ The export process consists of several steps:
 - WordPress site with Simply Static plugin installed and configured
 - WordPress user account with appropriate permissions
 - GitHub repository with Pages enabled
-- Python 3.12+ with uv package manager
+- Python 3.12+ with [uv](https://github.com/astral-sh/uv) package manager
 
 ## Installation
 
@@ -114,7 +114,7 @@ The GitHub Actions workflow runs automatically:
 
 ## API Endpoints
 
-The script interacts with the Simply Static plugin via these endpoints:
+The script interacts with the [Simply Static](https://docs.simplystatic.com/) plugin via these endpoints:
 
 - `/system-status/passed` - Check if system is ready for export
 - `/start-export` - Initiate static site generation
@@ -128,9 +128,7 @@ The script interacts with the Simply Static plugin via these endpoints:
 ├── .github/
 │   └── workflows/
 │       └── export-static-site.yml    # GitHub Actions workflow
-├── extra-assets/                     # Additional assets to include
-│   └── wp-admin/
-│       └── admin-ajax.css           # CSS replacement for dynamic requests
+├── extra-assets/                     # Additional assets to include (the wordpress export misses some stuff)
 ├── export.py                        # Main export script
 ├── pyproject.toml                   # Python project configuration
 ├── uv.lock                          # Dependency lock file
@@ -154,7 +152,3 @@ The automated workflow performs these steps:
 
 - **click** - Command-line interface framework
 - **requests** - HTTP library for API calls
-
-## License
-
-This project is open source.
