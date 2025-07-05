@@ -29,43 +29,41 @@ api_call() {
     local response
     local curl_exit_code
     
-    echo "DEBUG: Inside api_call function"
-    echo "DEBUG: method=$method, endpoint=$endpoint"
-    echo "Making $method request to $endpoint..."
-    echo "Full URL: $BASE_URL$endpoint"
+    echo "DEBUG: Inside api_call function" >&2
+    echo "DEBUG: method=$method, endpoint=$endpoint" >&2
+    echo "Making $method request to $endpoint..." >&2
+    echo "Full URL: $BASE_URL$endpoint" >&2
     
-    echo "DEBUG: About to run curl command"
-    set +e  # Temporarily disable exit on error
+    echo "DEBUG: About to run curl command" >&2
     response=$(curl --max-time 30 --connect-timeout 10 -s -w "\n%{http_code}" \
         -X "$method" \
         -H "$AUTH_HEADER" \
         -H "Content-Type: application/json" \
         "$BASE_URL$endpoint" 2>&1)
     curl_exit_code=$?
-    echo "DEBUG: curl finished with exit code $curl_exit_code"
-    set -e  # Re-enable exit on error
+    echo "DEBUG: curl finished with exit code $curl_exit_code" >&2
     
     if [ $curl_exit_code -ne 0 ]; then
-        echo "Error: curl command failed with exit code $curl_exit_code"
-        echo "Response/Error: $response"
+        echo "Error: curl command failed with exit code $curl_exit_code" >&2
+        echo "Response/Error: $response" >&2
         return 1
     fi
     
-    echo "Raw response: $response"
+    echo "Raw response: $response" >&2
     
     local body=$(echo "$response" | head -n -1)
     local status_code=$(echo "$response" | tail -n 1)
     
-    echo "Response body: $body"
-    echo "Status code: $status_code"
+    echo "Response body: $body" >&2
+    echo "Status code: $status_code" >&2
     
     if [ "$status_code" != "200" ]; then
-        echo "Error: API call to $endpoint failed with status $status_code"
-        echo "Response: $body"
+        echo "Error: API call to $endpoint failed with status $status_code" >&2
+        echo "Response: $body" >&2
         return 1
     fi
     
-    echo "DEBUG: About to return body"
+    echo "DEBUG: About to return body" >&2
     echo "$body"
 }
 
@@ -74,10 +72,8 @@ echo "Checking system status..."
 echo "DEBUG: About to call api_call"
 
 # Call api_call and handle errors
-set +e
 status_response=$(api_call "GET" "/system-status/passed")
 api_call_exit_code=$?
-set -e
 
 echo "DEBUG: api_call returned with exit code $api_call_exit_code"
 
