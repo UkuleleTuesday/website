@@ -87,12 +87,14 @@ echo "DEBUG: status_response=$status_response"
 # Parse the response to check if system checks passed
 # Use jq if available, otherwise use grep with proper JSON format
 if command -v jq >/dev/null 2>&1; then
-    passed_status=$(echo "$status_response" | jq -r '.passed')
+    # First try to parse as-is, if that fails, try unescaping the JSON string
+    passed_status=$(echo "$status_response" | jq -r '.passed' 2>/dev/null || echo "$status_response" | jq -r '. | fromjson | .passed' 2>/dev/null)
     if [ "$passed_status" = "yes" ]; then
         echo "✓ System status checks passed"
     else
         echo "✗ System status checks failed"
         echo "Response: $status_response"
+        echo "Parsed status: $passed_status"
         exit 1
     fi
 else
