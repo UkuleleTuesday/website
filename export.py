@@ -11,6 +11,9 @@ import base64
 import logging
 import requests
 import json
+import tempfile
+import zipfile
+from pathlib import Path
 from typing import Dict, Any, Optional, Tuple
 
 # Configure logging
@@ -287,6 +290,54 @@ class StaticExporter:
 
         return download_url
 
+    def download_and_extract_zip(self, download_url: str) -> Optional[str]:
+        """Download the ZIP file and extract it to a temporary directory"""
+        logger.info("Downloading static site archive...")
+        
+        try:
+            # Create a temporary directory for extraction
+            temp_dir = tempfile.mkdtemp(prefix='ukulele_tuesday_static_')
+            logger.info(f"Created temporary directory: {temp_dir}")
+            
+            # Download the ZIP file
+            response = requests.get(download_url, timeout=300)  # 5 minute timeout for download
+            response.raise_for_status()
+            
+            # Save to a temporary ZIP file
+            zip_path = os.path.join(temp_dir, 'static_site.zip')
+            with open(zip_path, 'wb') as f:
+                f.write(response.content)
+            
+            logger.info(f"✓ Downloaded ZIP file ({len(response.content)} bytes)")
+            
+            # Extract the ZIP file
+            extract_dir = os.path.join(temp_dir, 'extracted')
+            os.makedirs(extract_dir, exist_ok=True)
+            
+            with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+                zip_ref.extractall(extract_dir)
+            
+            # Count extracted files
+            extracted_files = list(Path(extract_dir).rglob('*'))
+            file_count = len([f for f in extracted_files if f.is_file()])
+            
+            logger.info(f"✓ Extracted {file_count} files to {extract_dir}")
+            
+            # Clean up the ZIP file
+            os.remove(zip_path)
+            
+            return extract_dir
+            
+        except requests.exceptions.RequestException as e:
+            logger.error(f"✗ Failed to download ZIP file: {e}")
+            return None
+        except zipfile.BadZipFile as e:
+            logger.error(f"✗ Failed to extract ZIP file: {e}")
+            return None
+        except Exception as e:
+            logger.error(f"✗ Unexpected error during download/extraction: {e}")
+            return None
+
     def run(self) -> bool:
         """Run the complete export process"""
         # Step 0: Ensure no export is currently running
@@ -307,14 +358,18 @@ class StaticExporter:
         if download_url is None:
             return False
 
-        # If we still don't have a download URL, that's not necessarily a failure
-        # The export might be configured differently (e.g., direct deployment)
-        if not download_url:
+        # Step 4: Download and extract the static site
+        if download_url:
+            extract_dir = self.download_and_extract_zip(download_url)
+            if extract_dir:
+                logger.info("✓ Export process completed successfully!")
+                logger.info(f"Static site extracted to: {extract_dir}")
+            else:
+                logger.error("✗ Failed to download and extract static site")
+                return False
+        else:
             logger.warning("⚠ Export completed but no download URL was found")
             logger.warning("This might be normal if the site is configured for direct deployment")
-        else:
-            logger.info("✓ Export process completed successfully!")
-            logger.info(f"Download URL: {download_url}")
 
         logger.info("Script completed successfully!")
         return True
