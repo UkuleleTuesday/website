@@ -12,14 +12,17 @@ on:
   push:
     branches: [ main ]
 
+  # Run on pull requests
+  pull_request:
+
 jobs:
   export-and-deploy:
     runs-on: ubuntu-latest
     
     # Use a concurrency group to prevent multiple exports running simultaneously
     concurrency:
-      group: "netlify-deploy"
-      cancel-in-progress: false
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
     
     steps:
     - name: Checkout repository
@@ -51,10 +54,19 @@ jobs:
           echo "No extra-assets directory found, skipping"
         fi
     
+    - name: Set Netlify deployment arguments
+      id: netlify_args
+      run: |
+        if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+          echo "deploy_args=deploy --dir=./static-export" >> "$GITHUB_OUTPUT"
+        else
+          echo "deploy_args=deploy --dir=./static-export --prod" >> "$GITHUB_OUTPUT"
+        fi
+
     - name: Deploy to Netlify
       uses: netlify/actions/cli@master
       with:
-        args: deploy --dir=./static-export --prod
+        args: ${{ steps.netlify_args.outputs.deploy_args }}
       env:
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
