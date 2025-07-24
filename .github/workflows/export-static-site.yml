@@ -40,9 +40,9 @@ jobs:
     - name: Fix paths in static site
       run: |
         cd ./static-export
-        grep -rl --include='*.html' 'action=dynamic_css#038;ver=6.8.1' . \
-          | xargs sed -i \
-              's@/wp-admin/admin-ajax\.php?action=dynamic_css#038;ver=6\.8\.1@/wp-admin/admin-ajax.css@g'
+        grep -rl --include='*.html' 'action=dynamic_css#038;ver=' . \
+          | xargs sed -i -E \
+              's@/wp-admin/admin-ajax\.php\?action=dynamic_css#038;ver=[^"]*@/wp-admin/admin-ajax.css@g'
         echo "✓ Fixed paths in static site"
     
     - name: Copy extra assets
