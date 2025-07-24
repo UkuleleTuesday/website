@@ -188,6 +188,21 @@ class StaticExporter:
         logger.info("Waiting 30 seconds before starting to monitor...")
         time.sleep(30)
 
+        # Retry loop to wait for export to start, because the API is... special
+        max_start_wait = 120  # 2 minutes
+        start_wait_interval = 10  # 10 seconds
+        start_elapsed = 0
+        while start_elapsed < max_start_wait:
+            if self.check_if_export_running():
+                logger.info("✓ Export process has started.")
+                break
+            logger.warning(f"Export not started yet, waiting {start_wait_interval}s...")
+            time.sleep(start_wait_interval)
+            start_elapsed += start_wait_interval
+        else:
+            logger.error(f"✗ Export did not start within {max_start_wait} seconds.")
+            return None
+
         download_url = ""
         max_polling_time = 1800  # 30 minutes
         polling_interval = 10    # 10 seconds
