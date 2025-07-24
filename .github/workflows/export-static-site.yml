@@ -16,28 +16,14 @@ jobs:
   export-and-deploy:
     runs-on: ubuntu-latest
     
-    # Specify environment for Pages deployment
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    
-    # Grant GITHUB_TOKEN write permissions for Pages deployment
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    
     # Use a concurrency group to prevent multiple exports running simultaneously
     concurrency:
-      group: "pages"
+      group: "netlify-deploy"
       cancel-in-progress: false
     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-    
-    - name: Setup Pages
-      uses: actions/configure-pages@v4
     
     - name: Install uv
       uses: astral-sh/setup-uv@v4
@@ -65,11 +51,10 @@ jobs:
           echo "No extra-assets directory found, skipping"
         fi
     
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v3
+    - name: Deploy to Netlify
+      uses: netlify/actions/cli@master
       with:
-        path: './static-export'
-    
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4
+        args: deploy --dir=./static-export --prod
+      env:
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
