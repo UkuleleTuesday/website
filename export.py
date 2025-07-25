@@ -35,7 +35,7 @@ class StaticExporter:
             stop_export_poll_interval_seconds: int = 5,
             export_start_timeout_seconds: int = 120,
             export_start_poll_interval_seconds: int = 10,
-            export_monitor_timeout_seconds: int = 60,
+            export_monitor_timeout_seconds: int = 120,
             export_monitor_poll_interval_seconds: int = 10,
             zip_download_timeout_seconds: int = 300
     ):
