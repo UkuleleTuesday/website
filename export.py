@@ -288,6 +288,8 @@ class StaticExporter:
             if current_message != last_message and current_message:
                 logger.info(current_message)
                 last_message = current_message
+                # Reset elapsed time since we have activity
+                elapsed_time = 0
 
             # Check if export is complete
             if not is_running:
