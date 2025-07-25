@@ -10,6 +10,7 @@ Rewrite CF7 markup so Netlify picks it up.
     Netlify simply ignores the extra hidden fields & JS.
 """
 import pathlib
+import sys
 import bs4
 import click
 import logging
