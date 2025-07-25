@@ -47,6 +47,9 @@ jobs:
     - name: Install uv
       uses: astral-sh/setup-uv@v4
 
+    - name: Fix paths in static site
+      run: uv run export_tools.py fix-paths ./static-export
+
     - name: Remove unused assets
       run: uv run export_tools.py remove-unused-assets ./static-export
 
