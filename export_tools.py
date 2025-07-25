@@ -171,11 +171,15 @@ def formify(root_dir: str):
                 form_changed = True
 
             # 5. Remove Cloudflare Turnstile divs
-            for turnstile_div in form.find_all("div", class_=["cf-turnstile", "cf7-cf-turnstile"]):
-                class_name = turnstile_div.get('class')
-                turnstile_div.decompose()
-                form_changed = True
-                logger.info(f"✓ Removed Cloudflare Turnstile div with class '{class_name}' from form '{form_id}' in {html_path.relative_to(root)}")
+            turnstile_divs_to_remove = form.find_all("div", class_=["cf-turnstile", "cf7-cf-turnstile"])
+            if turnstile_divs_to_remove:
+                for turnstile_div in turnstile_divs_to_remove:
+                    # Check if the element is still in the soup before trying to access it
+                    if turnstile_div.parent:
+                        class_name = turnstile_div.get('class', 'N/A')
+                        turnstile_div.decompose()
+                        form_changed = True
+                        logger.info(f"✓ Removed Cloudflare Turnstile div with class '{class_name}' from form '{form_id}' in {html_path.relative_to(root)}")
 
             # 6. Remove WPCF7 hidden fields
             for wpcf7_field in form.find_all("input", attrs={"name": re.compile(r"^_wpcf7")}):
