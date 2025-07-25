@@ -147,6 +147,7 @@ class StaticExporter:
             elapsed_time += self.stop_export_poll_interval_seconds
 
         logger.error(f"✗ Timed out waiting for export to stop after {self.stop_export_timeout_seconds} seconds")
+        self.cancel_running_export()
         return False
 
     def ensure_no_running_export(self) -> bool:
@@ -219,6 +220,7 @@ class StaticExporter:
             start_elapsed += self.export_start_poll_interval_seconds
         else:
             logger.error(f"✗ Export did not start within {self.export_start_timeout_seconds} seconds.")
+            self.cancel_running_export()
             return None
 
         download_url = ""
@@ -319,6 +321,7 @@ class StaticExporter:
         # Check if we timed out
         if elapsed_time >= self.export_monitor_timeout_seconds:
             logger.error(f"✗ Export process timed out after {self.export_monitor_timeout_seconds} seconds")
+            self.cancel_running_export()
             return None
 
         return download_url
