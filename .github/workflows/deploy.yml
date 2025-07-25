@@ -74,13 +74,13 @@ jobs:
           # Escape quotes in PR title
           PR_TITLE_ESCAPED=${PR_TITLE//\"/\\\"}
           DEPLOY_MESSAGE="Deploy preview for PR #${{ github.event.number }} - ${PR_TITLE_ESCAPED}"
-          echo "deploy_args=deploy --dir=./static-export --no-build --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
+          echo "deploy_args=deploy --dir=./static-export --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
         else
           COMMIT_MSG=$(git log -1 --pretty=%B)
           # Escape quotes in commit message
           COMMIT_MSG_ESCAPED=${COMMIT_MSG//\"/\\\"}
           DEPLOY_MESSAGE="Production deploy: ${COMMIT_MSG_ESCAPED}"
-          echo "deploy_args=deploy --dir=./static-export --no-build --prod-if-unlocked --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
+          echo "deploy_args=deploy --dir=./static-export --prod-if-unlocked --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
         fi
 
     - name: Deploy to Netlify
