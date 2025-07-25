@@ -10,6 +10,7 @@ import shutil
 import bs4
 import click
 import logging
+from urllib.parse import urlparse
 from export import run_scraper
 
 # Configure logging
@@ -35,6 +36,56 @@ def download(output_dir: str):
     if not success:
         logger.error("✗ Site export failed.")
         sys.exit(1)
+
+
+@cli.command(name="fix-paths")
+@click.argument('root_dir', type=click.Path(exists=True, file_okay=False, resolve_path=True))
+def fix_paths(root_dir: str):
+    """Convert absolute URLs to root-relative paths in exported HTML files."""
+    root = pathlib.Path(root_dir)
+    base_url = "https://ukuleletuesday.ie"
+    parsed_base_url = urlparse(base_url)
+    domain = parsed_base_url.netloc
+
+    logger.info(f"Converting absolute URLs to relative paths in: {root}")
+    total_files_changed = 0
+
+    for html_path in root.rglob("*.html"):
+        file_changed = False
+        try:
+            soup = bs4.BeautifulSoup(html_path.read_text(encoding="utf-8"), "html.parser")
+
+            # Find all attributes that might contain a URL
+            for tag in soup.find_all(True, href=True):
+                url = tag['href']
+                if domain in url:
+                    tag['href'] = urlparse(url).path
+                    file_changed = True
+            
+            for tag in soup.find_all(True, src=True):
+                url = tag['src']
+                if domain in url:
+                    tag['src'] = urlparse(url).path
+                    file_changed = True
+
+            for tag in soup.find_all('meta', content=True):
+                url = tag['content']
+                if domain in url:
+                    tag['content'] = urlparse(url).path
+                    file_changed = True
+
+            if file_changed:
+                html_path.write_text(str(soup), encoding="utf-8")
+                total_files_changed += 1
+                logger.info(f"✓ Fixed paths in {html_path.relative_to(root)}")
+
+        except Exception as e:
+            logger.error(f"✗ Could not process file {html_path.relative_to(root)}: {e}")
+
+    if total_files_changed > 0:
+        logger.info(f"✓ Path fixing complete. Changed {total_files_changed} file(s).")
+    else:
+        logger.info("✓ No absolute URLs found that needed fixing.")
 
 
 @click.group(name="netlify-forms")
