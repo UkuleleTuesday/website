@@ -1,5 +1,10 @@
 name: Export Static Site
 
+permissions:
+  id-token: write     # OIDC
+  contents: read
+  pull-requests: write
+
 on:
   # Allow manual triggering
   workflow_dispatch:
