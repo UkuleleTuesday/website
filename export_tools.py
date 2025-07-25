@@ -45,7 +45,6 @@ def fix_paths(root_dir: str):
     """Convert absolute URLs to root-relative paths in exported HTML files."""
     root = pathlib.Path(root_dir)
     base_url = "https://ukuleletuesday.ie"
-    base_url_http = "http://ukuleletuesday.ie"
     parsed_base_url = urlparse(base_url)
     domain = parsed_base_url.netloc
 
@@ -57,12 +56,22 @@ def fix_paths(root_dir: str):
         try:
             # Process the raw text first for script tags
             content = html_path.read_text(encoding="utf-8")
-            # Replace absolute URLs inside script tags (like JSON-LD)
-            new_content = content.replace(f'"{base_url}', '"')
-            new_content = new_content.replace(f"'{base_url}", "'")
-            # Handle escaped JSON
-            new_content = new_content.replace(f'\\"{base_url}', '\\"')
-            new_content = new_content.replace(base_url, "")
+            
+            # Create a version of the base_url with escaped slashes for JSON contexts
+            escaped_base_url = base_url.replace('/', r'\/')
+
+            # Perform replacements
+            replacements = {
+                f'"{base_url}': '"',
+                f"'{base_url}": "'",
+                f'\\"{base_url}': '\\"',
+                escaped_base_url: '',
+                base_url: '',
+            }
+            
+            new_content = content
+            for old, new in replacements.items():
+                new_content = new_content.replace(old, new)
 
             if content != new_content:
                 file_changed = True
