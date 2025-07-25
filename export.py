@@ -33,7 +33,6 @@ class StaticExporter:
             password: str,
             stop_export_timeout_seconds: int = 60,
             stop_export_poll_interval_seconds: int = 5,
-            initial_monitor_wait_seconds: int = 30,
             export_start_timeout_seconds: int = 120,
             export_start_poll_interval_seconds: int = 10,
             export_monitor_timeout_seconds: int = 60,
@@ -45,7 +44,6 @@ class StaticExporter:
         self.password = password
         self.stop_export_timeout_seconds = stop_export_timeout_seconds
         self.stop_export_poll_interval_seconds = stop_export_poll_interval_seconds
-        self.initial_monitor_wait_seconds = initial_monitor_wait_seconds
         self.export_start_timeout_seconds = export_start_timeout_seconds
         self.export_start_poll_interval_seconds = export_start_poll_interval_seconds
         self.export_monitor_timeout_seconds = export_monitor_timeout_seconds
@@ -204,10 +202,6 @@ class StaticExporter:
     def monitor_export_progress(self) -> Optional[str]:
         """Monitor the export process and return download URL when available"""
         logger.info("Monitoring export progress...")
-
-        # Wait before starting to poll
-        logger.info(f"Waiting {self.initial_monitor_wait_seconds} seconds before starting to monitor...")
-        time.sleep(self.initial_monitor_wait_seconds)
 
         # Retry loop to wait for export to start, because the API is... special
         start_elapsed = 0
