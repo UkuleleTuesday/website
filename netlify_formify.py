@@ -76,6 +76,22 @@ def formify(root_dir: str):
                 form_changed = True
                 logger.info(f"✓ Removed Cloudflare Turnstile div from form '{form_id}' in {html_path.relative_to(root)}")
 
+            # 4. Remove CF7 attributes that trigger JS
+            if form.has_attr('action'):
+                del form['action']
+                form_changed = True
+                logger.info(f"✓ Removed 'action' attribute from form '{form_id}' in {html_path.relative_to(root)}")
+            if form.has_attr('novalidate'):
+                del form['novalidate']
+                form_changed = True
+                logger.info(f"✓ Removed 'novalidate' attribute from form '{form_id}' in {html_path.relative_to(root)}")
+
+            # Remove 'wpcf7-form' class but keep others
+            if 'wpcf7-form' in form.get('class', []):
+                form['class'].remove('wpcf7-form')
+                form_changed = True
+                logger.info(f"✓ Removed 'wpcf7-form' class from form '{form_id}' in {html_path.relative_to(root)}")
+
             if form_changed:
                 file_changed = True
                 total_forms_changed += 1
