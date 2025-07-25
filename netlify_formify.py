@@ -48,12 +48,20 @@ def formify(root_dir: str):
             file_changed = True
             logger.info(f"✓ Removed Cloudflare Turnstile script from {html_path.relative_to(root)}")
 
-        # Remove CF7 and swv script tags from the document
+        # Remove any elements with an ID related to contact-form-7
+        for cf7_element in soup.find_all(id=lambda i: i and "contact-form-7" in i):
+            element_id = cf7_element.get('id')
+            tag_name = cf7_element.name
+            cf7_element.decompose()
+            file_changed = True
+            logger.info(f"✓ Removed CF7 {tag_name} element with id '{element_id}' from {html_path.relative_to(root)}")
+
+        # Also remove any remaining scripts by src, just in case
         for cf7_script in soup.find_all("script", src=lambda s: s and "contact-form-7" in s):
             script_src = cf7_script['src']
             cf7_script.decompose()
             file_changed = True
-            logger.info(f"✓ Removed CF7 script tag: {script_src} from {html_path.relative_to(root)}")
+            logger.info(f"✓ Removed CF7 script tag with src: {script_src} from {html_path.relative_to(root)}")
 
         for form_container in soup.find_all("div", class_="wpcf7"):
             form = form_container.find("form")
