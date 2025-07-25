@@ -66,9 +66,8 @@ def fix_paths(root_dir: str):
     root = pathlib.Path(root_dir)
     logger.info(f"Fixing paths in: {root}")
 
-    # Regex to find /wp-admin/admin-ajax.php?action=dynamic_css#038;ver=...
-    # It will match 'ver=' followed by any characters that are not a single or double quote.
-    search_pattern = re.compile(r"/wp-admin/admin-ajax\.php\?action=dynamic_css#038;ver=[^'\"]*")
+    # Regex to find /wp-admin/admin-ajax.php followed by any query string.
+    search_pattern = re.compile(r"/wp-admin/admin-ajax\.php\?[^\"'\s]+")
     replace_str = "/wp-admin/admin-ajax.css"
     files_changed = 0
 
