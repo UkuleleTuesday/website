@@ -58,6 +58,8 @@ def download(output_dir: str, num_retries: int):
         sys.exit(1)
 
 
+import re
+
 @cli.command(name="fix-paths")
 @click.argument('root_dir', type=click.Path(exists=True, file_okay=False, resolve_path=True))
 def fix_paths(root_dir: str):
@@ -65,15 +67,18 @@ def fix_paths(root_dir: str):
     root = pathlib.Path(root_dir)
     logger.info(f"Fixing paths in: {root}")
 
-    search_str = "/wp-admin/admin-ajax.php?action=dynamic_css#038;ver=6.8.1"
+    # Regex to find /wp-admin/admin-ajax.php?action=dynamic_css#038;ver=...
+    # It will match 'ver=' followed by any characters that are not a single or double quote.
+    search_pattern = re.compile(r"/wp-admin/admin-ajax\.php\?action=dynamic_css#038;ver=[^'\"]*")
     replace_str = "/wp-admin/admin-ajax.css"
     files_changed = 0
 
     for html_path in root.rglob("*.html"):
         try:
             content = html_path.read_text(encoding="utf-8")
-            if search_str in content:
-                new_content = content.replace(search_str, replace_str)
+            new_content, num_subs = search_pattern.subn(replace_str, content)
+
+            if num_subs > 0:
                 html_path.write_text(new_content, encoding="utf-8")
                 logger.info(f"✓ Fixed paths in {html_path.relative_to(root)}")
                 files_changed += 1
