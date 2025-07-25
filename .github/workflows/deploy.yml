@@ -50,9 +50,6 @@ jobs:
     - name: Fix paths in static site
       run: uv run export_tools.py fix-paths ./static-export
 
-    - name: Remove unused assets
-      run: uv run export_tools.py remove-unused-assets ./static-export
-
     - name: Run netlify_formify
       run: uv run export_tools.py netlify-forms formify ./static-export
 

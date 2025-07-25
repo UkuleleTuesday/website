@@ -90,28 +90,6 @@ def fix_paths(root_dir: str):
         logger.info("✓ No paths needed fixing.")
 
 
-@cli.command(name="remove-unused-assets")
-@click.argument('root_dir', type=click.Path(exists=True, file_okay=False, resolve_path=True))
-def remove_unused_assets(root_dir: str):
-    """Clean up unused files and directories from the export."""
-    root = pathlib.Path(root_dir)
-    logger.info(f"Cleaning up unused assets in: {root}")
-
-    # Remove wp-admin directory
-    wp_admin_path = root / "wp-admin"
-    if wp_admin_path.is_dir():
-        try:
-            shutil.rmtree(wp_admin_path)
-            logger.info(f"✓ Removed directory: {wp_admin_path.relative_to(root)}")
-        except Exception as e:
-            logger.error(f"✗ Could not remove directory {wp_admin_path.relative_to(root)}: {e}")
-            sys.exit(1)
-    else:
-        logger.info("✓ wp-admin directory not found, skipping.")
-
-    logger.info("✓ Asset cleanup complete.")
-
-
 @click.group(name="netlify-forms")
 def netlify_forms():
     """Tools to prepare Contact Form 7 forms for Netlify."""
