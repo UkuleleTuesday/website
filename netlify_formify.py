@@ -22,7 +22,13 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-@click.command()
+@click.group()
+def cli():
+    """Tools to prepare Contact Form 7 forms for Netlify."""
+    pass
+
+
+@cli.command()
 @click.argument('root_dir', type=click.Path(exists=True, file_okay=False, resolve_path=True))
 def formify(root_dir: str):
     """Rewrite CF7 markup in HTML files so Netlify picks it up."""
@@ -69,5 +75,50 @@ def formify(root_dir: str):
         logger.info("✓ No CF7 forms found to Netlify-formify.")
 
 
+@cli.command()
+@click.argument('root_dir', type=click.Path(exists=True, file_okay=False, resolve_path=True))
+def verify(root_dir: str):
+    """Verify that forms in HTML files are Netlify-ready."""
+    root = pathlib.Path(root_dir)
+    logger.info(f"Verifying Netlify forms in: {root}")
+    forms_found = 0
+    errors_found = 0
+
+    for html_path in root.rglob("*.html"):
+        html = html_path.read_text(encoding="utf‑8", errors="ignore")
+        soup = bs4.BeautifulSoup(html, "html.parser")
+
+        for form in soup.find_all("form"):
+            forms_found += 1
+            form_id = form.get('id', 'unidentified form')
+            relative_path = html_path.relative_to(root)
+
+            # Check for Netlify attribute
+            if not form.has_attr("data-netlify"):
+                continue  # Not a Netlify form, skip
+
+            # Check for form-name input
+            if not form.find("input", attrs={"type": "hidden", "name": "form-name"}):
+                logger.error(f"✗ [{relative_path}] Form '{form_id}' is missing a hidden 'form-name' input.")
+                errors_found += 1
+
+            # Check for name attributes on all inputs
+            for field in form.find_all(["input", "textarea", "select"]):
+                # submit buttons don't need a name
+                if field.get("type") == "submit":
+                    continue
+                if not field.has_attr("name"):
+                    logger.error(f"✗ [{relative_path}] Form '{form_id}' has a field without a 'name' attribute: {str(field)}")
+                    errors_found += 1
+
+    if errors_found > 0:
+        logger.error(f"\nFound {errors_found} errors in {forms_found} forms.")
+        sys.exit(1)
+    elif forms_found > 0:
+        logger.info(f"\n✓ All {forms_found} found forms appear to be correctly configured for Netlify.")
+    else:
+        logger.info("\n✓ No forms found to verify.")
+
+
 if __name__ == '__main__':
-    formify()
+    cli()

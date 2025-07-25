@@ -47,7 +47,10 @@ jobs:
         echo "✓ Fixed paths in static site"
     
     - name: Run netlify_formify
-      run: uv run netlify_formify.py ./static-export
+      run: uv run netlify_formify.py formify ./static-export
+    
+    - name: Verify Netlify forms
+      run: uv run netlify_formify.py verify ./static-export
     
     - name: Copy extra assets
       if: always() # Ensure this runs even if previous step finds no forms
