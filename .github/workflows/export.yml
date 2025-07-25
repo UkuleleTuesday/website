@@ -1,0 +1,49 @@
+name: Hourly Static Site Export
+
+permissions:
+  id-token: write     # OIDC
+  contents: read
+
+on:
+  # Allow manual triggering
+  workflow_dispatch:
+
+  # Run on schedule (hourly)
+  schedule:
+    - cron: '0 * * * *'
+
+jobs:
+  export-to-gcs:
+    runs-on: ubuntu-latest
+
+    # Use a concurrency group to prevent multiple exports running simultaneously
+    concurrency:
+      group: ${{ github.workflow }}
+      cancel-in-progress: true
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+
+    - name: Run static export
+      timeout-minutes: 10
+      env:
+        WP_USERNAME: ${{ secrets.WP_USERNAME }}
+        WP_PASSWORD: ${{ secrets.WP_PASSWORD }}
+      run: uv run export_tools.py download -o ./static-export --num-retries 5
+
+    - name: Upload raw export to GCS
+      run: gsutil -m rsync -d -r ./static-export gs://ukulele-tuesday-website-wordpress-static-export/latest

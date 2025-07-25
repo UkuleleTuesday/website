@@ -7,6 +7,7 @@ import sys
 import time
 import pathlib
 import shutil
+import re
 import bs4
 import click
 import logging
@@ -58,26 +59,34 @@ def download(output_dir: str, num_retries: int):
         sys.exit(1)
 
 
-@cli.command(name="clean-up")
+@cli.command(name="fix-paths")
 @click.argument('root_dir', type=click.Path(exists=True, file_okay=False, resolve_path=True))
-def clean_up(root_dir: str):
-    """Clean up unused files and directories from the export."""
+def fix_paths(root_dir: str):
+    """Fix paths in the exported static site."""
     root = pathlib.Path(root_dir)
-    logger.info(f"Cleaning up unused files in: {root}")
+    logger.info(f"Fixing paths in: {root}")
 
-    # Remove wp-admin directory
-    wp_admin_path = root / "wp-admin"
-    if wp_admin_path.is_dir():
+    # Regex to find /wp-admin/admin-ajax.php followed by any query string.
+    search_pattern = re.compile(r"/wp-admin/admin-ajax\.php\?[^\"'\s]+")
+    replace_str = "/wp-admin/admin-ajax.css"
+    files_changed = 0
+
+    for html_path in root.rglob("*.html"):
         try:
-            shutil.rmtree(wp_admin_path)
-            logger.info(f"✓ Removed directory: {wp_admin_path.relative_to(root)}")
-        except Exception as e:
-            logger.error(f"✗ Could not remove directory {wp_admin_path.relative_to(root)}: {e}")
-            sys.exit(1)
-    else:
-        logger.info("✓ wp-admin directory not found, skipping.")
+            content = html_path.read_text(encoding="utf-8")
+            new_content, num_subs = search_pattern.subn(replace_str, content)
 
-    logger.info("✓ Cleanup complete.")
+            if num_subs > 0:
+                html_path.write_text(new_content, encoding="utf-8")
+                logger.info(f"✓ Fixed paths in {html_path.relative_to(root)}")
+                files_changed += 1
+        except Exception as e:
+            logger.error(f"✗ Could not process file {html_path.relative_to(root)}: {e}")
+
+    if files_changed > 0:
+        logger.info(f"✓ Fixed paths in {files_changed} file(s).")
+    else:
+        logger.info("✓ No paths needed fixing.")
 
 
 @click.group(name="netlify-forms")
@@ -128,13 +137,29 @@ def formify(root_dir: str):
             form_changed = False
             form_id = form.get('id', 'N/A')
 
-            # 1. Netlify attributes
+            # 1. Add name attribute from page slug
+            # This is important for Netlify to identify the form.
+            if html_path.name == "index.html":
+                form_name = html_path.parent.name
+            else:
+                form_name = html_path.stem
+
+            if not form.has_attr("name"):
+                form["name"] = form_name
+                form_changed = True
+
+            # 2. Remove action attribute
+            if form.has_attr("action"):
+                del form["action"]
+                form_changed = True
+
+            # 3. Netlify attributes
             if not form.has_attr("data-netlify"):
                 form["data-netlify"] = "true"
                 form["netlify-honeypot"] = "bot-field"
                 form_changed = True
 
-            # 2. Hidden 'form-name'
+            # 4. Hidden 'form-name'
             if not form.find("input", attrs={"name": "form-name"}):
                 default_name = form_id or "contact"
                 hidden = soup.new_tag("input", attrs={
@@ -145,7 +170,7 @@ def formify(root_dir: str):
                 form.insert(0, hidden)  # as first child
                 form_changed = True
 
-            # 3. Remove Cloudflare Turnstile div
+            # 5. Remove Cloudflare Turnstile div
             turnstile_div = form.find("div", class_="cf-turnstile")
             if turnstile_div:
                 turnstile_div.decompose()

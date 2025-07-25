@@ -1,14 +1,15 @@
-name: Export Static Site
+name: Deploy Static Site to Netlify
+
+permissions:
+  id-token: write     # OIDC
+  contents: read
+  pull-requests: write
 
 on:
   # Allow manual triggering
   workflow_dispatch:
-  
-  # Run on schedule (daily at 2 AM UTC)
-  schedule:
-    - cron: '0 2 * * *'
-  
-  # Run on pushes to main branch (for testing)
+
+  # Run on pushes to main branch
   push:
     branches: [ main ]
 
@@ -16,37 +17,45 @@ on:
   pull_request:
 
 jobs:
-  export-and-deploy:
+  deploy-to-netlify:
     runs-on: ubuntu-latest
-    
-    # Use a concurrency group to prevent multiple exports running simultaneously
+
+    # Use a concurrency group to prevent multiple deployments running simultaneously
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
-    
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-    
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+
+    - name: Download latest export from GCS
+      run: |
+        mkdir -p ./static-export
+        gsutil -m rsync -r gs://ukulele-tuesday-website-wordpress-static-export/latest ./static-export
+
     - name: Install uv
       uses: astral-sh/setup-uv@v4
-    
-    - name: Run static export
-      timeout-minutes: 10
-      env:
-        WP_USERNAME: ${{ secrets.WP_USERNAME }}
-        WP_PASSWORD: ${{ secrets.WP_PASSWORD }}
-      run: uv run export_tools.py download -o ./static-export --num-retries 5
 
-    - name: Clean up unused files
-      run: uv run export_tools.py clean-up ./static-export
-    
+    - name: Fix paths in static site
+      run: uv run export_tools.py fix-paths ./static-export
+
     - name: Run netlify_formify
       run: uv run export_tools.py netlify-forms formify ./static-export
-    
+
     - name: Verify Netlify forms
       run: uv run export_tools.py netlify-forms verify ./static-export
-      
+
     - name: Copy extra assets
       if: always() # Ensure this runs even if previous step finds no forms
       run: |
@@ -56,7 +65,7 @@ jobs:
         else
           echo "No extra-assets directory found, skipping"
         fi
-    
+
     - name: Set Netlify deployment arguments
       id: netlify_args
       run: |
@@ -65,13 +74,13 @@ jobs:
           # Escape quotes in PR title
           PR_TITLE_ESCAPED=${PR_TITLE//\"/\\\"}
           DEPLOY_MESSAGE="Deploy preview for PR #${{ github.event.number }} - ${PR_TITLE_ESCAPED}"
-          echo "deploy_args=deploy --dir=./static-export --no-build --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
+          echo "deploy_args=deploy --dir=./static-export --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
         else
           COMMIT_MSG=$(git log -1 --pretty=%B)
           # Escape quotes in commit message
           COMMIT_MSG_ESCAPED=${COMMIT_MSG//\"/\\\"}
           DEPLOY_MESSAGE="Production deploy: ${COMMIT_MSG_ESCAPED}"
-          echo "deploy_args=deploy --dir=./static-export --no-build --prod-if-unlocked --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
+          echo "deploy_args=deploy --dir=./static-export --prod-if-unlocked --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
         fi
 
     - name: Deploy to Netlify
