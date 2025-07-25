@@ -45,6 +45,7 @@ def fix_paths(root_dir: str):
     """Convert absolute URLs to root-relative paths in exported HTML files."""
     root = pathlib.Path(root_dir)
     base_url = "https://ukuleletuesday.ie"
+    base_url_http = "http://ukuleletuesday.ie"
     parsed_base_url = urlparse(base_url)
     domain = parsed_base_url.netloc
 
@@ -54,7 +55,19 @@ def fix_paths(root_dir: str):
     for html_path in root.rglob("*.html"):
         file_changed = False
         try:
-            soup = bs4.BeautifulSoup(html_path.read_text(encoding="utf-8"), "html.parser")
+            # Process the raw text first for script tags
+            content = html_path.read_text(encoding="utf-8")
+            # Replace absolute URLs inside script tags (like JSON-LD)
+            new_content = content.replace(f'"{base_url}', '"')
+            new_content = new_content.replace(f"'{base_url}", "'")
+            # Handle escaped JSON
+            new_content = new_content.replace(f'\\"{base_url}', '\\"')
+            new_content = new_content.replace(base_url, "")
+
+            if content != new_content:
+                file_changed = True
+
+            soup = bs4.BeautifulSoup(new_content, "html.parser")
 
             # Find all attributes that might contain a URL
             for tag in soup.find_all(True, href=True):
@@ -62,7 +75,7 @@ def fix_paths(root_dir: str):
                 if domain in url:
                     tag['href'] = urlparse(url).path
                     file_changed = True
-            
+
             for tag in soup.find_all(True, src=True):
                 url = tag['src']
                 if domain in url:

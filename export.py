@@ -64,18 +64,24 @@ class StaticSiteSpider(scrapy.Spider):
     def save_file(self, response):
         """Saves a response to a local file and spiders CSS/JS files for more assets."""
         parsed_url = urlparse(response.url)
-        path = parsed_url.path.lstrip('/')
+        path_without_query = parsed_url.path.lstrip('/')
         
         # Determine the file path
-        if not path or path.endswith('/'):
+        if not path_without_query or path_without_query.endswith('/'):
             # This is a directory URL, save as index.html
-            file_path = self.output_dir / path / 'index.html'
-        elif '.' not in Path(path).name:
-            # This is a "clean" URL without an extension, save as index.html in a directory
-            file_path = self.output_dir / path / 'index.html'
+            file_path = self.output_dir / path_without_query / 'index.html'
+        elif '.' not in Path(path_without_query).name and not parsed_url.query:
+             # This is a "clean" URL without an extension or query, save as index.html in a directory
+            file_path = self.output_dir / path_without_query / 'index.html'
         else:
-            # This is a file with an extension
-            file_path = self.output_dir / path
+            # This is a file with an extension or a URL with a query string
+            # We append the query string to the filename to avoid overwrites
+            # but replace characters that are invalid in filenames.
+            query_part = parsed_url.query.replace('&', '_').replace('=', '-')
+            if query_part:
+                file_path = self.output_dir / f"{path_without_query}?{query_part}"
+            else:
+                file_path = self.output_dir / path_without_query
         
         # Create parent directories if they don't exist
         file_path.parent.mkdir(parents=True, exist_ok=True)
