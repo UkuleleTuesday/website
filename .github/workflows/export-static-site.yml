@@ -12,51 +12,43 @@ on:
   push:
     branches: [ main ]
 
+  # Run on pull requests
+  pull_request:
+
 jobs:
   export-and-deploy:
     runs-on: ubuntu-latest
     
-    # Specify environment for Pages deployment
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    
-    # Grant GITHUB_TOKEN write permissions for Pages deployment
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    
     # Use a concurrency group to prevent multiple exports running simultaneously
     concurrency:
-      group: "pages"
-      cancel-in-progress: false
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
     
-    - name: Setup Pages
-      uses: actions/configure-pages@v4
-    
     - name: Install uv
       uses: astral-sh/setup-uv@v4
     
     - name: Run static export
+      timeout-minutes: 10
       env:
         WP_USERNAME: ${{ secrets.WP_USERNAME }}
         WP_PASSWORD: ${{ secrets.WP_PASSWORD }}
-      run: uv run export.py download -o ./static-export
+      run: uv run export_tools.py download -o ./static-export --num-retries 5
+
+    - name: Clean up unused files
+      run: uv run export_tools.py clean-up ./static-export
     
-    - name: Fix paths in static site
-      run: |
-        cd ./static-export
-        grep -rl --include='*.html' 'action=dynamic_css#038;ver=6.8.1' . \
-          | xargs sed -i \
-              's@/wp-admin/admin-ajax\.php?action=dynamic_css#038;ver=6\.8\.1@/wp-admin/admin-ajax.css@g'
-        echo "✓ Fixed paths in static site"
+    - name: Run netlify_formify
+      run: uv run export_tools.py netlify-forms formify ./static-export
     
+    - name: Verify Netlify forms
+      run: uv run export_tools.py netlify-forms verify ./static-export
+      
     - name: Copy extra assets
+      if: always() # Ensure this runs even if previous step finds no forms
       run: |
         if [ -d "./extra-assets" ]; then
           cp -r ./extra-assets/* ./static-export/
@@ -65,11 +57,78 @@ jobs:
           echo "No extra-assets directory found, skipping"
         fi
     
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v3
+    - name: Set Netlify deployment arguments
+      id: netlify_args
+      run: |
+        if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          # Escape quotes in PR title
+          PR_TITLE_ESCAPED=${PR_TITLE//\"/\\\"}
+          DEPLOY_MESSAGE="Deploy preview for PR #${{ github.event.number }} - ${PR_TITLE_ESCAPED}"
+          echo "deploy_args=deploy --dir=./static-export --no-build --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
+        else
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          # Escape quotes in commit message
+          COMMIT_MSG_ESCAPED=${COMMIT_MSG//\"/\\\"}
+          DEPLOY_MESSAGE="Production deploy: ${COMMIT_MSG_ESCAPED}"
+          echo "deploy_args=deploy --dir=./static-export --no-build --prod-if-unlocked --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Deploy to Netlify
+      id: netlify_deploy
+      uses: netlify/actions/cli@master
       with:
-        path: './static-export'
-    
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4
+        args: ${{ steps.netlify_args.outputs.deploy_args }}
+      env:
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+
+    - name: Check Netlify deployment for errors
+      if: contains(steps.netlify_deploy.outputs.NETLIFY_OUTPUT, 'Error:')
+      run: |
+        echo "Netlify deployment failed!"
+        echo "${{ steps.netlify_deploy.outputs.NETLIFY_OUTPUT }}"
+        exit 1
+
+    - name: Post Netlify preview link to PR
+      if: github.event_name == 'pull_request' && success()
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const comment_marker = "<!-- NETLIFY_PREVIEW_COMMENT -->";
+          const previewUrl = `${{ steps.netlify_deploy.outputs.NETLIFY_URL }}`;
+          const commentBody = `
+            ${comment_marker}
+            ## ✅ Netlify Deploy Preview Ready!
+
+            You can view the live preview of your changes here:
+            **[${previewUrl}](${previewUrl})**
+
+            ---
+            _Build logs are available in the [GitHub Actions summary](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})._
+          `;
+
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          });
+
+          const existing_comment = comments.find(comment => comment.body.includes(comment_marker));
+
+          if (existing_comment) {
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: existing_comment.id,
+              body: commentBody,
+            });
+          } else {
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: commentBody,
+            });
+          }

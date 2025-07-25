@@ -14,9 +14,9 @@ import json
 import tempfile
 import zipfile
 import shutil
-import click
 from pathlib import Path
 from typing import Dict, Any, Optional, Tuple
+from urllib.parse import urlparse
 
 # Configure logging
 logging.basicConfig(
@@ -26,17 +26,36 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 class StaticExporter:
-    def __init__(self):
-        self.base_url = "https://ukuleletuesday.ie/wp-json/simplystatic/v1"
-        self.username = os.getenv('WP_USERNAME')
-        self.password = os.getenv('WP_PASSWORD')
+    def __init__(
+            self,
+            base_url: str,
+            username: str,
+            password: str,
+            stop_export_timeout_seconds: int = 60,
+            stop_export_poll_interval_seconds: int = 5,
+            export_start_timeout_seconds: int = 120,
+            export_start_poll_interval_seconds: int = 10,
+            export_monitor_timeout_seconds: int = 150,
+            export_monitor_poll_interval_seconds: int = 10,
+            zip_download_timeout_seconds: int = 300
+    ):
+        self.base_url = base_url
+        self.username = username
+        self.password = password
+        self.stop_export_timeout_seconds = stop_export_timeout_seconds
+        self.stop_export_poll_interval_seconds = stop_export_poll_interval_seconds
+        self.export_start_timeout_seconds = export_start_timeout_seconds
+        self.export_start_poll_interval_seconds = export_start_poll_interval_seconds
+        self.export_monitor_timeout_seconds = export_monitor_timeout_seconds
+        self.export_monitor_poll_interval_seconds = export_monitor_poll_interval_seconds
+        self.zip_download_timeout_seconds = zip_download_timeout_seconds
 
         if not self.username:
-            logger.error("Error: WP_USERNAME environment variable is required")
+            logger.error("Error: Username is required")
             sys.exit(1)
 
         if not self.password:
-            logger.error("Error: WP_PASSWORD environment variable is required")
+            logger.error("Error: Password is required")
             sys.exit(1)
 
         # Create auth header
@@ -100,6 +119,18 @@ class StaticExporter:
         is_running = response_data.get('running', False)
         return is_running
 
+    def kick_website(self):
+        """Make a request to the main website to potentially wake up services."""
+        try:
+            parsed_url = urlparse(self.base_url)
+            main_site_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
+            logger.info(f"Kicking the website at {main_site_url} to wake it up...")
+            response = requests.get(main_site_url, timeout=10)
+            response.raise_for_status()
+            logger.info("✓ Website kicked successfully.")
+        except requests.exceptions.RequestException as e:
+            logger.warning(f"⚠ Could not kick website: {e}")
+
     def cancel_running_export(self) -> bool:
         """Cancel any currently running export"""
         logger.info("Canceling running export...")
@@ -110,23 +141,23 @@ class StaticExporter:
         logger.info("✓ Export cancellation requested")
         return True
 
-    def wait_for_export_to_stop(self, max_wait_time: int = 60) -> bool:
+    def wait_for_export_to_stop(self) -> bool:
         """Wait for any running export to stop"""
         logger.info("Waiting for export to stop...")
 
-        wait_interval = 5  # Check every 5 seconds
         elapsed_time = 0
 
-        while elapsed_time < max_wait_time:
+        while elapsed_time < self.stop_export_timeout_seconds:
             if not self.check_if_export_running():
                 logger.info("✓ No export is currently running")
                 return True
 
             logger.info(f"Export still running, waiting... (elapsed: {elapsed_time}s)")
-            time.sleep(wait_interval)
-            elapsed_time += wait_interval
+            time.sleep(self.stop_export_poll_interval_seconds)
+            elapsed_time += self.stop_export_poll_interval_seconds
 
-        logger.error(f"✗ Timed out waiting for export to stop after {max_wait_time} seconds")
+        logger.error(f"✗ Timed out waiting for export to stop after {self.stop_export_timeout_seconds} seconds")
+        self.cancel_running_export()
         return False
 
     def ensure_no_running_export(self) -> bool:
@@ -184,17 +215,26 @@ class StaticExporter:
         """Monitor the export process and return download URL when available"""
         logger.info("Monitoring export progress...")
 
-        # Wait 30 seconds before starting to poll
-        logger.info("Waiting 30 seconds before starting to monitor...")
-        time.sleep(30)
+        # Retry loop to wait for export to start, because the API is... special
+        start_elapsed = 0
+        while start_elapsed < self.export_start_timeout_seconds:
+            if self.check_if_export_running():
+                logger.info("✓ Export process has started.")
+                break
+            logger.warning(f"Export not started yet, waiting {self.export_start_poll_interval_seconds}s...")
+            self.kick_website()
+            time.sleep(self.export_start_poll_interval_seconds)
+            start_elapsed += self.export_start_poll_interval_seconds
+        else:
+            logger.error(f"✗ Export did not start within {self.export_start_timeout_seconds} seconds.")
+            self.cancel_running_export()
+            return None
 
         download_url = ""
-        max_polling_time = 1800  # 30 minutes
-        polling_interval = 10    # 10 seconds
         elapsed_time = 0
         last_message = ""
 
-        while elapsed_time < max_polling_time:
+        while elapsed_time < self.export_monitor_timeout_seconds:
             logger.info(f"Checking export status... (elapsed: {elapsed_time}s)")
 
             try:
@@ -202,9 +242,9 @@ class StaticExporter:
                 activity_response = api_result[0]
                 status_code = api_result[1]
             except SystemExit:
-                logger.warning(f"Warning: Failed to get activity log, retrying in {polling_interval}s...")
-                time.sleep(polling_interval)
-                elapsed_time += polling_interval
+                logger.warning(f"Warning: Failed to get activity log, retrying in {self.export_monitor_poll_interval_seconds}s...")
+                time.sleep(self.export_monitor_poll_interval_seconds)
+                elapsed_time += self.export_monitor_poll_interval_seconds
                 continue
 
             # Check if export is still running
@@ -261,6 +301,8 @@ class StaticExporter:
             if current_message != last_message and current_message:
                 logger.info(current_message)
                 last_message = current_message
+                # Reset elapsed time since we have activity
+                elapsed_time = 0
 
             # Check if export is complete
             if not is_running:
@@ -282,12 +324,13 @@ class StaticExporter:
 
                 break
 
-            time.sleep(polling_interval)
-            elapsed_time += polling_interval
+            time.sleep(self.export_monitor_poll_interval_seconds)
+            elapsed_time += self.export_monitor_poll_interval_seconds
 
         # Check if we timed out
-        if elapsed_time >= max_polling_time:
-            logger.error(f"✗ Export process timed out after {max_polling_time} seconds")
+        if elapsed_time >= self.export_monitor_timeout_seconds:
+            logger.error(f"✗ Export process timed out after {self.export_monitor_timeout_seconds} seconds")
+            self.cancel_running_export()
             return None
 
         return download_url
@@ -302,7 +345,7 @@ class StaticExporter:
             logger.info(f"Created temporary directory: {temp_dir}")
 
             # Download the ZIP file
-            response = requests.get(download_url, timeout=300)  # 5 minute timeout for download
+            response = requests.get(download_url, timeout=self.zip_download_timeout_seconds)
             response.raise_for_status()
 
             # Save to a temporary ZIP file
@@ -384,23 +427,3 @@ class StaticExporter:
             return False
 
 
-@click.group()
-def cli():
-    """Ukulele Tuesday static site export tool"""
-    pass
-
-
-@cli.command()
-@click.option('-o', '--output', 'output_dir', required=True,
-              help='Output directory for the extracted static site')
-def download(output_dir: str):
-    """Export the WordPress site and download the static files"""
-    exporter = StaticExporter()
-    success = exporter.run_download(output_dir)
-
-    if not success:
-        sys.exit(1)
-
-
-if __name__ == "__main__":
-    cli()
