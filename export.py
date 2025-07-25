@@ -37,7 +37,9 @@ class StaticSiteSpider(scrapy.Spider):
 
         # Extract and download static assets (CSS, JS, images, etc.)
         for asset_url in self.extract_asset_urls(response):
-            yield scrapy.Request(asset_url, callback=self.save_file)
+            # Only request assets with http/https schemes
+            if asset_url.startswith('http'):
+                yield scrapy.Request(asset_url, callback=self.save_file)
 
     def extract_asset_urls(self, response):
         """Extracts all static asset URLs from a response."""
