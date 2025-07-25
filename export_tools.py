@@ -45,41 +45,38 @@ def download(output_dir: str):
 def fix_paths(root_dir: str):
     """Convert absolute URLs to root-relative paths in exported HTML files."""
     root = pathlib.Path(root_dir)
-    base_url = "https://ukuleletuesday.ie"
-    parsed_base_url = urlparse(base_url)
-    domain = parsed_base_url.netloc
+    domain = "ukuleletuesday.ie"
 
     logger.info(f"Converting absolute URLs to relative paths in: {root}")
     total_files_changed = 0
 
-    # Regex to find http/https protocols followed by the domain,
-    # accounting for escaped slashes in JSON/JS.
-    url_pattern = re.compile(
-        r'https?:' +  # Match http: or https:
-        r'(?:\\\/){2}' +  # Match two escaped slashes e.g. \/\/
-        re.escape(domain)
-    )
+    # Pattern for escaped URLs in JSON/JS: https:\/\/ukuleletuesday.ie
+    escaped_url_pattern = re.compile(r'https?:\\/\\/' + re.escape(domain))
+    # Pattern for standard URLs: https://ukuleletuesday.ie
+    standard_url_pattern = re.compile(r'https?://' + re.escape(domain))
 
     for html_path in root.rglob("*.html"):
         file_changed = False
         try:
-            # Process the raw text first for script tags and JSON
             content = html_path.read_text(encoding="utf-8")
+            original_content = content
+
+            # Replace escaped URLs (e.g., in JSON) first
+            content = escaped_url_pattern.sub('', content)
+            # Replace standard URLs
+            content = standard_url_pattern.sub('', content)
             
-            # First, handle escaped URLs inside script tags/json
-            new_content, num_replacements = url_pattern.subn('', content)
-            
-            if num_replacements > 0:
+            if content != original_content:
                 file_changed = True
+            
+            # The regex handles most cases, but we run over attributes
+            # with BeautifulSoup as a fallback and to normalize.
+            soup = bs4.BeautifulSoup(content, "html.parser")
 
-            soup = bs4.BeautifulSoup(new_content, "html.parser")
-
-            # Then, handle standard URLs in HTML attributes
             for attr in ['href', 'src', 'content', 'data-lazyload']:
                 for tag in soup.find_all(True, attrs={attr: True}):
                     url = tag[attr]
                     if domain in url:
-                        # Use urlparse to safely get just the path and query
                         parsed_url = urlparse(url)
                         relative_url = parsed_url.path
                         if parsed_url.query:
@@ -88,6 +85,24 @@ def fix_paths(root_dir: str):
                         if tag[attr] != relative_url:
                             tag[attr] = relative_url
                             file_changed = True
+            
+            # For srcset, we need to process each part of the string
+            for tag in soup.find_all(True, srcset=True):
+                original_srcset = tag['srcset']
+                parts = [p.strip() for p in original_srcset.split(',')]
+                new_parts = []
+                for part in parts:
+                    url_part, *descriptor = part.split(' ', 1)
+                    if domain in url_part:
+                        new_url = urlparse(url_part).path
+                        new_parts.append(' '.join([new_url] + descriptor))
+                    else:
+                        new_parts.append(part)
+                
+                new_srcset = ', '.join(new_parts)
+                if new_srcset != original_srcset:
+                    tag['srcset'] = new_srcset
+                    file_changed = True
 
             if file_changed:
                 html_path.write_text(str(soup), encoding="utf-8")

@@ -36,6 +36,11 @@ class StaticSiteSpider(scrapy.Spider):
         for link in self.link_extractor.extract_links(response):
             yield scrapy.Request(link.url, callback=self.parse)
 
+        # Scrapy's link extractor might miss root links like href="/", let's get them manually.
+        for href in response.css('a::attr(href)').getall():
+            if href == "/" and response.url == self.start_urls[0]:
+                yield scrapy.Request(response.urljoin(href), callback=self.parse)
+
         # Extract and download static assets (CSS, JS, images, etc.)
         for asset_url in self.extract_asset_urls(response):
             # Only request assets with http/https schemes
