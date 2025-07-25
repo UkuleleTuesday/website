@@ -31,26 +31,26 @@ class StaticExporter:
             base_url: str,
             username: str,
             password: str,
-            stop_export_timeout: int = 60,
-            stop_export_poll_interval: int = 5,
-            initial_monitor_wait: int = 30,
-            export_start_timeout: int = 120,
-            export_start_poll_interval: int = 10,
-            export_monitor_timeout: int = 60,
-            export_monitor_poll_interval: int = 10,
-            zip_download_timeout: int = 300
+            stop_export_timeout_seconds: int = 60,
+            stop_export_poll_interval_seconds: int = 5,
+            initial_monitor_wait_seconds: int = 30,
+            export_start_timeout_seconds: int = 120,
+            export_start_poll_interval_seconds: int = 10,
+            export_monitor_timeout_seconds: int = 60,
+            export_monitor_poll_interval_seconds: int = 10,
+            zip_download_timeout_seconds: int = 300
     ):
         self.base_url = base_url
         self.username = username
         self.password = password
-        self.stop_export_timeout = stop_export_timeout
-        self.stop_export_poll_interval = stop_export_poll_interval
-        self.initial_monitor_wait = initial_monitor_wait
-        self.export_start_timeout = export_start_timeout
-        self.export_start_poll_interval = export_start_poll_interval
-        self.export_monitor_timeout = export_monitor_timeout
-        self.export_monitor_poll_interval = export_monitor_poll_interval
-        self.zip_download_timeout = zip_download_timeout
+        self.stop_export_timeout_seconds = stop_export_timeout_seconds
+        self.stop_export_poll_interval_seconds = stop_export_poll_interval_seconds
+        self.initial_monitor_wait_seconds = initial_monitor_wait_seconds
+        self.export_start_timeout_seconds = export_start_timeout_seconds
+        self.export_start_poll_interval_seconds = export_start_poll_interval_seconds
+        self.export_monitor_timeout_seconds = export_monitor_timeout_seconds
+        self.export_monitor_poll_interval_seconds = export_monitor_poll_interval_seconds
+        self.zip_download_timeout_seconds = zip_download_timeout_seconds
 
         if not self.username:
             logger.error("Error: Username is required")
@@ -137,16 +137,16 @@ class StaticExporter:
 
         elapsed_time = 0
 
-        while elapsed_time < self.stop_export_timeout:
+        while elapsed_time < self.stop_export_timeout_seconds:
             if not self.check_if_export_running():
                 logger.info("✓ No export is currently running")
                 return True
 
             logger.info(f"Export still running, waiting... (elapsed: {elapsed_time}s)")
-            time.sleep(self.stop_export_poll_interval)
-            elapsed_time += self.stop_export_poll_interval
+            time.sleep(self.stop_export_poll_interval_seconds)
+            elapsed_time += self.stop_export_poll_interval_seconds
 
-        logger.error(f"✗ Timed out waiting for export to stop after {self.stop_export_timeout} seconds")
+        logger.error(f"✗ Timed out waiting for export to stop after {self.stop_export_timeout_seconds} seconds")
         return False
 
     def ensure_no_running_export(self) -> bool:
@@ -205,27 +205,27 @@ class StaticExporter:
         logger.info("Monitoring export progress...")
 
         # Wait before starting to poll
-        logger.info(f"Waiting {self.initial_monitor_wait} seconds before starting to monitor...")
-        time.sleep(self.initial_monitor_wait)
+        logger.info(f"Waiting {self.initial_monitor_wait_seconds} seconds before starting to monitor...")
+        time.sleep(self.initial_monitor_wait_seconds)
 
         # Retry loop to wait for export to start, because the API is... special
         start_elapsed = 0
-        while start_elapsed < self.export_start_timeout:
+        while start_elapsed < self.export_start_timeout_seconds:
             if self.check_if_export_running():
                 logger.info("✓ Export process has started.")
                 break
-            logger.warning(f"Export not started yet, waiting {self.export_start_poll_interval}s...")
-            time.sleep(self.export_start_poll_interval)
-            start_elapsed += self.export_start_poll_interval
+            logger.warning(f"Export not started yet, waiting {self.export_start_poll_interval_seconds}s...")
+            time.sleep(self.export_start_poll_interval_seconds)
+            start_elapsed += self.export_start_poll_interval_seconds
         else:
-            logger.error(f"✗ Export did not start within {self.export_start_timeout} seconds.")
+            logger.error(f"✗ Export did not start within {self.export_start_timeout_seconds} seconds.")
             return None
 
         download_url = ""
         elapsed_time = 0
         last_message = ""
 
-        while elapsed_time < self.export_monitor_timeout:
+        while elapsed_time < self.export_monitor_timeout_seconds:
             logger.info(f"Checking export status... (elapsed: {elapsed_time}s)")
 
             try:
@@ -233,9 +233,9 @@ class StaticExporter:
                 activity_response = api_result[0]
                 status_code = api_result[1]
             except SystemExit:
-                logger.warning(f"Warning: Failed to get activity log, retrying in {self.export_monitor_poll_interval}s...")
-                time.sleep(self.export_monitor_poll_interval)
-                elapsed_time += self.export_monitor_poll_interval
+                logger.warning(f"Warning: Failed to get activity log, retrying in {self.export_monitor_poll_interval_seconds}s...")
+                time.sleep(self.export_monitor_poll_interval_seconds)
+                elapsed_time += self.export_monitor_poll_interval_seconds
                 continue
 
             # Check if export is still running
@@ -313,12 +313,12 @@ class StaticExporter:
 
                 break
 
-            time.sleep(self.export_monitor_poll_interval)
-            elapsed_time += self.export_monitor_poll_interval
+            time.sleep(self.export_monitor_poll_interval_seconds)
+            elapsed_time += self.export_monitor_poll_interval_seconds
 
         # Check if we timed out
-        if elapsed_time >= self.export_monitor_timeout:
-            logger.error(f"✗ Export process timed out after {self.export_monitor_timeout} seconds")
+        if elapsed_time >= self.export_monitor_timeout_seconds:
+            logger.error(f"✗ Export process timed out after {self.export_monitor_timeout_seconds} seconds")
             return None
 
         return download_url
@@ -333,7 +333,7 @@ class StaticExporter:
             logger.info(f"Created temporary directory: {temp_dir}")
 
             # Download the ZIP file
-            response = requests.get(download_url, timeout=self.zip_download_timeout)
+            response = requests.get(download_url, timeout=self.zip_download_timeout_seconds)
             response.raise_for_status()
 
             # Save to a temporary ZIP file
