@@ -151,11 +151,6 @@ def verify(root_dir: str):
     else:
         logger.info("\n✓ No forms found to verify.")
 
-    if total_forms_changed > 0:
-        logger.info(f"✓ Netlify-formified {total_forms_changed} CF7 form(s) in → {root}")
-    else:
-        logger.info("✓ No CF7 forms found to Netlify-formify.")
-
 
 @cli.command()
 @click.argument('root_dir', type=click.Path(exists=True, file_okay=False, resolve_path=True))
