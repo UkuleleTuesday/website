@@ -43,7 +43,7 @@ def download(output_dir: str):
 @cli.command(name="fix-paths")
 @click.argument('root_dir', type=click.Path(exists=True, file_okay=False, resolve_path=True))
 def fix_paths(root_dir: str):
-    """Convert absolute URLs to root-relative paths in exported HTML files."""
+    """Convert absolute URLs to root-relative paths in exported files."""
     root = pathlib.Path(root_dir)
     domain = "ukuleletuesday.ie"
 
@@ -55,10 +55,15 @@ def fix_paths(root_dir: str):
     # Pattern for standard URLs: https://ukuleletuesday.ie
     standard_url_pattern = re.compile(r'https?://' + re.escape(domain))
 
-    for html_path in root.rglob("*.html"):
+    file_patterns = ["*.html", "*.css", "*.js"]
+    files_to_process = []
+    for pattern in file_patterns:
+        files_to_process.extend(root.rglob(pattern))
+
+    for file_path in files_to_process:
         file_changed = False
         try:
-            content = html_path.read_text(encoding="utf-8")
+            content = file_path.read_text(encoding="utf-8")
             original_content = content
 
             # Replace escaped URLs (e.g., in JSON) first
@@ -69,48 +74,52 @@ def fix_paths(root_dir: str):
             if content != original_content:
                 file_changed = True
             
-            # The regex handles most cases, but we run over attributes
-            # with BeautifulSoup as a fallback and to normalize.
-            soup = bs4.BeautifulSoup(content, "html.parser")
+            # For HTML files, do a deeper parse with BeautifulSoup
+            if file_path.suffix == ".html":
+                soup = bs4.BeautifulSoup(content, "html.parser")
 
-            for attr in ['href', 'src', 'content', 'data-lazyload']:
-                for tag in soup.find_all(True, attrs={attr: True}):
-                    url = tag[attr]
-                    if domain in url:
-                        parsed_url = urlparse(url)
-                        relative_url = parsed_url.path
-                        if parsed_url.query:
-                            relative_url += '?' + parsed_url.query
-                        
-                        if tag[attr] != relative_url:
-                            tag[attr] = relative_url
-                            file_changed = True
-            
-            # For srcset, we need to process each part of the string
-            for tag in soup.find_all(True, srcset=True):
-                original_srcset = tag['srcset']
-                parts = [p.strip() for p in original_srcset.split(',')]
-                new_parts = []
-                for part in parts:
-                    url_part, *descriptor = part.split(' ', 1)
-                    if domain in url_part:
-                        new_url = urlparse(url_part).path
-                        new_parts.append(' '.join([new_url] + descriptor))
-                    else:
-                        new_parts.append(part)
+                for attr in ['href', 'src', 'content', 'data-lazyload']:
+                    for tag in soup.find_all(True, attrs={attr: True}):
+                        url = tag[attr]
+                        if domain in url:
+                            parsed_url = urlparse(url)
+                            relative_url = parsed_url.path
+                            if parsed_url.query:
+                                relative_url += '?' + parsed_url.query
+                            
+                            if tag[attr] != relative_url:
+                                tag[attr] = relative_url
+                                file_changed = True
                 
-                new_srcset = ', '.join(new_parts)
-                if new_srcset != original_srcset:
-                    tag['srcset'] = new_srcset
-                    file_changed = True
+                # For srcset, we need to process each part of the string
+                for tag in soup.find_all(True, srcset=True):
+                    original_srcset = tag['srcset']
+                    parts = [p.strip() for p in original_srcset.split(',')]
+                    new_parts = []
+                    for part in parts:
+                        url_part, *descriptor = part.split(' ', 1)
+                        if domain in url_part:
+                            new_url = urlparse(url_part).path
+                            new_parts.append(' '.join([new_url] + descriptor))
+                        else:
+                            new_parts.append(part)
+                    
+                    new_srcset = ', '.join(new_parts)
+                    if new_srcset != original_srcset:
+                        tag['srcset'] = new_srcset
+                        file_changed = True
+                
+                # If BeautifulSoup made changes, update the content
+                if file_changed:
+                    content = str(soup)
 
             if file_changed:
-                html_path.write_text(str(soup), encoding="utf-8")
+                file_path.write_text(content, encoding="utf-8")
                 total_files_changed += 1
-                logger.info(f"✓ Fixed paths in {html_path.relative_to(root)}")
+                logger.info(f"✓ Fixed paths in {file_path.relative_to(root)}")
 
         except Exception as e:
-            logger.error(f"✗ Could not process file {html_path.relative_to(root)}: {e}")
+            logger.error(f"✗ Could not process file {file_path.relative_to(root)}: {e}")
 
     if total_files_changed > 0:
         logger.info(f"✓ Path fixing complete. Changed {total_files_changed} file(s).")
