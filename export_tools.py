@@ -289,7 +289,8 @@ def _show_diff(file1_path: pathlib.Path, file2_path: pathlib.Path):
 @cli.command(name="diff-exports")
 @click.argument('path1_arg', type=click.Path(exists=True, file_okay=True, resolve_path=True))
 @click.argument('path2_arg', type=click.Path(exists=True, file_okay=True, resolve_path=True))
-def diff_exports(path1_arg: str, path2_arg: str):
+@click.option('--with-diff', is_flag=True, help='Show full content diff for differing files.')
+def diff_exports(path1_arg: str, path2_arg: str, with_diff: bool):
     """Compares two files or directories and lists content differences."""
     path1 = pathlib.Path(path1_arg)
     path2 = pathlib.Path(path2_arg)
@@ -298,7 +299,8 @@ def diff_exports(path1_arg: str, path2_arg: str):
     if path1.is_file() and path2.is_file():
         logger.info(f"Comparing files:\n- {path1}\n- {path2}")
         if path1.read_bytes() != path2.read_bytes():
-            _show_diff(path1, path2)
+            if with_diff:
+                _show_diff(path1, path2)
             logger.warning("\n✗ Files have differences.")
             sys.exit(1)
         else:
@@ -334,12 +336,17 @@ def diff_exports(path1_arg: str, path2_arg: str):
             file2_path = path2 / f
             if file1_path.read_bytes() != file2_path.read_bytes():
                 has_diff = True
-                diff_files.append((file1_path, file2_path))
+                diff_files.append((f, file1_path, file2_path))
 
         if diff_files:
             logger.info("\n--- Content differences found in the following files ---")
-            for file1_path, file2_path in diff_files:
-                _show_diff(file1_path, file2_path)
+            for f, file1_path, file2_path in diff_files:
+                if not with_diff:
+                    click.echo(f)
+            
+            if with_diff:
+                for f, file1_path, file2_path in diff_files:
+                    _show_diff(file1_path, file2_path)
 
         if not has_diff:
             logger.info("\n✓ Directories are identical.")
