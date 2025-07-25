@@ -48,6 +48,12 @@ def formify(root_dir: str):
             file_changed = True
             logger.info(f"✓ Removed Cloudflare Turnstile script from {html_path.relative_to(root)}")
 
+        # Remove other CF7 related scripts
+        for cf7_script in soup.find_all("script", id=lambda i: i and "contact-form-7" in i):
+            cf7_script.decompose()
+            file_changed = True
+            logger.info(f"✓ Removed Contact Form 7 script '{cf7_script.get('id')}' from {html_path.relative_to(root)}")
+
         for form in soup.find_all("form", class_=lambda c: c and "wpcf7-form" in c):
             form_changed = False
             form_id = form.get('id', 'N/A')
@@ -86,6 +92,13 @@ def formify(root_dir: str):
                 form_changed = True
                 logger.info(f"✓ Removed 'novalidate' attribute from form '{form_id}' in {html_path.relative_to(root)}")
 
+            # Remove CF7 hidden fields
+            cf7_fieldset = form.find("fieldset", class_="hidden-fields-container")
+            if cf7_fieldset:
+                cf7_fieldset.decompose()
+                form_changed = True
+                logger.info(f"✓ Removed CF7 hidden fieldset from form '{form_id}' in {html_path.relative_to(root)}")
+
             # Remove 'wpcf7-form' class but keep others
             if 'wpcf7-form' in form.get('class', []):
                 form['class'].remove('wpcf7-form')
@@ -99,6 +112,10 @@ def formify(root_dir: str):
 
         if file_changed:
             html_path.write_text(str(soup), encoding="utf‑8")
+
+    # Remove screen-reader-response and response-output divs
+    for a in soup.find_all('div', class_='screen-reader-response'): a.decompose()
+    for a in soup.find_all('div', class_='wpcf7-response-output'): a.decompose()
 
     if total_forms_changed > 0:
         logger.info(f"✓ Netlify-formified {total_forms_changed} CF7 form(s) in → {root}")
