@@ -11,6 +11,7 @@ import shutil
 import bs4
 import click
 import logging
+import re
 from urllib.parse import urlparse
 from export import run_scraper
 
@@ -51,51 +52,42 @@ def fix_paths(root_dir: str):
     logger.info(f"Converting absolute URLs to relative paths in: {root}")
     total_files_changed = 0
 
+    # Regex to find http/https protocols followed by the domain,
+    # accounting for escaped slashes in JSON/JS.
+    url_pattern = re.compile(
+        r'https?:' +  # Match http: or https:
+        r'(?:\\\/){2}' +  # Match two escaped slashes e.g. \/\/
+        re.escape(domain)
+    )
+
     for html_path in root.rglob("*.html"):
         file_changed = False
         try:
-            # Process the raw text first for script tags
+            # Process the raw text first for script tags and JSON
             content = html_path.read_text(encoding="utf-8")
             
-            # Create a version of the base_url with escaped slashes for JSON contexts
-            escaped_base_url = base_url.replace('/', r'\/')
-
-            # Perform replacements
-            replacements = {
-                f'"{base_url}': '"',
-                f"'{base_url}": "'",
-                f'\\"{base_url}': '\\"',
-                escaped_base_url: '',
-                base_url: '',
-            }
+            # First, handle escaped URLs inside script tags/json
+            new_content, num_replacements = url_pattern.subn('', content)
             
-            new_content = content
-            for old, new in replacements.items():
-                new_content = new_content.replace(old, new)
-
-            if content != new_content:
+            if num_replacements > 0:
                 file_changed = True
 
             soup = bs4.BeautifulSoup(new_content, "html.parser")
 
-            # Find all attributes that might contain a URL
-            for tag in soup.find_all(True, href=True):
-                url = tag['href']
-                if domain in url:
-                    tag['href'] = urlparse(url).path
-                    file_changed = True
-
-            for tag in soup.find_all(True, src=True):
-                url = tag['src']
-                if domain in url:
-                    tag['src'] = urlparse(url).path
-                    file_changed = True
-
-            for tag in soup.find_all('meta', content=True):
-                url = tag['content']
-                if domain in url:
-                    tag['content'] = urlparse(url).path
-                    file_changed = True
+            # Then, handle standard URLs in HTML attributes
+            for attr in ['href', 'src', 'content', 'data-lazyload']:
+                for tag in soup.find_all(True, attrs={attr: True}):
+                    url = tag[attr]
+                    if domain in url:
+                        # Use urlparse to safely get just the path and query
+                        parsed_url = urlparse(url)
+                        relative_url = parsed_url.path
+                        if parsed_url.query:
+                            relative_url += '?' + parsed_url.query
+                        
+                        if tag[attr] != relative_url:
+                            tag[attr] = relative_url
+                            file_changed = True
 
             if file_changed:
                 html_path.write_text(str(soup), encoding="utf-8")
