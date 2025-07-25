@@ -58,37 +58,26 @@ def download(output_dir: str, num_retries: int):
         sys.exit(1)
 
 
-import re
-
-@cli.command(name="fix-paths")
+@cli.command(name="remove-unused-assets")
 @click.argument('root_dir', type=click.Path(exists=True, file_okay=False, resolve_path=True))
-def fix_paths(root_dir: str):
-    """Fix paths in the exported static site."""
+def remove_unused_assets(root_dir: str):
+    """Clean up unused files and directories from the export."""
     root = pathlib.Path(root_dir)
-    logger.info(f"Fixing paths in: {root}")
+    logger.info(f"Cleaning up unused assets in: {root}")
 
-    # Regex to find /wp-admin/admin-ajax.php?action=dynamic_css#038;ver=...
-    # It will match 'ver=' followed by any characters that are not a single or double quote.
-    search_pattern = re.compile(r"/wp-admin/admin-ajax\.php\?action=dynamic_css#038;ver=[^'\"]*")
-    replace_str = "/wp-admin/admin-ajax.css"
-    files_changed = 0
-
-    for html_path in root.rglob("*.html"):
+    # Remove wp-admin directory
+    wp_admin_path = root / "wp-admin"
+    if wp_admin_path.is_dir():
         try:
-            content = html_path.read_text(encoding="utf-8")
-            new_content, num_subs = search_pattern.subn(replace_str, content)
-
-            if num_subs > 0:
-                html_path.write_text(new_content, encoding="utf-8")
-                logger.info(f"✓ Fixed paths in {html_path.relative_to(root)}")
-                files_changed += 1
+            shutil.rmtree(wp_admin_path)
+            logger.info(f"✓ Removed directory: {wp_admin_path.relative_to(root)}")
         except Exception as e:
-            logger.error(f"✗ Could not process file {html_path.relative_to(root)}: {e}")
-
-    if files_changed > 0:
-        logger.info(f"✓ Fixed paths in {files_changed} file(s).")
+            logger.error(f"✗ Could not remove directory {wp_admin_path.relative_to(root)}: {e}")
+            sys.exit(1)
     else:
-        logger.info("✓ No paths needed fixing.")
+        logger.info("✓ wp-admin directory not found, skipping.")
+
+    logger.info("✓ Asset cleanup complete.")
 
 
 @click.group(name="netlify-forms")
