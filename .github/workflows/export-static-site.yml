@@ -3,11 +3,11 @@ name: Export Static Site
 on:
   # Allow manual triggering
   workflow_dispatch:
-  
+
   # Run on schedule (daily at 2 AM UTC)
   schedule:
     - cron: '0 2 * * *'
-  
+
   # Run on pushes to main branch (for testing)
   push:
     branches: [ main ]
@@ -18,19 +18,23 @@ on:
 jobs:
   export-and-deploy:
     runs-on: ubuntu-latest
-    
+
     # Use a concurrency group to prevent multiple exports running simultaneously
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
-    
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-    
+    - uses: google-github-actions/auth@v2
+      with:
+        workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
     - name: Install uv
       uses: astral-sh/setup-uv@v4
-    
+
     - name: Run static export
       timeout-minutes: 10
       env:
@@ -40,13 +44,13 @@ jobs:
 
     - name: Clean up unused files
       run: uv run export_tools.py clean-up ./static-export
-    
+
     - name: Run netlify_formify
       run: uv run export_tools.py netlify-forms formify ./static-export
-    
+
     - name: Verify Netlify forms
       run: uv run export_tools.py netlify-forms verify ./static-export
-      
+
     - name: Copy extra assets
       if: always() # Ensure this runs even if previous step finds no forms
       run: |
@@ -56,7 +60,7 @@ jobs:
         else
           echo "No extra-assets directory found, skipping"
         fi
-    
+
     - name: Set Netlify deployment arguments
       id: netlify_args
       run: |
