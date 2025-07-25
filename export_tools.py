@@ -137,29 +137,46 @@ def formify(root_dir: str):
             form_changed = False
             form_id = form.get('id', 'N/A')
 
-            # 1. Add name attribute from page slug
-            # This is important for Netlify to identify the form.
+            # 1. Determine form name from slug
             if html_path.name == "index.html":
-                form_name = html_path.parent.name
+                slug_form_name = html_path.parent.name
             else:
-                form_name = html_path.stem
+                slug_form_name = html_path.stem
 
-            if not form.has_attr("name"):
+            # 2. Find or create hidden 'form-name' input and set form name
+            hidden_form_name_input = form.find("input", attrs={"name": "form-name"})
+            if hidden_form_name_input and hidden_form_name_input.get("value"):
+                form_name = hidden_form_name_input["value"]
+            else:
+                # If input doesn't exist or has no value, create it
+                if not hidden_form_name_input:
+                    hidden_form_name_input = soup.new_tag("input", attrs={
+                        "type": "hidden",
+                        "name": "form-name"
+                    })
+                    form.insert(0, hidden_form_name_input) # as first child
+                
+                form_name = slug_form_name
+                hidden_form_name_input["value"] = form_name
+                form_changed = True
+
+            # Set form 'name' attribute
+            if form.get("name") != form_name:
                 form["name"] = form_name
                 form_changed = True
 
-            # 2. Remove action attribute
+            # 3. Remove action attribute
             if form.has_attr("action"):
                 del form["action"]
                 form_changed = True
 
-            # 3. Netlify attributes
+            # 4. Netlify attributes
             if not form.has_attr("data-netlify"):
                 form["data-netlify"] = "true"
                 form["netlify-honeypot"] = "bot-field"
                 form_changed = True
 
-            # 4. Add honeypot field
+            # 5. Add honeypot field
             # We add a p tag with a class of "hidden" that we can target with CSS.
             if not form.find("input", attrs={"name": "bot-field"}):
                 hidden_p = soup.new_tag("p", attrs={"class": "hidden"})
@@ -169,17 +186,6 @@ def formify(root_dir: str):
                 label.append(bot_input)
                 hidden_p.append(label)
                 form.append(hidden_p) # append at the end of the form
-                form_changed = True
-
-            # 5. Hidden 'form-name'
-            if not form.find("input", attrs={"name": "form-name"}):
-                default_name = form_id or "contact"
-                hidden = soup.new_tag("input", attrs={
-                    "type": "hidden",
-                    "name": "form-name",
-                    "value": default_name,
-                })
-                form.insert(0, hidden)  # as first child
                 form_changed = True
 
             # 6. Remove Cloudflare Turnstile divs
