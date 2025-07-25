@@ -35,7 +35,7 @@ class StaticExporter:
             stop_export_poll_interval_seconds: int = 5,
             export_start_timeout_seconds: int = 120,
             export_start_poll_interval_seconds: int = 10,
-            export_monitor_timeout_seconds: int = 120,
+            export_monitor_timeout_seconds: int = 150,
             export_monitor_poll_interval_seconds: int = 10,
             zip_download_timeout_seconds: int = 300
     ):
@@ -441,7 +441,7 @@ def download(output_dir: str, num_retries: int):
             break
 
         if i < num_retries:
-            retry_wait_seconds = 30
+            retry_wait_seconds = 10
             logger.warning(f"Attempt {attempt} failed. Retrying in {retry_wait_seconds} seconds...")
             time.sleep(retry_wait_seconds)
 

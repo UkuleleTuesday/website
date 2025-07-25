@@ -32,7 +32,7 @@ jobs:
       uses: astral-sh/setup-uv@v4
     
     - name: Run static export
-      timeout-minutes: 5
+      timeout-minutes: 10
       env:
         WP_USERNAME: ${{ secrets.WP_USERNAME }}
         WP_PASSWORD: ${{ secrets.WP_PASSWORD }}
