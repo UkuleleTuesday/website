@@ -137,13 +137,18 @@ def formify(root_dir: str):
             form_changed = False
             form_id = form.get('id', 'N/A')
 
-            # 1. Netlify attributes
+            # 1. Remove action attribute
+            if form.has_attr("action"):
+                del form["action"]
+                form_changed = True
+
+            # 2. Netlify attributes
             if not form.has_attr("data-netlify"):
                 form["data-netlify"] = "true"
                 form["netlify-honeypot"] = "bot-field"
                 form_changed = True
 
-            # 2. Hidden 'form-name'
+            # 3. Hidden 'form-name'
             if not form.find("input", attrs={"name": "form-name"}):
                 default_name = form_id or "contact"
                 hidden = soup.new_tag("input", attrs={
@@ -154,7 +159,7 @@ def formify(root_dir: str):
                 form.insert(0, hidden)  # as first child
                 form_changed = True
 
-            # 3. Remove Cloudflare Turnstile div
+            # 4. Remove Cloudflare Turnstile div
             turnstile_div = form.find("div", class_="cf-turnstile")
             if turnstile_div:
                 turnstile_div.decompose()
