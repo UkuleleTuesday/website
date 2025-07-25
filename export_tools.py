@@ -180,9 +180,16 @@ def formify(root_dir: str):
             # 6. Remove WPCF7 hidden fields
             for wpcf7_field in form.find_all("input", attrs={"name": re.compile(r"^_wpcf7")}):
                 field_name = wpcf7_field.get('name')
+                parent = wpcf7_field.parent
+                
                 wpcf7_field.decompose()
                 form_changed = True
                 logger.info(f"✓ Removed WPCF7 hidden field '{field_name}' from form '{form_id}' in {html_path.relative_to(root)}")
+
+                # If the parent is a fieldset and is now empty, remove it
+                if parent and parent.name == 'fieldset' and not parent.get_text(strip=True) and not parent.find_all(True, recursive=False):
+                    parent.decompose()
+                    logger.info(f"✓ Removed empty fieldset that contained '{field_name}' in {html_path.relative_to(root)}")
 
             if form_changed:
                 file_changed = True
