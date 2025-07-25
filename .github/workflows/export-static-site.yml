@@ -32,10 +32,11 @@ jobs:
       uses: astral-sh/setup-uv@v4
     
     - name: Run static export
+      timeout-minutes: 5
       env:
         WP_USERNAME: ${{ secrets.WP_USERNAME }}
         WP_PASSWORD: ${{ secrets.WP_PASSWORD }}
-      run: uv run export.py download -o ./static-export --num-retries 2
+      run: uv run export.py download -o ./static-export --num-retries 5
     
     - name: Fix paths in static site
       run: |
