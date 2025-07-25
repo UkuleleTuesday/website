@@ -220,6 +220,43 @@ def verify(root_dir: str):
         logger.info("\n✓ No forms found to verify.")
 
 
+@cli.command(name="diff-exports")
+@click.argument('dir1', type=click.Path(exists=True, file_okay=False, resolve_path=True))
+@click.argument('dir2', type=click.Path(exists=True, file_okay=False, resolve_path=True))
+def diff_exports(dir1: str, dir2: str):
+    """Compares two export directories and lists file differences."""
+    path1 = pathlib.Path(dir1)
+    path2 = pathlib.Path(dir2)
+
+    logger.info(f"Comparing directories:\n- {path1}\n- {path2}")
+
+    files1 = {p.relative_to(path1) for p in path1.rglob('*') if p.is_file()}
+    files2 = {p.relative_to(path2) for p in path2.rglob('*') if p.is_file()}
+
+    only_in_1 = files1 - files2
+    only_in_2 = files2 - files1
+
+    has_diff = False
+
+    if only_in_1:
+        has_diff = True
+        logger.info(f"\n--- Files only in {dir1} ---")
+        for f in sorted(only_in_1):
+            click.echo(f)
+
+    if only_in_2:
+        has_diff = True
+        logger.info(f"\n--- Files only in {dir2} ---")
+        for f in sorted(only_in_2):
+            click.echo(f)
+    
+    if not has_diff:
+        logger.info("\n✓ Directories have identical file lists.")
+    else:
+        logger.warning("\n✗ Directories have differences.")
+        sys.exit(1)
+
+
 cli.add_command(netlify_forms)
 
 if __name__ == '__main__':
