@@ -14,7 +14,6 @@ import json
 import tempfile
 import zipfile
 import shutil
-import click
 from pathlib import Path
 from typing import Dict, Any, Optional, Tuple
 from urllib.parse import urlparse
@@ -428,43 +427,3 @@ class StaticExporter:
             return False
 
 
-@click.group()
-def cli():
-    """Ukulele Tuesday static site export tool"""
-    pass
-
-
-@cli.command()
-@click.option('-o', '--output', 'output_dir', required=True,
-              help='Output directory for the extracted static site')
-@click.option('--num-retries', 'num_retries', default=0, type=int,
-              help='Number of times to retry the export on failure')
-def download(output_dir: str, num_retries: int):
-    """Export the WordPress site and download the static files"""
-    exporter = StaticExporter(
-        base_url="https://ukuleletuesday.ie/wp-json/simplystatic/v1",
-        username=os.getenv('WP_USERNAME'),
-        password=os.getenv('WP_PASSWORD')
-    )
-
-    success = False
-    for i in range(num_retries + 1):
-        attempt = i + 1
-        logger.info(f"--- Starting export attempt {attempt}/{num_retries + 1} ---")
-        success = exporter.run_download(output_dir)
-
-        if success:
-            break
-
-        if i < num_retries:
-            retry_wait_seconds = 10
-            logger.warning(f"Attempt {attempt} failed. Retrying in {retry_wait_seconds} seconds...")
-            time.sleep(retry_wait_seconds)
-
-    if not success:
-        logger.error("✗ All export attempts failed.")
-        sys.exit(1)
-
-
-if __name__ == "__main__":
-    cli()

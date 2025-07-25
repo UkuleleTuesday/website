@@ -36,22 +36,17 @@ jobs:
       env:
         WP_USERNAME: ${{ secrets.WP_USERNAME }}
         WP_PASSWORD: ${{ secrets.WP_PASSWORD }}
-      run: uv run export.py download -o ./static-export --num-retries 5
-    
-    - name: Fix paths in static site
-      run: |
-        cd ./static-export
-        grep -rl --include='*.html' 'action=dynamic_css#038;ver=' . \
-          | xargs sed -i -E \
-              's@/wp-admin/admin-ajax\.php\?action=dynamic_css#038;ver=[^"]*@/wp-admin/admin-ajax.css@g'
-        echo "✓ Fixed paths in static site"
+      run: uv run export_tools.py download -o ./static-export --num-retries 5
+
+    - name: Clean up unused files
+      run: uv run export_tools.py clean-up ./static-export
     
     - name: Run netlify_formify
-      run: uv run netlify_formify.py formify ./static-export
+      run: uv run export_tools.py netlify-forms formify ./static-export
     
     - name: Verify Netlify forms
-      run: uv run netlify_formify.py verify ./static-export
-    
+      run: uv run export_tools.py netlify-forms verify ./static-export
+      
     - name: Copy extra assets
       if: always() # Ensure this runs even if previous step finds no forms
       run: |

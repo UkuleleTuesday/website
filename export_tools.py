@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 """
-Rewrite CF7 markup so Netlify picks it up.
-
-•   Adds data‑netlify="true"  and  netlify-honeypot="bot-field"
-•   Injects <input type="hidden" name="form-name" …>
-    – value is taken from <form id="…"> if present,
-      otherwise falls back to "contact".
-•   Leaves the rest of the CF7 markup untouched;
-    Netlify simply ignores the extra hidden fields & JS.
+Static export and processing tools for Ukulele Tuesday website
 """
-import pathlib
+import os
 import sys
+import time
+import pathlib
+import shutil
 import bs4
 import click
 import logging
+from export import StaticExporter
 
 # Configure logging
 logging.basicConfig(
@@ -25,11 +22,71 @@ logger = logging.getLogger(__name__)
 
 @click.group()
 def cli():
-    """Tools to prepare Contact Form 7 forms for Netlify."""
+    """Ukulele Tuesday static site export and processing tool."""
     pass
 
 
 @cli.command()
+@click.option('-o', '--output', 'output_dir', required=True,
+              help='Output directory for the extracted static site')
+@click.option('--num-retries', 'num_retries', default=0, type=int,
+              help='Number of times to retry the export on failure')
+def download(output_dir: str, num_retries: int):
+    """Export the WordPress site and download the static files."""
+    exporter = StaticExporter(
+        base_url="https://ukuleletuesday.ie/wp-json/simplystatic/v1",
+        username=os.getenv('WP_USERNAME'),
+        password=os.getenv('WP_PASSWORD')
+    )
+
+    success = False
+    for i in range(num_retries + 1):
+        attempt = i + 1
+        logger.info(f"--- Starting export attempt {attempt}/{num_retries + 1} ---")
+        success = exporter.run_download(output_dir)
+
+        if success:
+            break
+
+        if i < num_retries:
+            retry_wait_seconds = 10
+            logger.warning(f"Attempt {attempt} failed. Retrying in {retry_wait_seconds} seconds...")
+            time.sleep(retry_wait_seconds)
+
+    if not success:
+        logger.error("✗ All export attempts failed.")
+        sys.exit(1)
+
+
+@cli.command(name="clean-up")
+@click.argument('root_dir', type=click.Path(exists=True, file_okay=False, resolve_path=True))
+def clean_up(root_dir: str):
+    """Clean up unused files and directories from the export."""
+    root = pathlib.Path(root_dir)
+    logger.info(f"Cleaning up unused files in: {root}")
+
+    # Remove wp-admin directory
+    wp_admin_path = root / "wp-admin"
+    if wp_admin_path.is_dir():
+        try:
+            shutil.rmtree(wp_admin_path)
+            logger.info(f"✓ Removed directory: {wp_admin_path.relative_to(root)}")
+        except Exception as e:
+            logger.error(f"✗ Could not remove directory {wp_admin_path.relative_to(root)}: {e}")
+            sys.exit(1)
+    else:
+        logger.info("✓ wp-admin directory not found, skipping.")
+
+    logger.info("✓ Cleanup complete.")
+
+
+@click.group(name="netlify-forms")
+def netlify_forms():
+    """Tools to prepare Contact Form 7 forms for Netlify."""
+    pass
+
+
+@netlify_forms.command()
 @click.argument('root_dir', type=click.Path(exists=True, file_okay=False, resolve_path=True))
 def formify(root_dir: str):
     """Rewrite CF7 markup in HTML files so Netlify picks it up."""
@@ -109,58 +166,7 @@ def formify(root_dir: str):
         logger.info("✓ No CF7 forms found to Netlify-formify.")
 
 
-@cli.command()
-@click.argument('root_dir', type=click.Path(exists=True, file_okay=False, resolve_path=True))
-def verify(root_dir: str):
-    """Verify that forms in HTML files are Netlify-ready."""
-    root = pathlib.Path(root_dir)
-    logger.info(f"Verifying Netlify forms in: {root}")
-    forms_found = 0
-    errors_found = 0
-
-    for html_path in root.rglob("*.html"):
-        html = html_path.read_text(encoding="utf‑8", errors="ignore")
-        soup = bs4.BeautifulSoup(html, "html.parser")
-
-        # Find forms inside a .wpcf7 container
-        for form_container in soup.find_all("div", class_="wpcf7"):
-            form = form_container.find("form")
-            if not form:
-                continue
-
-            forms_found += 1
-            form_id = form.get('id', 'unidentified form')
-            relative_path = html_path.relative_to(root)
-
-            # Check for Netlify attribute
-            if not form.has_attr("data-netlify"):
-                logger.error(f"✗ [{relative_path}] Form '{form_id}' is missing the 'data-netlify' attribute.")
-                errors_found += 1
-
-            # Check for form-name input
-            if not form.find("input", attrs={"type": "hidden", "name": "form-name"}):
-                logger.error(f"✗ [{relative_path}] Form '{form_id}' is missing a hidden 'form-name' input.")
-                errors_found += 1
-
-            # Check for name attributes on all inputs
-            for field in form.find_all(["input", "textarea", "select"]):
-                # submit buttons don't need a name
-                if field.get("type") == "submit":
-                    continue
-                if not field.has_attr("name"):
-                    logger.error(f"✗ [{relative_path}] Form '{form_id}' has a field without a 'name' attribute: {str(field)}")
-                    errors_found += 1
-
-    if errors_found > 0:
-        logger.error(f"\nFound {errors_found} errors in {forms_found} forms.")
-        sys.exit(1)
-    elif forms_found > 0:
-        logger.info(f"\n✓ All {forms_found} found forms appear to be correctly configured for Netlify.")
-    else:
-        logger.info("\n✓ No forms found to verify.")
-
-
-@cli.command()
+@netlify_forms.command()
 @click.argument('root_dir', type=click.Path(exists=True, file_okay=False, resolve_path=True))
 def verify(root_dir: str):
     """Verify that forms in HTML files are Netlify-ready."""
@@ -174,13 +180,14 @@ def verify(root_dir: str):
         soup = bs4.BeautifulSoup(html, "html.parser")
 
         for form in soup.find_all("form"):
-            forms_found += 1
             form_id = form.get('id', 'unidentified form')
             relative_path = html_path.relative_to(root)
 
             # Check for Netlify attribute
             if not form.has_attr("data-netlify"):
                 continue  # Not a Netlify form, skip
+
+            forms_found += 1
 
             # Check for form-name input
             if not form.find("input", attrs={"type": "hidden", "name": "form-name"}):
@@ -204,6 +211,8 @@ def verify(root_dir: str):
     else:
         logger.info("\n✓ No forms found to verify.")
 
+
+cli.add_command(netlify_forms)
 
 if __name__ == '__main__':
     cli()
