@@ -58,6 +58,12 @@ def formify(root_dir: str):
             form_changed = False
             form_id = form.get('id', 'N/A')
 
+            # Unwrap form from parent div.wpcf7
+            parent_div = form.find_parent('div', class_='wpcf7')
+            if parent_div:
+                parent_div.unwrap()
+                logger.info(f"✓ Unwrapped form '{form_id}' from parent '.wpcf7' div in {html_path.relative_to(root)}")
+
             # 1. Netlify attributes
             if not form.has_attr("data-netlify"):
                 form["data-netlify"] = "true"
