@@ -5,6 +5,7 @@ Scrapy-based static site exporter for Ukulele Tuesday website.
 
 import logging
 import os
+import re
 import shutil
 from pathlib import Path
 from urllib.parse import urlparse
@@ -44,15 +45,24 @@ class StaticSiteSpider(scrapy.Spider):
     def extract_asset_urls(self, response):
         """Extracts all static asset URLs from a response."""
         urls = set()
-        # Get all src and href attributes
-        for element in response.css('[src], [href]'):
+        # Get all src, href, and srcset attributes
+        for element in response.css('[src], [href], [srcset]'):
+            # Handle src and href
             url = element.attrib.get('src') or element.attrib.get('href')
             if url:
                 urls.add(response.urljoin(url))
+            
+            # Handle srcset for responsive images
+            srcset = element.attrib.get('srcset')
+            if srcset:
+                # Split the srcset by comma and extract the URL part
+                for src in srcset.split(','):
+                    src_url = src.strip().split(' ')[0]
+                    urls.add(response.urljoin(src_url))
         return urls
 
     def save_file(self, response):
-        """Saves a response to a local file."""
+        """Saves a response to a local file and spiders CSS/JS files for more assets."""
         parsed_url = urlparse(response.url)
         path = parsed_url.path.lstrip('/')
         
@@ -78,6 +88,28 @@ class StaticSiteSpider(scrapy.Spider):
             yield {'path': str(file_path)}
         except Exception as e:
             self.log(f"Error saving {response.url} to {file_path}: {e}", level=logging.ERROR)
+
+        content = response.body.decode('utf-8', errors='ignore')
+
+        # If the saved file is CSS, parse it for more assets
+        if file_path.suffix == '.css':
+            # Find all url(...) declarations
+            css_urls = re.findall(r'url\((?![\'"]?data:)(.*?)\)', content)
+            for css_url in css_urls:
+                # Clean up the URL (remove quotes)
+                css_url = css_url.strip('\'"')
+                full_url = response.urljoin(css_url)
+                if full_url.startswith('http'):
+                    yield scrapy.Request(full_url, callback=self.save_file)
+        
+        # If the saved file is JS, parse it for more assets
+        elif file_path.suffix == '.js':
+            # Find paths to assets within JS strings
+            js_urls = re.findall(r'["\'](/wp-content/[^"\']+)["\']', content)
+            for js_url in js_urls:
+                full_url = response.urljoin(js_url)
+                if full_url.startswith('http'):
+                    yield scrapy.Request(full_url, callback=self.save_file)
 
 def run_scraper(output_dir: str):
     """
