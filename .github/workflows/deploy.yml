@@ -76,7 +76,7 @@ jobs:
           DEPLOY_MESSAGE="Deploy preview for PR #${{ github.event.number }} - ${PR_TITLE_ESCAPED}"
           echo "deploy_args=deploy --dir=./static-export --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
         else
-          COMMIT_MSG=$(git log -1 --pretty=%B)
+          COMMIT_MSG=$(git log -1 --pretty=%s) # %s gets only the subject line
           # Escape quotes in commit message
           COMMIT_MSG_ESCAPED=${COMMIT_MSG//\"/\\\"}
           DEPLOY_MESSAGE="Production deploy: ${COMMIT_MSG_ESCAPED}"
