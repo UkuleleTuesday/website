@@ -12,18 +12,20 @@ Rewrite CF7 markup so Netlify picks it up.
 import sys, pathlib, bs4
 
 root = pathlib.Path(sys.argv[1]).resolve()
+total_forms_changed = 0
 
 for html_path in root.rglob("*.html"):
     html = html_path.read_text(encoding="utf‑8", errors="ignore")
     soup = bs4.BeautifulSoup(html, "html.parser")
-    changed = False
+    file_changed = False
 
     for form in soup.find_all("form", class_=lambda c: c and "wpcf7-form" in c):
+        form_changed = False
         # 1. Netlify attributes
         if not form.has_attr("data-netlify"):
             form["data-netlify"] = "true"
             form["netlify-honeypot"] = "bot-field"
-            changed = True
+            form_changed = True
 
         # 2. Hidden 'form-name'
         if not form.find("input", attrs={"name": "form-name"}):
@@ -34,9 +36,18 @@ for html_path in root.rglob("*.html"):
                 "value": default_name,
             })
             form.insert(0, hidden)        # as first child
-            changed = True
+            form_changed = True
 
-    if changed:
+        if form_changed:
+            file_changed = True
+            total_forms_changed += 1
+            form_id = form.get('id', 'N/A')
+            print(f"✓ Transformed form with id: '{form_id}' in {html_path.relative_to(root)}")
+
+    if file_changed:
         html_path.write_text(str(soup), encoding="utf‑8")
 
-print("✓ Netlify‑formified CF7 →", root)
+if total_forms_changed > 0:
+    print(f"✓ Netlify-formified {total_forms_changed} CF7 form(s) in → {root}")
+else:
+    print("✓ No CF7 forms found to Netlify-formify.")

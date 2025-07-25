@@ -46,7 +46,11 @@ jobs:
               's@/wp-admin/admin-ajax\.php\?action=dynamic_css#038;ver=[^"]*@/wp-admin/admin-ajax.css@g'
         echo "✓ Fixed paths in static site"
     
+    - name: Run netlify_formify
+      run: uv run netlify_formify.py ./static-export
+    
     - name: Copy extra assets
+      if: always() # Ensure this runs even if previous step finds no forms
       run: |
         if [ -d "./extra-assets" ]; then
           cp -r ./extra-assets/* ./static-export/
