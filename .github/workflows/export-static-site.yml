@@ -58,9 +58,17 @@ jobs:
       id: netlify_args
       run: |
         if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-          echo "deploy_args=deploy --dir=./static-export" >> "$GITHUB_OUTPUT"
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          # Escape quotes in PR title
+          PR_TITLE_ESCAPED=${PR_TITLE//\"/\\\"}
+          DEPLOY_MESSAGE="Deploy preview for PR #${{ github.event.number }} - ${PR_TITLE_ESCAPED}"
+          echo "deploy_args=deploy --dir=./static-export --no-build --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
         else
-          echo "deploy_args=deploy --dir=./static-export --prod" >> "$GITHUB_OUTPUT"
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          # Escape quotes in commit message
+          COMMIT_MSG_ESCAPED=${COMMIT_MSG//\"/\\\"}
+          DEPLOY_MESSAGE="Production deploy: ${COMMIT_MSG_ESCAPED}"
+          echo "deploy_args=deploy --dir=./static-export --no-build --prod-if-unlocked --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
         fi
 
     - name: Deploy to Netlify
