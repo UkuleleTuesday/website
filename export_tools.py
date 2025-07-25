@@ -159,7 +159,19 @@ def formify(root_dir: str):
                 form["netlify-honeypot"] = "bot-field"
                 form_changed = True
 
-            # 4. Hidden 'form-name'
+            # 4. Add honeypot field
+            # We add a p tag with a class of "hidden" that we can target with CSS.
+            if not form.find("input", attrs={"name": "bot-field"}):
+                hidden_p = soup.new_tag("p", attrs={"class": "hidden"})
+                label = soup.new_tag("label")
+                label.string = "Don’t fill this out if you’re human: "
+                bot_input = soup.new_tag("input", attrs={"name": "bot-field", "type": "text"})
+                label.append(bot_input)
+                hidden_p.append(label)
+                form.append(hidden_p) # append at the end of the form
+                form_changed = True
+
+            # 5. Hidden 'form-name'
             if not form.find("input", attrs={"name": "form-name"}):
                 default_name = form_id or "contact"
                 hidden = soup.new_tag("input", attrs={
@@ -170,7 +182,7 @@ def formify(root_dir: str):
                 form.insert(0, hidden)  # as first child
                 form_changed = True
 
-            # 5. Remove Cloudflare Turnstile divs
+            # 6. Remove Cloudflare Turnstile divs
             turnstile_divs_to_remove = form.find_all("div", class_=["cf-turnstile", "cf7-cf-turnstile"])
             if turnstile_divs_to_remove:
                 for turnstile_div in turnstile_divs_to_remove:
@@ -181,7 +193,7 @@ def formify(root_dir: str):
                         form_changed = True
                         logger.info(f"✓ Removed Cloudflare Turnstile div with class '{class_name}' from form '{form_id}' in {html_path.relative_to(root)}")
 
-            # 6. Remove WPCF7 hidden fields
+            # 7. Remove WPCF7 hidden fields
             for wpcf7_field in form.find_all("input", attrs={"name": re.compile(r"^_wpcf7")}):
                 field_name = wpcf7_field.get('name')
                 parent = wpcf7_field.parent
