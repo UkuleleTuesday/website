@@ -177,6 +177,13 @@ def formify(root_dir: str):
                 form_changed = True
                 logger.info(f"✓ Removed Cloudflare Turnstile div from form '{form_id}' in {html_path.relative_to(root)}")
 
+            # 6. Remove WPCF7 hidden fields
+            for wpcf7_field in form.find_all("input", attrs={"name": re.compile(r"^_wpcf7")}):
+                field_name = wpcf7_field.get('name')
+                wpcf7_field.decompose()
+                form_changed = True
+                logger.info(f"✓ Removed WPCF7 hidden field '{field_name}' from form '{form_id}' in {html_path.relative_to(root)}")
+
             if form_changed:
                 file_changed = True
                 total_forms_changed += 1
