@@ -101,8 +101,10 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
+          const comment_marker = "<!-- NETLIFY_PREVIEW_COMMENT -->";
           const previewUrl = `${{ steps.netlify_deploy.outputs.NETLIFY_URL }}`;
           const commentBody = `
+            ${comment_marker}
             ## ✅ Netlify Deploy Preview Ready!
 
             You can view the live preview of your changes here:
@@ -111,9 +113,27 @@ jobs:
             ---
             _Build logs are available in the [GitHub Actions summary](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})._
           `;
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
+
+          const { data: comments } = await github.rest.issues.listComments({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: commentBody
+            issue_number: context.issue.number,
           });
+
+          const existing_comment = comments.find(comment => comment.body.includes(comment_marker));
+
+          if (existing_comment) {
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: existing_comment.id,
+              body: commentBody,
+            });
+          } else {
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: commentBody,
+            });
+          }
