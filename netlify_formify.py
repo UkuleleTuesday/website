@@ -42,8 +42,16 @@ def formify(root_dir: str):
         soup = bs4.BeautifulSoup(html, "html.parser")
         file_changed = False
 
+        # Remove Turnstile script tags from the document
+        for turnstile_script in soup.find_all("script", src=lambda s: s and "challenges.cloudflare.com/turnstile" in s):
+            turnstile_script.decompose()
+            file_changed = True
+            logger.info(f"✓ Removed Cloudflare Turnstile script from {html_path.relative_to(root)}")
+
         for form in soup.find_all("form", class_=lambda c: c and "wpcf7-form" in c):
             form_changed = False
+            form_id = form.get('id', 'N/A')
+
             # 1. Netlify attributes
             if not form.has_attr("data-netlify"):
                 form["data-netlify"] = "true"
@@ -61,10 +69,16 @@ def formify(root_dir: str):
                 form.insert(0, hidden)        # as first child
                 form_changed = True
 
+            # 3. Remove Cloudflare Turnstile div
+            turnstile_div = form.find("div", class_="cf-turnstile")
+            if turnstile_div:
+                turnstile_div.decompose()
+                form_changed = True
+                logger.info(f"✓ Removed Cloudflare Turnstile div from form '{form_id}' in {html_path.relative_to(root)}")
+
             if form_changed:
                 file_changed = True
                 total_forms_changed += 1
-                form_id = form.get('id', 'N/A')
                 logger.info(f"✓ Transformed form with id: '{form_id}' in {html_path.relative_to(root)}")
 
         if file_changed:
