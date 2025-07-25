@@ -58,26 +58,32 @@ def download(output_dir: str, num_retries: int):
         sys.exit(1)
 
 
-@cli.command(name="clean-up")
+@cli.command(name="fix-paths")
 @click.argument('root_dir', type=click.Path(exists=True, file_okay=False, resolve_path=True))
-def clean_up(root_dir: str):
-    """Clean up unused files and directories from the export."""
+def fix_paths(root_dir: str):
+    """Fix paths in the exported static site."""
     root = pathlib.Path(root_dir)
-    logger.info(f"Cleaning up unused files in: {root}")
+    logger.info(f"Fixing paths in: {root}")
 
-    # Remove wp-admin directory
-    wp_admin_path = root / "wp-admin"
-    if wp_admin_path.is_dir():
+    search_str = "/wp-admin/admin-ajax.php?action=dynamic_css#038;ver=6.8.1"
+    replace_str = "/wp-admin/admin-ajax.css"
+    files_changed = 0
+
+    for html_path in root.rglob("*.html"):
         try:
-            shutil.rmtree(wp_admin_path)
-            logger.info(f"✓ Removed directory: {wp_admin_path.relative_to(root)}")
+            content = html_path.read_text(encoding="utf-8")
+            if search_str in content:
+                new_content = content.replace(search_str, replace_str)
+                html_path.write_text(new_content, encoding="utf-8")
+                logger.info(f"✓ Fixed paths in {html_path.relative_to(root)}")
+                files_changed += 1
         except Exception as e:
-            logger.error(f"✗ Could not remove directory {wp_admin_path.relative_to(root)}: {e}")
-            sys.exit(1)
-    else:
-        logger.info("✓ wp-admin directory not found, skipping.")
+            logger.error(f"✗ Could not process file {html_path.relative_to(root)}: {e}")
 
-    logger.info("✓ Cleanup complete.")
+    if files_changed > 0:
+        logger.info(f"✓ Fixed paths in {files_changed} file(s).")
+    else:
+        logger.info("✓ No paths needed fixing.")
 
 
 @click.group(name="netlify-forms")
