@@ -137,18 +137,29 @@ def formify(root_dir: str):
             form_changed = False
             form_id = form.get('id', 'N/A')
 
-            # 1. Remove action attribute
+            # 1. Add name attribute from page slug
+            # This is important for Netlify to identify the form.
+            if html_path.name == "index.html":
+                form_name = html_path.parent.name
+            else:
+                form_name = html_path.stem
+
+            if not form.has_attr("name"):
+                form["name"] = form_name
+                form_changed = True
+
+            # 2. Remove action attribute
             if form.has_attr("action"):
                 del form["action"]
                 form_changed = True
 
-            # 2. Netlify attributes
+            # 3. Netlify attributes
             if not form.has_attr("data-netlify"):
                 form["data-netlify"] = "true"
                 form["netlify-honeypot"] = "bot-field"
                 form_changed = True
 
-            # 3. Hidden 'form-name'
+            # 4. Hidden 'form-name'
             if not form.find("input", attrs={"name": "form-name"}):
                 default_name = form_id or "contact"
                 hidden = soup.new_tag("input", attrs={
@@ -159,7 +170,7 @@ def formify(root_dir: str):
                 form.insert(0, hidden)  # as first child
                 form_changed = True
 
-            # 4. Remove Cloudflare Turnstile div
+            # 5. Remove Cloudflare Turnstile div
             turnstile_div = form.find("div", class_="cf-turnstile")
             if turnstile_div:
                 turnstile_div.decompose()
