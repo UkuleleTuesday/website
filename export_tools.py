@@ -67,19 +67,36 @@ def fix_paths(root_dir: str):
     logger.info(f"Fixing paths in: {root}")
 
     # Regex to find /wp-admin/admin-ajax.php followed by any query string.
-    search_pattern = re.compile(r"/wp-admin/admin-ajax\.php\?[^\"'\s]+")
-    replace_str = "/wp-admin/admin-ajax.css"
+    ajax_search_pattern = re.compile(r"/wp-admin/admin-ajax\.php\?[^\"'\s]+")
+    ajax_replace_str = "/wp-admin/admin-ajax.css"
+
+    # Regex to find .js files with query parameters
+    js_search_pattern = re.compile(r'(\.js)\?[^"\'\s]+')
+    js_replace_str = r'\1'
+
     files_changed = 0
 
     for html_path in root.rglob("*.html"):
         try:
             content = html_path.read_text(encoding="utf-8")
-            new_content, num_subs = search_pattern.subn(replace_str, content)
+            made_change = False
 
-            if num_subs > 0:
-                html_path.write_text(new_content, encoding="utf-8")
-                logger.info(f"✓ Fixed paths in {html_path.relative_to(root)}")
+            # Fix admin-ajax.php paths
+            content, num_ajax_subs = ajax_search_pattern.subn(ajax_replace_str, content)
+            if num_ajax_subs > 0:
+                logger.info(f"✓ Fixed {num_ajax_subs} admin-ajax.php path(s) in {html_path.relative_to(root)}")
+                made_change = True
+
+            # Fix .js paths with query parameters
+            content, num_js_subs = js_search_pattern.subn(js_replace_str, content)
+            if num_js_subs > 0:
+                logger.info(f"✓ Removed query params from {num_js_subs} JS path(s) in {html_path.relative_to(root)}")
+                made_change = True
+
+            if made_change:
+                html_path.write_text(content, encoding="utf-8")
                 files_changed += 1
+
         except Exception as e:
             logger.error(f"✗ Could not process file {html_path.relative_to(root)}: {e}")
 
