@@ -17,6 +17,7 @@ import shutil
 import click
 from pathlib import Path
 from typing import Dict, Any, Optional, Tuple
+from urllib.parse import urlparse
 
 # Configure logging
 logging.basicConfig(
@@ -119,6 +120,18 @@ class StaticExporter:
         is_running = response_data.get('running', False)
         return is_running
 
+    def kick_website(self):
+        """Make a request to the main website to potentially wake up services."""
+        try:
+            parsed_url = urlparse(self.base_url)
+            main_site_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
+            logger.info(f"Kicking the website at {main_site_url} to wake it up...")
+            response = requests.get(main_site_url, timeout=10)
+            response.raise_for_status()
+            logger.info("✓ Website kicked successfully.")
+        except requests.exceptions.RequestException as e:
+            logger.warning(f"⚠ Could not kick website: {e}")
+
     def cancel_running_export(self) -> bool:
         """Cancel any currently running export"""
         logger.info("Canceling running export...")
@@ -210,6 +223,7 @@ class StaticExporter:
                 logger.info("✓ Export process has started.")
                 break
             logger.warning(f"Export not started yet, waiting {self.export_start_poll_interval_seconds}s...")
+            self.kick_website()
             time.sleep(self.export_start_poll_interval_seconds)
             start_elapsed += self.export_start_poll_interval_seconds
         else:
