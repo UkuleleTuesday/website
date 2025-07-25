@@ -2,6 +2,7 @@
 """
 Static export and processing tools for Ukulele Tuesday website
 """
+import difflib
 import os
 import sys
 import time
@@ -224,7 +225,7 @@ def verify(root_dir: str):
 @click.argument('dir1', type=click.Path(exists=True, file_okay=False, resolve_path=True))
 @click.argument('dir2', type=click.Path(exists=True, file_okay=False, resolve_path=True))
 def diff_exports(dir1: str, dir2: str):
-    """Compares two export directories and lists file differences."""
+    """Compares two export directories and lists file and content differences."""
     path1 = pathlib.Path(dir1)
     path2 = pathlib.Path(dir2)
 
@@ -235,6 +236,7 @@ def diff_exports(dir1: str, dir2: str):
 
     only_in_1 = files1 - files2
     only_in_2 = files2 - files1
+    common_files = files1 & files2
 
     has_diff = False
 
@@ -249,9 +251,41 @@ def diff_exports(dir1: str, dir2: str):
         logger.info(f"\n--- Files only in {dir2} ---")
         for f in sorted(only_in_2):
             click.echo(f)
-    
+
+    diff_files = []
+    for f in sorted(common_files):
+        file1_path = path1 / f
+        file2_path = path2 / f
+
+        if file1_path.read_bytes() != file2_path.read_bytes():
+            has_diff = True
+            diff_files.append((f, file1_path, file2_path))
+
+    if diff_files:
+        logger.info("\n--- Content differences found in the following files ---")
+        for f, file1_path, file2_path in diff_files:
+            click.echo(f"--- Diff for {f} ---")
+            try:
+                # Try to read as text and show a unified diff
+                text1 = file1_path.read_text(encoding='utf-8').splitlines()
+                text2 = file2_path.read_text(encoding='utf-8').splitlines()
+                diff = difflib.unified_diff(text1, text2, fromfile=str(file1_path), tofile=str(file2_path), lineterm='')
+                for line in diff:
+                    if line.startswith('+'):
+                        click.secho(line, fg='green')
+                    elif line.startswith('-'):
+                        click.secho(line, fg='red')
+                    elif line.startswith('^'):
+                        click.secho(line, fg='blue')
+                    else:
+                        click.echo(line)
+            except UnicodeDecodeError:
+                # If it's a binary file, just state they are different
+                click.echo(f"Binary files {file1_path} and {file2_path} differ")
+            click.echo("-" * (20 + len(str(f))))
+
     if not has_diff:
-        logger.info("\n✓ Directories have identical file lists.")
+        logger.info("\n✓ Directories are identical.")
     else:
         logger.warning("\n✗ Directories have differences.")
         sys.exit(1)
