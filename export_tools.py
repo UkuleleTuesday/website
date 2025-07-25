@@ -213,6 +213,12 @@ def formify(root_dir: str):
                 logger.info(f"✓ Transformed form with id: '{form_id}' in {html_path.relative_to(root)}")
 
         if file_changed:
+            # If any forms were changed, inject CSS to hide the honeypot field
+            if total_forms_changed > 0 and soup.head:
+                style_tag = soup.new_tag('style')
+                style_tag.string = ".hidden { display: none; }"
+                soup.head.append(style_tag)
+
             html_path.write_text(str(soup), encoding="utf‑8")
 
     if total_forms_changed > 0:
