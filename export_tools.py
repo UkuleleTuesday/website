@@ -221,73 +221,97 @@ def verify(root_dir: str):
         logger.info("\n✓ No forms found to verify.")
 
 
+def _show_diff(file1_path: pathlib.Path, file2_path: pathlib.Path):
+    """Prints a formatted diff for two files."""
+    click.echo(f"--- Diff for {file1_path.name} ---")
+    try:
+        text1 = file1_path.read_text(encoding='utf-8').splitlines()
+        text2 = file2_path.read_text(encoding='utf-8').splitlines()
+        diff = difflib.unified_diff(
+            text1,
+            text2,
+            fromfile=str(file1_path),
+            tofile=str(file2_path),
+            lineterm=''
+        )
+        for line in diff:
+            if line.startswith('+'):
+                click.secho(line, fg='green')
+            elif line.startswith('-'):
+                click.secho(line, fg='red')
+            elif line.startswith('^'):
+                click.secho(line, fg='blue')
+            else:
+                click.echo(line)
+    except UnicodeDecodeError:
+        click.echo(f"Binary files {file1_path} and {file2_path} differ")
+    click.echo("-" * (20 + len(str(file1_path.name))))
+
+
 @cli.command(name="diff-exports")
-@click.argument('dir1', type=click.Path(exists=True, file_okay=False, resolve_path=True))
-@click.argument('dir2', type=click.Path(exists=True, file_okay=False, resolve_path=True))
-def diff_exports(dir1: str, dir2: str):
-    """Compares two export directories and lists file and content differences."""
-    path1 = pathlib.Path(dir1)
-    path2 = pathlib.Path(dir2)
+@click.argument('path1_arg', type=click.Path(exists=True, file_okay=True, resolve_path=True))
+@click.argument('path2_arg', type=click.Path(exists=True, file_okay=True, resolve_path=True))
+def diff_exports(path1_arg: str, path2_arg: str):
+    """Compares two files or directories and lists content differences."""
+    path1 = pathlib.Path(path1_arg)
+    path2 = pathlib.Path(path2_arg)
 
-    logger.info(f"Comparing directories:\n- {path1}\n- {path2}")
+    # --- File-to-File comparison ---
+    if path1.is_file() and path2.is_file():
+        logger.info(f"Comparing files:\n- {path1}\n- {path2}")
+        if path1.read_bytes() != path2.read_bytes():
+            _show_diff(path1, path2)
+            logger.warning("\n✗ Files have differences.")
+            sys.exit(1)
+        else:
+            logger.info("\n✓ Files are identical.")
+            sys.exit(0)
 
-    files1 = {p.relative_to(path1) for p in path1.rglob('*') if p.is_file()}
-    files2 = {p.relative_to(path2) for p in path2.rglob('*') if p.is_file()}
+    # --- Directory-to-Directory comparison ---
+    elif path1.is_dir() and path2.is_dir():
+        logger.info(f"Comparing directories:\n- {path1}\n- {path2}")
+        files1 = {p.relative_to(path1) for p in path1.rglob('*') if p.is_file()}
+        files2 = {p.relative_to(path2) for p in path2.rglob('*') if p.is_file()}
 
-    only_in_1 = files1 - files2
-    only_in_2 = files2 - files1
-    common_files = files1 & files2
+        only_in_1 = files1 - files2
+        only_in_2 = files2 - files1
+        common_files = files1 & files2
+        has_diff = False
 
-    has_diff = False
-
-    if only_in_1:
-        has_diff = True
-        logger.info(f"\n--- Files only in {dir1} ---")
-        for f in sorted(only_in_1):
-            click.echo(f)
-
-    if only_in_2:
-        has_diff = True
-        logger.info(f"\n--- Files only in {dir2} ---")
-        for f in sorted(only_in_2):
-            click.echo(f)
-
-    diff_files = []
-    for f in sorted(common_files):
-        file1_path = path1 / f
-        file2_path = path2 / f
-
-        if file1_path.read_bytes() != file2_path.read_bytes():
+        if only_in_1:
             has_diff = True
-            diff_files.append((f, file1_path, file2_path))
+            logger.info(f"\n--- Files only in {path1} ---")
+            for f in sorted(only_in_1):
+                click.echo(f)
 
-    if diff_files:
-        logger.info("\n--- Content differences found in the following files ---")
-        for f, file1_path, file2_path in diff_files:
-            click.echo(f"--- Diff for {f} ---")
-            try:
-                # Try to read as text and show a unified diff
-                text1 = file1_path.read_text(encoding='utf-8').splitlines()
-                text2 = file2_path.read_text(encoding='utf-8').splitlines()
-                diff = difflib.unified_diff(text1, text2, fromfile=str(file1_path), tofile=str(file2_path), lineterm='')
-                for line in diff:
-                    if line.startswith('+'):
-                        click.secho(line, fg='green')
-                    elif line.startswith('-'):
-                        click.secho(line, fg='red')
-                    elif line.startswith('^'):
-                        click.secho(line, fg='blue')
-                    else:
-                        click.echo(line)
-            except UnicodeDecodeError:
-                # If it's a binary file, just state they are different
-                click.echo(f"Binary files {file1_path} and {file2_path} differ")
-            click.echo("-" * (20 + len(str(f))))
+        if only_in_2:
+            has_diff = True
+            logger.info(f"\n--- Files only in {path2} ---")
+            for f in sorted(only_in_2):
+                click.echo(f)
 
-    if not has_diff:
-        logger.info("\n✓ Directories are identical.")
+        diff_files = []
+        for f in sorted(common_files):
+            file1_path = path1 / f
+            file2_path = path2 / f
+            if file1_path.read_bytes() != file2_path.read_bytes():
+                has_diff = True
+                diff_files.append((file1_path, file2_path))
+
+        if diff_files:
+            logger.info("\n--- Content differences found in the following files ---")
+            for file1_path, file2_path in diff_files:
+                _show_diff(file1_path, file2_path)
+
+        if not has_diff:
+            logger.info("\n✓ Directories are identical.")
+        else:
+            logger.warning("\n✗ Directories have differences.")
+            sys.exit(1)
+            
+    # --- Invalid argument combination ---
     else:
-        logger.warning("\n✗ Directories have differences.")
+        logger.error("✗ Incompatible arguments: both must be files or both must be directories.")
         sys.exit(1)
 
 
