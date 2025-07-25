@@ -1,4 +1,4 @@
-name: Export Static Site
+name: Deploy Static Site to Netlify
 
 permissions:
   id-token: write     # OIDC
@@ -9,11 +9,7 @@ on:
   # Allow manual triggering
   workflow_dispatch:
 
-  # Run on schedule (daily at 2 AM UTC)
-  schedule:
-    - cron: '0 2 * * *'
-
-  # Run on pushes to main branch (for testing)
+  # Run on pushes to main branch
   push:
     branches: [ main ]
 
@@ -21,10 +17,10 @@ on:
   pull_request:
 
 jobs:
-  export-and-deploy:
+  deploy-to-netlify:
     runs-on: ubuntu-latest
 
-    # Use a concurrency group to prevent multiple exports running simultaneously
+    # Use a concurrency group to prevent multiple deployments running simultaneously
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
@@ -32,20 +28,24 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-    - uses: google-github-actions/auth@v2
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
       with:
         workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+
+    - name: Download latest export from GCS
+      run: |
+        mkdir -p ./static-export
+        gsutil -m rsync -r gs://ukulele-tuesday-website-wordpress-static-export/latest ./static-export
+
     - name: Install uv
       uses: astral-sh/setup-uv@v4
-
-    - name: Run static export
-      timeout-minutes: 10
-      env:
-        WP_USERNAME: ${{ secrets.WP_USERNAME }}
-        WP_PASSWORD: ${{ secrets.WP_PASSWORD }}
-      run: uv run export_tools.py download -o ./static-export --num-retries 5
 
     - name: Clean up unused files
       run: uv run export_tools.py clean-up ./static-export
