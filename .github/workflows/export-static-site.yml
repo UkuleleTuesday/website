@@ -94,3 +94,26 @@ jobs:
         echo "Netlify deployment failed!"
         echo "${{ steps.netlify_deploy.outputs.NETLIFY_OUTPUT }}"
         exit 1
+
+    - name: Post Netlify preview link to PR
+      if: github.event_name == 'pull_request' && success()
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const previewUrl = `${{ steps.netlify_deploy.outputs.NETLIFY_URL }}`;
+          const commentBody = `
+            ## ✅ Netlify Deploy Preview Ready!
+
+            You can view the live preview of your changes here:
+            **[${previewUrl}](${previewUrl})**
+
+            ---
+            _Build logs are available in the [GitHub Actions summary](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})._
+          `;
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: commentBody
+          });
