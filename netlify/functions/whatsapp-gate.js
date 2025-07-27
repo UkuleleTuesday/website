@@ -19,6 +19,17 @@ exports.handler = async (event) => {
     };
   }
 
+  const params = new URLSearchParams(event.body);
+  const accepted = params.get('test-accept');
+
+  if (accepted !== '1') {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: 'You must agree to the Code of Conduct to join.' }),
+      headers: { 'Content-Type': 'application/json' },
+    };
+  }
+
   // The request is valid, return the join link.
   return {
     statusCode: 200,

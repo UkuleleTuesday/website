@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('whatsapp-form');
   const resultDiv = document.getElementById('form-result');
-  const submitButton = form.querySelector('button[type="submit"]');
+  const submitButton = form.querySelector('input[type="submit"]');
 
   if (!form) {
     console.error('WhatsApp form not found.');
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     if (submitButton) {
       submitButton.disabled = true;
-      submitButton.textContent = 'Submitting...';
+      submitButton.value = 'Submitting...';
     }
     resultDiv.textContent = '';
 
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
       resultDiv.style.color = 'red';
       if (submitButton) {
         submitButton.disabled = false;
-        submitButton.textContent = 'Submit';
+        submitButton.value = 'Join Community';
       }
     }
   });
