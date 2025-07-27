@@ -63,6 +63,15 @@ jobs:
           echo "deploy_args=deploy --dir=./static-export --functions=./netlify/functions --prod-if-unlocked --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
         fi
 
+    - name: Set Netlify Environment Variable
+      if: github.ref == 'refs/heads/main'
+      uses: netlify/actions/cli@master
+      with:
+        args: env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}"
+      env:
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+
     - name: Deploy to Netlify
       id: netlify_deploy
       uses: netlify/actions/cli@master
@@ -71,7 +80,6 @@ jobs:
       env:
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-        WHATSAPP_JOIN_LINK: ${{ secrets.WHATSAPP_JOIN_LINK }}
 
     - name: Check Netlify deployment for errors
       if: contains(steps.netlify_deploy.outputs.NETLIFY_OUTPUT, 'Error:')
