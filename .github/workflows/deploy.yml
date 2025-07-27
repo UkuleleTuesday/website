@@ -66,7 +66,14 @@ jobs:
     - name: Set Netlify Environment Variable
       uses: netlify/actions/cli@master
       with:
-        args: env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context production deploy-preview --secret
+        args: |
+          CONTEXTS="production deploy-preview"
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            BRANCH_NAME="${{ github.head_ref }}"
+            CONTEXTS="$CONTEXTS branch:$BRANCH_NAME"
+          fi
+          echo "Setting contexts: $CONTEXTS"
+          netlify env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context $CONTEXTS --secret
       env:
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
