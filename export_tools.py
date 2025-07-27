@@ -180,16 +180,6 @@ def remove_cf7(root_dir: str, exclude_paths: tuple[str, ...]):
             
             form_id = form.get('id', 'N/A')
 
-            # Remove Cloudflare Turnstile divs
-            turnstile_divs = form.find_all("div", class_=["cf-turnstile", "cf7-cf-turnstile"])
-            if turnstile_divs:
-                for turnstile_div in turnstile_divs:
-                    if turnstile_div:
-                        class_name = turnstile_div.get('class', ['N/A'])
-                        turnstile_div.decompose()
-                        file_changed = True
-                        logger.info(f"✓ Removed Cloudflare Turnstile div with class '{class_name}' from form '{form_id}' in {html_path.relative_to(root)}")
-
             # Remove WPCF7 hidden fields
             for wpcf7_field in form.find_all("input", attrs={"name": re.compile(r"^_wpcf7")}):
                 field_name = wpcf7_field.get('name')
