@@ -16,9 +16,12 @@ echo "✓ Download complete."
 echo -e "\n--- Fixing paths in static site ---"
 uv run export_tools.py fix-paths "$OUTPUT_DIR"
 
-# --- Step 3: Fix forms for Netlify ---
-echo -e "\n--- Fixing forms for Netlify ---"
+# --- Step 3: Fix forms ---
+echo -e "\n--- Fixing forms ---"
+echo "Fixing forms for Netlify (excluding WhatsApp)..."
 uv run export_tools.py fix-forms "$OUTPUT_DIR" --add-netlify --exclude "$OUTPUT_DIR/whatsapp"
+echo "Fixing forms for WhatsApp (without Netlify)..."
+uv run export_tools.py fix-forms "$OUTPUT_DIR/whatsapp"
 
 # --- Step 4: Copy extra assets ---
 echo -e "\n--- Copying extra assets ---"
