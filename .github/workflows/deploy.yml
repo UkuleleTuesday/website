@@ -39,32 +39,12 @@ jobs:
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@v2
 
-    - name: Download latest export from GCS
-      run: |
-        mkdir -p ./static-export
-        gsutil -m rsync -r gs://ukulele-tuesday-website-wordpress-static-export/latest ./static-export
-
     - name: Install uv
       uses: astral-sh/setup-uv@v4
 
-    - name: Fix paths in static site
-      run: uv run export_tools.py fix-paths ./static-export
-
-    - name: Run netlify_formify
-      run: uv run export_tools.py netlify-forms formify ./static-export
-
-    - name: Verify Netlify forms
-      run: uv run export_tools.py netlify-forms verify ./static-export
-
-    - name: Copy extra assets
-      if: always() # Ensure this runs even if previous step finds no forms
+    - name: Build static site
       run: |
-        if [ -d "./extra-assets" ]; then
-          cp -r ./extra-assets/* ./static-export/
-          echo "✓ Copied extra assets to static-export"
-        else
-          echo "No extra-assets directory found, skipping"
-        fi
+        ./build-static-site.sh
 
     - name: Set Netlify deployment arguments
       id: netlify_args
@@ -74,14 +54,39 @@ jobs:
           # Escape quotes in PR title
           PR_TITLE_ESCAPED=${PR_TITLE//\"/\\\"}
           DEPLOY_MESSAGE="Deploy preview for PR #${{ github.event.number }} - ${PR_TITLE_ESCAPED}"
-          echo "deploy_args=deploy --dir=./static-export --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
+          echo "deploy_args=deploy --dir=./static-export --functions=./netlify/functions --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
         else
           COMMIT_MSG=$(git log -1 --pretty=%s) # %s gets only the subject line
           # Escape quotes in commit message
           COMMIT_MSG_ESCAPED=${COMMIT_MSG//\"/\\\"}
           DEPLOY_MESSAGE="Production deploy: ${COMMIT_MSG_ESCAPED}"
-          echo "deploy_args=deploy --dir=./static-export --prod-if-unlocked --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
+          echo "deploy_args=deploy --dir=./static-export --functions=./netlify/functions --prod-if-unlocked --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
         fi
+
+    - name: Set Netlify Env Var for Production
+      uses: netlify/actions/cli@master
+      with:
+        args: env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context production --secret
+      env:
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+
+    - name: Set Netlify Env Var for Deploy Previews
+      uses: netlify/actions/cli@master
+      with:
+        args: env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context deploy-preview --secret
+      env:
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+
+    - name: Set Netlify Env Var for Branch Deploys
+      if: github.event_name == 'pull_request'
+      uses: netlify/actions/cli@master
+      with:
+        args: env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context "branch:${{ github.head_ref }}" --secret
+      env:
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
 
     - name: Deploy to Netlify
       id: netlify_deploy
