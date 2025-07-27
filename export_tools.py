@@ -119,24 +119,22 @@ def fix_paths(root_dir: str, exclude_paths: tuple[str, ...]):
         logger.info("✓ No paths needed fixing.")
 
 
-@click.group(name="netlify-forms")
-def netlify_forms():
-    """Tools to prepare Contact Form 7 forms for Netlify."""
-    pass
-
-
-@netlify_forms.command(name="remove-cf7")
+@cli.command(name="fix-forms")
 @click.argument('root_dir', type=click.Path(exists=True, file_okay=False, resolve_path=True))
+@click.option('--add-netlify', is_flag=True, help='Add Netlify-specific attributes to forms.')
 @click.option('--exclude', 'exclude_paths', multiple=True, type=click.Path(),
               help='File or directory paths to exclude. Can be used multiple times.')
-def remove_cf7(root_dir: str, exclude_paths: tuple[str, ...]):
-    """Remove Contact Form 7 and Cloudflare Turnstile assets from HTML files."""
+def fix_forms(root_dir: str, add_netlify: bool, exclude_paths: tuple[str, ...]):
+    """Fix forms by removing CF7 assets and optionally adding Netlify support."""
     root = pathlib.Path(root_dir)
     absolute_exclude_paths = {pathlib.Path(p).resolve() for p in exclude_paths}
 
-    logger.info(f"Scanning for CF7 assets to remove in: {root}")
+    logger.info(f"Fixing forms in: {root}")
+    if add_netlify:
+        logger.info("Netlify support enabled.")
     if exclude_paths:
         logger.info(f"Excluding paths: {', '.join(exclude_paths)}")
+
     total_files_changed = 0
 
     for html_path in root.rglob("*.html"):
@@ -150,6 +148,8 @@ def remove_cf7(root_dir: str, exclude_paths: tuple[str, ...]):
         html = html_path.read_text(encoding="utf‑8", errors="ignore")
         soup = bs4.BeautifulSoup(html, "html.parser")
         file_changed = False
+
+        # --- CF7 Cleanup (always runs) ---
 
         # Remove Turnstile script tags
         for turnstile_script in soup.find_all("script", src=lambda s: s and "challenges.cloudflare.com/turnstile" in s):
@@ -172,18 +172,17 @@ def remove_cf7(root_dir: str, exclude_paths: tuple[str, ...]):
             file_changed = True
             logger.info(f"✓ Removed CF7 script tag with src: {script_src} from {html_path.relative_to(root)}")
 
-        # Process forms inside wpcf7 containers
-        for form_container in soup.find_all("div", class_="wpcf7"):
-            form = form_container.find("form")
-            if not form or not isinstance(form, bs4.Tag):
-                continue
-            
+        # Process all forms
+        for form in soup.find_all("form"):
+            form_changed = False
             form_id = form.get('id', 'N/A')
+
+            # --- Universal Form Fixes ---
 
             # Remove action attribute
             if form.has_attr("action"):
                 del form["action"]
-                file_changed = True
+                form_changed = True
                 logger.info(f"✓ Removed action attribute from form '{form_id}' in {html_path.relative_to(root)}")
 
             # Remove WPCF7 hidden fields
@@ -191,54 +190,13 @@ def remove_cf7(root_dir: str, exclude_paths: tuple[str, ...]):
                 field_name = wpcf7_field.get('name')
                 parent = wpcf7_field.parent
                 wpcf7_field.decompose()
-                file_changed = True
+                form_changed = True
                 logger.info(f"✓ Removed WPCF7 hidden field '{field_name}' from form '{form_id}' in {html_path.relative_to(root)}")
 
                 # If the parent is an empty fieldset, remove it too
                 if parent and parent.name == 'fieldset' and not parent.get_text(strip=True) and not parent.find_all(True, recursive=False):
                     parent.decompose()
                     logger.info(f"✓ Removed empty fieldset that contained '{field_name}' in {html_path.relative_to(root)}")
-
-        if file_changed:
-            total_files_changed += 1
-            html_path.write_text(str(soup), encoding="utf-8")
-    
-    if total_files_changed > 0:
-        logger.info(f"\n✓ Removed CF7 assets from {total_files_changed} file(s) in → {root}")
-    else:
-        logger.info("\n✓ No CF7 assets found to remove.")
-
-
-@netlify_forms.command(name="add-netlify-support")
-@click.argument('root_dir', type=click.Path(exists=True, file_okay=False, resolve_path=True))
-@click.option('--exclude', 'exclude_paths', multiple=True, type=click.Path(),
-              help='File or directory paths to exclude. Can be used multiple times.')
-def add_netlify_support(root_dir: str, exclude_paths: tuple[str, ...]):
-    """Rewrite forms in HTML files to add Netlify support."""
-    root = pathlib.Path(root_dir)
-    absolute_exclude_paths = {pathlib.Path(p).resolve() for p in exclude_paths}
-
-    logger.info(f"Scanning for forms to add Netlify support in: {root}")
-    if exclude_paths:
-        logger.info(f"Excluding paths: {', '.join(exclude_paths)}")
-    total_forms_changed = 0
-
-    for html_path in root.rglob("*.html"):
-        if any(
-            html_path.resolve() == p or p in html_path.resolve().parents
-            for p in absolute_exclude_paths
-        ):
-            logger.info(f"Skipping excluded file: {html_path.relative_to(root)}")
-            continue
-
-        html = html_path.read_text(encoding="utf‑8", errors="ignore")
-        soup = bs4.BeautifulSoup(html, "html.parser")
-        file_changed = False
-
-        # Find all forms, not just those in wpcf7 divs
-        for form in soup.find_all("form"):
-            form_changed = False
-            form_id = form.get('id', 'N/A')
 
             # Determine form name from slug
             if html_path.name == "index.html":
@@ -258,109 +216,48 @@ def add_netlify_support(root_dir: str, exclude_paths: tuple[str, ...]):
                 form_name = slug_form_name
                 hidden_form_name_input["value"] = form_name
                 form_changed = True
-
+            
             # Set form 'name' attribute
             if form.get("name") != form_name:
                 form["name"] = form_name
                 form_changed = True
 
-            # Add Netlify attributes
-            if not form.has_attr("data-netlify"):
-                form["data-netlify"] = "true"
-                form["netlify-honeypot"] = "bot-field"
-                form_changed = True
+            # --- Netlify-specific additions ---
+            if add_netlify:
+                # Add Netlify attributes
+                if not form.has_attr("data-netlify"):
+                    form["data-netlify"] = "true"
+                    form["netlify-honeypot"] = "bot-field"
+                    form_changed = True
 
-            # Add honeypot field
-            if not form.find("input", attrs={"name": "bot-field"}):
-                hidden_p = soup.new_tag("p", attrs={"class": "hidden"})
-                label = soup.new_tag("label")
-                label.string = "Don’t fill this out if you’re human: "
-                bot_input = soup.new_tag("input", attrs={"name": "bot-field", "type": "text"})
-                label.append(bot_input)
-                hidden_p.append(label)
-                form.append(hidden_p)
-                form_changed = True
-
+                # Add honeypot field
+                if not form.find("input", attrs={"name": "bot-field"}):
+                    hidden_p = soup.new_tag("p", attrs={"class": "hidden"})
+                    label = soup.new_tag("label")
+                    label.string = "Don’t fill this out if you’re human: "
+                    bot_input = soup.new_tag("input", attrs={"name": "bot-field", "type": "text"})
+                    label.append(bot_input)
+                    hidden_p.append(label)
+                    form.append(hidden_p)
+                    form_changed = True
+            
             if form_changed:
                 file_changed = True
-                total_forms_changed += 1
-                logger.info(f"✓ Transformed form with id: '{form_id}' in {html_path.relative_to(root)}")
+                logger.info(f"✓ Processed form '{form_id}' in {html_path.relative_to(root)}")
 
         if file_changed:
-            # Inject CSS to hide the honeypot field if not already present
-            if soup.head and not soup.head.find("style", string=".hidden { display: none; }"):
+            # Inject CSS to hide the honeypot field if Netlify is enabled and not already present
+            if add_netlify and soup.head and not soup.head.find("style", string=".hidden { display: none; }"):
                 style_tag = soup.new_tag('style')
                 style_tag.string = ".hidden { display: none; }"
                 soup.head.append(style_tag)
 
-            html_path.write_text(str(soup), encoding="utf‑8")
+            total_files_changed += 1
+            html_path.write_text(str(soup), encoding="utf-8")
 
-    if total_forms_changed > 0:
-        logger.info(f"\n✓ Added Netlify support to {total_forms_changed} form(s) in → {root}")
+    if total_files_changed > 0:
+        logger.info(f"\n✓ Processed {total_files_changed} file(s) in → {root}")
     else:
-        logger.info("\n✓ No forms found to modify for Netlify.")
-
-
-@netlify_forms.command()
-@click.argument('root_dir', type=click.Path(exists=True, file_okay=False, resolve_path=True))
-@click.option('--exclude', 'exclude_paths', multiple=True, type=click.Path(),
-              help='File or directory paths to exclude. Can be used multiple times.')
-def verify(root_dir: str, exclude_paths: tuple[str, ...]):
-    """Verify that forms in HTML files are Netlify-ready."""
-    root = pathlib.Path(root_dir)
-    absolute_exclude_paths = {pathlib.Path(p).resolve() for p in exclude_paths}
-
-    logger.info(f"Verifying Netlify forms in: {root}")
-    if exclude_paths:
-        logger.info(f"Excluding paths: {', '.join(exclude_paths)}")
-    forms_found = 0
-    errors_found = 0
-
-    for html_path in root.rglob("*.html"):
-        if any(
-            html_path.resolve() == p or p in html_path.resolve().parents
-            for p in absolute_exclude_paths
-        ):
-            logger.info(f"Skipping excluded file: {html_path.relative_to(root)}")
-            continue
-
-        html = html_path.read_text(encoding="utf‑8", errors="ignore")
-        soup = bs4.BeautifulSoup(html, "html.parser")
-
-        for form in soup.find_all("form"):
-            form_id = form.get('id', 'unidentified form')
-            relative_path = html_path.relative_to(root)
-
-            # Check for Netlify attribute
-            if not form.has_attr("data-netlify"):
-                continue  # Not a Netlify form, skip
-
-            forms_found += 1
-
-            # Check for form-name input
-            if not form.find("input", attrs={"type": "hidden", "name": "form-name"}):
-                logger.error(f"✗ [{relative_path}] Form '{form_id}' is missing a hidden 'form-name' input.")
-                errors_found += 1
-
-            # Check for name attributes on all inputs
-            for field in form.find_all(["input", "textarea", "select"]):
-                # submit buttons don't need a name
-                if field.get("type") == "submit":
-                    continue
-                if not field.has_attr("name"):
-                    logger.error(f"✗ [{relative_path}] Form '{form_id}' has a field without a 'name' attribute: {str(field)}")
-                    errors_found += 1
-
-    if errors_found > 0:
-        logger.error(f"\nFound {errors_found} errors in {forms_found} forms.")
-        sys.exit(1)
-    elif forms_found > 0:
-        logger.info(f"\n✓ All {forms_found} found forms appear to be correctly configured for Netlify.")
-    else:
-        logger.info("\n✓ No forms found to verify.")
-
-
-cli.add_command(netlify_forms)
-
+        logger.info("\n✓ No files required changes.")
 if __name__ == '__main__':
     cli()

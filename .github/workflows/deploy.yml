@@ -50,14 +50,8 @@ jobs:
     - name: Fix paths in static site
       run: uv run export_tools.py fix-paths ./static-export
 
-    - name: Remove Contact Form 7 assets
-      run: uv run export_tools.py netlify-forms remove-cf7 ./static-export
-
-    - name: Add Netlify support to forms
-      run: uv run export_tools.py netlify-forms add-netlify-support ./static-export --exclude ./static-export/whatsapp
-
-    - name: Verify Netlify forms
-      run: uv run export_tools.py netlify-forms verify ./static-export --exclude ./static-export/whatsapp
+    - name: Fix forms for Netlify
+      run: uv run export_tools.py fix-forms ./static-export --add-netlify --exclude ./static-export/whatsapp
 
     - name: Copy extra assets
       if: always() # Ensure this runs even if previous step finds no forms
