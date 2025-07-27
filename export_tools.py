@@ -175,7 +175,7 @@ def remove_cf7(root_dir: str, exclude_paths: tuple[str, ...]):
         # Process forms inside wpcf7 containers
         for form_container in soup.find_all("div", class_="wpcf7"):
             form = form_container.find("form")
-            if not form:
+            if not form or not isinstance(form, bs4.Tag):
                 continue
             
             form_id = form.get('id', 'N/A')
@@ -184,10 +184,11 @@ def remove_cf7(root_dir: str, exclude_paths: tuple[str, ...]):
             turnstile_divs = form.find_all("div", class_=["cf-turnstile", "cf7-cf-turnstile"])
             if turnstile_divs:
                 for turnstile_div in turnstile_divs:
-                    class_name = turnstile_div.get('class', ['N/A'])
-                    turnstile_div.decompose()
-                    file_changed = True
-                    logger.info(f"✓ Removed Cloudflare Turnstile div with class '{class_name}' from form '{form_id}' in {html_path.relative_to(root)}")
+                    if turnstile_div:
+                        class_name = turnstile_div.get('class', ['N/A'])
+                        turnstile_div.decompose()
+                        file_changed = True
+                        logger.info(f"✓ Removed Cloudflare Turnstile div with class '{class_name}' from form '{form_id}' in {html_path.relative_to(root)}")
 
             # Remove WPCF7 hidden fields
             for wpcf7_field in form.find_all("input", attrs={"name": re.compile(r"^_wpcf7")}):
