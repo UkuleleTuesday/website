@@ -61,10 +61,16 @@ def download(output_dir: str, num_retries: int):
 
 @cli.command(name="fix-paths")
 @click.argument('root_dir', type=click.Path(exists=True, file_okay=False, resolve_path=True))
-def fix_paths(root_dir: str):
+@click.option('--exclude', 'exclude_paths', multiple=True, type=click.Path(),
+              help='File or directory paths to exclude. Can be used multiple times.')
+def fix_paths(root_dir: str, exclude_paths: tuple[str, ...]):
     """Fix paths in the exported static site."""
     root = pathlib.Path(root_dir)
+    absolute_exclude_paths = {pathlib.Path(p).resolve() for p in exclude_paths}
+
     logger.info(f"Fixing paths in: {root}")
+    if exclude_paths:
+        logger.info(f"Excluding paths: {', '.join(exclude_paths)}")
 
     # Regex to find /wp-admin/admin-ajax.php followed by any query string.
     ajax_search_pattern = re.compile(r"/wp-admin/admin-ajax\.php\?[^\"'\s]+")
@@ -77,6 +83,13 @@ def fix_paths(root_dir: str):
     files_changed = 0
 
     for html_path in root.rglob("*.html"):
+        if any(
+            html_path.resolve() == p or p in html_path.resolve().parents
+            for p in absolute_exclude_paths
+        ):
+            logger.info(f"Skipping excluded file: {html_path.relative_to(root)}")
+            continue
+
         try:
             content = html_path.read_text(encoding="utf-8")
             made_change = False
@@ -114,13 +127,26 @@ def netlify_forms():
 
 @netlify_forms.command(name="remove-cf7")
 @click.argument('root_dir', type=click.Path(exists=True, file_okay=False, resolve_path=True))
-def remove_cf7(root_dir: str):
+@click.option('--exclude', 'exclude_paths', multiple=True, type=click.Path(),
+              help='File or directory paths to exclude. Can be used multiple times.')
+def remove_cf7(root_dir: str, exclude_paths: tuple[str, ...]):
     """Remove Contact Form 7 and Cloudflare Turnstile assets from HTML files."""
     root = pathlib.Path(root_dir)
+    absolute_exclude_paths = {pathlib.Path(p).resolve() for p in exclude_paths}
+
     logger.info(f"Scanning for CF7 assets to remove in: {root}")
+    if exclude_paths:
+        logger.info(f"Excluding paths: {', '.join(exclude_paths)}")
     total_files_changed = 0
 
     for html_path in root.rglob("*.html"):
+        if any(
+            html_path.resolve() == p or p in html_path.resolve().parents
+            for p in absolute_exclude_paths
+        ):
+            logger.info(f"Skipping excluded file: {html_path.relative_to(root)}")
+            continue
+
         html = html_path.read_text(encoding="utf‑8", errors="ignore")
         soup = bs4.BeautifulSoup(html, "html.parser")
         file_changed = False
@@ -188,13 +214,26 @@ def remove_cf7(root_dir: str):
 
 @netlify_forms.command(name="add-netlify-support")
 @click.argument('root_dir', type=click.Path(exists=True, file_okay=False, resolve_path=True))
-def add_netlify_support(root_dir: str):
+@click.option('--exclude', 'exclude_paths', multiple=True, type=click.Path(),
+              help='File or directory paths to exclude. Can be used multiple times.')
+def add_netlify_support(root_dir: str, exclude_paths: tuple[str, ...]):
     """Rewrite forms in HTML files to add Netlify support."""
     root = pathlib.Path(root_dir)
+    absolute_exclude_paths = {pathlib.Path(p).resolve() for p in exclude_paths}
+
     logger.info(f"Scanning for forms to add Netlify support in: {root}")
+    if exclude_paths:
+        logger.info(f"Excluding paths: {', '.join(exclude_paths)}")
     total_forms_changed = 0
 
     for html_path in root.rglob("*.html"):
+        if any(
+            html_path.resolve() == p or p in html_path.resolve().parents
+            for p in absolute_exclude_paths
+        ):
+            logger.info(f"Skipping excluded file: {html_path.relative_to(root)}")
+            continue
+
         html = html_path.read_text(encoding="utf‑8", errors="ignore")
         soup = bs4.BeautifulSoup(html, "html.parser")
         file_changed = False
@@ -272,14 +311,27 @@ def add_netlify_support(root_dir: str):
 
 @netlify_forms.command()
 @click.argument('root_dir', type=click.Path(exists=True, file_okay=False, resolve_path=True))
-def verify(root_dir: str):
+@click.option('--exclude', 'exclude_paths', multiple=True, type=click.Path(),
+              help='File or directory paths to exclude. Can be used multiple times.')
+def verify(root_dir: str, exclude_paths: tuple[str, ...]):
     """Verify that forms in HTML files are Netlify-ready."""
     root = pathlib.Path(root_dir)
+    absolute_exclude_paths = {pathlib.Path(p).resolve() for p in exclude_paths}
+
     logger.info(f"Verifying Netlify forms in: {root}")
+    if exclude_paths:
+        logger.info(f"Excluding paths: {', '.join(exclude_paths)}")
     forms_found = 0
     errors_found = 0
 
     for html_path in root.rglob("*.html"):
+        if any(
+            html_path.resolve() == p or p in html_path.resolve().parents
+            for p in absolute_exclude_paths
+        ):
+            logger.info(f"Skipping excluded file: {html_path.relative_to(root)}")
+            continue
+
         html = html_path.read_text(encoding="utf‑8", errors="ignore")
         soup = bs4.BeautifulSoup(html, "html.parser")
 
