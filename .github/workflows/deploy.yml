@@ -63,17 +63,27 @@ jobs:
           echo "deploy_args=deploy --dir=./static-export --functions=./netlify/functions --prod-if-unlocked --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
         fi
 
-    - name: Set Netlify Environment Variable
+    - name: Set Netlify Env Var for Production
       uses: netlify/actions/cli@master
       with:
-        args: |
-          netlify env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context production --secret
-          netlify env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context deploy-preview --secret
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            BRANCH_NAME="${{ github.head_ref }}"
-            echo "Setting secret for branch context: branch:$BRANCH_NAME"
-            netlify env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context "branch:$BRANCH_NAME" --secret
-          fi
+        args: env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context production --secret
+      env:
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+
+    - name: Set Netlify Env Var for Deploy Previews
+      uses: netlify/actions/cli@master
+      with:
+        args: env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context deploy-preview --secret
+      env:
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+
+    - name: Set Netlify Env Var for Branch Deploys
+      if: github.event_name == 'pull_request'
+      uses: netlify/actions/cli@master
+      with:
+        args: env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context "branch:${{ github.head_ref }}" --secret
       env:
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
