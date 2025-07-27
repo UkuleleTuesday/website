@@ -39,29 +39,13 @@ jobs:
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@v2
 
-    - name: Download latest export from GCS
-      run: |
-        mkdir -p ./static-export
-        gsutil -m rsync -r gs://ukulele-tuesday-website-wordpress-static-export/latest ./static-export
-
     - name: Install uv
       uses: astral-sh/setup-uv@v4
 
-    - name: Fix paths in static site
-      run: uv run export_tools.py fix-paths ./static-export
-
-    - name: Fix forms for Netlify
-      run: uv run export_tools.py fix-forms ./static-export --add-netlify --exclude ./static-export/whatsapp
-
-    - name: Copy extra assets
-      if: always() # Ensure this runs even if previous step finds no forms
+    - name: Build static site
       run: |
-        if [ -d "./extra-assets" ]; then
-          cp -r ./extra-assets/* ./static-export/
-          echo "✓ Copied extra assets to static-export"
-        else
-          echo "No extra-assets directory found, skipping"
-        fi
+        chmod +x build-static-site.sh
+        ./build-static-site.sh
 
     - name: Set Netlify deployment arguments
       id: netlify_args
