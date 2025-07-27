@@ -159,7 +159,7 @@ def remove_cf7(root_dir: str, exclude_paths: tuple[str, ...]):
 
         # Remove elements with an ID related to contact-form-7
         for cf7_element in soup.find_all(id=lambda i: i and "contact-form-7" in i):
-            element_id = cf7_element.get('id')
+            element_id = cf7_element.get('id', 'N/A')
             tag_name = cf7_element.name
             cf7_element.decompose()
             file_changed = True
@@ -184,7 +184,7 @@ def remove_cf7(root_dir: str, exclude_paths: tuple[str, ...]):
             turnstile_divs = form.find_all("div", class_=["cf-turnstile", "cf7-cf-turnstile"])
             if turnstile_divs:
                 for turnstile_div in turnstile_divs:
-                    class_name = turnstile_div.get('class', 'N/A')
+                    class_name = turnstile_div.get('class', ['N/A'])
                     turnstile_div.decompose()
                     file_changed = True
                     logger.info(f"✓ Removed Cloudflare Turnstile div with class '{class_name}' from form '{form_id}' in {html_path.relative_to(root)}")
