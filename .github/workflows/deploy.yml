@@ -64,10 +64,9 @@ jobs:
         fi
 
     - name: Set Netlify Environment Variable
-      if: github.ref == 'refs/heads/main'
       uses: netlify/actions/cli@master
       with:
-        args: env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context production --secret
+        args: env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context production deploy-preview --secret
       env:
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
