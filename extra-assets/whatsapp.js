@@ -32,9 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error(json.error || 'An unknown error occurred.');
       }
       
-      // On success, hide the form and show the link
-      form.style.display = 'none';
-      resultDiv.innerHTML = `<a href="${json.link}" target="_blank" rel="noopener noreferrer">🎉 Success! Click here to join the WhatsApp group →</a>`;
+      // On success, redirect to the WhatsApp link
+      if (submitButton) {
+        submitButton.value = 'Redirecting...';
+      }
+      window.location.href = json.link;
 
     } catch (error) {
       resultDiv.textContent = `Error: ${error.message}`;
