@@ -44,7 +44,6 @@ jobs:
 
     - name: Build static site
       run: |
-        chmod +x build-static-site.sh
         ./build-static-site.sh
 
     - name: Set Netlify deployment arguments
