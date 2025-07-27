@@ -180,6 +180,12 @@ def remove_cf7(root_dir: str, exclude_paths: tuple[str, ...]):
             
             form_id = form.get('id', 'N/A')
 
+            # Remove action attribute
+            if form.has_attr("action"):
+                del form["action"]
+                file_changed = True
+                logger.info(f"✓ Removed action attribute from form '{form_id}' in {html_path.relative_to(root)}")
+
             # Remove WPCF7 hidden fields
             for wpcf7_field in form.find_all("input", attrs={"name": re.compile(r"^_wpcf7")}):
                 field_name = wpcf7_field.get('name')
@@ -256,11 +262,6 @@ def add_netlify_support(root_dir: str, exclude_paths: tuple[str, ...]):
             # Set form 'name' attribute
             if form.get("name") != form_name:
                 form["name"] = form_name
-                form_changed = True
-
-            # Remove action attribute
-            if form.has_attr("action"):
-                del form["action"]
                 form_changed = True
 
             # Add Netlify attributes
