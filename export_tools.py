@@ -112,26 +112,26 @@ def netlify_forms():
     pass
 
 
-@netlify_forms.command()
+@netlify_forms.command(name="remove-cf7")
 @click.argument('root_dir', type=click.Path(exists=True, file_okay=False, resolve_path=True))
-def formify(root_dir: str):
-    """Rewrite CF7 markup in HTML files so Netlify picks it up."""
+def remove_cf7(root_dir: str):
+    """Remove Contact Form 7 and Cloudflare Turnstile assets from HTML files."""
     root = pathlib.Path(root_dir)
-    logger.info(f"Scanning for forms to Netlify-formify in: {root}")
-    total_forms_changed = 0
+    logger.info(f"Scanning for CF7 assets to remove in: {root}")
+    total_files_changed = 0
 
     for html_path in root.rglob("*.html"):
         html = html_path.read_text(encoding="utf‑8", errors="ignore")
         soup = bs4.BeautifulSoup(html, "html.parser")
         file_changed = False
 
-        # Remove Turnstile script tags from the document
+        # Remove Turnstile script tags
         for turnstile_script in soup.find_all("script", src=lambda s: s and "challenges.cloudflare.com/turnstile" in s):
             turnstile_script.decompose()
             file_changed = True
             logger.info(f"✓ Removed Cloudflare Turnstile script from {html_path.relative_to(root)}")
 
-        # Remove any elements with an ID related to contact-form-7
+        # Remove elements with an ID related to contact-form-7
         for cf7_element in soup.find_all(id=lambda i: i and "contact-form-7" in i):
             element_id = cf7_element.get('id')
             tag_name = cf7_element.name
@@ -139,39 +139,85 @@ def formify(root_dir: str):
             file_changed = True
             logger.info(f"✓ Removed CF7 {tag_name} element with id '{element_id}' from {html_path.relative_to(root)}")
 
-        # Also remove any remaining scripts by src, just in case
+        # Remove CF7 script tags
         for cf7_script in soup.find_all("script", src=lambda s: s and "contact-form-7" in s):
             script_src = cf7_script['src']
             cf7_script.decompose()
             file_changed = True
             logger.info(f"✓ Removed CF7 script tag with src: {script_src} from {html_path.relative_to(root)}")
 
+        # Process forms inside wpcf7 containers
         for form_container in soup.find_all("div", class_="wpcf7"):
             form = form_container.find("form")
             if not form:
                 continue
+            
+            form_id = form.get('id', 'N/A')
 
+            # Remove Cloudflare Turnstile divs
+            turnstile_divs = form.find_all("div", class_=["cf-turnstile", "cf7-cf-turnstile"])
+            if turnstile_divs:
+                for turnstile_div in turnstile_divs:
+                    class_name = turnstile_div.get('class', 'N/A')
+                    turnstile_div.decompose()
+                    file_changed = True
+                    logger.info(f"✓ Removed Cloudflare Turnstile div with class '{class_name}' from form '{form_id}' in {html_path.relative_to(root)}")
+
+            # Remove WPCF7 hidden fields
+            for wpcf7_field in form.find_all("input", attrs={"name": re.compile(r"^_wpcf7")}):
+                field_name = wpcf7_field.get('name')
+                parent = wpcf7_field.parent
+                wpcf7_field.decompose()
+                file_changed = True
+                logger.info(f"✓ Removed WPCF7 hidden field '{field_name}' from form '{form_id}' in {html_path.relative_to(root)}")
+
+                # If the parent is an empty fieldset, remove it too
+                if parent and parent.name == 'fieldset' and not parent.get_text(strip=True) and not parent.find_all(True, recursive=False):
+                    parent.decompose()
+                    logger.info(f"✓ Removed empty fieldset that contained '{field_name}' in {html_path.relative_to(root)}")
+
+        if file_changed:
+            total_files_changed += 1
+            html_path.write_text(str(soup), encoding="utf-8")
+    
+    if total_files_changed > 0:
+        logger.info(f"\n✓ Removed CF7 assets from {total_files_changed} file(s) in → {root}")
+    else:
+        logger.info("\n✓ No CF7 assets found to remove.")
+
+
+@netlify_forms.command(name="add-netlify-support")
+@click.argument('root_dir', type=click.Path(exists=True, file_okay=False, resolve_path=True))
+def add_netlify_support(root_dir: str):
+    """Rewrite forms in HTML files to add Netlify support."""
+    root = pathlib.Path(root_dir)
+    logger.info(f"Scanning for forms to add Netlify support in: {root}")
+    total_forms_changed = 0
+
+    for html_path in root.rglob("*.html"):
+        html = html_path.read_text(encoding="utf‑8", errors="ignore")
+        soup = bs4.BeautifulSoup(html, "html.parser")
+        file_changed = False
+
+        # Find all forms, not just those in wpcf7 divs
+        for form in soup.find_all("form"):
             form_changed = False
             form_id = form.get('id', 'N/A')
 
-            # 1. Determine form name from slug
+            # Determine form name from slug
             if html_path.name == "index.html":
                 slug_form_name = html_path.parent.name
             else:
                 slug_form_name = html_path.stem
 
-            # 2. Find or create hidden 'form-name' input and set form name
+            # Find or create hidden 'form-name' input and set form name
             hidden_form_name_input = form.find("input", attrs={"name": "form-name"})
             if hidden_form_name_input and hidden_form_name_input.get("value"):
                 form_name = hidden_form_name_input["value"]
             else:
-                # If input doesn't exist or has no value, create it
                 if not hidden_form_name_input:
-                    hidden_form_name_input = soup.new_tag("input", attrs={
-                        "type": "hidden",
-                        "name": "form-name"
-                    })
-                    form.insert(0, hidden_form_name_input) # as first child
+                    hidden_form_name_input = soup.new_tag("input", attrs={"type": "hidden", "name": "form-name"})
+                    form.insert(0, hidden_form_name_input)
                 
                 form_name = slug_form_name
                 hidden_form_name_input["value"] = form_name
@@ -182,19 +228,18 @@ def formify(root_dir: str):
                 form["name"] = form_name
                 form_changed = True
 
-            # 3. Remove action attribute
+            # Remove action attribute
             if form.has_attr("action"):
                 del form["action"]
                 form_changed = True
 
-            # 4. Netlify attributes
+            # Add Netlify attributes
             if not form.has_attr("data-netlify"):
                 form["data-netlify"] = "true"
                 form["netlify-honeypot"] = "bot-field"
                 form_changed = True
 
-            # 5. Add honeypot field
-            # We add a p tag with a class of "hidden" that we can target with CSS.
+            # Add honeypot field
             if not form.find("input", attrs={"name": "bot-field"}):
                 hidden_p = soup.new_tag("p", attrs={"class": "hidden"})
                 label = soup.new_tag("label")
@@ -202,33 +247,8 @@ def formify(root_dir: str):
                 bot_input = soup.new_tag("input", attrs={"name": "bot-field", "type": "text"})
                 label.append(bot_input)
                 hidden_p.append(label)
-                form.append(hidden_p) # append at the end of the form
+                form.append(hidden_p)
                 form_changed = True
-
-            # 6. Remove Cloudflare Turnstile divs
-            turnstile_divs_to_remove = form.find_all("div", class_=["cf-turnstile", "cf7-cf-turnstile"])
-            if turnstile_divs_to_remove:
-                for turnstile_div in turnstile_divs_to_remove:
-                    # Check if the element is still in the soup before trying to access it
-                    if turnstile_div.parent:
-                        class_name = turnstile_div.get('class', 'N/A')
-                        turnstile_div.decompose()
-                        form_changed = True
-                        logger.info(f"✓ Removed Cloudflare Turnstile div with class '{class_name}' from form '{form_id}' in {html_path.relative_to(root)}")
-
-            # 7. Remove WPCF7 hidden fields
-            for wpcf7_field in form.find_all("input", attrs={"name": re.compile(r"^_wpcf7")}):
-                field_name = wpcf7_field.get('name')
-                parent = wpcf7_field.parent
-                
-                wpcf7_field.decompose()
-                form_changed = True
-                logger.info(f"✓ Removed WPCF7 hidden field '{field_name}' from form '{form_id}' in {html_path.relative_to(root)}")
-
-                # If the parent is a fieldset and is now empty, remove it
-                if parent and parent.name == 'fieldset' and not parent.get_text(strip=True) and not parent.find_all(True, recursive=False):
-                    parent.decompose()
-                    logger.info(f"✓ Removed empty fieldset that contained '{field_name}' in {html_path.relative_to(root)}")
 
             if form_changed:
                 file_changed = True
@@ -236,8 +256,8 @@ def formify(root_dir: str):
                 logger.info(f"✓ Transformed form with id: '{form_id}' in {html_path.relative_to(root)}")
 
         if file_changed:
-            # If any forms were changed, inject CSS to hide the honeypot field
-            if total_forms_changed > 0 and soup.head:
+            # Inject CSS to hide the honeypot field if not already present
+            if soup.head and not soup.head.find("style", string=".hidden { display: none; }"):
                 style_tag = soup.new_tag('style')
                 style_tag.string = ".hidden { display: none; }"
                 soup.head.append(style_tag)
@@ -245,9 +265,9 @@ def formify(root_dir: str):
             html_path.write_text(str(soup), encoding="utf‑8")
 
     if total_forms_changed > 0:
-        logger.info(f"✓ Netlify-formified {total_forms_changed} CF7 form(s) in → {root}")
+        logger.info(f"\n✓ Added Netlify support to {total_forms_changed} form(s) in → {root}")
     else:
-        logger.info("✓ No CF7 forms found to Netlify-formify.")
+        logger.info("\n✓ No forms found to modify for Netlify.")
 
 
 @netlify_forms.command()
