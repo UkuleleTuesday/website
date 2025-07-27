@@ -1,3 +1,4 @@
 .aider*
 out/
+static-export/
 __pycache__/
