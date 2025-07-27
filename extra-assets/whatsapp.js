@@ -32,11 +32,16 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error(json.error || 'An unknown error occurred.');
       }
       
-      // On success, redirect to the WhatsApp link
-      if (submitButton) {
-        submitButton.value = 'Redirecting...';
+      // On success, show link and then attempt redirect as a fallback
+      form.style.display = 'none';
+      resultDiv.innerHTML = `🎉 Success! If you are not redirected automatically, <a href="${json.link}" target="_blank" rel="noopener noreferrer">click here to join the WhatsApp group</a>.`;
+      
+      try {
+        window.location.href = json.link;
+      } catch (redirectError) {
+        console.error("Redirect failed:", redirectError);
+        // The link is already displayed, so no further action is needed.
       }
-      window.location.href = json.link;
 
     } catch (error) {
       resultDiv.textContent = `Error: ${error.message}`;
