@@ -55,13 +55,13 @@ jobs:
           # Escape quotes in PR title
           PR_TITLE_ESCAPED=${PR_TITLE//\"/\\\"}
           DEPLOY_MESSAGE="Deploy preview for PR #${{ github.event.number }} - ${PR_TITLE_ESCAPED}"
-          echo "deploy_args=deploy --dir=./static-export --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
+          echo "deploy_args=deploy --dir=./static-export --functions=./netlify/functions --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
         else
           COMMIT_MSG=$(git log -1 --pretty=%s) # %s gets only the subject line
           # Escape quotes in commit message
           COMMIT_MSG_ESCAPED=${COMMIT_MSG//\"/\\\"}
           DEPLOY_MESSAGE="Production deploy: ${COMMIT_MSG_ESCAPED}"
-          echo "deploy_args=deploy --dir=./static-export --prod-if-unlocked --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
+          echo "deploy_args=deploy --dir=./static-export --functions=./netlify/functions --prod-if-unlocked --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
         fi
 
     - name: Deploy to Netlify
@@ -72,6 +72,7 @@ jobs:
       env:
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        WHATSAPP_JOIN_LINK: ${{ secrets.WHATSAPP_JOIN_LINK }}
 
     - name: Check Netlify deployment for errors
       if: contains(steps.netlify_deploy.outputs.NETLIFY_OUTPUT, 'Error:')
