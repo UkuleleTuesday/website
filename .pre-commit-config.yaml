@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: tidy-html5
+        name: tidy-html5
+        entry: tidy -quiet -indent -wrap 100 -utf8
+        language: system
+        files: \.html$
+        pass_filenames: true
