@@ -47,9 +47,10 @@ jobs:
           echo "deploy_args=deploy --dir=./static-export --functions=./netlify/functions --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
         else
           COMMIT_MSG=$(git log -1 --pretty=%s) # %s gets only the subject line
-          # Escape quotes in commit message
+          # Escape quotes and other special characters in commit message
           COMMIT_MSG_ESCAPED=${COMMIT_MSG//\"/\\\"}
-          DEPLOY_MESSAGE="Production deploy: ${COMMIT_MSG_ESCAPED}"
+          COMMIT_MSG_SANITIZED=$(echo "$COMMIT_MSG_ESCAPED" | sed "s/[^a-zA-Z0-9 :_.-]/ /g")
+          DEPLOY_MESSAGE="Production deploy: ${COMMIT_MSG_SANITIZED}"
           echo "deploy_args=deploy --dir=./static-export --functions=./netlify/functions --prod-if-unlocked --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
         fi
 
