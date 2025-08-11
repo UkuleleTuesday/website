@@ -6,11 +6,11 @@ set -e
 # Define the output directory
 OUTPUT_DIR="./static-export"
 
-# --- Step 1: Download latest export from GCS ---
-echo "--- Downloading latest export from GCS ---"
+# --- Step 1: Copy static dump from public/ directory ---
+echo "--- Copying static dump from public/ directory ---"
 mkdir -p "$OUTPUT_DIR"
-gsutil -m rsync -r gs://ukulele-tuesday-website-wordpress-static-export/latest "$OUTPUT_DIR"
-echo "✓ Download complete."
+cp -r public/* "$OUTPUT_DIR/"
+echo "✓ Copy complete."
 
 # --- Step 2: Fix paths in static site ---
 echo -e "\n--- Fixing paths in static site ---"
