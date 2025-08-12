@@ -112,6 +112,24 @@ The GitHub Actions workflow runs automatically:
 - **On push to main branch** - For testing changes
 - **Manual trigger** - Via GitHub Actions interface
 
+## Development
+
+### Pre-commit Hooks
+
+This project uses `pre-commit` for code linting and formatting. The hooks are defined in `.pre-commit-config.yaml` and run automatically on every commit after they have been installed.
+
+To install the hooks:
+
+```bash
+uvx pre-commit install
+```
+
+To run the hooks on all files at any time:
+
+```bash
+uvx pre-commit run --all-files
+```
+
 ## API Endpoints
 
 The script interacts with the [Simply Static](https://docs.simplystatic.com/) plugin via these endpoints:
