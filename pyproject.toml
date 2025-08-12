@@ -1,11 +1,9 @@
 [project]
-name = "static-website-exporter"
+name = "ukulele-tuesday-website"
 version = "0.1.0"
-description = "Add your description here"
+description = "Static website for Ukulele Tuesday"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "beautifulsoup4>=4.13.4",
-    "click>=8.2.1",
-    "requests>=2.32.4",
+    "jinja2>=3.1.4",
 ]
