@@ -1,6 +1,6 @@
 # Ukulele Tuesday Static Website
 
-This project contains the source code and build process for the Ukulele Tuesday static website, published via GitHub Pages.
+This project contains the source code and build process for the Ukulele Tuesday static website, published via Netlify.
 
 ## Overview
 
@@ -8,7 +8,7 @@ The initial version of this site was created from a static export of a WordPress
 
 ## Prerequisites
 
-- GitHub repository with Pages enabled
+- A Netlify account linked to this GitHub repository
 - Python 3.12+ with [uv](https://github.com/astral-sh/uv) package manager
 
 ## Usage
@@ -25,7 +25,7 @@ This will generate the static HTML files in the `public/` directory.
 
 ### Automated Deployment
 
-The GitHub Actions workflow automatically builds and deploys the site to GitHub Pages on every push to the `main` branch.
+The site is automatically built and deployed to Netlify on every push to the `main` branch.
 
 ## Development
 
