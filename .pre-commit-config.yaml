@@ -5,5 +5,11 @@ repos:
         name: tidy-html5
         entry: tidy -m -quiet --gnu-emacs yes --warn-proprietary-attributes no -indent -wrap 100 -utf8 --new-blocklevel-tags "rs-module-wrap rs-module rs-slides rs-slide rs-layer"
         language: system
-        files: \.html$
+        files: ^static/.*\.html$
         pass_filenames: true
+  - repo: https://github.com/djlint/djlint
+    rev: v1.34.1
+    hooks:
+      - id: djlint-reformat-jinja
+        files: ^templates/.*\.html$
+        types_or: ["html"]
