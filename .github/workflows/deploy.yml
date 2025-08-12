@@ -29,13 +29,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Install uv
-      uses: astral-sh/setup-uv@v4
-
-    - name: Build static site
-      run: |
-        ./build-static-site.sh
-
     - name: Set Netlify deployment arguments
       id: netlify_args
       run: |
@@ -44,14 +37,14 @@ jobs:
           # Escape quotes in PR title
           PR_TITLE_ESCAPED=${PR_TITLE//\"/\\\"}
           DEPLOY_MESSAGE="Deploy preview for PR #${{ github.event.number }} - ${PR_TITLE_ESCAPED}"
-          echo "deploy_args=deploy --dir=./static-export --functions=./netlify/functions --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
+          echo "deploy_args=deploy --dir=./public --functions=./netlify/functions --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
         else
           COMMIT_MSG=$(git log -1 --pretty=%s) # %s gets only the subject line
           # Escape quotes and other special characters in commit message
           COMMIT_MSG_ESCAPED=${COMMIT_MSG//\"/\\\"}
           COMMIT_MSG_SANITIZED=$(echo "$COMMIT_MSG_ESCAPED" | sed "s/[^a-zA-Z0-9 :_.-]/ /g")
           DEPLOY_MESSAGE="Production deploy: ${COMMIT_MSG_SANITIZED}"
-          echo "deploy_args=deploy --dir=./static-export --functions=./netlify/functions --prod-if-unlocked --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
+          echo "deploy_args=deploy --dir=./public --functions=./netlify/functions --prod-if-unlocked --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
         fi
 
     - name: Set Netlify Env Var for Production
