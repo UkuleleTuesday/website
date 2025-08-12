@@ -25,7 +25,7 @@ This will generate the static HTML files in the `public/` directory.
 
 ### Automated Deployment
 
-The site is automatically built and deployed to Netlify on every push to the `main` branch.
+The site is automatically built and deployed to Netlify on every push to the `main` branch. Preview environments are also created for every pull request.
 
 ## Development
 
