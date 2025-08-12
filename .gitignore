@@ -1,4 +1,3 @@
 .aider*
-out/
-public/
+/public/
 __pycache__/
