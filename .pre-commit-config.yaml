@@ -3,7 +3,7 @@ repos:
     hooks:
       - id: tidy-html5
         name: tidy-html5
-        entry: tidy -m -quiet --config .tidyrc -indent -wrap 100 -utf8 --new-blocklevel-tags "rs-module-wrap rs-module rs-slides rs-slide rs-layer"
+        entry: tidy -m -quiet --warn-proprietary-attributes no -indent -wrap 100 -utf8 --new-blocklevel-tags "rs-module-wrap rs-module rs-slides rs-slide rs-layer"
         language: system
         files: \.html$
         pass_filenames: true
