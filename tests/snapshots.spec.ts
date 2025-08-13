@@ -40,7 +40,7 @@ for (const templateFile of templateFiles) {
             return;
         }
 
-        await page.goto(`file://${filePath}`);
-        await expect(page).toHaveScreenshot(`${templateFile}.png`);
+        await page.goto(`file://${filePath}`, { waitUntil: 'networkidle' });
+        await expect(page).toHaveScreenshot(`${templateFile}.png`, { animations: 'disabled', fullPage: true });
     });
 }
