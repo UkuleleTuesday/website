@@ -29,10 +29,23 @@ function getAllHtmlFiles(dirPath: string, arrayOfFiles: string[] = [], relativeD
 
 const templateFiles = getAllHtmlFiles(templatesDir);
 
+test.beforeAll(async () => {
+    const artifactsDir = path.join(__dirname, '..', 'artifacts');
+    if (!fs.existsSync(artifactsDir)) {
+        fs.mkdirSync(artifactsDir, { recursive: true });
+    }
+});
+
 for (const templateFile of templateFiles) {
-    test(`visual regression for ${templateFile}`, async ({ page }) => {
+    test(`visual regression for ${templateFile}`, async ({ page }, testInfo) => {
         await page.goto(templateFile, { waitUntil: 'networkidle' });
         await page.waitForTimeout(2000);
+
+        const artifactsDir = path.join(__dirname, '..', 'artifacts');
+        // Sanitize the title to create a valid filename. Replaces invalid chars with _.
+        const sanitizedTitle = testInfo.title.replace(/[<>:"/\\|?*]/g, '_').replace(/ /g, '_');
+        await fs.promises.writeFile(path.join(artifactsDir, `${sanitizedTitle}.html`), await page.content());
+
         await expect(page).toHaveScreenshot(`${templateFile}.png`, { animations: 'disabled', fullPage: true, maxDiffPixels: 100 });
     });
 }
