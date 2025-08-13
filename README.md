@@ -23,6 +23,9 @@ uv run python build.py
 
 This will generate the static HTML files in the `public/` directory.
 
+* Files in `./templates/` are processed as jinja2 templates before being copied to `public/`
+* Files in `./static/` are copied as is to `public/`
+
 ### Automated Deployment
 
 The site is automatically built and deployed to Netlify on every push to the `main` branch. Preview environments are also created for every pull request.
