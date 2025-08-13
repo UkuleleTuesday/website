@@ -32,6 +32,7 @@ const templateFiles = getAllHtmlFiles(templatesDir);
 for (const templateFile of templateFiles) {
     test(`visual regression for ${templateFile}`, async ({ page }) => {
         await page.goto(templateFile, { waitUntil: 'networkidle' });
+        await page.waitForTimeout(2000);
         await expect(page).toHaveScreenshot(`${templateFile}.png`, { animations: 'disabled', fullPage: true });
     });
 }
