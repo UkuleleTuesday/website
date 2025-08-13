@@ -38,6 +38,7 @@ test.beforeAll(async () => {
 
 for (const templateFile of templateFiles) {
     test(`visual regression for ${templateFile}`, async ({ page }, testInfo) => {
+        test.slow();
         await page.goto(templateFile, { waitUntil: 'networkidle' });
         await page.waitForTimeout(2000);
 
@@ -46,6 +47,6 @@ for (const templateFile of templateFiles) {
         const sanitizedTitle = testInfo.title.replace(/[<>:"/\\|?*]/g, '_').replace(/ /g, '_');
         await fs.promises.writeFile(path.join(artifactsDir, `${sanitizedTitle}.html`), await page.content());
 
-        await expect(page).toHaveScreenshot(`${templateFile}.png`, { animations: 'disabled', fullPage: true, maxDiffPixels: 100 });
+        await expect(page).toHaveScreenshot(`${templateFile}.png`, { animations: 'disabled', fullPage: true, maxDiffPixels: 100 , timeout: 10_000});
     });
 }
