@@ -48,16 +48,24 @@ To run the hooks on all files at any time:
 uvx pre-commit run --all-files
 ```
 
-## Project Structure
+### Visual Regression Testing
 
+This project uses [Playwright](https://playwright.dev/) for visual regression testing. It takes screenshots of every page and compares them against baseline snapshots to prevent unintended visual changes. The test dependencies and scripts are managed with `pnpm`.
+
+**Running Tests**
+
+To execute the visual regression tests:
+
+```bash
+pnpm playwright test
 ```
-├── .github/
-│   └── workflows/
-│       └── build-and-deploy.yml      # GitHub Actions workflow
-├── templates/                        # Jinja2 templates
-├── static/                           # Static assets (CSS, JS, images)
-├── build.py                          # Site build script
-├── pyproject.toml                    # Python project configuration
-├── uv.lock                           # Dependency lock file
-└── README.md                         # This documentation
+
+**Updating Snapshots**
+
+If you make intentional changes to the UI, you will need to update the baseline snapshots. After verifying that the changes are correct, run:
+
+```bash
+pnpm playwright test --update-snapshots
 ```
+
+Commit the updated snapshot files in the `tests/snapshots.spec.ts-snapshots/` directory along with your code changes.
