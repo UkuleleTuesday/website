@@ -59,7 +59,7 @@ jobs:
           retention-days: 30
 
   deploy-preview:
-    needs: test
+    needs: build
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
