@@ -8,8 +8,6 @@ const publicDir = path.join(__dirname, '..', 'public');
 const templateFiles = fs.readdirSync(templatesDir)
     .filter(file => file.endsWith('.html') && !file.startsWith('_') && !file.startsWith('.'));
 
-const publicDir = path.join(__dirname, '..', 'public');
-
 for (const templateFile of templateFiles) {
     test(`visual regression for ${templateFile}`, async ({ page }) => {
         const filePath = path.join(publicDir, templateFile);
