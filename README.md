@@ -69,17 +69,3 @@ pnpm playwright test --update-snapshots
 ```
 
 Commit the updated snapshot files in the `tests/snapshots.spec.ts-snapshots/` directory along with your code changes.
-
-## Project Structure
-
-```
-├── .github/
-│   └── workflows/
-│       └── build-and-deploy.yml      # GitHub Actions workflow
-├── templates/                        # Jinja2 templates
-├── static/                           # Static assets (CSS, JS, images)
-├── build.py                          # Site build script
-├── pyproject.toml                    # Python project configuration
-├── uv.lock                           # Dependency lock file
-└── README.md                         # This documentation
-```
