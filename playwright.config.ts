@@ -77,5 +77,7 @@ export default defineConfig({
      command: 'python3 -m http.server -d public',
      url: 'http://localhost:8000',
      reuseExistingServer: !process.env.CI,
+     stdout: 'ignore',
+     stderr: 'ignore', // python -m http.server is verbose and prints a line for every request on stderr...
   },
 });
