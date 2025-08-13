@@ -545,7 +545,4 @@
   </main>
 {% endblock %}
 {% block extra_scripts %}
-  <script type="text/javascript">
-  var to_like_post = {"url":"/wp-admin/admin-ajax.php","nonce":"f97e868219"};!function(t){"use strict";t(document).ready(function(){t(document).on("click",".to-post-like:not('.to-post-like-unactive')",function(e){e.preventDefault();var o=t(this),n=o.data("post-id"),s=parseInt(o.find(".to-like-count").text());return o.addClass("heart-pulse"),t.ajax({type:"post",url:to_like_post.url,data:{nonce:to_like_post.nonce,action:"to_like_post",post_id:n,like_nb:s},context:o,success:function(e){e&&((o=t(this)).attr("title",e.title),o.find(".to-like-count").text(e.count),o.removeClass(e.remove_class+" heart-pulse").addClass(e.add_class))}}),!1})})}(jQuery);
-  </script>
 {% endblock %}
