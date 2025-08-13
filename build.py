@@ -54,7 +54,6 @@ def build():
 
     print("Templates rendered successfully.")
     print("Build process completed.")
-    return template_files
 
 if __name__ == "__main__":
     build()

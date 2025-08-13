@@ -1,11 +1,12 @@
 import { test, expect } from '@playwright/test';
-import { execSync } from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
 
-// Get the list of template files from build.py
-const templateFilesJson = execSync('uv run python -c "import build; import json; print(json.dumps(build.build()))"', { encoding: 'utf-8' });
-const templateFiles: string[] = JSON.parse(templateFilesJson);
+const templatesDir = path.join(__dirname, '..', 'templates');
+const publicDir = path.join(__dirname, '..', 'public');
+
+const templateFiles = fs.readdirSync(templatesDir)
+    .filter(file => file.endsWith('.html') && !file.startsWith('_') && !file.startsWith('.'));
 
 const publicDir = path.join(__dirname, '..', 'public');
 
