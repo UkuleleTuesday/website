@@ -31,16 +31,7 @@ const templateFiles = getAllHtmlFiles(templatesDir);
 
 for (const templateFile of templateFiles) {
     test(`visual regression for ${templateFile}`, async ({ page }) => {
-        const filePath = path.join(publicDir, templateFile);
-        // Make sure the file exists before trying to navigate
-        if (!fs.existsSync(filePath)) {
-            // Log a warning and skip the test if the file doesn't exist.
-            console.warn(`Warning: HTML file not found for template: ${templateFile} at path ${filePath}`);
-            test.skip();
-            return;
-        }
-
-        await page.goto(`file://${filePath}`, { waitUntil: 'networkidle' });
+        await page.goto(templateFile, { waitUntil: 'networkidle' });
         await expect(page).toHaveScreenshot(`${templateFile}.png`, { animations: 'disabled', fullPage: true });
     });
 }
