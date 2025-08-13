@@ -24,6 +24,33 @@
 {% endblock %}
 {% block extra_head %}
   <style data-type="vc_shortcodes-custom-css" type="text/css">
+  .hero-banner {
+    background-image: url(/wp-content/uploads/2022/07/ukulele-tuesday-showcase-01.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+  }
+  .vc_row[data-vc-full-width="true"] {
+    width: 100vw !important;
+    position: relative !important;
+    left: 50% !important;
+    right: 50% !important;
+    margin-left: -50vw !important;
+    margin-right: -50vw !important;
+    box-sizing: border-box !important;
+  }
   .vc_custom_1657991858553{padding-top: 50px !important;padding-bottom: 60px !important;background-color: #66023c !important;}.vc_custom_1657991825210{margin-top: 25px !important;}.vc_custom_1657991825210{margin-top: 25px !important;}.vc_custom_1657999937062{margin-top: 15px !important;}.vc_custom_1753485737377{border-top-width: 15px !important;border-right-width: 15px !important;border-bottom-width: 15px !important;border-left-width: 15px !important;border-left-color: #006566 !important;border-left-style: solid !important;border-right-color: #006566 !important;border-right-style: solid !important;border-top-color: #006566 !important;border-top-style: solid !important;border-bottom-color: #006566 !important;border-bottom-style: solid !important;border-radius: 10px !important;}.vc_custom_1657999937062{margin-top: 15px !important;}.vc_custom_1753485788796{border-top-width: 15px !important;border-right-width: 15px !important;border-bottom-width: 15px !important;border-left-width: 15px !important;border-left-color: #66023c !important;border-left-style: solid !important;border-right-color: #66023c !important;border-right-style: solid !important;border-top-color: #66023c !important;border-top-style: solid !important;border-bottom-color: #66023c !important;border-bottom-style: solid !important;border-radius: 10px !important;}
   </style>
   <noscript>
@@ -47,26 +74,16 @@
           </header>
           <!-- .entry-content-header -->
           <div class="entry-content">
-            <div class="vc_row wpb_row vc_row-fluid">
-              <div class="wpb_column vc_column_container vc_col-sm-12">
-                <div class="vc_column-inner">
-                  <div class="wpb_wrapper">
-                    <div style="background-image: url(/wp-content/uploads/2022/07/ukulele-tuesday-showcase-01.jpg); background-position: center; background-repeat: no-repeat; background-size: cover; height: 600px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-                      <h1 style="color: white; font-family: 'Pattaya', sans-serif; font-size: 72px; line-height: 80px; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Welcome to Ukulele Tuesday</h1>
-                      <div style="margin-top: 40px;">
-                        <a class="rev-btn" href="/songbook/" style="background-color: #1db1ad; color: white; font-family: 'Poppins', sans-serif; text-transform: uppercase; font-size: 17px; padding: 21px 36px; border-radius: 100px; text-decoration: none; margin: 0 10px; box-shadow: rgba(0, 0, 0, 0.2) 2px 2px 6px 0px;" target="_self">View Songbook</a>
-                        <a class="rev-btn" href="/contact-us" style="background-color: #1db1ad; color: white; font-family: 'Poppins', sans-serif; text-transform: uppercase; font-size: 17px; padding: 21px 36px; border-radius: 100px; text-decoration: none; margin: 0 10px; box-shadow: rgba(0, 0, 0, 0.2) 2px 2px 6px 0px;" target="_self">Get In touch</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            <section class="hero-banner">
+              <h1 style="color: white; font-family: 'Pattaya', sans-serif; font-size: 72px; line-height: 80px; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Welcome to Ukulele Tuesday</h1>
+              <div style="margin-top: 40px;">
+                <a class="rev-btn" href="/songbook/" style="background-color: #1db1ad; color: white; font-family: 'Poppins', sans-serif; text-transform: uppercase; font-size: 17px; padding: 21px 36px; border-radius: 100px; text-decoration: none; margin: 0 10px; box-shadow: rgba(0, 0, 0, 0.2) 2px 2px 6px 0px;" target="_self">View Songbook</a>
+                <a class="rev-btn" href="/contact-us" style="background-color: #1db1ad; color: white; font-family: 'Poppins', sans-serif; text-transform: uppercase; font-size: 17px; padding: 21px 36px; border-radius: 100px; text-decoration: none; margin: 0 10px; box-shadow: rgba(0, 0, 0, 0.2) 2px 2px 6px 0px;" target="_self">Get In touch</a>
               </div>
-              <div class="tt-shape tt-shape-top" data-negative="false"></div>
-              <div class="tt-shape tt-shape-bottom" data-negative="false"></div>
-            </div>
+            </section>
             <div class="vc_row wpb_row vc_row-fluid vc_custom_1657991858553 vc_row-has-fill"
                  data-vc-full-width="true"
-                 data-vc-full-width-init="false">
+                 data-vc-full-width-init="true">
               <div class="wpb_column vc_column_container vc_col-sm-2">
                 <div class="vc_column-inner">
                   <div class="wpb_wrapper"></div>
