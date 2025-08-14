@@ -23,9 +23,6 @@
   </script>
 {% endblock %}
 {% block extra_head %}
-  <style data-type="vc_shortcodes-custom-css" type="text/css">
-  .vc_custom_1658013410183{margin-bottom: 25px !important;padding-top: 90px !important;padding-bottom: 70px !important;}.vc_custom_1657998317456{margin-bottom: 25px !important;}.vc_custom_1657998251159{margin-bottom: 25px !important;}
-  </style>
   <noscript>
     <style>.wpb_animate_when_almost_visible { opacity: 1; }</style>
   </noscript>
@@ -46,28 +43,10 @@
           </header>
           <!-- .entry-content-header -->
           <div class="entry-content">
-            <div class="vc_row wpb_row vc_row-fluid vc_custom_1658013410183 vc_row-has-fill cesis_row_has_parallax cesis_row_has_overlay"
-                 data-overlay="true"
-                 data-overlay-color="rgba(102,2,60,0.75)"
-                 data-parallax_speed="1.5"
-                 data-vc-full-width="true"
-                 data-vc-full-width-init="false"
-                 data-vc-parallax-image="/wp-content/uploads/2022/07/banner-ukulele-tuesday-mic-crowd.jpg">
-              <div class="wpb_column vc_column_container vc_col-sm-12">
-                <div class="vc_column-inner vc_custom_1657998317456">
-                  <div class="wpb_wrapper">
-                    <h1 class="vc_custom_heading cesis_text_transform_none vc_custom_1657998251159 cesis_ar_text"
-                        data-max_size=""
-                        data-min_size="60px"
-                        style="color: #ffffff;
-                               text-align: center;
-                               letter-spacing:0px">Contact Us</h1>
-                  </div>
-                </div>
-              </div>
-              <div class="tt-shape tt-shape-top" data-negative="false"></div>
-              <div class="tt-shape tt-shape-bottom" data-negative="false"></div>
-            </div>
+            {% set banner_title = "Contact Us" %}
+            {% set banner_image_url = "/wp-content/uploads/2022/07/banner-ukulele-tuesday-mic-crowd.jpg" %}
+            {% set banner_class = "banner-padding-large mb-25" %}
+            {% include "_partials/banner.html" %}
             <div class="vc_row-full-width vc_clearfix"></div>
             <div class="vc_row wpb_row vc_row-fluid">
               <div class="wpb_column vc_column_container vc_col-sm-3">

@@ -23,14 +23,6 @@
   </script>
 {% endblock %}
 {% block extra_head %}
-  <style data-type="vc_custom-css" type="text/css">
-  .body {
-    color: white;
-  }
-  </style>
-  <style data-type="vc_shortcodes-custom-css" type="text/css">
-  .vc_custom_1657994790801{padding-top: 70px !important;padding-bottom: 70px !important;}.vc_custom_1657994285373{padding-top: 50px !important;padding-bottom: 60px !important;background-color: #1db1ad !important;}.vc_custom_1657990007159{margin-top: 25px !important;}.vc_custom_1657990364152{padding-top: 50px !important;padding-bottom: 60px !important;background-color: #66023c !important;}.vc_custom_1657996088194{margin-top: 25px !important;}.vc_custom_1658000048949{margin-top: 15px !important;}.vc_custom_1657999833230{margin-top: 15px !important;}.vc_custom_1657999846180{margin-top: 15px !important;}.vc_custom_1753486545270{border-top-width: 15px !important;border-right-width: 15px !important;border-bottom-width: 15px !important;border-left-width: 15px !important;border-left-color: #006566 !important;border-left-style: solid !important;border-right-color: #006566 !important;border-right-style: solid !important;border-top-color: #006566 !important;border-top-style: solid !important;border-bottom-color: #006566 !important;border-bottom-style: solid !important;border-radius: 10px !important;}.vc_custom_1753486556184{border-top-width: 15px !important;border-right-width: 15px !important;border-bottom-width: 15px !important;border-left-width: 15px !important;border-left-color: #efa537 !important;border-left-style: solid !important;border-right-color: #efa537 !important;border-right-style: solid !important;border-top-color: #efa537 !important;border-top-style: solid !important;border-bottom-color: #efa537 !important;border-bottom-style: solid !important;border-radius: 10px !important;}.vc_custom_1753486565307{border-top-width: 15px !important;border-right-width: 15px !important;border-bottom-width: 15px !important;border-left-width: 15px !important;border-left-color: #66023c !important;border-left-style: solid !important;border-right-color: #66023c !important;border-right-style: solid !important;border-top-color: #66023c !important;border-top-style: solid !important;border-bottom-color: #66023c !important;border-bottom-style: solid !important;border-radius: 10px !important;}
-  </style>
   <noscript>
     <style>.wpb_animate_when_almost_visible { opacity: 1; }</style>
   </noscript>
@@ -51,59 +43,13 @@
           </header>
           <!-- .entry-content-header -->
           <div class="entry-content">
-            <div class="vc_row wpb_row vc_row-fluid vc_custom_1657994790801 vc_row-has-fill cesis_row_has_parallax cesis_row_has_overlay"
-                 data-overlay="true"
-                 data-overlay-color="rgba(102,2,60,0.75)"
-                 data-parallax_speed="1.5"
-                 data-vc-full-width="true"
-                 data-vc-full-width-init="false"
-                 data-vc-parallax-image="/wp-content/uploads/2022/07/banner-ukulele-tuesday-mic-crowd.jpg">
-              <div class="wpb_column vc_column_container vc_col-sm-12">
-                <div class="vc_column-inner">
-                  <div class="wpb_wrapper">
-                    <h1 class="vc_custom_heading cesis_text_transform_none cesis_ar_text"
-                        data-max_size=""
-                        data-min_size="60px"
-                        style="color: #ffffff;
-                               text-align: center;
-                               letter-spacing:0px">Concerts</h1>
-                    <div class="wpbsctn" data-delay="10">
-                      <div class="cesis_button_center">
-                        <a class="cesis_button_ctn cesis_button_medium center"
-                           data-delay="10"
-                           href="/contact-us"
-                           id="cesis_button_w7vj1qp2amdq7296c2vq"
-                           onmouseenter="this.style.boxShadow='none'; this.style.borderColor='#66023c'; this.style.background='#006566'; this.style.color='#ffffff';"
-                           onmouseleave="this.style.boxShadow='0 14px 28px rgba(0,0,0,0.05), 0 10px 10px rgba(0,0,0,0.05)'; this.style.borderColor='#efa537'; this.style.background='#efa537'; this.style.color='#ffffff';"
-                           style="margin-top:0px;
-                                  margin-bottom:0px;
-                                  margin-right:0px;
-                                  margin-left:0px;
-                                  box-shadow:0 14px 28px rgba(0,0,0,0.05), 0 10px 10px rgba(0,0,0,0.05);
-                                  font-family:Quicksand;
-                                  font-style:normal;
-                                  font-size:16px;
-                                  font-weight:700;
-                                  line-height:48px;
-                                  text-transform:uppercase;
-                                  letter-spacing:0px;
-                                  border:0px solid #efa537;
-                                  border-radius:100px;
-                                  background:#efa537;
-                                  color:#ffffff"
-                           target="_self"><span class="cesis_button_sub_ctn cesis_button_icon_hover cesis_button_icon_right"><span class="cesis_button_text">Book Us!</span></span></a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="tt-shape tt-shape-top" data-negative="false"></div>
-              <div class="tt-shape tt-shape-bottom" data-negative="false"></div>
-            </div>
+            {% set banner_title = "Concerts" %}
+            {% set banner_image_url = "/wp-content/uploads/2022/07/banner-ukulele-tuesday-mic-crowd.jpg" %}
+            {% set banner_class = "banner-padding" %}
+            {% include "_partials/banner.html" %}
             <div class="vc_row-full-width vc_clearfix"></div>
-            <div class="vc_row wpb_row vc_row-fluid vc_custom_1657994285373 vc_row-has-fill"
-                 data-vc-full-width="true"
-                 data-vc-full-width-init="false">
+            <div class="vc_row wpb_row vc_row-fluid section-teal vc_row-has-fill"
+                 data-vc-full-width="true">
               <div class="wpb_column vc_column_container vc_col-sm-2">
                 <div class="vc_column-inner">
                   <div class="wpb_wrapper"></div>
@@ -112,7 +58,7 @@
               <div class="wpb_column vc_column_container vc_col-sm-8">
                 <div class="vc_column-inner">
                   <div class="wpb_wrapper">
-                    <h2 class="vc_custom_heading cesis_text_transform_none cesis_ar_text"
+                    <h2 class="cesis_text_transform_none cesis_ar_text"
                         data-max_size=""
                         data-min_size="18"
                         style="color: #ffffff;
@@ -135,7 +81,7 @@
               <div class="tt-shape tt-shape-bottom" data-negative="false">{% include "_partials/shape-divider.html" %}</div>
             </div>
             <div class="vc_row-full-width vc_clearfix"></div>
-            <div class="vc_row wpb_row vc_row-fluid vc_custom_1657990007159 vc_row-o-content-middle vc_row-flex">
+            <div class="vc_row wpb_row vc_row-fluid mt-25 vc_row-o-content-middle vc_row-flex">
               <div class="wpb_column vc_column_container vc_col-sm-6">
                 <div class="vc_column-inner">
                   <div class="wpb_wrapper">
@@ -166,7 +112,7 @@
                     </div>
                     <div class="vc_row wpb_row vc_inner vc_row-fluid">
                       <div class="wpb_column vc_column_container vc_col-sm-6">
-                        <div class="vc_column-inner vc_custom_1657999833230">
+                        <div class="vc_column-inner mt-15">
                           <div class="wpb_wrapper">
                             <div class="wpbsctn" data-delay="0">
                               <div class="cesis_button_center">
@@ -198,7 +144,7 @@
                         </div>
                       </div>
                       <div class="wpb_column vc_column_container vc_col-sm-6">
-                        <div class="vc_column-inner vc_custom_1657999846180">
+                        <div class="vc_column-inner mt-15">
                           <div class="wpb_wrapper">
                             <div class="wpbsctn" data-delay="0">
                               <div class="cesis_button_center">
@@ -234,7 +180,7 @@
                 </div>
               </div>
               <div class="wpb_column vc_column_container vc_col-sm-6">
-                <div class="vc_column-inner vc_custom_1658000048949">
+                <div class="vc_column-inner mt-15">
                   <div class="wpb_wrapper">
                     <div class="wpb_raw_code wpb_content_element wpb_raw_html">
                       <div class="wpb_wrapper">
@@ -291,13 +237,12 @@
               <div class="tt-shape tt-shape-top" data-negative="false"></div>
               <div class="tt-shape tt-shape-bottom" data-negative="false"></div>
             </div>
-            <div class="vc_row wpb_row vc_row-fluid vc_custom_1657990364152 vc_row-has-fill"
-                 data-vc-full-width="true"
-                 data-vc-full-width-init="false">
+            <div class="vc_row wpb_row vc_row-fluid section-maroon vc_row-has-fill"
+                 data-vc-full-width="true">
               <div class="wpb_column vc_column_container vc_col-sm-6">
                 <div class="vc_column-inner">
                   <div class="wpb_wrapper">
-                    <h2 class="vc_custom_heading cesis_text_transform_none cesis_ar_text"
+                    <h2 class="cesis_text_transform_none cesis_ar_text"
                         data-max_size="36px"
                         data-min_size="18"
                         style="font-size: 36px;
@@ -447,11 +392,11 @@
               <div class="tt-shape tt-shape-bottom" data-negative="false">{% include "_partials/shape-divider.html" %}</div>
             </div>
             <div class="vc_row-full-width vc_clearfix"></div>
-            <div class="vc_row wpb_row vc_row-fluid vc_custom_1657996088194">
+            <div class="vc_row wpb_row vc_row-fluid mt-25">
               <div class="wpb_column vc_column_container vc_col-sm-4">
                 <div class="vc_column-inner">
                   <div class="wpb_wrapper">
-                    <div class="wpb_single_image wpb_content_element vc_align_center vc_custom_1753486545270">
+                    <div class="wpb_single_image wpb_content_element vc_align_center img-border-green">
                       <figure class="wpb_wrapper vc_figure">
                         <div class="vc_single_image-wrapper vc_box_border_grey">
                           <img alt=""
@@ -477,7 +422,7 @@
               <div class="wpb_column vc_column_container vc_col-sm-4">
                 <div class="vc_column-inner">
                   <div class="wpb_wrapper">
-                    <div class="wpb_single_image wpb_content_element vc_align_center vc_custom_1753486556184">
+                    <div class="wpb_single_image wpb_content_element vc_align_center img-border-yellow">
                       <figure class="wpb_wrapper vc_figure">
                         <div class="vc_single_image-wrapper vc_box_border_grey">
                           <img alt="Ukulele Tuesday band"
@@ -503,7 +448,7 @@
               <div class="wpb_column vc_column_container vc_col-sm-4">
                 <div class="vc_column-inner">
                   <div class="wpb_wrapper">
-                    <div class="wpb_single_image wpb_content_element vc_align_center vc_custom_1753486565307">
+                    <div class="wpb_single_image wpb_content_element vc_align_center img-border-maroon">
                       <figure class="wpb_wrapper vc_figure">
                         <div class="vc_single_image-wrapper vc_box_border_grey">
                           <img alt="Ukulele Tuesday with John Sheahan"

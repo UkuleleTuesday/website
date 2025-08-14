@@ -23,9 +23,6 @@
   </script>
 {% endblock %}
 {% block extra_head %}
-  <style data-type="vc_shortcodes-custom-css" type="text/css">
-  .vc_custom_1658013118472{margin-bottom: 0px !important;padding-top: 90px !important;padding-bottom: 70px !important;}.vc_custom_1657999666533{margin-bottom: 25px !important;padding-top: 50px !important;padding-bottom: 60px !important;background-color: #1db1ad !important;}
-  </style>
   <noscript>
     <style>.wpb_animate_when_almost_visible { opacity: 1; }</style>
   </noscript>
@@ -47,35 +44,13 @@
           </header>
           <!-- .entry-content-header -->
           <div class="entry-content">
-            <div class="vc_row wpb_row vc_row-fluid vc_custom_1658013118472 vc_row-has-fill cesis_row_has_parallax cesis_row_has_overlay"
-                 data-overlay="true"
-                 data-overlay-color="rgba(102,2,60,0.75)"
-                 data-parallax_speed="1.5"
-                 data-vc-full-width="true"
-                 data-vc-full-width-init="false"
-                 data-vc-parallax-image="/wp-content/uploads/2022/07/banner-ukulele-tuesday-mic-crowd.jpg">
-              <div class="wpb_column vc_column_container vc_col-sm-12">
-                <div class="vc_column-inner">
-                  <div class="wpb_wrapper">
-                    <h1 class="vc_custom_heading cesis_text_transform_none cesis_ar_text"
-                        data-max_size=""
-                        data-min_size="60px"
-                        style="color: #ffffff;
-                               text-align: center;
-                               letter-spacing:0px">
-                      Join Our WhatsApp
-                      Community!
-                    </h1>
-                  </div>
-                </div>
-              </div>
-              <div class="tt-shape tt-shape-top" data-negative="false"></div>
-              <div class="tt-shape tt-shape-bottom" data-negative="false"></div>
-            </div>
+            {% set banner_title = "Join Our WhatsApp Community!" %}
+            {% set banner_image_url = "/wp-content/uploads/2022/07/banner-ukulele-tuesday-mic-crowd.jpg" %}
+            {% set banner_class = "banner-padding-large mb-0" %}
+            {% include "_partials/banner.html" %}
             <div class="vc_row-full-width vc_clearfix"></div>
-            <div class="vc_row wpb_row vc_row-fluid vc_custom_1657999666533 vc_row-has-fill"
-                 data-vc-full-width="true"
-                 data-vc-full-width-init="false">
+            <div class="vc_row wpb_row vc_row-fluid section-teal vc_row-has-fill"
+                 data-vc-full-width="true">
               <div class="wpb_column vc_column_container vc_col-sm-2">
                 <div class="vc_column-inner">
                   <div class="wpb_wrapper"></div>
@@ -84,7 +59,7 @@
               <div class="wpb_column vc_column_container vc_col-sm-8">
                 <div class="vc_column-inner">
                   <div class="wpb_wrapper">
-                    <h2 class="vc_custom_heading cesis_text_transform_none cesis_ar_text"
+                    <h2 class="cesis_text_transform_none cesis_ar_text"
                         data-max_size=""
                         data-min_size="18"
                         style="color: #ffffff;
@@ -117,12 +92,11 @@
                     <div class="wpb_text_column wpb_content_element cesis_text_transform_none">
                       <div class="wpb_wrapper">
                         <p data-min_size="18">
-                          Join 100+ members of our community! Stay up to
-                          date with the latest events and upcoming jam sessions and gigs, chat
-                          with the members, buy and sell ukes, or join jam sessions organised by
-                          our community members. We’ve got groups for all of that in our Whatsapp
-                          community. Start by joining the “Welcome & Intros” chat group and
-                          saying hi! 👋
+                          Join 100+ members of our community! Stay up to date with the latest events and
+                          upcoming jam sessions and gigs, chat with the members, buy and sell ukes, or
+                          join jam sessions organised by our community members. We&rsquo;ve got groups
+                          for all of that in our Whatsapp community. Start by joining the &ldquo;General Chat&rdquo;
+                          group and saying hi! &#x1F44B;
                         </p>
                       </div>
                     </div>

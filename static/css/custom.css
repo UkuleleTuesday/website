@@ -1,0 +1,94 @@
+/* Full-width rows */
+.vc_row[data-vc-full-width="true"] {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+/* Utility classes to replace vc_custom_* styles */
+
+/* Banners */
+.banner-padding {
+  padding-top: 70px !important;
+  padding-bottom: 70px !important;
+}
+
+.banner-padding-large {
+  padding-top: 90px !important;
+  padding-bottom: 70px !important;
+}
+
+/* Sections */
+.section-teal {
+  background-color: #1db1ad !important;
+  padding-top: 50px !important;
+  padding-bottom: 60px !important;
+  margin-bottom: 25px !important;
+}
+
+.section-maroon {
+  background-color: #66023c !important;
+  padding-top: 50px !important;
+  padding-bottom: 60px !important;
+}
+
+/* Spacing */
+.mt-15 {
+  margin-top: 15px !important;
+}
+
+.mt-25 {
+  margin-top: 25px !important;
+}
+
+.mb-0 {
+  margin-bottom: 0px !important;
+}
+
+.mb-25 {
+  margin-bottom: 25px !important;
+}
+
+.mb-55 {
+  margin-bottom: 55px !important;
+}
+
+/* Images & Borders */
+.img-border-green {
+  border: 15px solid #006566 !important;
+  border-radius: 10px !important;
+}
+
+.img-border-yellow {
+  border: 15px solid #efa537 !important;
+  border-radius: 10px !important;
+}
+
+.img-border-maroon {
+  border: 15px solid #66023c !important;
+  border-radius: 10px !important;
+}
+
+.img-border-teal {
+  border: 15px solid #1db1ad !important;
+  border-radius: 10px !important;
+}
+
+/* Testimonials */
+.testimonial-box {
+  border: 2px solid #1eb0ad !important;
+  border-radius: 10px !important;
+  padding-top: 40px !important;
+  padding-right: 20px !important;
+  padding-bottom: 10px !important;
+  padding-left: 20px !important;
+  margin-top: 15px !important;
+}
+
+/* Misc */
+.youtube-embed {
+  border: 15px solid #efa537 !important;
+  border-radius: 10px !important;
+}
