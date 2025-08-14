@@ -43,9 +43,10 @@ for (const templateFile of templateFiles) {
         await page.waitForTimeout(2000);
 
         const artifactsDir = path.join(__dirname, '..', 'artifacts');
-        // Sanitize the title to create a valid filename. Replaces invalid chars with _.
-        const sanitizedTitle = testInfo.title.replace(/[<>:"/\\|?*]/g, '_').replace(/ /g, '_');
-        await fs.promises.writeFile(path.join(artifactsDir, `${sanitizedTitle}.html`), await page.content());
+        // Sanitize the filename. Replaces invalid chars with _.
+        const sanitizedTemplateFile = templateFile.replace(/[<>:"/\\|?*]/g, '_').replace(/ /g, '_');
+        const artifactFilename = `page_render_${sanitizedTemplateFile}`;
+        await fs.promises.writeFile(path.join(artifactsDir, artifactFilename), await page.content());
 
         await expect(page).toHaveScreenshot(`${templateFile}.png`, { animations: 'disabled', fullPage: true, maxDiffPixels: 100 , timeout: 10_000});
     });
