@@ -35,7 +35,7 @@ def build():
     ]
 
     # Enable analytics only in production builds
-    analytics_enabled = os.environ.get('IS_PRODUCTION') == 'true'
+    analytics_enabled = os.environ.get('ENABLE_ANALYTICS') == 'true'
     if analytics_enabled:
         print("Analytics will be enabled for this build.")
     else:

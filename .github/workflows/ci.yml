@@ -23,7 +23,7 @@ jobs:
         run: uvx pre-commit run --all-files
       - name: Build static site
         env:
-          IS_PRODUCTION: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
+          ENABLE_ANALYTICS: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
         run: uv run build.py
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
