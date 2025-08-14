@@ -61,55 +61,39 @@
           </header>
           <!-- .entry-content-header -->
           <div class="entry-content">
-            <div class="vc_row wpb_row vc_row-fluid vc_custom_1657994790801 vc_row-has-fill"
-                 data-vc-full-width="true"
-                 style="background-image: linear-gradient(rgba(102,2,60,0.75), rgba(102,2,60,0.75)), url(/wp-content/uploads/2022/07/banner-ukulele-tuesday-mic-crowd.jpg);
-                        background-attachment: fixed;
-                        background-position: center;
-                        background-repeat: no-repeat;
-                        background-size: cover">
-              <div class="wpb_column vc_column_container vc_col-sm-12">
-                <div class="vc_column-inner">
-                  <div class="wpb_wrapper">
-                    <h1 class="vc_custom_heading cesis_text_transform_none cesis_ar_text"
-                        data-max_size=""
-                        data-min_size="60px"
-                        style="color: #ffffff;
-                               text-align: center;
-                               letter-spacing:0px">Concerts</h1>
-                    <div class="wpbsctn" data-delay="10">
-                      <div class="cesis_button_center">
-                        <a class="cesis_button_ctn cesis_button_medium center"
-                           data-delay="10"
-                           href="/contact-us"
-                           id="cesis_button_w7vj1qp2amdq7296c2vq"
-                           onmouseenter="this.style.boxShadow='none'; this.style.borderColor='#66023c'; this.style.background='#006566'; this.style.color='#ffffff';"
-                           onmouseleave="this.style.boxShadow='0 14px 28px rgba(0,0,0,0.05), 0 10px 10px rgba(0,0,0,0.05)'; this.style.borderColor='#efa537'; this.style.background='#efa537'; this.style.color='#ffffff';"
-                           style="margin-top:0px;
-                                  margin-bottom:0px;
-                                  margin-right:0px;
-                                  margin-left:0px;
-                                  box-shadow:0 14px 28px rgba(0,0,0,0.05), 0 10px 10px rgba(0,0,0,0.05);
-                                  font-family:Quicksand;
-                                  font-style:normal;
-                                  font-size:16px;
-                                  font-weight:700;
-                                  line-height:48px;
-                                  text-transform:uppercase;
-                                  letter-spacing:0px;
-                                  border:0px solid #efa537;
-                                  border-radius:100px;
-                                  background:#efa537;
-                                  color:#ffffff"
-                           target="_self"><span class="cesis_button_sub_ctn cesis_button_icon_hover cesis_button_icon_right"><span class="cesis_button_text">Book Us!</span></span></a>
-                      </div>
-                    </div>
-                  </div>
+            {% set banner_title = 'Concerts' %}
+            {% set banner_image_url = '/wp-content/uploads/2022/07/banner-ukulele-tuesday-mic-crowd.jpg' %}
+            {% from "_partials/banner.html" import banner_extra_content %}
+            {% include "_partials/banner.html" with context %}
+            {% block banner_extra_content %}
+              <div class="wpbsctn" data-delay="10">
+                <div class="cesis_button_center">
+                  <a class="cesis_button_ctn cesis_button_medium center"
+                      data-delay="10"
+                      href="/contact-us"
+                      id="cesis_button_w7vj1qp2amdq7296c2vq"
+                      onmouseenter="this.style.boxShadow='none'; this.style.borderColor='#66023c'; this.style.background='#006566'; this.style.color='#ffffff';"
+                      onmouseleave="this.style.boxShadow='0 14px 28px rgba(0,0,0,0.05), 0 10px 10px rgba(0,0,0,0.05)'; this.style.borderColor='#efa537'; this.style.background='#efa537'; this.style.color='#ffffff';"
+                      style="margin-top:0px;
+                            margin-bottom:0px;
+                            margin-right:0px;
+                            margin-left:0px;
+                            box-shadow:0 14px 28px rgba(0,0,0,0.05), 0 10px 10px rgba(0,0,0,0.05);
+                            font-family:Quicksand;
+                            font-style:normal;
+                            font-size:16px;
+                            font-weight:700;
+                            line-height:48px;
+                            text-transform:uppercase;
+                            letter-spacing:0px;
+                            border:0px solid #efa537;
+                            border-radius:100px;
+                            background:#efa537;
+                            color:#ffffff"
+                      target="_self"><span class="cesis_button_sub_ctn cesis_button_icon_hover cesis_button_icon_right"><span class="cesis_button_text">Book Us!</span></span></a>
                 </div>
               </div>
-              <div class="tt-shape tt-shape-top" data-negative="false"></div>
-              <div class="tt-shape tt-shape-bottom" data-negative="false"></div>
-            </div>
+            {% endblock %}
             <div class="vc_row-full-width vc_clearfix"></div>
             <div class="vc_row wpb_row vc_row-fluid vc_custom_1657994285373 vc_row-has-fill"
                  data-vc-full-width="true">
