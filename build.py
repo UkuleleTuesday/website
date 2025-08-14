@@ -34,8 +34,8 @@ def build():
         if not t.startswith('_') and not t.startswith('.')
     ]
 
-    # Enable analytics only in the Netlify 'production' context
-    analytics_enabled = os.environ.get('CONTEXT') == 'production'
+    # Enable analytics only in production builds
+    analytics_enabled = os.environ.get('IS_PRODUCTION') == 'true'
     if analytics_enabled:
         print("Analytics will be enabled for this build.")
     else:
