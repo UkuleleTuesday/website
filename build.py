@@ -34,13 +34,20 @@ def build():
         if not t.startswith('_') and not t.startswith('.')
     ]
 
+    # Enable analytics only in the Netlify 'production' context
+    analytics_enabled = os.environ.get('CONTEXT') == 'production'
+    if analytics_enabled:
+        print("Analytics will be enabled for this build.")
+    else:
+        print("Analytics will be disabled for this build.")
+
     errors = []
     for template_file in template_files:
         print(f"  - Rendering: {template_file}")
         try:
             template = env.get_template(template_file)
             # You can pass variables to your templates here, e.g., template.render(var='value')
-            rendered_html = template.render()
+            rendered_html = template.render(analytics_enabled=analytics_enabled)
 
             output_path = os.path.join(OUTPUT_DIR, template_file)
 
