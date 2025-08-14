@@ -1,5 +1,6 @@
 import os
 import shutil
+import sys
 from jinja2 import Environment, FileSystemLoader
 
 # --- Configuration ---
@@ -33,6 +34,7 @@ def build():
         if not t.startswith('_') and not t.startswith('.')
     ]
 
+    errors = []
     for template_file in template_files:
         print(f"  - Rendering: {template_file}")
         try:
@@ -48,9 +50,13 @@ def build():
             with open(output_path, 'w', encoding='utf-8') as f:
                 f.write(rendered_html)
         except Exception as e:
-            print(f"    ERROR rendering {template_file}: {e}")
-            # Depending on strictness, you might want to exit here
-            # exit(1)
+            error_message = f"    ERROR rendering {template_file}: {e}"
+            print(error_message)
+            errors.append(error_message)
+
+    if errors:
+        print(f"\nBuild failed with {len(errors)} error(s).")
+        sys.exit(1)
 
     print("Templates rendered successfully.")
     print("Build process completed.")
