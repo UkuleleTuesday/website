@@ -49,7 +49,7 @@ for (const templateFile of templateFiles) {
         let jsonLdContent: any;
 
         test.beforeEach(async ({ page }) => {
-            await page.goto(templateFile, { waitUntil: 'networkidle' });
+            await page.goto(templateFile, { waitUntil: 'domcontentloaded' });
             
             // 1. Verify the old Yoast schema is gone.
             await expect(page.locator('script.yoast-schema-graph')).toHaveCount(0);
@@ -88,21 +88,21 @@ for (const templateFile of templateFiles) {
             graph.forEach(item => {
                 // Check `@id` fields
                 if (item['@id']) {
-                    expect(item['@id']).toStartWith(baseUrl);
+                    expect(item['@id']).startsWith(baseUrl);
                 }
                 // Check `url` fields
                 if (item.url) {
                     if (typeof item.url === 'string') {
-                        expect(item.url).toStartWith(baseUrl);
+                        expect(item.url).startsWith(baseUrl);
                     } else if (typeof item.url === 'object' && item.url.url) {
                          // Handles cases like the logo object
-                        expect(item.url.url).toStartWith(baseUrl);
+                        expect(item.url.url).startsWith(baseUrl);
                     }
                 }
                 // Check `item` in BreadcrumbList
                 if (item.itemListElement) {
                     item.itemListElement.forEach(crumb => {
-                        expect(crumb.item).toStartWith(baseUrl);
+                        expect(crumb.item).startsWith(baseUrl);
                     });
                 }
             });
