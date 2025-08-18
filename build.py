@@ -41,13 +41,22 @@ def build():
     else:
         print("Analytics will be disabled for this build.")
 
+    # Base URL for absolute paths in SEO data.
+    # Use DEPLOY_PRIME_URL which is set by Netlify, otherwise default to a local-friendly URL.
+    base_url = os.environ.get('DEPLOY_PRIME_URL', 'https://ukuleletuesday.com')
+    print(f"Using base URL: {base_url}")
+
+
     errors = []
     for template_file in template_files:
         print(f"  - Rendering: {template_file}")
         try:
             template = env.get_template(template_file)
             # You can pass variables to your templates here, e.g., template.render(var='value')
-            rendered_html = template.render(analytics_enabled=analytics_enabled)
+            rendered_html = template.render(
+                analytics_enabled=analytics_enabled,
+                base_url=base_url
+            )
 
             output_path = os.path.join(OUTPUT_DIR, template_file)
 

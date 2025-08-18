@@ -1,0 +1,52 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "{{ base_url }}/#organization",
+      "name": "Ukulele Tuesday",
+      "url": "{{ base_url }}/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "{{ base_url }}/wp-content/uploads/2022/07/ut-icon-white-green.png"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "{{ base_url }}/#website",
+      "url": "{{ base_url }}/",
+      "name": "Ukulele Tuesday",
+      "description": "We play ukuleles on Tuesday",
+      "publisher": {
+        "@id": "{{ base_url }}/#organization"
+      },
+      "inLanguage": "en-GB"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "{{ base_url }}{{ page_url if page_url else '/' }}#webpage",
+      "url": "{{ base_url }}{{ page_url if page_url else '/' }}",
+      "name": "{% block og_title %}{% endblock %}",
+      "isPartOf": {
+        "@id": "{{ base_url }}/#website"
+      },
+      "inLanguage": "en-GB"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "{{ base_url }}{{ page_url if page_url else '/' }}#breadcrumb",
+      "itemListElement": [
+        {% for crumb in breadcrumbs %}
+        {
+          "@type": "ListItem",
+          "position": {{ loop.index }},
+          "name": "{{ crumb.name }}",
+          "item": "{{ base_url }}{{ crumb.url }}"
+        }{% if not loop.last %},{% endif %}
+        {% endfor %}
+      ]
+    }
+  ]
+}
+</script>
