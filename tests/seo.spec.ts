@@ -86,23 +86,25 @@ for (const templateFile of templateFiles) {
             expect(Array.isArray(graph)).toBe(true);
 
             graph.forEach(item => {
+                const urlRegex = new RegExp(`^${baseUrl}`);
+
                 // Check `@id` fields
                 if (item['@id']) {
-                    expect(item['@id']).startsWith(baseUrl);
+                    expect(item['@id']).toMatch(urlRegex);
                 }
                 // Check `url` fields
                 if (item.url) {
                     if (typeof item.url === 'string') {
-                        expect(item.url).startsWith(baseUrl);
+                        expect(item.url).toMatch(urlRegex);
                     } else if (typeof item.url === 'object' && item.url.url) {
                          // Handles cases like the logo object
-                        expect(item.url.url).startsWith(baseUrl);
+                        expect(item.url.url).toMatch(urlRegex);
                     }
                 }
                 // Check `item` in BreadcrumbList
                 if (item.itemListElement) {
                     item.itemListElement.forEach(crumb => {
-                        expect(crumb.item).startsWith(baseUrl);
+                        expect(crumb.item).toMatch(urlRegex);
                     });
                 }
             });
