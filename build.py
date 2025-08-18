@@ -8,6 +8,27 @@ STATIC_DIR = 'static'
 TEMPLATES_DIR = 'templates'
 OUTPUT_DIR = 'public'
 
+def generate_breadcrumbs(path):
+    """
+    Generates breadcrumbs from a template file path.
+    e.g., 'concerts/index.html' -> [{'name': 'Home', 'url': '/'}, {'name': 'Concerts', 'url': '/concerts/'}]
+    """
+    breadcrumbs = [{'name': 'Home', 'url': '/'}]
+    if path == 'index.html':
+        return breadcrumbs
+
+    # Get the directory part of the path, e.g., 'concerts' from 'concerts/index.html'
+    directory = os.path.dirname(path)
+    if directory:
+        # Capitalize the first letter for the name, e.g., 'Concerts'
+        name = directory.replace('-', ' ').title()
+        # Create a URL-friendly path, e.g., '/concerts/'
+        url = f'/{directory}/'
+        breadcrumbs.append({'name': name, 'url': url})
+
+    return breadcrumbs
+
+
 def build():
     """
     Builds the static site by copying static files and rendering Jinja2 templates.
@@ -41,13 +62,29 @@ def build():
     else:
         print("Analytics will be disabled for this build.")
 
+    # Base URL for absolute paths in SEO data.
+    # Use BASE_URL, with a sane default.
+    base_url = os.environ.get('BASE_URL', 'https://ukuleletuesday.ie')
+    print(f"Using base URL: {base_url}")
+
+
     errors = []
     for template_file in template_files:
         print(f"  - Rendering: {template_file}")
         try:
             template = env.get_template(template_file)
+
+            # Generate breadcrumbs and page URL for the current template
+            breadcrumbs = generate_breadcrumbs(template_file)
+            page_url = breadcrumbs[-1]['url']
+
             # You can pass variables to your templates here, e.g., template.render(var='value')
-            rendered_html = template.render(analytics_enabled=analytics_enabled)
+            rendered_html = template.render(
+                analytics_enabled=analytics_enabled,
+                base_url=base_url,
+                breadcrumbs=breadcrumbs,
+                page_url=page_url
+            )
 
             output_path = os.path.join(OUTPUT_DIR, template_file)
 
