@@ -42,8 +42,8 @@ def build():
         print("Analytics will be disabled for this build.")
 
     # Base URL for absolute paths in SEO data.
-    # Use DEPLOY_PRIME_URL which is set by Netlify, otherwise default to a local-friendly URL.
-    base_url = os.environ.get('DEPLOY_PRIME_URL', 'https://ukuleletuesday.com')
+    # Use BASE_URL, with a sane default.
+    base_url = os.environ.get('BASE_URL', 'https://ukuleletuesday.ie')
     print(f"Using base URL: {base_url}")
 
 
