@@ -27,7 +27,7 @@
       "@type": "WebPage",
       "@id": "{{ base_url }}{{ page_url if page_url else '/' }}#webpage",
       "url": "{{ base_url }}{{ page_url if page_url else '/' }}",
-      "name": "{{ self.og_title() }}",
+      "name": "{% block og_title %}{% endblock %}",
       "isPartOf": {
         "@id": "{{ base_url }}/#website"
       },
