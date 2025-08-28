@@ -158,6 +158,13 @@
 
 /* Mobile Navigation Fix */
 @media only screen and (max-width: 978px) {
+  /* Ensure proper layout for header logo container */
+  body:not(.cesis_custom_breakpoint) .header_logo.logo_left {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
   /* Force display of mobile menu button on smaller screens */
   body:not(.cesis_custom_breakpoint) .header_main .cesis_mobile_menu_switch {
     display: flex !important;
@@ -166,6 +173,17 @@
     width: 40px;
     height: 40px;
     cursor: pointer;
+    order: 2; /* Position after logo but before mobile button */
+  }
+  
+  /* Ensure logo image area maintains its layout */
+  body:not(.cesis_custom_breakpoint) .header_logo #logo_img {
+    order: 1;
+  }
+  
+  /* Position mobile extra button at the end */
+  body:not(.cesis_custom_breakpoint) .header_logo .cesis_mobile_extra {
+    order: 3;
   }
   
   /* Ensure the mobile menu hamburger lines are visible */
