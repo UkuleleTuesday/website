@@ -4,3 +4,7 @@
 [[edge_functions]]
   path = "/donate"
   function = "donate"
+
+[[edge_functions]]
+  path = "/donate-qr"
+  function = "donate"
