@@ -1,4 +1,5 @@
 export default async (request, context) => {
+  // This edge function handles both /donate and /donate-qr redirects
   // Access environment variables in Edge Functions
   const bmcUrl = Deno.env.get('BMC_URL') || 'https://buymeacoffee.com/ukuleletuesday';
   const defaultUtms = Deno.env.get('BMC_DEFAULT_UTMS') || 'utm_source=screen&utm_medium=qr&utm_campaign=donate';
