@@ -155,3 +155,66 @@
   margin-left: -50vw;
   margin-right: -50vw;
 }
+
+/* Mobile Navigation Fix */
+@media only screen and (max-width: 978px) {
+  /* Force display of mobile menu button on smaller screens */
+  body:not(.cesis_custom_breakpoint) .header_main .cesis_mobile_menu_switch {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+  }
+  
+  /* Ensure the mobile menu hamburger lines are visible */
+  body:not(.cesis_custom_breakpoint) .cesis_mobile_menu_switch .lines {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: #ffffff;
+    position: relative;
+    transition: background 0.3s;
+  }
+  
+  body:not(.cesis_custom_breakpoint) .cesis_mobile_menu_switch .lines:before,
+  body:not(.cesis_custom_breakpoint) .cesis_mobile_menu_switch .lines:after {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: #ffffff;
+    position: absolute;
+    left: 0;
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  
+  body:not(.cesis_custom_breakpoint) .cesis_mobile_menu_switch .lines:before {
+    top: -6px;
+  }
+  
+  body:not(.cesis_custom_breakpoint) .cesis_mobile_menu_switch .lines:after {
+    top: 6px;
+  }
+  
+  /* Hamburger animation when open */
+  body:not(.cesis_custom_breakpoint) .cesis_mobile_menu_switch.open .lines {
+    background: transparent;
+  }
+  
+  body:not(.cesis_custom_breakpoint) .cesis_mobile_menu_switch.open .lines:before {
+    transform: rotate(45deg);
+    top: 0;
+  }
+  
+  body:not(.cesis_custom_breakpoint) .cesis_mobile_menu_switch.open .lines:after {
+    transform: rotate(-45deg);
+    top: 0;
+  }
+  
+  /* Initially hide the mobile menu */
+  body:not(.cesis_custom_breakpoint) .header_mobile {
+    display: none;
+  }
+}
