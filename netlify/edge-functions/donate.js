@@ -6,6 +6,9 @@ export default async (request, context) => {
   
   // Extract UTM parameters from the request URL
   const url = new URL(request.url);
+  
+  // Log function invocation
+  console.log(`[donate] Function invoked for URL: ${url.href}`);
   const utmParams = new URLSearchParams();
   
   // Check if there are any incoming UTM parameters
@@ -25,6 +28,9 @@ export default async (request, context) => {
     for (const [key, value] of defaults) {
       utmParams.set(key, value);
     }
+    console.log(`[donate] No incoming UTM parameters, using defaults: ${defaultUtms}`);
+  } else {
+    console.log(`[donate] Using incoming UTM parameters: ${utmParams.toString()}`);
   }
   
   // Build the final redirect URL
@@ -32,6 +38,8 @@ export default async (request, context) => {
   for (const [key, value] of utmParams) {
     redirectUrl.searchParams.set(key, value);
   }
+  
+  console.log(`[donate] Final redirect URL: ${redirectUrl.href}`);
   
   // Send Mixpanel event to EU endpoint
   const mixpanelToken = '04eaf7b10f676ae6014416d3bb1486ec';
@@ -54,24 +62,30 @@ export default async (request, context) => {
   
   // Send to Mixpanel Import API (EU endpoint)
   try {
-    const mixpanelData = btoa(JSON.stringify(mixpanelEvent));
-    const mixpanelResponse = await fetch('https://api-eu.mixpanel.com/import', {
+    // Create Basic Auth header with token as username and empty password
+    const authHeader = 'Basic ' + btoa(mixpanelToken + ':');
+    
+    const mixpanelResponse = await fetch('https://api-eu.mixpanel.com/import?strict=1', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
+        'Authorization': authHeader,
       },
-      body: `data=${mixpanelData}&api_key=${mixpanelToken}`,
+      body: JSON.stringify([mixpanelEvent]),
     });
     
     // Log response for debugging (optional - will appear in Netlify function logs)
     if (!mixpanelResponse.ok) {
-      console.warn('Mixpanel import failed:', mixpanelResponse.status, await mixpanelResponse.text());
+      console.warn(`[donate] Mixpanel import failed: ${mixpanelResponse.status} ${await mixpanelResponse.text()}`);
+    } else {
+      console.log(`[donate] Mixpanel event sent successfully: ${mixpanelEvent.event}`);
     }
   } catch (error) {
-    console.error('Error sending Mixpanel event:', error);
+    console.error(`[donate] Error sending Mixpanel event: ${error.message}`);
     // Continue with redirect even if Mixpanel fails
   }
   
   // Return 302 redirect to BuyMeACoffee
+  console.log(`[donate] Redirecting to: ${redirectUrl.href}`);
   return Response.redirect(redirectUrl.toString(), 302);
 };
