@@ -76,13 +76,23 @@ jobs:
         with:
           name: public-site
           path: public/
-      - name: Set Netlify Env Vars
-        uses: netlify/actions/cli@master
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          args: env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context deploy-preview --secret && netlify env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context "branch:${{ github.head_ref }}" --secret && netlify env:set BMC_URL "https://buymeacoffee.com/ukuleletuesday" --context deploy-preview && netlify env:set BMC_URL "https://buymeacoffee.com/ukuleletuesday" --context "branch:${{ github.head_ref }}" && netlify env:set BMC_DEFAULT_UTMS "utm_source=screen&utm_medium=qr&utm_campaign=donate" --context deploy-preview && netlify env:set BMC_DEFAULT_UTMS "utm_source=screen&utm_medium=qr&utm_campaign=donate" --context "branch:${{ github.head_ref }}"
+          node-version: lts/*
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+      - name: Set Netlify Env Vars
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: |
+          netlify env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context deploy-preview --secret
+          netlify env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context "branch:${{ github.head_ref }}" --secret
+          netlify env:set BMC_URL "https://buymeacoffee.com/ukuleletuesday" --context deploy-preview
+          netlify env:set BMC_URL "https://buymeacoffee.com/ukuleletuesday" --context "branch:${{ github.head_ref }}"
+          netlify env:set BMC_DEFAULT_UTMS "utm_source=screen&utm_medium=qr&utm_campaign=donate" --context deploy-preview
+          netlify env:set BMC_DEFAULT_UTMS "utm_source=screen&utm_medium=qr&utm_campaign=donate" --context "branch:${{ github.head_ref }}"
       - name: Set Netlify deployment arguments
         id: netlify_args
         run: |
@@ -93,12 +103,12 @@ jobs:
           echo "deploy_args=deploy --dir=./public --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
       - name: Deploy to Netlify
         id: netlify_deploy
-        uses: netlify/actions/cli@master
-        with:
-          args: ${{ steps.netlify_args.outputs.deploy_args }}
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: |
+          DEPLOY_URL=$(netlify ${{ steps.netlify_args.outputs.deploy_args }} --json | jq -r '.deploy_url')
+          echo "NETLIFY_URL=$DEPLOY_URL" >> $GITHUB_OUTPUT
       - name: Post Netlify preview link to PR
         uses: actions/github-script@v7
         with:
@@ -148,13 +158,20 @@ jobs:
         with:
           name: public-site
           path: public/
-      - name: Set Netlify Env Var for Production
-        uses: netlify/actions/cli@master
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          args: env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context production --secret && netlify env:set BMC_URL "https://buymeacoffee.com/ukuleletuesday" --context production && netlify env:set BMC_DEFAULT_UTMS "utm_source=screen&utm_medium=qr&utm_campaign=donate" --context production
+          node-version: lts/*
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+      - name: Set Netlify Env Var for Production
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: |
+          netlify env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context production --secret
+          netlify env:set BMC_URL "https://buymeacoffee.com/ukuleletuesday" --context production
+          netlify env:set BMC_DEFAULT_UTMS "utm_source=screen&utm_medium=qr&utm_campaign=donate" --context production
       - name: Set Netlify deployment arguments
         id: netlify_args
         run: |
@@ -165,9 +182,7 @@ jobs:
           DEPLOY_MESSAGE="Production deploy: ${COMMIT_MSG_SANITIZED}"
           echo "deploy_args=deploy --dir=./public --prod-if-unlocked --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
       - name: Deploy to Netlify
-        uses: netlify/actions/cli@master
-        with:
-          args: ${{ steps.netlify_args.outputs.deploy_args }}
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: netlify ${{ steps.netlify_args.outputs.deploy_args }}
