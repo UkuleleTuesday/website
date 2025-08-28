@@ -121,10 +121,11 @@ jobs:
       - name: Set Netlify deployment arguments
         id: netlify_args
         run: |
-          PR_TITLE="${{ github.event.pull_request.title }}"
-          # Escape quotes in PR title
-          PR_TITLE_ESCAPED=${PR_TITLE//\"/\\\"}
-          DEPLOY_MESSAGE="Deploy preview for PR #${{ github.event.number }} - ${PR_TITLE_ESCAPED}"
+          # Use printf %q to safely escape the PR title
+          PR_TITLE=$(printf %q "${{ github.event.pull_request.title }}")
+          # Sanitize the title by removing problematic characters
+          PR_TITLE_SANITIZED=$(echo "$PR_TITLE" | sed "s/[^a-zA-Z0-9 :_.-]/ /g")
+          DEPLOY_MESSAGE="Deploy preview for PR #${{ github.event.number }} - ${PR_TITLE_SANITIZED}"
           echo "deploy_args=deploy --dir=./public --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
       - name: Deploy to Netlify
         id: netlify_deploy
