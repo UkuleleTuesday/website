@@ -1,5 +1,5 @@
 export default async (request, context) => {
-  // This edge function handles both /donate and /donate-qr redirects
+  // This edge function handles /donate, /donate-qr, and /support-us redirects
   // Access environment variables in Edge Functions
   const bmcUrl = Deno.env.get('BMC_URL') || 'https://buymeacoffee.com/ukuleletuesday';
   const defaultUtms = Deno.env.get('BMC_DEFAULT_UTMS') || 'utm_source=screen&utm_medium=qr&utm_campaign=donate';
@@ -28,6 +28,9 @@ export default async (request, context) => {
     if (url.pathname === '/donate-qr') {
       // QR code scanning source
       pathBasedUtms = 'utm_source=qr_code&utm_medium=qr&utm_campaign=donate';
+    } else if (url.pathname === '/support-us') {
+      // Website menu navigation source
+      pathBasedUtms = 'utm_source=menu&utm_medium=website&utm_campaign=donate';
     } else {
       // Direct URL typing source (for /donate)
       pathBasedUtms = 'utm_source=direct&utm_medium=typed&utm_campaign=donate';

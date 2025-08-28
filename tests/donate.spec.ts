@@ -6,7 +6,7 @@ test.describe('Donate Edge Function Behavior', () => {
     // The actual edge function runs on Netlify and can't be tested directly in Playwright
     // These tests verify the function exists and the routing is configured correctly
     
-    // Verify the netlify.toml configuration includes both paths
+    // Verify the netlify.toml configuration includes all paths
     const netlifyConfig = `
 [[edge_functions]]
   path = "/donate"
@@ -15,10 +15,15 @@ test.describe('Donate Edge Function Behavior', () => {
 [[edge_functions]]
   path = "/donate-qr"
   function = "donate"
+
+[[edge_functions]]
+  path = "/support-us"
+  function = "donate"
     `;
     
     expect(netlifyConfig).toContain('path = "/donate"');
     expect(netlifyConfig).toContain('path = "/donate-qr"');
+    expect(netlifyConfig).toContain('path = "/support-us"');
     expect(netlifyConfig).toContain('function = "donate"');
   });
 
@@ -30,10 +35,12 @@ test.describe('Donate Edge Function Behavior', () => {
     const donateJsPath = path.join(__dirname, '..', 'netlify', 'edge-functions', 'donate.js');
     const donateJsContent = fs.readFileSync(donateJsPath, 'utf8');
     
-    // Verify key functionality is present
+    // Verify key functionality is present for all paths
     expect(donateJsContent).toContain('url.pathname === \'/donate-qr\'');
+    expect(donateJsContent).toContain('url.pathname === \'/support-us\'');
     expect(donateJsContent).toContain('utm_source=qr_code&utm_medium=qr');
     expect(donateJsContent).toContain('utm_source=direct&utm_medium=typed');
+    expect(donateJsContent).toContain('utm_source=menu&utm_medium=website');
     expect(donateJsContent).toContain('url: url.href');
     
     // Verify it still handles incoming UTM parameters
