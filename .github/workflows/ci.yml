@@ -98,6 +98,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
+      - name: Cache npm global packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-global-${{ runner.os }}-netlify-cli
+          restore-keys: |
+            npm-global-${{ runner.os }}-
       - name: Install Netlify CLI
         run: npm install -g netlify-cli
       - name: Set Netlify Env Vars
@@ -180,6 +187,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
+      - name: Cache npm global packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-global-${{ runner.os }}-netlify-cli
+          restore-keys: |
+            npm-global-${{ runner.os }}-
       - name: Install Netlify CLI
         run: npm install -g netlify-cli
       - name: Set Netlify Env Var for Production
