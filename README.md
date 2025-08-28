@@ -30,24 +30,6 @@ This will generate the static HTML files in the `public/` directory.
 
 The site is automatically built and deployed to Netlify on every push to the `main` branch. Preview environments are also created for every pull request.
 
-### CI/CD Pipeline & Build Caching
-
-The project uses GitHub Actions for continuous integration and deployment, with comprehensive build caching to improve performance:
-
-#### Build Caching Strategy
-- **uv/Python Dependencies**: Python dependencies and virtual environments are cached using `astral-sh/setup-uv@v4` with `enable-cache: true`
-- **Pre-commit Hooks**: Pre-commit hook environments are cached in `~/.cache/pre-commit` to avoid re-downloading tools on every run
-- **pnpm Dependencies**: Node.js dependencies are cached using the official `pnpm/action-setup@v4` action with pnpm store caching
-- **Playwright Browsers**: Browser binaries are cached in `~/.cache/ms-playwright` and `~/.cache/playwright-browsers` to avoid re-downloading (~150MB) on each test run
-- **npm Global Packages**: Global npm packages (like Netlify CLI) are cached in `~/.npm` for deploy jobs
-
-#### Performance Benefits
-- **Pre-commit hooks**: ~24 seconds saved on cache hits
-- **Playwright browsers**: ~2.5 minutes saved on cache hits
-- **Overall CI time**: Significantly reduced execution time, especially for test jobs
-
-The caching configuration is designed to be safe with appropriate fallback keys to ensure builds can complete even if specific cache entries are unavailable.
-
 ## Development
 
 ### Pre-commit Hooks
