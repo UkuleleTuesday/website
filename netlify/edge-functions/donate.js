@@ -54,13 +54,16 @@ export default async (request, context) => {
   
   // Send to Mixpanel Import API (EU endpoint)
   try {
-    const mixpanelData = btoa(JSON.stringify(mixpanelEvent));
-    const mixpanelResponse = await fetch('https://api-eu.mixpanel.com/import', {
+    // Create Basic Auth header with token as username and empty password
+    const authHeader = 'Basic ' + btoa(mixpanelToken + ':');
+    
+    const mixpanelResponse = await fetch('https://api-eu.mixpanel.com/import?strict=1', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
+        'Authorization': authHeader,
       },
-      body: `data=${mixpanelData}&api_key=${mixpanelToken}`,
+      body: JSON.stringify([mixpanelEvent]),
     });
     
     // Log response for debugging (optional - will appear in Netlify function logs)
