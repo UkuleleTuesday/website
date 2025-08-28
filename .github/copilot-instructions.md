@@ -4,17 +4,22 @@ This repository contains a static website built with Python 3.12+, Jinja2 templa
 
 **ALWAYS reference these instructions first and fallback to search or bash commands only when you encounter unexpected information that does not match the info here.**
 
+## Pre-configured Environment
+
+Your development environment is automatically configured with:
+- ✅ `uv` (Python package manager) 
+- ✅ Node.js and `pnpm` (JavaScript package manager)
+- ✅ All project dependencies installed (`pnpm install` already run)
+- ✅ Playwright browsers for testing
+
+You do **not** need to run setup commands - focus on the development workflow below.
+
 ## Working Effectively
 
-### Essential Setup Commands
-Run these commands in order to bootstrap your development environment:
+### Core Development Commands
+The development environment is pre-configured via GitHub Actions setup steps. You only need to run these commands during development:
 
-1. **Install system dependencies (if needed):**
-   ```bash
-   sudo apt-get update && sudo apt-get install -y ripgrep
-   ```
-
-2. **Build the static site:**
+1. **Build the static site:**
    ```bash
    uv run python build.py
    ```
@@ -24,24 +29,13 @@ Run these commands in order to bootstrap your development environment:
    - Uses environment variables: `ENABLE_ANALYTICS=true` for production, `BASE_URL` for absolute URLs
    - **NEVER CANCEL** - command completes almost instantly
 
-3. **Install pre-commit hooks:**
-   ```bash
-   uvx pre-commit install
-   ```
-
-4. **Run pre-commit hooks (linting/formatting):**
+2. **Run pre-commit hooks (linting/formatting):**
    ```bash
    uvx pre-commit run --all-files
    ```
    - **TIMING: Takes ~24 seconds on first run** (subsequent runs are much faster)
    - **NEVER CANCEL** - wait for completion as this is required for CI
    - Uses djLint to format Jinja2 templates in `templates/`
-
-5. **Install JavaScript/testing dependencies:**
-   ```bash
-   pnpm install
-   ```
-   - **TIMING: Takes ~350ms** - very fast with existing lockfile
 
 ### Local Development Server
 Start the local development server to test your changes:
@@ -55,22 +49,14 @@ python3 -m http.server -d public 8000
 
 ### Testing Commands
 
-**Install test browsers (may fail due to network issues):**
-```bash
-pnpm exec playwright install --with-deps
-```
-- **TIMING: Takes 5-10 minutes if successful**
-- **KNOWN ISSUE:** Browser downloads may fail due to network restrictions
-- **WORKAROUND:** Tests can still be written and validated once browsers are available
-
 **Run all tests:**
 ```bash
 pnpm playwright test
 ```
 - **TIMING: Takes ~2.5 minutes when browsers are available**
-- **REQUIREMENT:** Requires browsers to be installed first
 - **TIMEOUT: Set to 300+ seconds** - NEVER CANCEL test runs
 - Tests include SEO validation and visual regression testing
+- **NOTE:** Playwright browsers are pre-installed in the development environment
 
 **Run specific test:**
 ```bash
@@ -109,8 +95,6 @@ pnpm playwright test --project="chromium" tests/snapshots.spec.ts --grep="visual
 
 - **Build site:** <1 second ⚡ (extremely fast)
 - **Pre-commit hooks:** ~24 seconds (first run)
-- **pnpm install:** ~350ms
-- **Playwright browser install:** 5-10 minutes (may fail)
 - **Full test suite:** ~2.5 minutes
 - **Asset analysis:** <1 second
 
@@ -176,13 +160,11 @@ templates/
 
 **Build fails:** Check that `templates/` and `static/` directories exist and contain expected files.
 
-**Tests fail:** Ensure `public/` directory exists (run build first) and browsers are installed.
+**Tests fail:** Ensure `public/` directory exists (run build first).
 
 **Pre-commit fails:** Run `uvx pre-commit run --all-files` to see specific formatting issues.
 
 **Server won't start:** Verify `public/` directory exists and port 8000 is not already in use.
-
-**Browser installation fails:** This is a known network issue - tests can still be written but may need to run in CI environment.
 
 ## CI/CD Integration
 
