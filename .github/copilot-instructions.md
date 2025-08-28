@@ -90,6 +90,9 @@ pnpm playwright test --project="chromium" tests/snapshots.spec.ts --grep="visual
    - Resize browser window to test mobile layouts
    - Check that navigation menu works on mobile
    - Verify images scale properly
+  
+5. **Update documentation**
+   - Check whether any of your changes warrant an update to **README.md**
 
 ## Build Timing Expectations
 
@@ -123,38 +126,6 @@ Check which assets are actively used:
 ### Environment Variables
 - `ENABLE_ANALYTICS=true` - Enable Google Analytics (production only)
 - `BASE_URL=https://ukuleletuesday.ie` - Base URL for absolute paths in SEO data
-
-### Key Directories and Files
-
-**Repository root:**
-```
-├── build.py                     # Main build script
-├── pyproject.toml              # Python dependencies
-├── package.json                # JavaScript dependencies  
-├── playwright.config.ts        # Test configuration
-├── .pre-commit-config.yaml     # Linting configuration
-├── templates/                  # Jinja2 templates
-├── static/                     # Static assets
-├── public/                     # Generated site (after build)
-├── tests/                      # Playwright tests
-├── netlify/                    # Netlify functions
-├── tools/                      # WordPress export utilities
-└── wp-asset-check.sh          # Asset analysis script
-```
-
-**Template pages:**
-```
-templates/
-├── index.html                  # Homepage
-├── concerts/index.html         # Concerts page
-├── songbook/index.html         # Songbook page
-├── contact-us/index.html       # Contact page
-├── faq/index.html              # FAQ page
-├── testimonials/index.html     # Testimonials page
-├── tuesday-session/index.html  # Session info page
-├── whatsapp/index.html         # WhatsApp join page
-└── code-of-conduct/index.html  # Code of conduct
-```
 
 ## Troubleshooting
 
