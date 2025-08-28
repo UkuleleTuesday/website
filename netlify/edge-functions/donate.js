@@ -22,13 +22,22 @@ export default async (request, context) => {
     }
   }
   
-  // If no incoming UTMs, use defaults
+  // If no incoming UTMs, use path-based defaults
   if (!hasIncomingUtms) {
-    const defaults = new URLSearchParams(defaultUtms);
+    let pathBasedUtms;
+    if (url.pathname === '/donate-qr') {
+      // QR code scanning source
+      pathBasedUtms = 'utm_source=qr_code&utm_medium=qr&utm_campaign=donate';
+    } else {
+      // Direct URL typing source (for /donate)
+      pathBasedUtms = 'utm_source=direct&utm_medium=typed&utm_campaign=donate';
+    }
+    
+    const defaults = new URLSearchParams(pathBasedUtms);
     for (const [key, value] of defaults) {
       utmParams.set(key, value);
     }
-    console.log(`[donate] No incoming UTM parameters, using defaults: ${defaultUtms}`);
+    console.log(`[donate] No incoming UTM parameters, using path-based defaults for ${url.pathname}: ${pathBasedUtms}`);
   } else {
     console.log(`[donate] Using incoming UTM parameters: ${utmParams.toString()}`);
   }
@@ -57,6 +66,7 @@ export default async (request, context) => {
       user_agent: request.headers.get('user-agent'),
       ip: context.ip,
       referrer: request.headers.get('referer'),
+      url: url.href,
     }
   };
   
