@@ -79,7 +79,7 @@ jobs:
       - name: Set Netlify Env Vars
         uses: netlify/actions/cli@master
         with:
-          args: env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context deploy-preview --secret && netlify env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context "branch:${{ github.head_ref }}" --secret
+          args: env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context deploy-preview --secret && netlify env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context "branch:${{ github.head_ref }}" --secret && netlify env:set BMC_URL "https://buymeacoffee.com/ukuleletuesday" --context deploy-preview && netlify env:set BMC_URL "https://buymeacoffee.com/ukuleletuesday" --context "branch:${{ github.head_ref }}" && netlify env:set BMC_DEFAULT_UTMS "utm_source=screen&utm_medium=qr&utm_campaign=donate" --context deploy-preview && netlify env:set BMC_DEFAULT_UTMS "utm_source=screen&utm_medium=qr&utm_campaign=donate" --context "branch:${{ github.head_ref }}"
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
@@ -151,7 +151,7 @@ jobs:
       - name: Set Netlify Env Var for Production
         uses: netlify/actions/cli@master
         with:
-          args: env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context production --secret
+          args: env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context production --secret && netlify env:set BMC_URL "https://buymeacoffee.com/ukuleletuesday" --context production && netlify env:set BMC_DEFAULT_UTMS "utm_source=screen&utm_medium=qr&utm_campaign=donate" --context production
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
