@@ -1345,138 +1345,47 @@ aside.main-sidebar section > h2,.wpb_widgetised_column section > h2{ font-family
 
 .page .article_ctn,.page .sidebar_ctn { padding-top:0; padding-bottom:0; }
 
-
 /*--------------------------------------------------------------
-#8 Blog Settings
---------------------------------------------------------------*/
-
-
-
-/* width settings */
-.single-post .site-main .cesis_container,
-.single-post .cesis_top_banner .cesis_container{ max-width:1250px; }
-
-/* top and bottom padding settings */
-.single-post .article_ctn,.single-post .sidebar_ctn { padding-top:60px; padding-bottom:60px; }
-
-/* stacked gallery */
-
-.single-post .cesis_blog_gallery_stacked .cesis_gallery_img img { margin-bottom:0px;}
-
-/* width settings */
-body.blog .site-main .cesis_container,.archive.category .site-main .cesis_container,.archive.tag .site-main .cesis_container,
-body.blog .cesis_top_banner .cesis_container,.archive.category .cesis_top_banner .cesis_container,.archive.tag .cesis_top_banner .cesis_container { max-width:1250px; }
-
-/* top and bottom padding settings */
-body.blog .article_ctn,body.blog .sidebar_ctn,.archive.category .article_ctn,.archive.category .sidebar_ctn,.archive.tag .article_ctn,.archive.tag .sidebar_ctn,.archive.date .article_ctn,.archive.date .sidebar_ctn{ padding-top:60px; padding-bottom:60px; }
-
-
-
-
-
-/*--------------------------------------------------------------
-#9 Portfolio Settings
---------------------------------------------------------------*/
-
-
-
-
-/* width settings */
-
-/* top and bottom padding settings */
-
-
-
-/* stacked gallery */
-
-
-/* width settings */
-
-/* top and bottom padding settings */
-
-
-
-/*--------------------------------------------------------------
-#10 Staff Settings
---------------------------------------------------------------*/
-
-
-
-
-/* width settings */
-
-/* top and bottom padding settings */
-
-
-
-/* width settings */
-
-/* top and bottom padding settings */
-
-
-
-
-
-/*--------------------------------------------------------------
-#11 Career Position Settings
+#8 404 Page Settings
 --------------------------------------------------------------*/
 
 /* width settings */
+.error404 .site-main .cesis_container,
+.error404 .cesis_top_banner .cesis_container { max-width:1250px; }
 
 /* top and bottom padding settings */
-
-
-/* width settings */
- { max-width:1250px; }
-
-/* top and bottom padding settings */
-
-
+.error404 .article_ctn,
+.error404 .sidebar_ctn { padding-top:60px; padding-bottom:60px; }
 
 
 
 /*--------------------------------------------------------------
-#12 404 Page Settings
+#9 Search Settings
 --------------------------------------------------------------*/
 
 /* width settings */
-.error404 .site-main .cesis_container,.error404 .cesis_top_banner .cesis_container { max-width:1250px; }
+body.search .site-main .cesis_container,
+body.search .cesis_top_banner .cesis_container { max-width:1250px; }
 
 /* top and bottom padding settings */
+body.search .article_ctn,
+body.search .sidebar_ctn { padding-top:60px; padding-bottom:60px; }
 
-
-.error404 .article_ctn,.error404 .sidebar_ctn { padding-top:60px; padding-bottom:60px; }
-
-
-
-/*--------------------------------------------------------------
-#13 Search Settings
---------------------------------------------------------------*/
-
-
-
-
-/* width settings */
-body.search .site-main .cesis_container,body.search .cesis_top_banner .cesis_container { max-width:1250px; }
-
-/* top and bottom padding settings */
-
-
-body.search .article_ctn,body.search .sidebar_ctn { padding-top:60px; padding-bottom:60px; }
-
-
-
-.cesis_search_overlay{ background:rgba(35,35,35,0.75); }
-.cesis_search_overlay,.cesis_search_overlay .cesis_search_container input{ color:#ffffff; }
-.cesis_search_close .lines{ background:#ffffff; }
-.cesis_search_overlay .cesis_search_container input{ border:1px solid rgba(255,255,255,0.35); background:none;}
-
-.cesis_search_overlay .cesis_search_container input::-webkit-input-placeholder{ color:#ffffff;}
+/* search overlay styles */
+.cesis_search_overlay { background:rgba(35,35,35,0.75); }
+.cesis_search_overlay,
+.cesis_search_overlay .cesis_search_container input { color:#ffffff; }
+.cesis_search_close .lines { background:#ffffff; }
+.cesis_search_overlay .cesis_search_container input { 
+    border:1px solid rgba(255,255,255,0.35); 
+    background:none;
+}
+.cesis_search_overlay .cesis_search_container input::-webkit-input-placeholder { color:#ffffff; }
 
 
 
 
 /*--------------------------------------------------------------
-#14 Custom css
+#10 Custom css
 --------------------------------------------------------------*/
 
