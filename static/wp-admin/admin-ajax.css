@@ -74,7 +74,7 @@ select
 
 
 
- 
+
 { font-family:Poppins;  }
 .main_font[class*="tg-item"],.main_font[class*="tg-item"] span,.main_font[class*="tg-item"] a{ font-family:Poppins !important;  }
 
@@ -97,8 +97,8 @@ select
 
 
 
- 
- 
+
+
 { font-family:Poppins;  }
 
 .alt_font[class*="tg-item"],.alt_font[class*="tg-item"] span,.alt_font[class*="tg-item"] a{ font-family:Poppins !important;  }
@@ -127,10 +127,10 @@ select
 
 
 
-  
+
  .header_top_bar .cesis_container,.header_main .cesis_container,.header_sub .cesis_container { max-width:1250px; }
 
- 
+
 .header_main { background:#006566; height:90px; border-color:rgba(235,235,235,0.5);}
 #header_container.cesis_opaque_header{ background:#006566;}
 
@@ -179,8 +179,8 @@ border-color:#ffffff;
 { padding-right:20px; }
 
 
-  
-  
+
+
 
 .header_logo{  max-width:250px;}.header_logo #logo_img,.header_logo #logo_img img{  max-width:250px;  max-height:90px; }
 .header_logo.logo_center{ width:250px; margin-left:-125px; }
