@@ -105,16 +105,7 @@ pnpm playwright test --project="chromium" tests/snapshots.spec.ts --grep="visual
 
 ## Common Development Tasks
 
-### Asset Management
-Check for unused WordPress assets:
-```bash
-./wp-asset-check.sh --unused
-```
 
-Check which assets are actively used:
-```bash
-./wp-asset-check.sh --used
-```
 
 ### Template Structure
 - **Templates:** `templates/` - Jinja2 templates (processed during build)
