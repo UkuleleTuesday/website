@@ -114,7 +114,6 @@ select
 .header_top_bar { background:#ffffff; border-color:#ebebeb; color:#bababa}
 .header_top_bar a{ color:#6d7783;}
 .header_top_bar a:hover{ color:#293340;}
-.top_bar_cart .cesis_cart_icon .current_item_number
 
 
 
@@ -140,7 +139,6 @@ select
 .header_main:not(.header_vertical) .tt-main-additional .cesis_social_icons,
 .header_main:not(.header_vertical) .tt-main-additional .cesis_social_icons a,
 .header_main:not(.header_vertical) .tt-main-additional .cesis_search_icon i,
-.header_main:not(.header_vertical) .tt-main-additional .cesis_cart_icon i,
 .header_main:not(.header_vertical) .tt-main-additional .cesis_menu_btn a,
 .header_main:not(.header_vertical) .tt-main-additional .cesis_bp_notifications a,
 .header_main:not(.header_vertical) .tt-main-additional .cesis_bp_notifications.only_icons i,
@@ -189,17 +187,14 @@ body.rtl .sm .cl_before_logo{ margin-left:125px; margin-right:0; }body.rtl .sm .
 
 .tt-main-navigation  > div > ul > li > a span,.tt-main-navigation.tt-vertical-navigation span,
 .tt-main-additional .cesis_search_icon span,.tt-main-additional .cesis_search_icon input,
-.tt-main-additional .cesis_cart_icon.vertical, .tt-main-additional .cesis_cart_icon.vertical a,
 .tt-main-additional .cesis_bp_notifications.vertical a
 { color:#ffffff; font-family:Quicksand; font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:1px;}
 .cesis_parent_highlight .tt-main-navigation > div > ul > li.current_page_parent > a span,
 .cesis_parent_highlight .tt-main-navigation > div > ul > li.current-menu-parent > a span,
 .tt-main-navigation > div > ul > li.current-menu-item > a span,.tt-main-navigation  > div > ul > li > a:hover span,
 .tt-main-navigation.tt-vertical-navigation li.current-menu-item > a span,.tt-main-navigation.tt-vertical-navigation a:hover span,
-.tt-main-additional .cesis_cart_icon.vertical a:hover,
 .tt-main-additional .cesis_search_icon span:hover
 { color:#1db1ad;}
-.header_logo a,.cesis_mobile_cart .cesis_cart_icon a,
 .cesis_mobile_notifications a{ color:#ffffff; }
 .cesis_menu_overlay_close .lines,.cesis_menu_overlay_close .lines:after,.cesis_menu_overlay_close .lines:before,
 .cesis_mobile_menu_switch .lines, .cesis_mobile_menu_switch .lines:before, .cesis_mobile_menu_switch .lines:after{ background:#ffffff;}
@@ -210,11 +205,9 @@ body.rtl .sm .cl_before_logo{ margin-left:125px; margin-right:0; }body.rtl .sm .
 
 .tt-main-additional .cesis_social_icons a,
 .tt-main-additional .cesis_search_icon a,
-.tt-main-additional .cesis_cart_icon > ul > li > a,
 .tt-main-additional .cesis_bp_notifications a { color:#1dc4b3;}
 .tt-main-additional .cesis_social_icons a:after,
 .tt-main-additional .cesis_search_icon a i:after,
-.tt-main-additional .cesis_cart_icon > ul > li > a:after,
 .tt-main-additional .cesis_bp_notifications a:after{
     background-color:#ffffff;
     border-color:#ebebeb;
@@ -223,26 +216,19 @@ body.rtl .sm .cl_before_logo{ margin-left:125px; margin-right:0; }body.rtl .sm .
 
 .tt-main-additional .cesis_social_icons a:hover,
 .tt-main-additional .cesis_search_icon a:hover,
-.tt-main-additional .cesis_cart_icon > ul > li > a:hover,
 .tt-main-additional .cesis_bp_notifications a:hover
 { color:#ffffff;}
 
-.tt-main-additional .cesis_cart_icon .current_item_number,
-.cesis_offcanvas_cart .cesis_cart_icon .current_item_number,
-.cesis_overlay_cart .cesis_cart_icon .current_item_number,
-.cesis_mobile_cart .cesis_cart_icon .current_item_number
 
 { background:#ffffff;}
 .tt-main-additional .cesis_social_icons a:hover::after,
 .tt-main-additional .cesis_search_icon a:hover i:after,
-.tt-main-additional .cesis_cart_icon > ul > li > a:hover::after,
 .tt-main-additional .cesis_bp_notifications a:hover::after{
   background-color:#2c2c2c;
   border-color:#2c2c2c;
 }
 
 
-.tt-header-additional .cesis_social_icons a,.tt-header-additional .cesis_search_icon,.tt-header-additional .cesis_cart_icon,
 .tt-header-additional > span,.tt-header-additional .cesis_bp_notifications > span { margin:0 10px;}
 body:not(.rtl) .tt-header-additional .cesis_social_icons a:first-child,body:not(.rtl) .tt-header-additional > span:first-child,body:not(.rtl) .tt-header-additional .cesis_bp_notifications > span:first-child{ margin:0 10px 0 0;}
 body:not(.rtl) .tt-header-additional .cesis_social_icons a:last-child,body:not(.rtl) .tt-header-additional > span:last-child,body:not(.rtl) .tt-header-additional .cesis_bp_notifications > span:last-child { margin:0 0 0 10px;}
@@ -285,15 +271,12 @@ body:not(.cesis_custom_breakpoint) .cesis_transparent_header .top-header:not(.ce
 body:not(.cesis_custom_breakpoint) .cesis_transparent_header .top-header:not(.cesis_stuck) .tt-header-additional:not(.vertical_additional) .cesis_social_icons a,
 body:not(.cesis_custom_breakpoint) .cesis_transparent_header .top-header:not(.cesis_stuck) .tt-header-additional:not(.vertical_additional) .cesis_search_icon a,
 body:not(.cesis_custom_breakpoint) .cesis_transparent_header .top-header:not(.cesis_stuck) .tt-header-additional:not(.vertical_additional) .cesis_bp_notifications a,
-body:not(.cesis_custom_breakpoint) .cesis_transparent_header .top-header:not(.cesis_stuck) .tt-header-additional:not(.vertical_additional) .cesis_cart_icon i,
 body:not(.cesis_custom_breakpoint) .cesis_transparent_header .top-header:not(.cesis_stuck) .header_top_bar,
 body:not(.cesis_custom_breakpoint) .cesis_transparent_header .top-header:not(.cesis_stuck) .header_top_bar a,
 body:not(.cesis_custom_breakpoint) .cesis_transparent_header .top-header:not(.cesis_stuck) .header_top_bar .cesis_social_icons a,
-body:not(.cesis_custom_breakpoint) .cesis_transparent_header .top-header:not(.cesis_stuck) .header_top_bar .cesis_cart_icon a,
 body:not(.cesis_custom_breakpoint):not(.full_header_sticky) .cesis_transparent_header .header_top_bar,
 body:not(.cesis_custom_breakpoint):not(.full_header_sticky) .cesis_transparent_header .header_top_bar a,
 body:not(.cesis_custom_breakpoint):not(.full_header_sticky) .cesis_transparent_header .header_top_bar .cesis_social_icons a,
-body:not(.cesis_custom_breakpoint):not(.full_header_sticky) .cesis_transparent_header .header_top_bar .cesis_cart_icon a,
 body:not(.cesis_custom_breakpoint) .cesis_transparent_header .top-header:not(.cesis_stuck) .header_logo a,
 body:not(.cesis_custom_breakpoint) .cesis_transparent_header .top-header:not(.cesis_stuck) .cesis_offcanvas_cart .cart-menu > li > a,
 body:not(.cesis_custom_breakpoint) .cesis_transparent_header .top-header:not(.cesis_stuck) .header_main .cesis_offcanvas_notifications a,
@@ -325,10 +308,8 @@ body:not(.cesis_custom_breakpoint) .cesis_transparent_header .top-header:not(.ce
 body:not(.cesis_custom_breakpoint) .cesis_transparent_header .top-header:not(.cesis_stuck) .tt-header-additional:not(.vertical_additional) .cesis_bp_notifications a:hover,
 body:not(.cesis_custom_breakpoint) .cesis_transparent_header .top-header:not(.cesis_stuck) .header_top_bar a:hover,
 body:not(.cesis_custom_breakpoint) .cesis_transparent_header .top-header:not(.cesis_stuck) .header_top_bar .cesis_social_icons a:hover,
-body:not(.cesis_custom_breakpoint) .cesis_transparent_header .top-header:not(.cesis_stuck) .header_top_bar .cesis_cart_icon a:hover,
 body:not(.cesis_custom_breakpoint):not(.full_header_sticky)  .cesis_transparent_header .header_top_bar a:hover,
 body:not(.cesis_custom_breakpoint):not(.full_header_sticky)  .cesis_transparent_header .header_top_bar .cesis_social_icons a:hover,
-body:not(.cesis_custom_breakpoint):not(.full_header_sticky)  .cesis_transparent_header .header_top_bar .cesis_cart_icon a:hover
 {color:rgba(255,255,255,0.85)}
 
 body:not(.cesis_custom_breakpoint) .cesis_transparent_header .top-header:not(.cesis_stuck) .header_main .lines,
@@ -469,33 +450,23 @@ body:not(.cesis_custom_breakpoint) .header_main .lines:before { background:#ffff
 /* Dropdown settings */
 
 
-  .tt-main-navigation:not(.tt-vertical-navigation) .sub-menu,.cesis_cart_icon .cesis_dropdown{ background:rgba(255,255,255,1); color:#6d7783;
    font-family:Roboto; font-size:14px; font-weight:400;
   text-transform:none; letter-spacing:0px; line-height:24px; }
 
-.cesis_cart_icon .product_list_widget span.woocommerce-Price-amount.amount,.sm .cesis_megamenu_widget_area a{ font-family:Roboto }
 
 .sm .cesis_megamenu_widget_area a,
 .cesis_dropdown ul.product_list_widget li.mini_cart_item a{ color:#6d7783; }
 
 .tt-main-navigation:not(.tt-vertical-navigation) .sub-menu li > a > span,
-.cesis_cart_icon .cesis_dropdown,
-.cesis_cart_icon a.remove:after,
-.cesis_cart_icon .product_list_widget span.woocommerce-Price-amount.amount{color:#6d7783;}
 .tt-main-navigation:not(.tt-vertical-navigation) .sub-menu li > a > span:hover{color:#293340; Background:#f5f8f9;}
 
 .tt-main-navigation:not(.tt-vertical-navigation) > div > ul > li .sub-menu li.current-menu-item > a > span,
-.cesis_cart_icon a.remove:hover:after {color:#1db1ad;}
 body:not(.rtl) .tt-main-navigation:not(.tt-vertical-navigation) > div > ul > li:not(.cesis_megamenu) .sub-menu li.current-menu-item > a > span {
     box-shadow: inset 5px 0 0 0 #1db1ad; }
 body.rtl .tt-main-navigation:not(.tt-vertical-navigation) > div > ul > li:not(.cesis_megamenu) .sub-menu li.current-menu-item > a > span {
     box-shadow: inset -5px 0 0 0 #1db1ad; }
-.cesis_cart_icon .buttons a.button:last-child{ background:#1db1ad; }
 
 .tt-main-navigation:not(.tt-vertical-navigation) .cesis_megamenu > .sub-menu > li,
-.cesis_cart_icon ul.product_list_widget li.mini_cart_item,
-.cesis_cart_icon .buttons a.button:first-child,
-.cesis_cart_icon .widget_shopping_cart_content .total,
 .cesis_megamenu_widget_area section.widget_meta li,
 .cesis_megamenu_widget_area section.widget_archive li,
 .cesis_megamenu_widget_area section.widget_categories li,
@@ -508,15 +479,11 @@ body.rtl .tt-main-navigation:not(.tt-vertical-navigation) > div > ul > li:not(.c
 { border-color:rgba(235,235,235,1)}
 
 .tt-main-navigation:not(.tt-vertical-navigation) .cesis_megamenu > .sub-menu > li > a > span,
-.cesis_megamenu_widget_area section h2,.cesis_cart_icon a.button:first-child
 { color:#6d7783;
 font-family:Roboto; font-size:13px; font-weight:500;
 text-transform:uppercase; letter-spacing:1px; line-height:24px; }
-.sub-menu .cesis_cart_icon a,.sub-menu .cesis_cart_icon span.woocommerce-Price-amount.amount,
-.sub-menu .cesis_cart_icon .buttons a.button:first-child{ color:#6d7783; }
 .tt-main-navigation:not(.tt-vertical-navigation) .cesis_megamenu > .sub-menu > li > a > span:after,
 .tt-main-navigation:not(.tt-vertical-navigation) > div > ul > li.cesis_megamenu .sub-menu li.current-menu-item > a > span:after,
-.cesis_megamenu_widget_area section h2:after,.cesis_cart_icon a.button:first-child:hover { background:#1db1ad;}
 
 
 /*--------------------------------------------------------------
@@ -568,43 +535,21 @@ background-color:#ffffff;
   body.single-post .title_layout_three .breadcrumb_container{ background:rgba(0,0,0,0.05) }
 
   /* portfolio title */
-    body.single-portfolio .page_title_container {
   background-color:#ffffff;
   }
-    body.single-portfolio .page_title_container {  border-bottom:1px solid #ecf0f1; }
-    body.single-portfolio .page_title_container { min-height:70px; }
-    body.single-portfolio .page_title_container .cesis_container,body.single-portfolio .title_layout_three .breadcrumb_container ul{ max-width:1250px; }
-    body.single-portfolio .page_title_container { height:100px; }
     /* title */
-  body.single-portfolio .main-title{ color:#293340; font-family:Roboto; font-size:28px; text-transform:none; letter-spacing:0;  font-weight:500; }
-  body.single-portfolio .main-title a { color:#293340; }
 
   /* breadcrumb */
 
-  body.single-portfolio .breadcrumb_container{ font-family:Roboto; font-size:13px; text-transform:none; letter-spacing:0; font-weight:400;}
-  body.single-portfolio .breadcrumb_container,body.single-portfolio .breadcrumb_container a{ color:#6d7783 }
-  body.single-portfolio .breadcrumb_container a:hover{ color:#ecf0f1 }
-  body.single-portfolio .title_layout_three .breadcrumb_container{ background:rgba(0,0,0,0.05) }
 
 
   /* staff title */
-    body.single-staff .page_title_container {
   background-color:#ffffff;
   }
-    body.single-staff .page_title_container {  border-bottom:1px solid #ecf0f1; }
-    body.single-staff .page_title_container { min-height:70px; }
-    body.single-staff .page_title_container .cesis_container,body.single-staff .title_layout_three .breadcrumb_container ul{ max-width:1250px; }
-    body.single-staff .page_title_container { height:100px; }
     /* title */
-  body.single-staff .main-title{ color:#293340; font-family:Roboto; font-size:28px; text-transform:none; letter-spacing:0;  font-weight:500; }
-  body.single-staff .main-title a { color:#293340; }
 
   /* breadcrumb */
 
-  body.single-staff .breadcrumb_container{ font-family:Roboto; font-size:13px; text-transform:none; letter-spacing:0; font-weight:400;}
-  body.single-staff .breadcrumb_container,body.single-staff .breadcrumb_container a{ color:#6d7783 }
-  body.single-staff .breadcrumb_container a:hover{ color:#ecf0f1 }
-  body.single-staff .title_layout_three .breadcrumb_container{ background:rgba(0,0,0,0.05) }
 
 /*--------------------------------------------------------------
 #4 Main Content
@@ -656,11 +601,6 @@ background-color:#ffffff;
 .cesis_blog_style_8 .inside_e,
 .cesis_blog_style_15 .inside_e,
 
-.cesis_portfolio_style_4 .inside_e,
-.cesis_portfolio_style_5 .inside_e,
-.cesis_portfolio_style_6 .inside_e,
-.cesis_portfolio_style_12 .inside_e,
-.cesis_portfolio_style_13 .inside_e,
 .classic_container_boxed
 
 
@@ -725,23 +665,13 @@ fieldset,.site-main input[type="checkbox"],.site-main input[type="radio"],.site-
 .cesis_navigation_ctn.cesis_nav_style_1 span,
 
 
-.cesis_portfolio_style_1 .cesis_portfolio_m_bottom_info,
-.cesis_portfolio_style_4 .inside_e,
-.cesis_portfolio_style_4 .cesis_portfolio_m_bottom_info,
-.cesis_portfolio_style_5 .cesis_portfolio_m_content,
-.cesis_portfolio_style_6 .cesis_portfolio_m_content,
-.cesis_portfolio_style_12 .inside_e,
-.cesis_portfolio_style_13 .inside_e,
 
-.cesis_staff_ctn:not(.cesis_staff_style_5):not(.cesis_staff_style_6):not(.cesis_staff_style_7) .cesis_staff_m_info,
-.cesis_staff_style_3 .cesis_staff_m_content,.cesis_staff_style_4 .cesis_staff_m_content,
 
 .boxes_container .entry-footer,
 .agency_container .entry-footer,
 
 .cesis_share_ctn.cesis_share_transparent span a,
 
-.cesis_career_style_2 .cesis_career_m_content,
 
 .cesis_search_style_2 .inside_e,
 
@@ -848,7 +778,6 @@ body,
 .comments-layout-seven .date a,.comments-layout-seven .comment_ctn,.cesis_tabs.horizontal.cesis_tab_3 .tabs > li a,
 .cesis_tabs.horizontal.cesis_tab_4 .tabs > li:hover:not(.active) a,.cesis_tabs.vertical.cesis_tab_2 .tabs > li:hover:not(.active) a,
 .cesis_filter li a,.cesis_nav_style_4 .cesis_nav_active.cesis_nav_number:after,.cesis_nav_style_4 .cesis_nav_number:hover::after,
-.cesis_staff_sp_info .cesis_staff_social a,
 .cesis_nav_number a,
 .cesis_nav_prev a,
 .cesis_nav_next a,
@@ -886,25 +815,18 @@ body,
 .cesis_blog_m_top_info a,
 .cesis_blog_m_bottom_info,
 .cesis_blog_m_bottom_info a,
-.cesis_portfolio_m_top_info,
-.cesis_portfolio_m_top_info a,
-.cesis_portfolio_m_bottom_info,
-.cesis_portfolio_m_bottom_info a,
 
 
 .cesis_container:not(.business_container) .entry-footer .sp_categories_ctn a,
 .cesis_container:not(.business_container) .entry-footer .sp_tags_ctn a,
 
-.cesis_staff_ctn .cesis_staff_m_content .cesis_staff_social a,
 
-.cesis_staff_sp_info .cesis_staff_sp_position,
 
 .agency_container .share_ctn h3,
 .cesis_search_result_type,
 .comments-layout-eight .date a,
 .comments-layout-eight .comment_buttons .reply a,
 .comments-layout-eight .comment_buttons .edit a,
-.cesis_portfolio_m_bt_info a
 
 
 
@@ -938,9 +860,6 @@ a,.site-main input[type="checkbox"]:checked:before,.comments-layout-one .author 
 .cesis_blog_m_bt_info a:hover,
 .cesis_blog_m_top_info a:hover,
 .cesis_blog_m_bottom_info a:hover,
-.cesis_portfolio_m_title a:hover,
-.cesis_portfolio_m_top_info a:hover,
-.cesis_portfolio_m_bottom_info a:hover,
 .cesis_m_more_link a:not(.cesis_btn):not(.cesis_alt_btn):not(.cesis_sub_btn):hover,
 .cesis_filter_style_1 .cesis_filter li.selected a,.cesis_filter_style_1 .cesis_filter li a:hover,
 .cesis_filter_style_1 .cesis_sorter li:hover,.cesis_filter_style_1 .sort_selected,
@@ -961,7 +880,6 @@ a,.site-main input[type="checkbox"]:checked:before,.comments-layout-one .author 
 .cesis_nav_style_4 .current,.cesis_nav_style_4 span:hover a,
 
 
-.cesis_staff_sp_info .cesis_staff_social a:hover,
 .cesis_share_ctn.cesis_share_grey.cesis_share_io span a:hover,
 .cesis_share_ctn.cesis_share_transparent.cesis_share_io span a:hover,
 
@@ -1464,26 +1382,18 @@ body.blog .article_ctn,body.blog .sidebar_ctn,.archive.category .article_ctn,.ar
 
 
 /* width settings */
-.single-portfolio .site-main .cesis_container,
-.single-portfolio .cesis_top_banner .cesis_container { max-width:1250px; }
 
 /* top and bottom padding settings */
 
-.single-portfolio .article_ctn,.single-portfolio .sidebar_ctn { padding-top:0; padding-bottom:0; }
 
 
 /* stacked gallery */
 
-.single-portfolio .cesis_portfolio_gallery_stacked .cesis_gallery_img img { margin-bottom:0px;}
 
 /* width settings */
-.archive.tax-portfolio_category .site-main .cesis_container,
-.archive.tax-portfolio_category .cesis_top_banner .cesis_container { max-width:1250px; }
 
 /* top and bottom padding settings */
 
-.archive.tax-portfolio_category .article_ctn,.archive.tax-portfolio_category .sidebar_ctn,
-.archive.tax-portfolio_tag .article_ctn,.archive.tax-portfolio_tag .sidebar_ctn{ padding-top:60px; padding-bottom:60px; }
 
 
 /*--------------------------------------------------------------
@@ -1494,24 +1404,15 @@ body.blog .article_ctn,body.blog .sidebar_ctn,.archive.category .article_ctn,.ar
 
 
 /* width settings */
-.single-staff .site-main .cesis_container,
-.single-staff .cesis_top_banner .cesis_container { max-width:1250px; }
 
 /* top and bottom padding settings */
 
-.single-staff .article_ctn,.single-staff .sidebar_ctn { padding-top:60px; padding-bottom:60px; }
 
 
 /* width settings */
-.archive.tax-staff_group .site-main .cesis_container,
-.archive.tax-staff_tag .site-main .cesis_container,
-.archive.tax-staff_group .cesis_top_banner .cesis_container,
-.archive.tax-staff_tag .cesis_top_banner .cesis_container { max-width:1250px; }
 
 /* top and bottom padding settings */
 
-.archive.tax-staff_group .article_ctn,.archive.tax-staff_group .sidebar_ctn,
-.archive.tax-staff_tag .article_ctn,.archive.tax-staff_tag .sidebar_ctn { padding-top:60px; padding-bottom:60px; }
 
 
 
@@ -1521,46 +1422,21 @@ body.blog .article_ctn,body.blog .sidebar_ctn,.archive.category .article_ctn,.ar
 --------------------------------------------------------------*/
 
 /* width settings */
-.single-careers .site-main .cesis_container,
-.single-careers .cesis_top_banner .cesis_container { max-width:1250px; }
 
 /* top and bottom padding settings */
 
-.single-careers .article_ctn,.single-careers .sidebar_ctn { padding-top:0; padding-bottom:0; }
 
 /* width settings */
-.archive.tax-career_category .site-main .cesis_container,
-.archive.tax-career_category .cesis_top_banner .cesis_container
  { max-width:1250px; }
 
 /* top and bottom padding settings */
 
-.archive.tax-career_category .article_ctn,.archive.tax-career_category .sidebar_ctn{ padding-top:60px; padding-bottom:60px; }
 
 
 
 
 /*--------------------------------------------------------------
-#12 Woocommerce Settings
---------------------------------------------------------------*/
-
-
-
-
-/*--------------------------------------------------------------
-#13 Buddypress Settings
---------------------------------------------------------------*/
-
-
-/*--------------------------------------------------------------
-#14 bbpress Settings
---------------------------------------------------------------*/
-
-
-
-
-/*--------------------------------------------------------------
-#15 404 Page Settings
+#12 404 Page Settings
 --------------------------------------------------------------*/
 
 /* width settings */
@@ -1574,7 +1450,7 @@ body.blog .article_ctn,body.blog .sidebar_ctn,.archive.category .article_ctn,.ar
 
 
 /*--------------------------------------------------------------
-#16 Search Settings
+#13 Search Settings
 --------------------------------------------------------------*/
 
 
@@ -1601,6 +1477,6 @@ body.search .article_ctn,body.search .sidebar_ctn { padding-top:60px; padding-bo
 
 
 /*--------------------------------------------------------------
-#17 Custom css
+#14 Custom css
 --------------------------------------------------------------*/
 
