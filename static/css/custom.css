@@ -173,7 +173,7 @@
     width: 60px;
     height: 60px;
     cursor: pointer;
-    order: 2; /* Position after logo but before mobile button */
+    order: 3; /* Position at far right, after BOOK US button */
   }
   
   /* Ensure logo image area maintains its layout */
@@ -181,9 +181,9 @@
     order: 1;
   }
   
-  /* Position mobile extra button at the end */
+  /* Position mobile extra button in the center */
   body:not(.cesis_custom_breakpoint) .header_logo .cesis_mobile_extra {
-    order: 3;
+    order: 2;
   }
   
   /* Ensure the mobile menu hamburger lines are visible */
