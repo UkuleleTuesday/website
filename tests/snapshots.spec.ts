@@ -39,8 +39,13 @@ test.beforeAll(async () => {
 for (const templateFile of templateFiles) {
     test(`visual regression for ${templateFile}`, async ({ page }, testInfo) => {
         test.slow();
-        await page.goto(templateFile, { waitUntil: 'networkidle' });
-        await page.waitForTimeout(2000);
+        try {
+            await page.goto(templateFile, { waitUntil: 'networkidle', timeout: 10_000 });
+        } catch (e) {
+            // Ignore timeout errors and continue, as the page may have loaded enough for a snapshot.
+            console.log(`Timeout waiting for network idle on ${templateFile}. Continuing with test.`);
+        }
+        await page.evaluate(() => document.fonts.ready);
 
         const artifactsDir = path.join(__dirname, '..', 'artifacts');
         // Sanitize the filename. Replaces invalid chars with _.

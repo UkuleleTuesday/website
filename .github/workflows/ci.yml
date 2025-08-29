@@ -133,8 +133,21 @@ jobs:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         run: |
-          DEPLOY_URL=$(netlify ${{ steps.netlify_args.outputs.deploy_args }} --json | jq -r '.deploy_url')
+          echo "Running Netlify deploy command:"
+          echo "netlify ${{ steps.netlify_args.outputs.deploy_args }}"
+          
+          # Run the deploy command and capture output to a temporary file while still showing it
+          netlify ${{ steps.netlify_args.outputs.deploy_args }} --json | tee netlify_output.json
+          
+          # Extract the deploy URL from the JSON output
+          DEPLOY_URL=$(jq -r '.deploy_url' netlify_output.json)
           echo "NETLIFY_URL=$DEPLOY_URL" >> $GITHUB_OUTPUT
+          
+          # Clean up the temporary file
+          rm netlify_output.json
+          
+          # Also display the deploy URL for visibility
+          echo "Deploy URL: $DEPLOY_URL"
       - name: Post Netlify preview link to PR
         uses: actions/github-script@v7
         with:
