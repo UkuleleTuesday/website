@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "playwright test",
-    "postinstall": "playwright install --with-deps"
+    "postinstall": "playwright install --with-deps",
+    "build:tailwind": "tailwindcss -i static/css/tailwind.css -o static/css/tailwind.output.css",
+    "build:tailwind:watch": "tailwindcss -i static/css/tailwind.css -o static/css/tailwind.output.css --watch",
+    "build:site": "npm run build:tailwind && uv run python build.py"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +16,11 @@
   "packageManager": "pnpm@10.14.0",
   "devDependencies": {
     "@playwright/test": "^1.54.2",
-    "@types/node": "^24.2.1"
+    "@tailwindcss/typography": "^0.5.16",
+    "@types/node": "^24.2.1",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
+    "tailwindcss": "^3.4.17"
   }
 }
