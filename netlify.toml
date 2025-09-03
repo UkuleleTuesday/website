@@ -12,3 +12,38 @@
 [[edge_functions]]
   path = "/support-us"
   function = "donate"
+
+[[redirects]]
+  from = "https://ukuleletuesday.ie/*"
+  to = "https://www.ukuleletuesday.ie/:splat"
+  status = 301
+  force = true
+  headers = { Cache-Control = "public, max-age=31536000" }
+
+# --- Headers ---
+# HTML: short cache, revalidate in background
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=60, stale-while-revalidate=86400"
+
+# Static assets: long cache with immutable
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
