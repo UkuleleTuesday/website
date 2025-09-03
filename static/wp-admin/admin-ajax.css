@@ -2671,24 +2671,7 @@ body.search .sidebar_ctn {
   padding-bottom: 60px;
 }
 
-.cesis_search_overlay {
-  background: rgba(35, 35, 35, 0.75);
-}
-.cesis_search_overlay,
-.cesis_search_overlay .cesis_search_container input {
-  color: #ffffff;
-}
-.cesis_search_close .lines {
-  background: #ffffff;
-}
-.cesis_search_overlay .cesis_search_container input {
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  background: none;
-}
 
-.cesis_search_overlay .cesis_search_container input::-webkit-input-placeholder {
-  color: #ffffff;
-}
 
 /*--------------------------------------------------------------
 #17 Custom css
