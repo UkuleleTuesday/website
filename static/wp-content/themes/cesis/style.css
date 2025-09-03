@@ -1765,13 +1765,7 @@ position: static;}
 
 .cesis_menu_button { cursor: pointer;}
 
-.cesis_menu_button.cesis_search_close {
-	position: absolute;
-	right:0;
-	top: 0;
-	padding: 40px;
 
-}
 .lines, .lines:before, .lines:after {
     display: inline-block;
     width: 20px;
@@ -1854,77 +1848,7 @@ position: static;}
 
 .cesis_search_dropdown i {padding:0 10px 0 0; font-size: 14px;}
 
-.cesis_search_overlay {
-	 position: fixed;
-	 width: 100%;
-	 height: 100%;
-	 top: 0;
-	 left: 0;
-	 z-index: 9998;
-	 opacity: 0;
-	 visibility: hidden;
-	 -webkit-transition: opacity 0.4s 0.4s,visibility 0s 0.75s;
-	 transition: opacity 0.4s 0.4s,visibility 0s 0.75s;
-	 display: flex;
-	 justify-content: center;
-	 align-items: center;
-	 background-color: rgba(20,22,24,0.95);
-}
 
-.cesis_search_overlay.overlay_on {
-	visibility: visible;
-	opacity: 1;
-	-webkit-transition: opacity 0.4s;
-  transition: opacity 0.4s;
-}
-.cesis_search_overlay .cesis_search_container {
-	width: 100%;
-	text-align: center;
-	font-size: 3vh;
-}
-.cesis_search_overlay .cesis_search_container {
-
-}
-.cesis_search_overlay .cesis_search_container form {
-    opacity: 0;
-    -webkit-transform: translateY(50px);
-    transform: translateY(50px);
-    display: inline-block;
-    width: 100%;
-    max-width: 60vw;
-		position: relative;
-		transition: all .95s cubic-bezier(.2,1,.2,1), transform .95s cubic-bezier(.2,1,.2,1);
-    -webkit-transition: all .95s cubic-bezier(.2,1,.2,1), -webkit-transform .95s cubic-bezier(.2,1,.2,1);
-}
-.cesis_search_overlay.overlay_on .cesis_search_container form{
-		opacity:1;
-		-webkit-transform: translateY(0px);
-		transform: translateY(0px);
-}
-.cesis_search_overlay .cesis_search_container input:first-child {
-	width: 100%;
-	font-size: 3vh;
-  padding: .75em 3em .75em 1.5em;
-
-}
-.cesis_search_overlay .cesis_search_container input.search-submit {
-    position: absolute;
-    margin-top: -0.6em;
-    right: 1.5em;
-    top: 50%;
-    font-size: 3vh;
-    line-height: normal;
-    padding: 0px 10px;
-		opacity: 0;
-		z-index: 2;
-}
-.cesis_search_overlay .cesis_search_container i {
-    position: absolute;
-    margin-top: -0.5em;
-    right: 1.5em;
-    top: 50%;
-		z-index: 1;
-}
 .cesis_search_entry_title {
     margin-bottom: 5px;
      font-size: 18px;
