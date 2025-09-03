@@ -186,6 +186,8 @@ if ('function' !== typeof(window['cesis_menu'])) {
       jc('nav.menu_fill .menu-main-ct > ul').css('width','calc(100% - '+(logo_size+add_size+80)+'px)');
       jc('nav.menu_fill .menu-main-ct > ul > li').css('width','calc((100% - 1px) / '+total_menu_items+')');
     }
+    // Removed unused search overlay handlers - search functionality not used
+    /*
     if (jc('.search-menu a').length > 0) {
 
       jc('.search-menu:not(.cesis_search_dropdown) a').on('click', function(e){
@@ -203,6 +205,7 @@ if ('function' !== typeof(window['cesis_menu'])) {
         jc('.cesis_search_overlay').removeClass('overlay_on');
       })
     }
+    */
     if (jc('.cesis_menu_button').length > 0) {
       jc('.cesis_mobile_menu_switch').on('click', function(){
       var admin_bar;
@@ -274,7 +277,7 @@ if ('function' !== typeof(window['cesis_menu'])) {
           jc('.cesis_menu_overlay').removeClass('open');
           jc('.header_overlay').removeClass('overlay_on');
 					jc(this).addClass('closing');
-          jc('.cesis_search_overlay').removeClass('overlay_on');
+          // jc('.cesis_search_overlay').removeClass('overlay_on'); // Removed - search overlay no longer exists
 					setTimeout(function() {
 						jc('.closing').removeClass('closing');
 					}, 400);
