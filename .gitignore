@@ -11,3 +11,6 @@ node_modules/
 
 # Playwright test artifacts
 /artifacts/
+
+# Backup files
+*.backup*
