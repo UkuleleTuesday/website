@@ -112,12 +112,15 @@ blockquote {
 }
 
 .agency_container .author-info h3,
-.agency_comments_ctn .author {
+.agency_comments_ctn .author,
+.comments-layout-seven .author {
   font-family: Quicksand;
   font-weight: 700;
 }
 
 .main_font,
+.cesis_pb_10 .vc_label_units,
+.cesis_pb_10 .vc_label_units,
 input[type='text'],
 input[type='email'],
 input[type='url'],
@@ -136,15 +139,32 @@ select {
 
 .alt_font,
 legend,
+.comments-layout-two .author,
+.comments-layout-two .comment_buttons,
+.comments-layout-three .comment_buttons,
+.comments-layout-two .single_post_author,
+.comments-layout-two .single_post_email,
+.comments-layout-two .single_post_url,
+.comments-layout-two textarea,
+.comments-layout-three textarea,
+.comments-layout-three input,
 .writer_navigation a,
 .boxes_container .category_ctn a,
 .cesis_tm_1 .cesis_testimonial .tm_author,
 .cesis_tm_4 .cesis_testimonial .tm_author,
+.comments-layout-two .comment-navigation,
+.comments-layout-three .comment-navigation,
 .agency_navigation a,
 .agency_comments_ctn .comments-title,
 .agency_comments_ctn #reply-title,
+.comments-layout-three .author,
 .agency_container .author_bio_ctn h4,
 .agency_container .author_bio_ctn .author_posts_link,
+.comments-layout-four .date,
+.comments-layout-four .comment_buttons,
+.comments-layout-four input,
+.comments-layout-four .comment-navigation,
+.comments-layout-six .author,
 .careers_container .author_bio_ctn h4,
 .comments-layout-six .comments-title,
 .comments-layout-six #reply-title,
@@ -161,6 +181,11 @@ legend,
 .cesis_tm_15 .cesis_testimonial .tm_author,
 .cesis_tm_17 .cesis_testimonial .tm_author,
 .cesis_tm_17 .cesis_testimonial .tm_info,
+.cesis_pb_5 .cesis_progress_bar_label,
+.cesis_pb_9 .cesis_progress_bar_label,
+.cesis_pb_9 .vc_label_units,
+.cesis_pb_10 .cesis_progress_bar_label,
+.cesis_pb_11 .cesis_progress_bar_label,
 .cesis_tabs.horizontal.cesis_tab_4 .tabs > li a,
 .cesis_tabs.vertical.cesis_tab_2 .tabs > li a,
 .cesis_acc_1 .panel-title a,
@@ -215,6 +240,10 @@ legend,
 .header_top_bar a:hover {
   color: #293340;
 }
+.top_bar_cart .cesis_cart_icon .current_item_number {
+  background: #293340;
+}
+
 .header_top_bar .menu-top-bar-ct li,
 .top_bar_notifications .cesis_bp_notifications > span {
   font-family: Poppins;
@@ -390,6 +419,9 @@ body.rtl .sm .cl_after_logo {
 .tt-main-additional .cesis_cart_icon .current_item_number,
 .cesis_offcanvas_cart .cesis_cart_icon .current_item_number,
 .cesis_overlay_cart .cesis_cart_icon .current_item_number,
+.cesis_mobile_cart .cesis_cart_icon .current_item_number {
+  background: #ffffff;
+}
 .tt-main-additional .cesis_social_icons a:hover::after,
 .tt-main-additional .cesis_search_icon a:hover i:after,
 .tt-main-additional .cesis_cart_icon > ul > li > a:hover::after,
@@ -1453,6 +1485,9 @@ fieldset,
   border-color: #edf0f7;
 }
 
+.comments-layout-one .comment_ctn:after {
+  background: #edf0f7;
+}
 
 .cesis_tabs.horizontal.cesis_tab_2 .tabs > li.active,
 .cesis_tabs.horizontal.cesis_tab_3 .tabs > li.active {
@@ -1517,7 +1552,8 @@ legend,
 .site-main .comments-layout-eight textarea,
 .site-main .comments-layout-eight .single_post_author,
 .site-main .comments-layout-eight .single_post_email,
-.site-main .comments-layout-eight .single_post_url {
+.site-main .comments-layout-eight .single_post_url,
+.comments-layout-eight label {
   color: #293340;
 }
 
@@ -1623,7 +1659,9 @@ body,
 }
 
 .comments-layout-six input::-webkit-input-placeholder,
-
+.comments-layout-six textarea::-webkit-input-placeholder {
+  color: #aeb7c1;
+}
 
 .cesis_acc_3 .panel-title .plus-minus-toggle:after,
 .cesis_acc_3 .panel-title .plus-minus-toggle:before,
@@ -1813,7 +1851,9 @@ blockquote,
 
 a:hover,
 .comments-layout-six .comment_buttons span:hover,
-
+.comments-layout-six .comment_buttons span:hover a {
+  color: #66023c;
+}
 
 /* alternative background */
 
@@ -1866,7 +1906,9 @@ a:hover,
 .agency_comments_ctn .comments-title a,
 .agency_comments_ctn #reply-title,
 .comments-layout-seven .comments-title a,
-
+.comments-layout-seven #reply-title {
+  color: #293340;
+}
 
 /* alternative text */
 
@@ -1912,7 +1954,9 @@ a:hover,
 .comments-layout-four textarea::-webkit-input-placeholder,
 .comments-layout-four input::-webkit-input-placeholder,
 .comments-layout-seven input::-webkit-input-placeholder,
-
+.comments-layout-seven textarea::-webkit-input-placeholder {
+  color: #aeb7c1;
+}
 
 .cesis_acc_1 .panel-title .plus-minus-toggle:after,
 .cesis_acc_1 .panel-title .plus-minus-toggle:before,
@@ -1937,7 +1981,9 @@ a:hover,
 .comments-layout-four .logged-in-as a:hover,
 .comments-layout-four .comment_buttons a:hover,
 .comments-layout-four .comment-navigation a:hover,
-
+.comments-layout-seven .logged-in-as a:hover {
+  color: #d631ba;
+}
 
 .comments-layout-two .comments-title span:before,
 .comments-layout-four .date:after {
@@ -2016,6 +2062,16 @@ a:hover,
   border-color: rgba(0, 101, 102, 1);
 }
 
+.cesis_alt_btn[class*='tg-'] {
+  color: #293340 !important;
+  background: rgba(244, 244, 244, 1) !important;
+  border-color: rgba(236, 236, 236, 1) !important;
+  font-family: Quicksand !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+  letter-spacing: 0px !important;
+}
 .cesis_alt_btn[class*='tg-']:hover {
   color: #ffffff !important;
   background: rgba(0, 101, 102, 1) !important;
@@ -2047,7 +2103,11 @@ a:hover,
 
 .cesis_sub_btn,
 .comments-layout-two .cesis_sub_btn,
-
+.comments-layout-four .cesis_sub_btn {
+  -webkit-box-shadow: 0 0 20px rgba(46, 47, 57, 0.25);
+  -moz-box-shadow: 0 0 20px rgba(46, 47, 57, 0.25);
+  box-shadow: 0 0 20px rgba(46, 47, 57, 0.25);
+}
 
 /*--------------------------------------------------------------
 #5 Footer main and sub area
@@ -2438,6 +2498,9 @@ body.blog .site-main .cesis_container,
 .archive.tag .site-main .cesis_container,
 body.blog .cesis_top_banner .cesis_container,
 .archive.category .cesis_top_banner .cesis_container,
+.archive.tag .cesis_top_banner .cesis_container {
+  max-width: 1250px;
+}
 
 /* top and bottom padding settings */
 body.blog .article_ctn,
@@ -2607,6 +2670,8 @@ body.search .sidebar_ctn {
   padding-top: 60px;
   padding-bottom: 60px;
 }
+
+
 
 /*--------------------------------------------------------------
 #17 Custom css
