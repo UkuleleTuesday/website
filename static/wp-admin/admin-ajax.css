@@ -112,15 +112,12 @@ blockquote {
 }
 
 .agency_container .author-info h3,
-.agency_comments_ctn .author,
-.comments-layout-seven .author {
+.agency_comments_ctn .author {
   font-family: Quicksand;
   font-weight: 700;
 }
 
 .main_font,
-.cesis_pb_10 .vc_label_units,
-.cesis_pb_10 .vc_label_units,
 input[type='text'],
 input[type='email'],
 input[type='url'],
@@ -181,11 +178,6 @@ legend,
 .cesis_tm_15 .cesis_testimonial .tm_author,
 .cesis_tm_17 .cesis_testimonial .tm_author,
 .cesis_tm_17 .cesis_testimonial .tm_info,
-.cesis_pb_5 .cesis_progress_bar_label,
-.cesis_pb_9 .cesis_progress_bar_label,
-.cesis_pb_9 .vc_label_units,
-.cesis_pb_10 .cesis_progress_bar_label,
-.cesis_pb_11 .cesis_progress_bar_label,
 .cesis_tabs.horizontal.cesis_tab_4 .tabs > li a,
 .cesis_tabs.vertical.cesis_tab_2 .tabs > li a,
 .cesis_acc_1 .panel-title a,
@@ -240,10 +232,6 @@ legend,
 .header_top_bar a:hover {
   color: #293340;
 }
-.top_bar_cart .cesis_cart_icon .current_item_number {
-  background: #293340;
-}
-
 .header_top_bar .menu-top-bar-ct li,
 .top_bar_notifications .cesis_bp_notifications > span {
   font-family: Poppins;
@@ -419,9 +407,6 @@ body.rtl .sm .cl_after_logo {
 .tt-main-additional .cesis_cart_icon .current_item_number,
 .cesis_offcanvas_cart .cesis_cart_icon .current_item_number,
 .cesis_overlay_cart .cesis_cart_icon .current_item_number,
-.cesis_mobile_cart .cesis_cart_icon .current_item_number {
-  background: #ffffff;
-}
 .tt-main-additional .cesis_social_icons a:hover::after,
 .tt-main-additional .cesis_search_icon a:hover i:after,
 .tt-main-additional .cesis_cart_icon > ul > li > a:hover::after,
