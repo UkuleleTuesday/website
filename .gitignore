@@ -1,6 +1,7 @@
 .aider*
 /public/
 __pycache__/
+.venv/
 
 # Playwright
 node_modules/
