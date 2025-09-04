@@ -159,14 +159,14 @@
 /* Mobile Navigation Fix */
 @media only screen and (max-width: 978px) {
   /* Ensure proper layout for header logo container */
-  body:not(.cesis_custom_breakpoint) .header_logo.logo_left {
+  .header_logo.logo_left {
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
   
   /* Force display of mobile menu button on smaller screens */
-  body:not(.cesis_custom_breakpoint) .header_main .cesis_mobile_menu_switch {
+  .header_main .cesis_mobile_menu_switch {
     display: flex !important;
     align-items: center;
     justify-content: center;
@@ -177,17 +177,17 @@
   }
   
   /* Ensure logo image area maintains its layout */
-  body:not(.cesis_custom_breakpoint) .header_logo #logo_img {
+  .header_logo #logo_img {
     order: 1;
   }
   
   /* Position mobile extra button in the center */
-  body:not(.cesis_custom_breakpoint) .header_logo .cesis_mobile_extra {
+  .header_logo .cesis_mobile_extra {
     order: 2;
   }
   
   /* Ensure the mobile menu hamburger lines are visible */
-  body:not(.cesis_custom_breakpoint) .cesis_mobile_menu_switch .lines {
+  .cesis_mobile_menu_switch .lines {
     display: block;
     width: 20px;
     height: 2px;
@@ -196,8 +196,8 @@
     transition: background 0.3s;
   }
   
-  body:not(.cesis_custom_breakpoint) .cesis_mobile_menu_switch .lines:before,
-  body:not(.cesis_custom_breakpoint) .cesis_mobile_menu_switch .lines:after {
+  .cesis_mobile_menu_switch .lines:before,
+  .cesis_mobile_menu_switch .lines:after {
     content: '';
     display: block;
     width: 20px;
@@ -208,31 +208,31 @@
     transition: transform 0.3s, opacity 0.3s;
   }
   
-  body:not(.cesis_custom_breakpoint) .cesis_mobile_menu_switch .lines:before {
+  .cesis_mobile_menu_switch .lines:before {
     top: -6px;
   }
   
-  body:not(.cesis_custom_breakpoint) .cesis_mobile_menu_switch .lines:after {
+  .cesis_mobile_menu_switch .lines:after {
     top: 6px;
   }
   
   /* Hamburger animation when open */
-  body:not(.cesis_custom_breakpoint) .cesis_mobile_menu_switch.open .lines {
+  .cesis_mobile_menu_switch.open .lines {
     background: transparent;
   }
   
-  body:not(.cesis_custom_breakpoint) .cesis_mobile_menu_switch.open .lines:before {
+  .cesis_mobile_menu_switch.open .lines:before {
     transform: rotate(45deg);
     top: 0;
   }
   
-  body:not(.cesis_custom_breakpoint) .cesis_mobile_menu_switch.open .lines:after {
+  .cesis_mobile_menu_switch.open .lines:after {
     transform: rotate(-45deg);
     top: 0;
   }
   
   /* Initially hide the mobile menu */
-  body:not(.cesis_custom_breakpoint) .header_mobile {
+  .header_mobile {
     display: none;
   }
 }
