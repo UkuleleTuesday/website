@@ -58,6 +58,10 @@ for (const templateFile of templateFiles) {
     });
 
     test(`visual regression for ${templateFile} (with hover states)`, async ({ page }, testInfo) => {
+        // Skip hover tests on mobile/touch devices since hover doesn't apply
+        test.skip(testInfo.project.name.includes('Android') || testInfo.project.name.includes('iOS'), 
+                  'Hover states are not applicable on touch devices');
+        
         test.slow();
         try {
             await page.goto(templateFile, { waitUntil: 'networkidle', timeout: 10_000 });
