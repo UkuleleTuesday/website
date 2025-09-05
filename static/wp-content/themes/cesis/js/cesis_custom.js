@@ -728,7 +728,6 @@ function load_ajax_posts() {
                   	});
                     iso_ctn.on('layoutComplete', iso.layout());
                     iso_ctn.on('layoutComplete', isoLoaded(acontent, to_load));
-                    jc('.cesis_video_ctn').fitVids();
                     cesis_like();
                     setTimeout(function() {
                       jc('.cesis_video_ctn:not(.video_adjusted)').find('.mejs-video .mejs-controls').wrap('<div class="cesis_inner_video_ctn"></div>');
@@ -1565,7 +1564,6 @@ if ('function' !== typeof(window['cesis_animations'])) {
 
 if ('function' !== typeof(window['cesis_video'])) {
     window.cesis_video = function() {
-      jc('.cesis_video_ctn').fitVids();
       setTimeout(function() {
         jc('.cesis_video_ctn').find('.mejs-video .mejs-controls').wrap('<div class="cesis_inner_video_ctn"></div>');
         jc('.cesis_video_ctn').addClass('video_adjusted');
