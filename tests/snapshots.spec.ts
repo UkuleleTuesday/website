@@ -50,7 +50,7 @@ test.describe('Visual Regression Tests', () => {
                 { timeout: 10000 }
             ).catch(() => console.warn(`Google Fonts CSS request not intercepted for ${templateFile}.`));
 
-            // Hide dynamic embeds to prevent flaky tests
+            // Replace dynamic embeds with a static placeholder to prevent flaky tests
             await page.addStyleTag({
                 content: `
               iframe[src*="youtube.com"],
@@ -58,6 +58,27 @@ test.describe('Visual Regression Tests', () => {
               iframe[src*="vimeo.com"],
               .vc_video-bg {
                 visibility: hidden !important;
+                position: relative !important;
+              }
+              iframe[src*="youtube.com"]::before,
+              iframe[src*="youtu.be"]::before,
+              iframe[src*="vimeo.com"]::before,
+              .vc_video-bg::before {
+                content: 'Video Placeholder';
+                visibility: visible !important;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: #e0e0e0;
+                color: #666;
+                font-family: sans-serif;
+                border: 2px dashed #999;
+                box-sizing: border-box;
               }
             `
             });
