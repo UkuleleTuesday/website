@@ -1,58 +1,97 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
+import { withAllHoverStates } from './hover-utils';
+import { waitForFonts, setupFontNetworkLogging, gatherAndSaveDiagnostics, checkFonts } from './utils/fontDiagnostics';
 
 const templatesDir = path.join(__dirname, '..', 'templates');
-const publicDir = path.join(__dirname, '..', 'public');
+const artifactsDir = path.join(__dirname, '..', 'artifacts');
 
 function getAllHtmlFiles(dirPath: string, arrayOfFiles: string[] = [], relativeDir: string = ''): string[] {
     const files = fs.readdirSync(dirPath);
-
-    files.forEach(function (file) {
+    for (const file of files) {
+        if (file.startsWith('_') || file.startsWith('.')) continue;
         const currentRelativePath = path.join(relativeDir, file);
-
-        if (file.startsWith('_') || file.startsWith('.')) {
-            return;
-        }
-        
         const fullPath = path.join(dirPath, file);
-
         if (fs.statSync(fullPath).isDirectory()) {
             arrayOfFiles = getAllHtmlFiles(fullPath, arrayOfFiles, currentRelativePath);
         } else if (file.endsWith('.html')) {
             arrayOfFiles.push(currentRelativePath);
         }
-    });
-
+    }
     return arrayOfFiles;
 }
 
 const templateFiles = getAllHtmlFiles(templatesDir);
 
+const expectedFamilies = (process.env.EXPECT_FONTS || 'Quicksand,Pattaya').split(',').map(f => f.trim()).filter(Boolean);
+
 test.beforeAll(async () => {
-    const artifactsDir = path.join(__dirname, '..', 'artifacts');
     if (!fs.existsSync(artifactsDir)) {
         fs.mkdirSync(artifactsDir, { recursive: true });
     }
 });
 
-for (const templateFile of templateFiles) {
-    test(`visual regression for ${templateFile}`, async ({ page }, testInfo) => {
-        test.slow();
-        try {
-            await page.goto(templateFile, { waitUntil: 'networkidle', timeout: 10_000 });
-        } catch (e) {
-            // Ignore timeout errors and continue, as the page may have loaded enough for a snapshot.
-            console.log(`Timeout waiting for network idle on ${templateFile}. Continuing with test.`);
-        }
-        await page.evaluate(() => document.fonts.ready);
-
-        const artifactsDir = path.join(__dirname, '..', 'artifacts');
-        // Sanitize the filename. Replaces invalid chars with _.
-        const sanitizedTemplateFile = templateFile.replace(/[<>:"/\\|?*]/g, '_').replace(/ /g, '_');
-        const artifactFilename = `page_render_${sanitizedTemplateFile}`;
-        await fs.promises.writeFile(path.join(artifactsDir, artifactFilename), await page.content());
-
-        await expect(page).toHaveScreenshot(`${templateFile}.png`, { animations: 'disabled', fullPage: true, maxDiffPixels: 100 , timeout: 10_000});
-    });
+async function setupPageForSnapshot(page: Page, templateFile: string): Promise<Error | null> {
+    try {
+        await page.goto(templateFile, { waitUntil: 'load', timeout: 20000 });
+        await page.waitForResponse(
+            resp => resp.url().includes('fonts.googleapis.com/css') && resp.status() === 200,
+            { timeout: 10000 }
+        ).catch(() => console.warn(`Google Fonts CSS request not intercepted for ${templateFile}.`));
+        await page.addStyleTag({
+            content: `
+              iframe[src*="youtube.com"]::before, iframe[src*="youtu.be"]::before, iframe[src*="vimeo.com"]::before, .vc_video-bg::before {
+                content: 'Video Placeholder'; visibility: visible !important; position: absolute;
+                top: 0; left: 0; width: 100%; height: 100%; display: flex;
+                align-items: center; justify-content: center; background: #e0e0e0;
+                color: #666; font-family: sans-serif; border: 2px dashed #999;
+                box-sizing: border-box;
+              }
+            `
+        });
+        return null;
+    } catch (e) {
+        console.log(`Navigation issue on ${templateFile}: ${e}`);
+        return e as Error;
+    }
 }
+
+test.describe('Visual Regression Tests', () => {
+    test.describe.configure({ mode: 'serial' });
+
+    for (const templateFile of templateFiles) {
+        test.describe(templateFile, () => {
+            let navigationError: Error | null = null;
+
+            test.beforeEach(async ({ page }) => {
+                navigationError = await setupPageForSnapshot(page, templateFile);
+            });
+
+            test(`default state`, async ({ page }, testInfo) => {
+                test.slow();
+                const sanitizedTemplateFile = templateFile.replace(/[<>:"/\\|?*]/g, '_').replace(/ /g, '_');
+                const baseName = sanitizedTemplateFile;
+
+                await expect(page).toHaveScreenshot(`${templateFile}.png`, { animations: 'disabled', fullPage: true, maxDiffPixels: 100, timeout: 10000 });
+                if (navigationError) {
+                    console.log(`(Non-fatal) navigation error recorded for ${templateFile}:`, navigationError);
+                }
+            });
+
+            test(`with hover states`, async ({ page }, testInfo) => {
+                test.skip(testInfo.project.name.includes('Android') || testInfo.project.name.includes('iOS'), 'Hover states are not applicable on touch devices');
+                test.slow();
+                await waitForFonts(page);
+                await withAllHoverStates(page, async () => {
+                    await expect(page).toHaveScreenshot(`${templateFile}-hover.png`, {
+                        animations: 'disabled',
+                        fullPage: true,
+                        maxDiffPixels: 25000,
+                        timeout: 10000
+                    });
+                });
+            });
+        });
+    }
+});
