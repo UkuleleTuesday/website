@@ -6,7 +6,7 @@ This project contains the source code and build process for the [Ukulele Tuesday
 
 The initial version of this site was created on WordPress.
 
-After being exported from its Wordpress install, it is now maintained as a static site built with [Jinja2](https://pypi.org/project/Jinja2/) for better performance, security, and cost-effectiveness.
+After being exported from its WordPress install, it is now maintained as a static site built with [Jinja2](https://pypi.org/project/Jinja2/) for better performance, security, and cost-effectiveness.
 
 The rare dynamic parts of the site are handled via:
 * Netlify Forms for forms
