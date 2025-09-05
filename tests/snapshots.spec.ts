@@ -43,7 +43,7 @@ test.describe('Visual Regression Tests', () => {
         setupFontNetworkLogging(page, fontNet);
         let navigationError = null;
         try {
-            await page.goto(templateFile, { waitUntil: 'domcontentloaded', timeout: 10000 });
+            await page.goto(templateFile, { waitUntil: 'networkidle', timeout: 15000 });
         } catch (e) {
             navigationError = e;
             console.log(`Navigation issue on ${templateFile}: ${e}`);

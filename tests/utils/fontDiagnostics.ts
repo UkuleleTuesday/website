@@ -14,7 +14,9 @@ export async function waitForFonts(page, opts: { timeoutMs?: number } = {}) {
   }
   try {
     await page.evaluate(async () => { await document.fonts.ready; });
-  } catch {}
+  } catch (e) {
+    console.warn(`document.fonts.ready promise rejected: ${e.message}`);
+  }
   const fontStatus = await page.evaluate(() => {
     const fontFaces = Array.from(document.fonts).map(f => ({
       family: f.family,
