@@ -86,13 +86,24 @@ for (const templateFile of templateFiles) {
             const loadedFamilies = new Set(
                 fontStatus.fontFaces.filter(f => f.status === 'loaded').map(f => f.family.replace(/['"]/g, '').toLowerCase())
             );
+            
+            // Get all unique fonts that are actually used on the page for the tested selectors
             const usedFamilies = new Set(
                 computedSamples.map(s => s.fontFamily.split(',')[0].replace(/['"]/g, '').toLowerCase())
             );
-            const missing = expectedFamilies.map(f => f.toLowerCase()).filter(f => !loadedFamilies.has(f) && !usedFamilies.has(f));
+
+            // We only care about expected fonts that are actually used on this page
+            const expectedAndUsed = expectedFamilies
+                .map(f => f.toLowerCase())
+                .filter(f => usedFamilies.has(f));
+            
+            // Of those, find any that failed to load
+            const missing = expectedAndUsed.filter(f => !loadedFamilies.has(f));
+
             if (missing.length) {
-                testInfo.annotations.push({ type: 'missing-fonts', description: `Missing expected fonts: ${missing.join(', ')}` });
-                throw new Error(`Expected fonts not loaded: ${missing.join(', ')}`);
+                const description = `Expected fonts are used but not loaded: ${missing.join(', ')}`;
+                testInfo.annotations.push({ type: 'missing-fonts', description });
+                throw new Error(description);
             }
         }
         await expect(page).toHaveScreenshot(`${templateFile}.png`, { animations: 'disabled', fullPage: true, maxDiffPixels: 100, timeout: 10000 });
