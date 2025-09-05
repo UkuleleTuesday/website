@@ -44,6 +44,23 @@ test.describe('Visual Regression Tests', () => {
         let navigationError = null;
         try {
             await page.goto(templateFile, { waitUntil: 'load', timeout: 20000 });
+            // Wait for Google Fonts CSS to be loaded to reduce flakiness
+            await page.waitForResponse(
+                resp => resp.url().includes('fonts.googleapis.com/css') && resp.status() === 200,
+                { timeout: 10000 }
+            ).catch(() => console.warn(`Google Fonts CSS request not intercepted for ${templateFile}.`));
+
+            // Hide dynamic embeds to prevent flaky tests
+            await page.addStyleTag({
+                content: `
+              iframe[src*="youtube.com"],
+              iframe[src*="youtu.be"],
+              iframe[src*="vimeo.com"],
+              .vc_video-bg {
+                visibility: hidden !important;
+              }
+            `
+            });
         } catch (e) {
             navigationError = e;
             console.log(`Navigation issue on ${templateFile}: ${e}`);
