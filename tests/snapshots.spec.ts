@@ -31,9 +31,12 @@ test.beforeAll(async () => {
     }
 });
 
-for (const templateFile of templateFiles) {
-    test(`visual regression for ${templateFile}`, async ({ page }, testInfo) => {
-        test.slow();
+test.describe('Visual Regression Tests', () => {
+    test.describe.configure({ mode: 'serial' });
+
+    for (const templateFile of templateFiles) {
+        test(`visual regression for ${templateFile}`, async ({ page }, testInfo) => {
+            test.slow();
         const sanitizedTemplateFile = templateFile.replace(/[<>:"/\\|?*]/g, '_').replace(/ /g, '_');
         const baseName = sanitizedTemplateFile;
         const fontNet = { requests: [] };
@@ -111,4 +114,5 @@ for (const templateFile of templateFiles) {
             console.log(`(Non-fatal) navigation error recorded for ${templateFile}:`, navigationError);
         }
     });
-}
+    }
+});
