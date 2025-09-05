@@ -69,3 +69,33 @@ pnpm playwright test --update-snapshots
 ```
 
 Commit the updated snapshot files in the `tests/snapshots.spec.ts-snapshots/` directory along with your code changes.
+
+### Font Management
+
+This project uses a single canonical Google Fonts import to ensure consistent font loading and optimal performance.
+
+**Canonical Font Import**
+
+All Google Fonts are loaded via a single CSS2 endpoint in `templates/_layouts/base.html`:
+
+```html
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Pattaya:wght@400&family=Quicksand:wght@500;600;700&family=Roboto:wght@400;500;700;900&display=swap"
+      id="canonical-google-fonts-css"
+      media="all"
+      rel="stylesheet"
+      type="text/css">
+```
+
+**Font Families and Weights**
+
+- **Poppins**: 300, 400, 500, 600, 700 (main body text, headings)
+- **Pattaya**: 400 (decorative headings like "Welcome to Ukulele Tuesday")
+- **Quicksand**: 500, 600, 700 (UI elements, author names)
+- **Roboto**: 400, 500, 700, 900 (fallback font, specific UI components)
+
+**Performance Benefits**
+
+- Single HTTP request instead of multiple font imports
+- Uses modern CSS2 endpoint with `display=swap` for better loading performance
+- Eliminates duplicate font requests and malformed weights
+- Consistent font rendering across all pages
