@@ -73,14 +73,3 @@ pnpm playwright test --update-snapshots
 ```
 
 Commit the updated snapshot files in the `tests/snapshots.spec.ts-snapshots/` directory along with your code changes.
-
-**Hover State Testing**
-
-The visual regression tests include comprehensive hover state coverage that:
-- Automatically detects and applies CSS `:hover` rules to all elements
-- Triggers inline JavaScript `onmouseenter` handlers for dynamic hover effects
-- Handles both CSS and JavaScript-based hover interactions
-- Captures hover states across @media queries and complex selectors
-- Works reliably across desktop and mobile browsers
-
-This ensures UI regressions in interactive states are caught early in the development process.
