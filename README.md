@@ -1,15 +1,21 @@
-# Ukulele Tuesday Static Website
+# Ukulele Tuesday Website
 
-This project contains the source code and build process for the Ukulele Tuesday static website, published via Netlify.
+This project contains the source code and build process for the [Ukulele Tuesday website](https://www.ukuleletuesday.ie/), published on Netlify.
 
 ## Overview
 
-The initial version of this site was created from a static export of a WordPress site. It is now maintained as a static site built with Jinja2 for better performance, security, and cost-effectiveness.
+The initial version of this site was created on WordPress.
+
+After being exported from its Wordpress install, it is now maintained as a static site built with [Jinja2](https://pypi.org/project/Jinja2/) for better performance, security, and cost-effectiveness.
+
+The rare dynamic parts of the site are handled via:
+* Netlify Forms for forms
+* Netlify functions/edge functions for everything else.
 
 ## Prerequisites
 
-- A Netlify account linked to this GitHub repository
 - Python 3.12+ with [uv](https://github.com/astral-sh/uv) package manager
+- Node + `pnpm` to run the regression test suite.
 
 ## Usage
 
