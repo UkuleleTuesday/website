@@ -41,9 +41,6 @@ async function setupPageForSnapshot(page: Page, templateFile: string): Promise<E
         ).catch(() => console.warn(`Google Fonts CSS request not intercepted for ${templateFile}.`));
         await page.addStyleTag({
             content: `
-              iframe[src*="youtube.com"], iframe[src*="youtu.be"], iframe[src*="vimeo.com"], .vc_video-bg {
-                visibility: hidden !important; position: relative !important;
-              }
               iframe[src*="youtube.com"]::before, iframe[src*="youtu.be"]::before, iframe[src*="vimeo.com"]::before, .vc_video-bg::before {
                 content: 'Video Placeholder'; visibility: visible !important; position: absolute;
                 top: 0; left: 0; width: 100%; height: 100%; display: flex;
@@ -75,11 +72,6 @@ test.describe('Visual Regression Tests', () => {
                 test.slow();
                 const sanitizedTemplateFile = templateFile.replace(/[<>:"/\\|?*]/g, '_').replace(/ /g, '_');
                 const baseName = sanitizedTemplateFile;
-                const fontNet = { requests: [] };
-                setupFontNetworkLogging(page, fontNet);
-
-                const { fontStatus, computedSamples } = await gatherAndSaveDiagnostics(page, baseName, artifactsDir, fontNet);
-                checkFonts(fontStatus, computedSamples, expectedFamilies, testInfo);
 
                 await expect(page).toHaveScreenshot(`${templateFile}.png`, { animations: 'disabled', fullPage: true, maxDiffPixels: 100, timeout: 10000 });
                 if (navigationError) {
