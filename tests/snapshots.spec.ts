@@ -23,7 +23,7 @@ function getAllHtmlFiles(dirPath: string, arrayOfFiles: string[] = [], relativeD
 
 const templateFiles = getAllHtmlFiles(templatesDir);
 
-const expectedFamilies = (process.env.EXPECT_FONTS || '').split(',').map(f => f.trim()).filter(Boolean);
+const expectedFamilies = (process.env.EXPECT_FONTS || 'Quicksand,Pattaya').split(',').map(f => f.trim()).filter(Boolean);
 
 test.beforeAll(async () => {
     if (!fs.existsSync(artifactsDir)) {
