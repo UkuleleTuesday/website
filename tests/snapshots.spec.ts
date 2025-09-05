@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
+import { withAllHoverStates } from './hover-utils';
 
 const templatesDir = path.join(__dirname, '..', 'templates');
 const publicDir = path.join(__dirname, '..', 'public');
@@ -54,5 +55,26 @@ for (const templateFile of templateFiles) {
         await fs.promises.writeFile(path.join(artifactsDir, artifactFilename), await page.content());
 
         await expect(page).toHaveScreenshot(`${templateFile}.png`, { animations: 'disabled', fullPage: true, maxDiffPixels: 100 , timeout: 10_000});
+    });
+
+    test(`visual regression for ${templateFile} (with hover states)`, async ({ page }, testInfo) => {
+        test.slow();
+        try {
+            await page.goto(templateFile, { waitUntil: 'networkidle', timeout: 10_000 });
+        } catch (e) {
+            // Ignore timeout errors and continue, as the page may have loaded enough for a snapshot.
+            console.log(`Timeout waiting for network idle on ${templateFile}. Continuing with test.`);
+        }
+        await page.evaluate(() => document.fonts.ready);
+
+        // Use the utility function to force all hover states
+        await withAllHoverStates(page, async () => {
+            await expect(page).toHaveScreenshot(`${templateFile}-hover.png`, { 
+                animations: 'disabled', 
+                fullPage: true, 
+                maxDiffPixels: 100, 
+                timeout: 10_000 
+            });
+        });
     });
 }
