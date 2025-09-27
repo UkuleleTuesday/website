@@ -86,6 +86,7 @@
                                        class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required"
                                        maxlength="400"
                                        name="your-name"
+                                       id="name"
                                        size="40"
                                        type="text"
                                        value="">
@@ -102,6 +103,7 @@
                                        class="wpcf7-form-control wpcf7-email wpcf7-validates-as-required wpcf7-text wpcf7-validates-as-email"
                                        maxlength="400"
                                        name="your-email"
+                                       id="email"
                                        size="40"
                                        type="email"
                                        value="">
@@ -118,6 +120,7 @@
                                        class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required"
                                        maxlength="400"
                                        name="your-subject"
+                                       id="subject"
                                        size="40"
                                        type="text"
                                        value="">
@@ -126,7 +129,7 @@
                           </p>
                           <p>
                             <label>
-                              Your message (optional)
+                              Your message
                               <br>
                               <span class="wpcf7-form-control-wrap" data-name="your-message">
                                 <textarea aria-invalid="false"
@@ -134,6 +137,7 @@
                                           cols="40"
                                           maxlength="2000"
                                           name="your-message"
+                                          id="message"
                                           rows="10"></textarea></span>
                             </label>
                           </p>
@@ -159,9 +163,35 @@
                             </script>
                           </div>
                           <br>
+                          <script>
+                          function validateContactUsForm() {
+                             let name = document.getElementById('name').value;
+                             let email = document.getElementById('email').value;
+                             let message = document.getElementById('message').value;
+                             let subject = document.getElementById('subject').value;
+                             let fields = {
+                              'name': name,
+                              'email': email,
+                              'message': message,
+                              'subject': subject
+                            };
+                            
+                            for (var field in fields) {
+                              if (fields[field] == '') {
+                                n = '';
+                                if (field.startsWith('e')) {
+                                  n = 'n';
+                                }
+                                alert('Please enter a' + n + ' ' + field + '.');
+                                return false;
+                              }
+                            }
+                          }
+                          </script>
                           <input class="wpcf7-form-control wpcf7-submit has-spinner"
                                  type="submit"
-                                 value="Submit">
+                                 value="Submit"
+                                 onclick="return validateContactUsForm();">
                           <div aria-hidden="true" class="wpcf7-response-output"></div>
                           <p class="hidden">
                             <label>
