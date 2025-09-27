@@ -163,32 +163,35 @@
                             </script>
                           </div>
                           <br>
+                          <script>
+                          function validateContactUsForm() {
+                             let name = document.getElementById('name').value;
+                             let email = document.getElementById('email').value;
+                             let message = document.getElementById('message').value;
+                             let subject = document.getElementById('subject').value;
+                             let fields = {
+                              'name': name,
+                              'email': email,
+                              'message': message,
+                              'subject': subject
+                            };
+                            
+                            for (var field in fields) {
+                              if (fields[field] == '') {
+                                n = '';
+                                if (field.startsWith('e')) {
+                                  n = 'n';
+                                }
+                                alert('Please enter a' + n + ' ' + field + '.');
+                                return false;
+                              }
+                            }
+                          }
+                            </script>
                           <input class="wpcf7-form-control wpcf7-submit has-spinner"
                                  type="submit"
-                                 value="Submit" onclick="
-                                    let name = document.getElementById('name').value;
-                                    let email = document.getElementById('email').value;
-                                    let message = document.getElementById('message').value;
-                                    let subject = document.getElementById('subject').value;
-
-                                    let fields = {
-                                      'name': name,
-                                      'email': email,
-                                      'message': message,
-                                      'subject': subject
-                                    };
-
-
-                                    for (var field in fields) {
-                                      if (fields[field] == '') {
-                                        n = '';
-                                        if (field.startsWith('e')) {
-                                          n = 'n';
-                                        }
-                                        alert('Please enter a' + n + ' ' + field + '.');
-                                        return false;                                        
-                                      }
-                                    }">
+                                 value="Submit"
+                                 onclick="return validateContactUsForm();">
                           <div aria-hidden="true" class="wpcf7-response-output"></div>
                           <p class="hidden">
                             <label>
