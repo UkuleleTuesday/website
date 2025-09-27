@@ -79,3 +79,11 @@ pnpm playwright test --update-snapshots
 ```
 
 Commit the updated snapshot files in the `tests/snapshots.spec.ts-snapshots/` directory along with your code changes.
+
+### Running Locally
+
+To run the website locally, use the following command:
+
+```
+uv run python -m http.server -d public/
+```
