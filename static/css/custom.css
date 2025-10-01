@@ -239,8 +239,8 @@
 
 /* Promo Bar */
 .promo-bar {
-  background-color: #efa537;
-  color: #000;
+  background-color: #66023c;
+  color: #fff;
   text-align: center;
   padding: 10px;
   font-size: 16px;
@@ -251,11 +251,11 @@
 }
 
 .promo-bar a {
-  color: #000;
+  color: #fff;
   text-decoration: underline;
 }
 
 .promo-bar a:hover {
-  color: #66023c;
+  color: #efa537;
   text-decoration: none;
 }
