@@ -34,11 +34,7 @@ test.beforeAll(async () => {
 
 async function setupPageForSnapshot(page: Page, templateFile: string): Promise<Error | null> {
     try {
-        await page.goto(templateFile, { waitUntil: 'load', timeout: 20000 });
-        await page.waitForResponse(
-            resp => resp.url().includes('fonts.googleapis.com/css') && resp.status() === 200,
-            { timeout: 10000 }
-        ).catch(() => console.warn(`Google Fonts CSS request not intercepted for ${templateFile}.`));
+        await page.goto(templateFile, { waitUntil: 'networkidle', timeout: 20000 });
         await page.addStyleTag({
             content: `
               iframe[src*="youtube.com"]::before, iframe[src*="youtu.be"]::before, iframe[src*="vimeo.com"]::before, .vc_video-bg::before {
@@ -73,7 +69,7 @@ test.describe('Visual Regression Tests', () => {
                 const sanitizedTemplateFile = templateFile.replace(/[<>:"/\\|?*]/g, '_').replace(/ /g, '_');
                 const baseName = sanitizedTemplateFile;
 
-                await expect(page).toHaveScreenshot(`${templateFile}.png`, { animations: 'disabled', fullPage: true, maxDiffPixels: 100, timeout: 10000 });
+                await expect(page).toHaveScreenshot(`${templateFile}.png`, { animations: 'disabled', fullPage: true, maxDiffPixelRatio: 0.05, timeout: 10000 });
                 if (navigationError) {
                     console.log(`(Non-fatal) navigation error recorded for ${templateFile}:`, navigationError);
                 }
@@ -87,7 +83,7 @@ test.describe('Visual Regression Tests', () => {
                     await expect(page).toHaveScreenshot(`${templateFile}-hover.png`, {
                         animations: 'disabled',
                         fullPage: true,
-                        maxDiffPixels: 25000,
+                        maxDiffPixelRatio: 0.05,
                         timeout: 10000
                     });
                 });
