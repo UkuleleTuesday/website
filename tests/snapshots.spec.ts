@@ -34,11 +34,7 @@ test.beforeAll(async () => {
 
 async function setupPageForSnapshot(page: Page, templateFile: string): Promise<Error | null> {
     try {
-        await page.goto(templateFile, { waitUntil: 'load', timeout: 20000 });
-        await page.waitForResponse(
-            resp => resp.url().includes('fonts.googleapis.com/css') && resp.status() === 200,
-            { timeout: 10000 }
-        ).catch(() => console.warn(`Google Fonts CSS request not intercepted for ${templateFile}.`));
+        await page.goto(templateFile, { waitUntil: 'networkidle', timeout: 20000 });
         await page.addStyleTag({
             content: `
               iframe[src*="youtube.com"]::before, iframe[src*="youtu.be"]::before, iframe[src*="vimeo.com"]::before, .vc_video-bg::before {
