@@ -236,3 +236,26 @@
     display: none;
   }
 }
+
+/* Promo Bar */
+.promo-bar {
+  background-color: #efa537;
+  color: #000;
+  text-align: center;
+  padding: 10px;
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+  width: 100%;
+  z-index: 9999;
+  position: relative;
+}
+
+.promo-bar a {
+  color: #000;
+  text-decoration: underline;
+}
+
+.promo-bar a:hover {
+  color: #66023c;
+  text-decoration: none;
+}
