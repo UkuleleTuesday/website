@@ -27,17 +27,18 @@
   [headers.values]
     Cache-Control = "public, max-age=60, stale-while-revalidate=86400"
 
-# Static assets: long cache with immutable
+# CSS/JS: short cache to allow updates (5 minutes + stale-while-revalidate)
 [[headers]]
   for = "/*.css"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=300, stale-while-revalidate=86400"
 
 [[headers]]
   for = "/*.js"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=300, stale-while-revalidate=86400"
 
+# Static assets that rarely change: long cache with immutable
 [[headers]]
   for = "/images/*"
   [headers.values]
@@ -47,3 +48,19 @@
   for = "/fonts/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# Edge function endpoints: no caching
+[[headers]]
+  for = "/donate"
+  [headers.values]
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/donate-qr"
+  [headers.values]
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/support-us"
+  [headers.values]
+    Cache-Control = "no-store"
