@@ -38,16 +38,16 @@
   [headers.values]
     Cache-Control = "public, max-age=300, stale-while-revalidate=86400"
 
-# Static assets that rarely change: long cache with immutable
+# Static assets: moderate cache to avoid stale artifacts
 [[headers]]
   for = "/images/*"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=3600, stale-while-revalidate=86400"
 
 [[headers]]
   for = "/fonts/*"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=3600, stale-while-revalidate=86400"
 
 # Edge function endpoints: no caching
 [[headers]]
