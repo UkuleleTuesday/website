@@ -238,8 +238,8 @@ def fix_forms(root_dir: str, add_netlify: bool, exclude_paths: tuple[str, ...]):
                     logger.info(f"✓ Added result div in {html_path.relative_to(root)}")
 
                 # Add script tag for whatsapp.js if it doesn't exist
-                if soup.body and not soup.body.find("script", src="/whatsapp.js"):
-                    script_tag = soup.new_tag("script", src="/whatsapp.js", defer=True)
+                if soup.body and not soup.body.find("script", src="/js/whatsapp.js"):
+                    script_tag = soup.new_tag("script", src="/js/whatsapp.js", defer=True)
                     soup.body.append(script_tag)
                     file_changed = True # Mark file as changed
                     logger.info(f"✓ Added whatsapp.js script to {html_path.relative_to(root)}")
