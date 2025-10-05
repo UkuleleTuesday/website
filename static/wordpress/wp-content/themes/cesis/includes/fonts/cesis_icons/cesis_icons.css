@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'tticons';
-  src:  url('/wp-content/themes/cesis/includes/fonts/cesis_icons/fonts/tticons.eot?7siik9');
-  src:  url('/wp-content/themes/cesis/includes/fonts/cesis_icons/fonts/tticons.eot?7siik9#iefix') format('embedded-opentype'),
-    url('/wp-content/themes/cesis/includes/fonts/cesis_icons/fonts/tticons.ttf?7siik9') format('truetype'),
-    url('/wp-content/themes/cesis/includes/fonts/cesis_icons/fonts/tticons.woff?7siik9') format('woff'),
-    url('/wp-content/themes/cesis/includes/fonts/cesis_icons/fonts/tticons.svg?7siik9#tticons') format('svg');
+  src:  url('/wordpress/wp-content/themes/cesis/includes/fonts/cesis_icons/fonts/tticons.eot?7siik9');
+  src:  url('/wordpress/wp-content/themes/cesis/includes/fonts/cesis_icons/fonts/tticons.eot?7siik9#iefix') format('embedded-opentype'),
+    url('/wordpress/wp-content/themes/cesis/includes/fonts/cesis_icons/fonts/tticons.ttf?7siik9') format('truetype'),
+    url('/wordpress/wp-content/themes/cesis/includes/fonts/cesis_icons/fonts/tticons.woff?7siik9') format('woff'),
+    url('/wordpress/wp-content/themes/cesis/includes/fonts/cesis_icons/fonts/tticons.svg?7siik9#tticons') format('svg');
   font-weight: normal;
   font-style: normal;
 }
