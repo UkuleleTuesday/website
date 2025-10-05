@@ -114,6 +114,24 @@ pnpm playwright test --project="chromium" tests/snapshots.spec.ts --grep="visual
 - **Partials:** `templates/_partials/` - Reusable template components
 - **Layouts:** `templates/_layouts/` - Base template layouts
 
+### Static Directory Structure
+The `static/` directory is organized as follows:
+- **`_redirects`** - Netlify redirects file (kept at root for compatibility)
+- **`assets/`** - Site assets
+  - `images/` - All images (flattened from WordPress date hierarchy)
+  - PDF files and other documents
+- **`css/`** - Stylesheets
+- **`js/`** - JavaScript files
+  - `jquery/` - jQuery library files
+  - `mixpanel.js` - Analytics module
+  - `whatsapp.js` - WhatsApp form handler
+  - `mobile-menu.js` - Mobile navigation
+- **`sitemaps/`** - SEO sitemap files
+  - `sitemap.xml`, `sitemap_index.xml`, `page-sitemap.xml`, `main-sitemap.xsl`
+- **`wordpress/`** - Legacy WordPress theme/plugin files
+  - `wp-admin/` - WordPress admin assets
+  - `wp-content/` - WordPress themes, plugins, and fonts
+
 ### Environment Variables
 - `ENABLE_ANALYTICS=true` - Enable Google Analytics (production only)
 - `BASE_URL=https://ukuleletuesday.ie` - Base URL for absolute paths in SEO data
@@ -149,6 +167,7 @@ This is an extremely fast static site:
 ## Legacy Notes
 
 This site originated from a WordPress export, which explains:
-- Large `wp-content/` directory with legacy assets
+- WordPress theme/plugin files in `static/wordpress/` directory
 - WordPress-style URL structure maintained for SEO
 - Asset checking script to identify unused legacy files
+- All WordPress assets moved under `wordpress/` subdirectory for better organization
