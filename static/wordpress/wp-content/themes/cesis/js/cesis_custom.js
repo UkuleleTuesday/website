@@ -12,7 +12,6 @@ jc.noConflict();
 
 jc(document).ready(function() {
     vc_rowBehaviour();
-    cesis_initVideoBackgrounds();
     cesis_row();
     cesis_owl_carousel();
     cesis_text_resize();
@@ -57,57 +56,6 @@ window.cesis_resize = function() {
             }, 500);
     });
   }
-}
-
-if ('function' !== typeof(window['cesis_initVideoBackgrounds'])) {
-
-window.cesis_initVideoBackgrounds = function() {
-    jc("[data-vc-vimeo-video-bg]").each(function() {
-        var vimeoUrl, vimeoId, $element = jc(this);
-        $element.data("vc-vimeo-video-bg") ? (vimeoUrl = $element.data("vc-vimeo-video-bg"), vimeoId = ttExtractVimeoId(vimeoUrl), vimeoId && ($element.find(".vc_video-bg").remove(), insertVimeoVideoAsBackground($element, vimeoId)), jc(window).on("grid:items:added", function(event, $grid) {
-            $element.has($grid).length && vcResizeVideoBackground($element)
-        })) : $element.find(".vc_video-bg").remove()
-    })
-    jc("[data-vc-sh-video-bg]").each(function() {
-        var $element = jc(this);
-        var videoUrl = $element.data("vc-sh-video-bg");
-         $element.find(".vc_video-bg").remove();
-         $element.prepend('<video playsinline class="cesis_sh_video_bg" preload="auto" autoplay="true" loop="loop" muted="muted" data-top-default="0" style="top: 0px;"><source src="'+videoUrl+'"></video>');
-    })
-
-  }
-}
-
-
-
-function insertVimeoVideoAsBackground($element, vimeoId, counter) {
-    if ("undefined" == typeof YT || void 0 === YT.Player) return 100 < (counter = void 0 === counter ? 0 : counter) ? void console.warn("Too many attempts to load Vimeo api") : void setTimeout(function() {
-        insertVimeoVideoAsBackground($element, vimeoId, counter++)
-    }, 100);
-    var $container = $element.prepend('<div class="vc_video-bg vc_hidden-xs"><div class="inner"><iframe frameborder="0" allow="autoplay" src="//player.vimeo.com/video/'+vimeoId+'?background=1&amp;api=1&amp;title=0&amp;byline=0&amp;portrait=0&amp;playbar=0&amp;loop=1&amp;autoplay=1"></iframe></div></div>').find(".inner");
-    vcResizeVideoBackground($element), jc(window).on('resize', function() {
-        vcResizeVideoBackground($element)
-    })
-}
-
-
-function vcResizeVideoBackground($element) {
-    var iframeW, iframeH, marginLeft, marginTop, containerW = $element.innerWidth(),
-        containerH = $element.innerHeight();
-    containerW / containerH < 16 / 9 ? (iframeW = containerH * (16 / 9), iframeH = containerH, marginLeft = -Math.round((iframeW - containerW) / 2) + "px", marginTop = -Math.round((iframeH - containerH) / 2) + "px", iframeW += "px", iframeH += "px") : (iframeW = containerW, iframeH = containerW * (9 / 16), marginTop = -Math.round((iframeH - containerH) / 2) + "px", marginLeft = -Math.round((iframeW - containerW) / 2) + "px", iframeW += "px", iframeH += "px"), $element.find(".vc_video-bg iframe").css({
-        maxWidth: "1000%",
-        marginLeft: marginLeft,
-        marginTop: marginTop,
-        width: iframeW,
-        height: iframeH
-    })
-}
-
-function ttExtractVimeoId(url) {
-    if (void 0 === url) return !1;
-    var id = url.match(/(https?:\/\/)?(www\.)?(player\.)?vimeo\.com\/([a-z]*\/)*([‌​0-9]{6,11})[?]?.*/);
-    return null !== id && id[5]
-
 }
 
 
@@ -1485,14 +1433,6 @@ window.vc_rowBehaviour = function() {
             }
         }, window.vcParallaxSkroll = skrollr.init(vcSkrollrOptions), window.vcParallaxSkroll)
     }
-    function vc_initVideoBackgrounds() {
-      jc("[data-vc-video-bg]").each(function() {
-            var youtubeUrl, youtubeId, $element = jc(this);
-            $element.data("vcVideoBg") ? (youtubeUrl = $element.data("vcVideoBg"), youtubeId = vcExtractYoutubeId(youtubeUrl), youtubeId && ($element.find(".vc_video-bg").remove(), insertYoutubeVideoAsBackground($element, youtubeId)), jc(window).on("grid:items:added", function(event, $grid) {
-                $element.has($grid).length && vcResizeVideoBackground($element)
-            })) : $element.find(".vc_video-bg").remove()
-        })
-    }
     function fullHeightRow() {
         var $element = jc(".vc_row-o-full-height:first");
         if ($element.length) {
@@ -1514,7 +1454,7 @@ window.vc_rowBehaviour = function() {
       var id = url.match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/);
       return null !== id && id[1]
     }
-    jc(window).off("resize.vcRowBehaviour").on("resize.vcRowBehaviour", fullWidthRow).on("resize.vcRowBehaviour", fullHeightRow), fullWidthRow(), fullHeightRow(), fixIeFlexbox(), vc_initVideoBackgrounds(), parallaxRow();
+    jc(window).off("resize.vcRowBehaviour").on("resize.vcRowBehaviour", fullWidthRow).on("resize.vcRowBehaviour", fullHeightRow), fullWidthRow(), fullHeightRow(), fixIeFlexbox(), parallaxRow();
 
 
 
