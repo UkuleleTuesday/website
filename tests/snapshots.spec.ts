@@ -37,7 +37,7 @@ async function setupPageForSnapshot(page: Page, templateFile: string): Promise<E
         await page.goto(templateFile, { waitUntil: 'networkidle', timeout: 20000 });
         await page.addStyleTag({
             content: `
-              iframe[src*="youtube.com"]::before, iframe[src*="youtu.be"]::before, iframe[src*="vimeo.com"]::before, .vc_video-bg::before {
+              iframe[src*="youtube.com"]::before, iframe[src*="youtu.be"]::before, .vc_video-bg::before {
                 content: 'Video Placeholder'; visibility: visible !important; position: absolute;
                 top: 0; left: 0; width: 100%; height: 100%; display: flex;
                 align-items: center; justify-content: center; background: #e0e0e0;
