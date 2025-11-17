@@ -32,6 +32,28 @@ This will generate the static HTML files in the `public/` directory.
 * Files in `./templates/` are processed as jinja2 templates before being copied to `public/`
 * Files in `./static/` are copied as is to `public/`
 
+### Configuration
+
+#### Promo Banner
+
+The site supports an optional promotional banner that appears at the very top of every page. This banner can be configured using the `PROMO_BANNER` environment variable during the build process.
+
+**To display a promo banner:**
+
+```bash
+PROMO_BANNER='&#127926; Event Name &mdash; Description &mdash; <a href="https://example.com" target="_blank" rel="noopener"><strong>Call to Action</strong></a>' uv run python build.py
+```
+
+**To hide the banner (default):**
+
+```bash
+uv run python build.py
+```
+
+The banner accepts HTML content and will be rendered with the `| safe` filter to allow formatting, links, and special characters. If the `PROMO_BANNER` variable is empty or not set, the banner element will not be rendered at all (no empty container).
+
+**Styling:** The banner uses the `.promo-bar` CSS class defined in `static/css/custom.css` with the site's maroon color scheme (#66023c).
+
 ### Automated Deployment
 
 The site is automatically built and deployed to Netlify on every push to the `main` branch. Preview environments are also created for every pull request.
