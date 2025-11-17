@@ -67,6 +67,14 @@ def build():
     base_url = os.environ.get('BASE_URL', 'https://ukuleletuesday.ie')
     print(f"Using base URL: {base_url}")
 
+    # Promo banner configuration
+    # Set PROMO_BANNER environment variable to display a promo banner
+    # If empty or not set, no banner will be displayed
+    promo_banner = os.environ.get('PROMO_BANNER', '')
+    if promo_banner:
+        print(f"Promo banner will be displayed.")
+    else:
+        print("No promo banner configured.")
 
     errors = []
     for template_file in template_files:
@@ -83,7 +91,8 @@ def build():
                 analytics_enabled=analytics_enabled,
                 base_url=base_url,
                 breadcrumbs=breadcrumbs,
-                page_url=page_url
+                page_url=page_url,
+                promo_banner=promo_banner
             )
 
             output_path = os.path.join(OUTPUT_DIR, template_file)
