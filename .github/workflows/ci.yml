@@ -36,6 +36,7 @@ jobs:
       - name: Build static site
         env:
           ENABLE_ANALYTICS: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
+          PROMO_BANNER: "📍 Venue change! Ukulele Tuesday will be hosted at <a href=\"https://maps.app.goo.gl/vV4XFrwFQu9H8ARx8\">The Ha'penny Bridge Inn</a> between 2nd-30th December. We'll be back at The Stag's Head in January."
         run: uv run build.py
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
