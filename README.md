@@ -98,8 +98,16 @@ Commit the updated snapshot files in the `tests/snapshots.spec.ts-snapshots/` di
 
 ### Running Locally
 
-To run the website locally, use the following command:
+First, build the site:
 
+```bash
+uv run poe build
 ```
-uv run python -m http.server -d public/
+
+Then, to serve the website locally, use the following command:
+
+```bash
+uv run poe serve
 ```
+
+The site will be available at `http://localhost:8000`.

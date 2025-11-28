@@ -12,11 +12,7 @@ dependencies = [
 build = "python build.py"
 serve = "python -m http.server --directory public"
 
-[tool.poe.tasks.watch]
-cmd = "watchmedo shell-command --recursive --command='poe build && poe serve' static/ templates/ --wait"
-
 [dependency-groups]
 dev = [
     "poethepoet>=0.38.0",
-    "watchdog>=4.0.1",
 ]
