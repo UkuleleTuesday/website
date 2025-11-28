@@ -11,3 +11,8 @@ dependencies = [
 [tool.uv.scripts]
 build = "python build.py"
 serve = "python -m http.server --directory public"
+
+[dependency-groups]
+dev = [
+    "poethepoet>=0.38.0",
+]
