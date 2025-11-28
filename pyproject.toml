@@ -12,7 +12,7 @@ dependencies = [
 build = "python build.py"
 serve = "python -m http.server --directory public"
 watch = { "cmd": "poe build", "watch": ["static", "templates"] }
-dev = { "parallel": ["serve", "watch"] }
+dev = { "sequence": ["build", { "parallel": ["serve", "watch"] }] }
 
 [dependency-groups]
 dev = [
