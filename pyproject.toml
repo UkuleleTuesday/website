@@ -11,8 +11,16 @@ dependencies = [
 [tool.poe.tasks]
 build = "python build.py"
 serve = "python -m http.server --directory public"
-watch = { "cmd": "poe build", "watch": ["static", "templates"] }
-dev = { "sequence": ["build", { "parallel": ["serve", "watch"] }] }
+
+[tool.poe.tasks.watch]
+cmd = "poe build"
+watch = ["static", "templates"]
+
+[tool.poe.tasks.dev]
+sequence = [
+    "build",
+    { "parallel" = ["serve", "watch"] }
+]
 
 [dependency-groups]
 dev = [
