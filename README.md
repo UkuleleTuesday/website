@@ -36,21 +36,15 @@ This will generate the static HTML files in the `public/` directory.
 
 #### Promo Banner
 
-The site supports an optional promotional banner that appears at the very top of every page. This banner can be configured using the `PROMO_BANNER` environment variable during the build process.
+The site supports an optional promotional banner that appears at the very top of every page. This banner's content is controlled by the file `templates/_partials/promo_banner.html`.
 
 **To display a promo banner:**
 
-```bash
-PROMO_BANNER='&#127926; Event Name &mdash; Description &mdash; <a href="https://example.com" target="_blank" rel="noopener"><strong>Call to Action</strong></a>' uv run python build.py
-```
+Edit `templates/_partials/promo_banner.html` and add your desired HTML content.
 
-**To hide the banner (default):**
+**To hide the banner:**
 
-```bash
-uv run python build.py
-```
-
-The banner accepts HTML content and will be rendered with the `| safe` filter to allow formatting, links, and special characters. If the `PROMO_BANNER` variable is empty or not set, the banner element will not be rendered at all (no empty container).
+Remove all content from `templates/_partials/promo_banner.html`, or comment it out.
 
 **Styling:** The banner uses the `.promo-bar` CSS class defined in `static/css/custom.css` with the site's maroon color scheme (#66023c).
 
