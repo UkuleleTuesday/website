@@ -110,7 +110,7 @@
       {% set promo_banner_content %}
         {% include "_partials/promo_banner.html" %}
       {% endset %}
-      {% if promo_banner_content.strip() %}
+      {% if promo_banner_content | striptags | trim %}
       <div class="promo-bar">{{ promo_banner_content | safe }}</div>
       {% endif %}
       {% include "_partials/header.html" %}
