@@ -107,12 +107,7 @@
   <body class="wp-singular page-template-default page page-id-247 wp-theme-cesis wp-child-theme-cesis_child_theme header_sticky cesis_menu_use_dda cesis_has_header no-touch cesis_parent_highlight cesis_lightbox_lg wpb-js-composer js-comp-ver-6.9.0 vc_responsive">
     <div id="wrap_all">
       {# Promo banner - content is sourced from _partials/promo_banner.html #}
-      {% set promo_banner_content %}
-        {% include "_partials/promo_banner.html" %}
-      {% endset %}
-      {% if promo_banner_content | striptags | trim %}
-      <div class="promo-bar">{{ promo_banner_content | safe }}</div>
-      {% endif %}
+      {% include "_partials/promo_banner.html" %}
       {% include "_partials/header.html" %}
       <div class="main-container" id="main-content">
         {% block content %}{% endblock %}
