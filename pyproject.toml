@@ -13,8 +13,7 @@ build = "python build.py"
 serve = "python -m http.server --directory public"
 
 [tool.poe.tasks.watch]
-cmd = "poe build"
-watch = ["static", "templates"]
+cmd = "watchmedo shell-command --recursive --command='poe build' static/ templates/"
 
 [tool.poe.tasks.dev]
 sequence = [
