@@ -8,7 +8,7 @@ dependencies = [
     "jinja2>=3.1.4",
 ]
 
-[tool.uv.scripts]
+[tool.poe.tasks]
 build = "python build.py"
 serve = "python -m http.server --directory public"
 
