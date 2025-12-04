@@ -1,3 +1,5 @@
 # Netlify Redirects
+# Redirect code-of-conduct to about page anchor (backwards-compatibility)
+/code-of-conduct/ /about/#code-of-conduct 301
 # Redirect donate page to Buy Me A Coffee (fallback for Edge Function)
 /donate https://buymeacoffee.com/ukuleletuesday?utm_source=screen&utm_medium=qr&utm_campaign=donate 302
