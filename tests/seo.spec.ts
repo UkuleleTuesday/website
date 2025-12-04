@@ -34,6 +34,7 @@ const baseUrl = process.env.BASE_URL || 'https://ukuleletuesday.ie';
 // This logic mirrors the `generate_breadcrumbs` function in `build.py`.
 const expectedBreadcrumbs = {
     'index.html': [{ name: 'Home', url: '/' }],
+    'about/index.html': [{ name: 'Home', url: '/' }, { name: 'About', url: '/about/' }],
     'code-of-conduct/index.html': [{ name: 'Home', url: '/' }, { name: 'Code Of Conduct', url: '/code-of-conduct/' }],
     'concerts/index.html': [{ name: 'Home', url: '/' }, { name: 'Concerts', url: '/concerts/' }],
     'contact-us/index.html': [{ name: 'Home', url: '/' }, { name: 'Contact Us', url: '/contact-us/' }],
