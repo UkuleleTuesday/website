@@ -150,7 +150,7 @@ The `static/` directory is organized as follows:
 
 The project uses GitHub Actions (`.github/workflows/ci.yml`) with these stages:
 1. **Build:** Runs `uv run build.py` and pre-commit hooks
-2. **Test:** Runs Playwright tests across multiple browsers
+2. **Test:** Runs Playwright tests across multiple browsers (PRs only)
 3. **Deploy Preview:** Creates Netlify preview for PRs
 4. **Deploy Production:** Deploys to production on main branch
 

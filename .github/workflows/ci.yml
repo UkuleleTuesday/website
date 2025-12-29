@@ -46,6 +46,7 @@ jobs:
   test:
     needs: build
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
     strategy:
       fail-fast: false
       matrix:
@@ -189,7 +190,7 @@ jobs:
             }
 
   deploy-production:
-    needs: test
+    needs: build
     runs-on: ubuntu-latest
     if: "github.ref == 'refs/heads/main' && github.event_name == 'push'"
     steps:
