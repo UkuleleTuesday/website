@@ -37,7 +37,7 @@ async function setupPageForSnapshot(page: Page, templateFile: string): Promise<E
         await page.goto(templateFile, { waitUntil: 'networkidle', timeout: 20000 });
         await page.addStyleTag({
             content: `
-              .snapshot-hide { visibility: hidden !important; }
+              #google-calendar-iframe { visibility: hidden !important; }
               iframe[src*="youtube.com"]::before, iframe[src*="youtu.be"]::before, .vc_video-bg::before {
                 content: 'Video Placeholder'; visibility: visible !important; position: absolute;
                 top: 0; left: 0; width: 100%; height: 100%; display: flex;
