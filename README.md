@@ -96,6 +96,10 @@ pnpm playwright test --update-snapshots
 
 Commit the updated snapshot files in the `tests/snapshots.spec.ts-snapshots/` directory along with your code changes.
 
+**Hiding Dynamic Content**
+
+To ensure stable snapshots, dynamic or non-deterministic content (like embedded calendars or videos) can be hidden during tests. Any styles to be applied only during snapshot tests should be added to `tests/utils/snapshot.css`. This stylesheet is automatically injected into every page when a snapshot is taken.
+
 ### Running Locally
 
 First, build the site:

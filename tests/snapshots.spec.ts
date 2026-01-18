@@ -35,17 +35,6 @@ test.beforeAll(async () => {
 async function setupPageForSnapshot(page: Page, templateFile: string): Promise<Error | null> {
     try {
         await page.goto(templateFile, { waitUntil: 'networkidle', timeout: 20000 });
-        await page.addStyleTag({
-            content: `
-              iframe[src*="youtube.com"]::before, iframe[src*="youtu.be"]::before, .vc_video-bg::before {
-                content: 'Video Placeholder'; visibility: visible !important; position: absolute;
-                top: 0; left: 0; width: 100%; height: 100%; display: flex;
-                align-items: center; justify-content: center; background: #e0e0e0;
-                color: #666; font-family: sans-serif; border: 2px dashed #999;
-                box-sizing: border-box;
-              }
-            `
-        });
         return null;
     } catch (e) {
         console.log(`Navigation issue on ${templateFile}: ${e}`);
@@ -69,7 +58,7 @@ test.describe('Visual Regression Tests', () => {
                 const sanitizedTemplateFile = templateFile.replace(/[<>:"/\\|?*]/g, '_').replace(/ /g, '_');
                 const baseName = sanitizedTemplateFile;
 
-                await expect(page).toHaveScreenshot(`${templateFile}.png`, { animations: 'disabled', fullPage: true, maxDiffPixelRatio: 0.05, timeout: 10000 });
+                await expect(page).toHaveScreenshot(`${templateFile}.png`, { animations: 'disabled', fullPage: true, maxDiffPixelRatio: 0.05, timeout: 10000, stylePath: path.join(__dirname, 'utils', 'snapshot.css') });
                 if (navigationError) {
                     console.log(`(Non-fatal) navigation error recorded for ${templateFile}:`, navigationError);
                 }
@@ -84,7 +73,8 @@ test.describe('Visual Regression Tests', () => {
                         animations: 'disabled',
                         fullPage: true,
                         maxDiffPixelRatio: 0.05,
-                        timeout: 10000
+                        timeout: 10000,
+                        stylePath: path.join(__dirname, 'utils', 'snapshot.css')
                     });
                 });
             });
