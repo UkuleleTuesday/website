@@ -35,18 +35,6 @@ test.beforeAll(async () => {
 async function setupPageForSnapshot(page: Page, templateFile: string): Promise<Error | null> {
     try {
         await page.goto(templateFile, { waitUntil: 'networkidle', timeout: 20000 });
-        await page.addStyleTag({
-            content: `
-              #google-calendar-iframe { visibility: hidden !important; }
-              iframe[src*="youtube.com"]::before, iframe[src*="youtu.be"]::before, .vc_video-bg::before {
-                content: 'Video Placeholder'; visibility: visible !important; position: absolute;
-                top: 0; left: 0; width: 100%; height: 100%; display: flex;
-                align-items: center; justify-content: center; background: #e0e0e0;
-                color: #666; font-family: sans-serif; border: 2px dashed #999;
-                box-sizing: border-box;
-              }
-            `
-        });
         return null;
     } catch (e) {
         console.log(`Navigation issue on ${templateFile}: ${e}`);
