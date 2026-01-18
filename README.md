@@ -48,6 +48,12 @@ Remove all content from `templates/_partials/promo_banner.html`, or comment it o
 
 **Styling:** The banner uses the `.promo-bar` CSS class defined in `static/css/custom.css` with the site's maroon color scheme (#66023c).
 
+#### Events Calendar
+
+The homepage features an embedded Google Calendar to display upcoming events like our regular Tuesday jam sessions, concerts, and festival appearances.
+
+To add or edit events, Executive Committee members have been granted edit access to the "Ukulele Tuesday Public Events" Google Calendar. When adding events, please adhere to the established color-coding, which is displayed in a legend on the [homepage](https://www.ukuleletuesday.ie/).
+
 ### Automated Deployment
 
 The site is automatically built and deployed to Netlify on every push to the `main` branch. Preview environments are also created for every pull request.
