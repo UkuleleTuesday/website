@@ -70,7 +70,7 @@ test.describe('Visual Regression Tests', () => {
                 const sanitizedTemplateFile = templateFile.replace(/[<>:"/\\|?*]/g, '_').replace(/ /g, '_');
                 const baseName = sanitizedTemplateFile;
 
-                await expect(page).toHaveScreenshot(`${templateFile}.png`, { animations: 'disabled', fullPage: true, maxDiffPixelRatio: 0.05, timeout: 10000 });
+                await expect(page).toHaveScreenshot(`${templateFile}.png`, { animations: 'disabled', fullPage: true, maxDiffPixelRatio: 0.05, timeout: 10000, stylePath: path.join(__dirname, 'utils', 'hide-elements.css') });
                 if (navigationError) {
                     console.log(`(Non-fatal) navigation error recorded for ${templateFile}:`, navigationError);
                 }
@@ -85,7 +85,8 @@ test.describe('Visual Regression Tests', () => {
                         animations: 'disabled',
                         fullPage: true,
                         maxDiffPixelRatio: 0.05,
-                        timeout: 10000
+                        timeout: 10000,
+                        stylePath: path.join(__dirname, 'utils', 'hide-elements.css')
                     });
                 });
             });
