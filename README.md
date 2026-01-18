@@ -52,9 +52,7 @@ Remove all content from `templates/_partials/promo_banner.html`, or comment it o
 
 The homepage features an embedded Google Calendar to display upcoming events like our regular Tuesday jam sessions, concerts, and festival appearances.
 
-To add or edit events, Executive Committee members have been granted edit access to the "Ukulele Tuesday Public Events" Google Calendar. When adding events, please adhere to the established color-coding:
-- **Jam Sessions**: Green (`#0b8043`)
-- **Concerts**: Yellow (`#f6bf26`)
+To add or edit events, Executive Committee members have been granted edit access to the "Ukulele Tuesday Public Events" Google Calendar. When adding events, please adhere to the established color-coding, which is displayed in a legend on the [homepage](https://www.ukuleletuesday.ie/).
 
 ### Automated Deployment
 
