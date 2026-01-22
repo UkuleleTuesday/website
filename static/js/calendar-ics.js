@@ -9,7 +9,7 @@ const CALENDAR_API_URL = '/.netlify/functions/calendar-ics';
 /**
  * Format date for display
  */
-function formatEventDate(startDateTime, endDateTime, isAllDay) {
+function formatEventDate(startDateTime, isAllDay) {
   if (!startDateTime) return '';
   
   const start = new Date(startDateTime);
@@ -70,10 +70,9 @@ function renderEvents(events, containerId) {
   const eventsHTML = events.map(event => {
     // Google Calendar API returns start.dateTime for timed events or start.date for all-day events
     const startDateTime = event.start.dateTime || event.start.date;
-    const endDateTime = event.end.dateTime || event.end.date;
     const isAllDay = !event.start.dateTime; // If no dateTime, it's an all-day event
     
-    const dateStr = formatEventDate(startDateTime, endDateTime, isAllDay);
+    const dateStr = formatEventDate(startDateTime, isAllDay);
     const location = event.location ? `<div class="event-location">📍 ${escapeHtml(event.location)}</div>` : '';
     
     return `
