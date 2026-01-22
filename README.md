@@ -52,7 +52,8 @@ Remove all content from `templates/_partials/promo_banner.html`, or comment it o
 
 The homepage features an embedded Google Calendar to display upcoming events like our regular Tuesday jam sessions, concerts, and festival appearances.
 
-To add or edit events, Executive Committee members have been granted edit access to the "Ukulele Tuesday Public Events" Google Calendar. When adding events, please adhere to the established color-coding, which is displayed in a legend on the [homepage](https://www.ukuleletuesday.ie/).
+To add or edit events, Executive Committee members have been granted edit access to the "Ukulele Tuesday Public Events" Google Calendar. Event colour-coding is not supported, since it is visible only to those logged into
+the Ukulele Tuesday Google account (see https://github.com/UkuleleTuesday/website/issues/107).
 
 ### Automated Deployment
 
@@ -98,6 +99,19 @@ If you make intentional changes to the UI, you will need to update the baseline 
 
 ```bash
 pnpm playwright test --update-snapshots
+```
+
+If running under Windows, you should instead run:
+
+```
+powershell -ExecutionPolicy Bypass -File .\update-snapshots.ps1
+```
+
+And if running under a Linux distribution which has trouble with WebKit (e.g. KDE), use:
+
+```
+chmod +x update-snapshots.sh
+./update-snapshots.sh
 ```
 
 Commit the updated snapshot files in the `tests/snapshots.spec.ts-snapshots/` directory along with your code changes.
