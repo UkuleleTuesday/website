@@ -1,51 +1,18 @@
 /**
- * Calendar ICS Parser
- * Fetches and parses Google Calendar ICS feed to display upcoming events
+ * Google Calendar API Client
+ * Fetches and displays upcoming events from Google Calendar
  */
 
-// Use Netlify function to proxy the ICS data (avoids CORS issues)
-const CALENDAR_ICS_URL = '/.netlify/functions/calendar-ics';
-const MAX_EVENTS = 20;
-
-/**
- * Parse ICS format date string to JavaScript Date
- * Handles both UTC (YYYYMMDDTHHMMSSZ) and local (YYYYMMDDTHHMMSS) formats
- */
-function parseICSDate(dateString) {
-  if (!dateString) return null;
-  
-  // Remove TZID info if present
-  dateString = dateString.split(':').pop();
-  
-  // Handle all-day events (just date, no time)
-  if (dateString.length === 8) {
-    const year = parseInt(dateString.substring(0, 4), 10);
-    const month = parseInt(dateString.substring(4, 6), 10) - 1;
-    const day = parseInt(dateString.substring(6, 8), 10);
-    return new Date(year, month, day);
-  }
-  
-  // Handle date-time events
-  const year = parseInt(dateString.substring(0, 4), 10);
-  const month = parseInt(dateString.substring(4, 6), 10) - 1;
-  const day = parseInt(dateString.substring(6, 8), 10);
-  const hour = parseInt(dateString.substring(9, 11), 10);
-  const minute = parseInt(dateString.substring(11, 13), 10);
-  const second = parseInt(dateString.substring(13, 15), 10);
-  
-  // Check if it's UTC (ends with Z)
-  if (dateString.endsWith('Z')) {
-    return new Date(Date.UTC(year, month, day, hour, minute, second));
-  } else {
-    return new Date(year, month, day, hour, minute, second);
-  }
-}
+// Use Netlify function to fetch calendar data (handles API key)
+const CALENDAR_API_URL = '/.netlify/functions/calendar-ics';
 
 /**
  * Format date for display
  */
-function formatEventDate(date, isAllDay) {
-  if (!date) return '';
+function formatEventDate(startDateTime, endDateTime, isAllDay) {
+  if (!startDateTime) return '';
+  
+  const start = new Date(startDateTime);
   
   const options = {
     weekday: 'short',
@@ -54,7 +21,7 @@ function formatEventDate(date, isAllDay) {
     day: 'numeric'
   };
   
-  let formatted = date.toLocaleDateString('en-IE', options);
+  let formatted = start.toLocaleDateString('en-IE', options);
   
   if (!isAllDay) {
     const timeOptions = {
@@ -62,94 +29,23 @@ function formatEventDate(date, isAllDay) {
       minute: '2-digit',
       hour12: false
     };
-    formatted += ' at ' + date.toLocaleTimeString('en-IE', timeOptions);
+    formatted += ' at ' + start.toLocaleTimeString('en-IE', timeOptions);
   }
   
   return formatted;
 }
 
 /**
- * Unescape ICS text values
- */
-function unescapeICSText(text) {
-  return text.replace(/\\n/g, '\n').replace(/\\,/g, ',').replace(/\\\\/g, '\\');
-}
-
-/**
- * Parse ICS content into event objects
- */
-function parseICS(icsContent) {
-  const events = [];
-  const lines = icsContent.split(/\r?\n/);
-  let currentEvent = null;
-  const now = new Date(); // Create once and reuse
-  
-  for (let i = 0; i < lines.length; i++) {
-    let line = lines[i].trim();
-    
-    // Handle line continuations (lines starting with space or tab)
-    while (i + 1 < lines.length && /^[\s\t]/.test(lines[i + 1])) {
-      i++;
-      line += lines[i].trim();
-    }
-    
-    if (line === 'BEGIN:VEVENT') {
-      currentEvent = {
-        summary: '',
-        description: '',
-        location: '',
-        start: null,
-        end: null,
-        isAllDay: false
-      };
-    } else if (line === 'END:VEVENT' && currentEvent) {
-      // Only add future events
-      if (currentEvent.start && currentEvent.start > now) {
-        events.push(currentEvent);
-      }
-      currentEvent = null;
-    } else if (currentEvent) {
-      const colonIndex = line.indexOf(':');
-      if (colonIndex === -1) continue;
-      
-      const fullProperty = line.substring(0, colonIndex);
-      const value = line.substring(colonIndex + 1);
-      
-      // Extract property name (before any semicolon for parameters)
-      const property = fullProperty.split(';')[0];
-      
-      if (property === 'SUMMARY') {
-        currentEvent.summary = unescapeICSText(value.replace(/\\n/g, ' '));
-      } else if (property === 'DESCRIPTION') {
-        currentEvent.description = unescapeICSText(value);
-      } else if (property === 'LOCATION') {
-        currentEvent.location = unescapeICSText(value.replace(/\\n/g, ' '));
-      } else if (property === 'DTSTART') {
-        currentEvent.start = parseICSDate(value);
-        // Check if it's an all-day event (VALUE=DATE parameter)
-        if (fullProperty.includes('VALUE=DATE')) {
-          currentEvent.isAllDay = true;
-        }
-      } else if (property === 'DTEND') {
-        currentEvent.end = parseICSDate(value);
-      }
-    }
-  }
-  
-  return events;
-}
-
-/**
- * Fetch and parse the calendar ICS file
+ * Fetch calendar events from Google Calendar API
  */
 async function fetchCalendarEvents() {
   try {
-    const response = await fetch(CALENDAR_ICS_URL);
+    const response = await fetch(CALENDAR_API_URL);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const icsContent = await response.text();
-    return parseICS(icsContent);
+    const data = await response.json();
+    return data.items || [];
   } catch (error) {
     console.error('Error fetching calendar:', error);
     throw error;
@@ -171,20 +67,19 @@ function renderEvents(events, containerId) {
     return;
   }
   
-  // Sort events by date
-  events.sort((a, b) => a.start - b.start);
-  
-  // Take only the next MAX_EVENTS
-  const upcomingEvents = events.slice(0, MAX_EVENTS);
-  
-  const eventsHTML = upcomingEvents.map(event => {
-    const dateStr = formatEventDate(event.start, event.isAllDay);
+  const eventsHTML = events.map(event => {
+    // Google Calendar API returns start.dateTime for timed events or start.date for all-day events
+    const startDateTime = event.start.dateTime || event.start.date;
+    const endDateTime = event.end.dateTime || event.end.date;
+    const isAllDay = !event.start.dateTime; // If no dateTime, it's an all-day event
+    
+    const dateStr = formatEventDate(startDateTime, endDateTime, isAllDay);
     const location = event.location ? `<div class="event-location">📍 ${escapeHtml(event.location)}</div>` : '';
     
     return `
       <div class="calendar-event">
         <div class="event-date">${dateStr}</div>
-        <div class="event-title">${escapeHtml(event.summary)}</div>
+        <div class="event-title">${escapeHtml(event.summary || 'Untitled Event')}</div>
         ${location}
       </div>
     `;

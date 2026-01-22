@@ -1,6 +1,6 @@
 /**
- * Netlify Function to fetch Google Calendar ICS data
- * This acts as a proxy to avoid CORS issues when fetching from the browser
+ * Netlify Function to fetch Google Calendar events using the Calendar API
+ * This uses the API key from environment variables
  */
 exports.handler = async (event) => {
   // Only allow GET requests
@@ -15,24 +15,52 @@ exports.handler = async (event) => {
     };
   }
 
-  const CALENDAR_ICS_URL = 'https://calendar.google.com/calendar/ical/3a583720ada6b96add65d4dc75539408da8d79876140c012f4eb81b8b7fd1bb1%40group.calendar.google.com/public/basic.ics';
+  const { GOOGLE_CALENDAR_API_KEY } = process.env;
+  
+  if (!GOOGLE_CALENDAR_API_KEY) {
+    console.error('GOOGLE_CALENDAR_API_KEY environment variable is not set.');
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: 'Server configuration error: API key not available.' }),
+      headers: { 
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
+    };
+  }
+
+  const CALENDAR_ID = '3a583720ada6b96add65d4dc75539408da8d79876140c012f4eb81b8b7fd1bb1@group.calendar.google.com';
+  const MAX_RESULTS = 20;
+  
+  // Get current time in RFC3339 format
+  const timeMin = new Date().toISOString();
+  
+  // Build Google Calendar API URL
+  const apiUrl = new URL('https://www.googleapis.com/calendar/v3/calendars/' + encodeURIComponent(CALENDAR_ID) + '/events');
+  apiUrl.searchParams.set('key', GOOGLE_CALENDAR_API_KEY);
+  apiUrl.searchParams.set('timeMin', timeMin);
+  apiUrl.searchParams.set('maxResults', MAX_RESULTS.toString());
+  apiUrl.searchParams.set('singleEvents', 'true');
+  apiUrl.searchParams.set('orderBy', 'startTime');
 
   try {
-    // Fetch the ICS data from Google Calendar
-    const response = await fetch(CALENDAR_ICS_URL);
+    // Fetch events from Google Calendar API
+    const response = await fetch(apiUrl.toString());
     
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Google Calendar API error:', response.status, errorText);
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
-    const icsData = await response.text();
+    const data = await response.json();
     
-    // Return the ICS data with proper CORS headers
+    // Return the events data with proper CORS headers
     return {
       statusCode: 200,
-      body: icsData,
+      body: JSON.stringify(data),
       headers: {
-        'Content-Type': 'text/calendar; charset=utf-8',
+        'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
         'Cache-Control': 'public, max-age=300' // Cache for 5 minutes
       }
