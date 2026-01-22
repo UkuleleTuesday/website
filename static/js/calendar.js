@@ -4,7 +4,7 @@
  */
 
 // Use Netlify function to fetch calendar data (handles API key)
-const CALENDAR_API_URL = '/.netlify/functions/calendar-ics';
+const CALENDAR_API_URL = '/.netlify/functions/calendar';
 
 /**
  * Determine event type based on description
@@ -62,7 +62,16 @@ async function fetchCalendarEvents() {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    return data.items || [];
+    const events = data.items || [];
+    
+    // Sort events by start time (client-side sorting since we can't use orderBy=startTime without singleEvents=true)
+    events.sort((a, b) => {
+      const aStart = a.start.dateTime || a.start.date;
+      const bStart = b.start.dateTime || b.start.date;
+      return new Date(aStart) - new Date(bStart);
+    });
+    
+    return events;
   } catch (error) {
     console.error('Error fetching calendar:', error);
     throw error;
