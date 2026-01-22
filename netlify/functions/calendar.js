@@ -30,7 +30,7 @@ exports.handler = async (event) => {
   }
 
   const CALENDAR_ID = '3a583720ada6b96add65d4dc75539408da8d79876140c012f4eb81b8b7fd1bb1@group.calendar.google.com';
-  const MAX_RESULTS = 20;
+  const MAX_RESULTS = 200;
   
   // Get current time in RFC3339 format
   const timeMin = new Date().toISOString();
@@ -39,6 +39,8 @@ exports.handler = async (event) => {
   const apiUrl = new URL('https://www.googleapis.com/calendar/v3/calendars/' + encodeURIComponent(CALENDAR_ID) + '/events');
   apiUrl.searchParams.set('key', GOOGLE_CALENDAR_API_KEY);
   apiUrl.searchParams.set('timeMin', timeMin);
+  apiUrl.searchParams.set('singleEvents', true);
+  apiUrl.searchParams.set('orderBy', "startTime");
   apiUrl.searchParams.set('maxResults', MAX_RESULTS.toString());
 
   try {
