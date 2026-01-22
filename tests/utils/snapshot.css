@@ -1,4 +1,5 @@
-#google-calendar-iframe {
+#google-calendar-iframe,
+#upcoming-events-list {
   visibility: hidden !important;
 }
 

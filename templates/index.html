@@ -214,13 +214,7 @@
                 data-min_size="18"
                 id="upcoming-events">Upcoming Events</h2>
             <p>See what’s coming up — Tuesday jams, gigs, and festival shows.</p>
-            <iframe src="https://calendar.google.com/calendar/embed?src=3a583720ada6b96add65d4dc75539408da8d79876140c012f4eb81b8b7fd1bb1%40group.calendar.google.com&ctz=Europe%2FDublin&mode=AGENDA"
-                    style="border: 0"
-                    width="100%"
-                    height="600"
-                    frameborder="0"
-                    scrolling="no"
-                    id="google-calendar-iframe"></iframe>
+            <div id="upcoming-events-list"></div>
           </div>
           <!-- .entry-content -->
           <footer class="entry-footer">
@@ -232,4 +226,4 @@
     <!-- .container -->
   </main>
 {% endblock %}
-{% block extra_scripts %}{% endblock %}
+{% block extra_scripts %}<script src="/js/calendar-ics.js"></script>{% endblock %}

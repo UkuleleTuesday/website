@@ -259,3 +259,76 @@
   color: #efa537;
   text-decoration: none;
 }
+
+/* Calendar Events */
+#upcoming-events-list {
+  margin-top: 20px;
+}
+
+.calendar-event {
+  background-color: #f9f9f9;
+  border-left: 4px solid #1db1ad;
+  padding: 15px 20px;
+  margin-bottom: 12px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.calendar-event:hover {
+  background-color: #f0f0f0;
+  border-left-color: #66023c;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.event-date {
+  color: #66023c;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 6px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.event-title {
+  color: #333;
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.event-location {
+  color: #666;
+  font-size: 14px;
+  margin-top: 6px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.loading-events,
+.error-events,
+.no-events {
+  text-align: center;
+  padding: 30px;
+  color: #666;
+  font-style: italic;
+  font-family: 'Poppins', sans-serif;
+}
+
+.error-events {
+  color: #d32f2f;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .calendar-event {
+    padding: 12px 15px;
+  }
+  
+  .event-title {
+    font-size: 16px;
+  }
+  
+  .event-date,
+  .event-location {
+    font-size: 13px;
+  }
+}
