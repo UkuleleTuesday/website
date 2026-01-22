@@ -30,7 +30,7 @@ exports.handler = async (event) => {
   }
 
   const CALENDAR_ID = '3a583720ada6b96add65d4dc75539408da8d79876140c012f4eb81b8b7fd1bb1@group.calendar.google.com';
-  const MAX_RESULTS = 200;
+  const MAX_RESULTS = 20;
   
   // Get current time in RFC3339 format
   const timeMin = new Date().toISOString();
@@ -62,7 +62,7 @@ exports.handler = async (event) => {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
-        'Cache-Control': 'public, max-age=300' // Cache for 5 minutes
+        'Cache-Control': 'public, max-age=120' // Cache for 2 minutes
       }
     };
   } catch (error) {
