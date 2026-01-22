@@ -14,8 +14,8 @@ function getEventType(event) {
   const summary = (event.summary || '').toLowerCase();
   const text = description + ' ' + summary;
   
-  // Check for jam session keywords
-  if (text.match(/play-along|jam|session/i)) {
+  // Check for jam session keywords (hacky :-))
+  if (text.match(/play-along|jam/i)) {
     return 'jam-session';
   }
   
