@@ -62,7 +62,14 @@ async function fetchCalendarEvents() {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    const events = data.items || [];
+    let events = data.items || [];
+    
+    // Filter to only include future events (past current date and time)
+    const now = new Date();
+    events = events.filter(event => {
+      const eventStart = new Date(event.start.dateTime || event.start.date);
+      return eventStart > now;
+    });
     
     // Sort events by start time (client-side sorting since we can't use orderBy=startTime without singleEvents=true)
     events.sort((a, b) => {
