@@ -265,18 +265,53 @@
   margin-top: 20px;
 }
 
+.calendar-legend {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 15px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-color {
+  width: 20px;
+  height: 4px;
+  border-radius: 2px;
+}
+
+.legend-color.jam-session {
+  background-color: #efa537;
+}
+
+.legend-color.concert {
+  background-color: #1db1ad;
+}
+
 .calendar-event {
   background-color: #f9f9f9;
   border-left: 4px solid #1db1ad;
   padding: 15px 20px;
   margin-bottom: 12px;
   border-radius: 4px;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.calendar-event.jam-session {
+  border-left-color: #efa537;
+}
+
+.calendar-event.concert {
+  border-left-color: #1db1ad;
 }
 
 .calendar-event:hover {
   background-color: #f0f0f0;
-  border-left-color: #66023c;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 

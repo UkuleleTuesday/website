@@ -7,6 +7,23 @@
 const CALENDAR_API_URL = '/.netlify/functions/calendar-ics';
 
 /**
+ * Determine event type based on description
+ */
+function getEventType(event) {
+  const description = (event.description || '').toLowerCase();
+  const summary = (event.summary || '').toLowerCase();
+  const text = description + ' ' + summary;
+  
+  // Check for jam session keywords
+  if (text.match(/play-along|jam|session/i)) {
+    return 'jam-session';
+  }
+  
+  // Default to concert
+  return 'concert';
+}
+
+/**
  * Format date for display
  */
 function formatEventDate(startDateTime, isAllDay) {
@@ -71,12 +88,13 @@ function renderEvents(events, containerId) {
     // Google Calendar API returns start.dateTime for timed events or start.date for all-day events
     const startDateTime = event.start.dateTime || event.start.date;
     const isAllDay = !event.start.dateTime; // If no dateTime, it's an all-day event
+    const eventType = getEventType(event);
     
     const dateStr = formatEventDate(startDateTime, isAllDay);
     const location = event.location ? `<div class="event-location">📍 ${escapeHtml(event.location)}</div>` : '';
     
     return `
-      <div class="calendar-event">
+      <div class="calendar-event ${eventType}">
         <div class="event-date">${dateStr}</div>
         <div class="event-title">${escapeHtml(event.summary || 'Untitled Event')}</div>
         ${location}
