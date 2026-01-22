@@ -40,7 +40,6 @@ exports.handler = async (event) => {
   apiUrl.searchParams.set('key', GOOGLE_CALENDAR_API_KEY);
   apiUrl.searchParams.set('timeMin', timeMin);
   apiUrl.searchParams.set('maxResults', MAX_RESULTS.toString());
-  apiUrl.searchParams.set('orderBy', 'startTime');
 
   try {
     // Fetch events from Google Calendar API
