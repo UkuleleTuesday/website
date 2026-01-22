@@ -19,19 +19,19 @@ function parseICSDate(dateString) {
   
   // Handle all-day events (just date, no time)
   if (dateString.length === 8) {
-    const year = parseInt(dateString.substring(0, 4));
-    const month = parseInt(dateString.substring(4, 6)) - 1;
-    const day = parseInt(dateString.substring(6, 8));
+    const year = parseInt(dateString.substring(0, 4), 10);
+    const month = parseInt(dateString.substring(4, 6), 10) - 1;
+    const day = parseInt(dateString.substring(6, 8), 10);
     return new Date(year, month, day);
   }
   
   // Handle date-time events
-  const year = parseInt(dateString.substring(0, 4));
-  const month = parseInt(dateString.substring(4, 6)) - 1;
-  const day = parseInt(dateString.substring(6, 8));
-  const hour = parseInt(dateString.substring(9, 11));
-  const minute = parseInt(dateString.substring(11, 13));
-  const second = parseInt(dateString.substring(13, 15));
+  const year = parseInt(dateString.substring(0, 4), 10);
+  const month = parseInt(dateString.substring(4, 6), 10) - 1;
+  const day = parseInt(dateString.substring(6, 8), 10);
+  const hour = parseInt(dateString.substring(9, 11), 10);
+  const minute = parseInt(dateString.substring(11, 13), 10);
+  const second = parseInt(dateString.substring(13, 15), 10);
   
   // Check if it's UTC (ends with Z)
   if (dateString.endsWith('Z')) {
@@ -69,19 +69,26 @@ function formatEventDate(date, isAllDay) {
 }
 
 /**
+ * Unescape ICS text values
+ */
+function unescapeICSText(text) {
+  return text.replace(/\\n/g, '\n').replace(/\\,/g, ',').replace(/\\\\/g, '\\');
+}
+
+/**
  * Parse ICS content into event objects
  */
 function parseICS(icsContent) {
   const events = [];
   const lines = icsContent.split(/\r?\n/);
   let currentEvent = null;
-  let currentProperty = null;
+  const now = new Date(); // Create once and reuse
   
   for (let i = 0; i < lines.length; i++) {
     let line = lines[i].trim();
     
     // Handle line continuations (lines starting with space or tab)
-    while (i + 1 < lines.length && /^[ \t]/.test(lines[i + 1])) {
+    while (i + 1 < lines.length && /^[\s\t]/.test(lines[i + 1])) {
       i++;
       line += lines[i].trim();
     }
@@ -97,7 +104,7 @@ function parseICS(icsContent) {
       };
     } else if (line === 'END:VEVENT' && currentEvent) {
       // Only add future events
-      if (currentEvent.start && currentEvent.start > new Date()) {
+      if (currentEvent.start && currentEvent.start > now) {
         events.push(currentEvent);
       }
       currentEvent = null;
@@ -112,11 +119,11 @@ function parseICS(icsContent) {
       const property = fullProperty.split(';')[0];
       
       if (property === 'SUMMARY') {
-        currentEvent.summary = value.replace(/\\n/g, ' ').replace(/\\,/g, ',').replace(/\\\\/g, '\\');
+        currentEvent.summary = unescapeICSText(value.replace(/\\n/g, ' '));
       } else if (property === 'DESCRIPTION') {
-        currentEvent.description = value.replace(/\\n/g, '\n').replace(/\\,/g, ',').replace(/\\\\/g, '\\');
+        currentEvent.description = unescapeICSText(value);
       } else if (property === 'LOCATION') {
-        currentEvent.location = value.replace(/\\n/g, ' ').replace(/\\,/g, ',').replace(/\\\\/g, '\\');
+        currentEvent.location = unescapeICSText(value.replace(/\\n/g, ' '));
       } else if (property === 'DTSTART') {
         currentEvent.start = parseICSDate(value);
         // Check if it's an all-day event (VALUE=DATE parameter)
