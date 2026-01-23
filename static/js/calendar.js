@@ -30,7 +30,7 @@ function getEventType(event) {
   }
   
   // Fallback: check for jam session keywords
-  if (text.match(/play-along|jam|session/i)) {
+  if (text.match(/play-along|jam/i)) {
     return 'jam-session';
   }
   
