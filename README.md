@@ -65,7 +65,7 @@ Events are automatically color-coded by type using hashtags in the event descrip
 - **#jam** → Jam Session (orange border)
 - **#concert** → Concert (teal border)
 
-For backwards compatibility, events without hashtags are classified using keywords ("play-along", "jam", "session" → Jam Session; otherwise → Concert).
+For backwards compatibility, events without hashtags are classified by detecting some basic keywords ("play-along", "jam", → Jam Session; otherwise → Concert) but it's very easy to trip this up, we don't recommend relying on this approach.
 
 To reliably classify an event, add the appropriate hashtag to the event description when creating or editing events in Google Calendar.
 
