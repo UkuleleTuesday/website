@@ -118,6 +118,8 @@ jobs:
         run: |
           netlify env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context deploy-preview --secret
           netlify env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context "branch:${{ github.head_ref }}" --secret
+          netlify env:set GOOGLE_CALENDAR_API_KEY "${{ secrets.GOOGLE_CALENDAR_API_KEY }}" --context deploy-preview --secret
+          netlify env:set GOOGLE_CALENDAR_API_KEY "${{ secrets.GOOGLE_CALENDAR_API_KEY }}" --context "branch:${{ github.head_ref }}" --secret
           netlify env:set BMC_URL "https://buymeacoffee.com/ukuleletuesday" --context deploy-preview
           netlify env:set BMC_URL "https://buymeacoffee.com/ukuleletuesday" --context "branch:${{ github.head_ref }}"
           netlify env:set BMC_DEFAULT_UTMS "utm_source=screen&utm_medium=qr&utm_campaign=donate" --context deploy-preview
@@ -220,6 +222,7 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         run: |
           netlify env:set WHATSAPP_JOIN_LINK "${{ secrets.WHATSAPP_JOIN_LINK }}" --context production --secret
+          netlify env:set GOOGLE_CALENDAR_API_KEY "${{ secrets.GOOGLE_CALENDAR_API_KEY }}" --context production --secret
           netlify env:set BMC_URL "https://buymeacoffee.com/ukuleletuesday" --context production
           netlify env:set BMC_DEFAULT_UTMS "utm_source=screen&utm_medium=qr&utm_campaign=donate" --context production
       - name: Set Netlify deployment arguments

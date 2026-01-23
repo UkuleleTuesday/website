@@ -50,7 +50,24 @@ Remove all content from `templates/_partials/promo_banner.html`, or comment it o
 
 #### Events Calendar
 
-The homepage features an embedded Google Calendar to display upcoming events like our regular Tuesday jam sessions, concerts, and festival appearances.
+The homepage features a dynamic calendar that displays upcoming events like our regular Tuesday jam sessions, concerts, and festival appearances. Events are fetched from the "Ukulele Tuesday Public Events" Google Calendar using the Google Calendar API.
+
+To add or edit events, Executive Committee members have been granted edit access to the "Ukulele Tuesday Public Events" Google Calendar. Events are automatically displayed on the homepage once added to the calendar.
+
+**Technical details:**
+- The calendar data is fetched via a Netlify function (`netlify/functions/calendar.js`) which uses the Google Calendar API with an API key stored in environment variables
+- The JavaScript client (`static/js/calendar.js`) renders the next 20 upcoming events returned by the API
+- The calendar automatically updates as new events are added to the Google Calendar (with a 5-minute cache)
+- The `GOOGLE_CALENDAR_API_KEY` environment variable must be set in Netlify (or GitHub repository secrets) for the calendar to work
+
+**Event Classification:**
+Events are automatically color-coded by type using hashtags in the event description:
+- **#jam** → Jam Session (orange border)
+- **#concert** → Concert (teal border)
+
+For backwards compatibility, events without hashtags are classified by detecting some basic keywords ("play-along", "jam", → Jam Session; otherwise → Concert) but it's very easy to trip this up, we don't recommend relying on this approach.
+
+To reliably classify an event, add the appropriate hashtag to the event description when creating or editing events in Google Calendar.
 
 To add or edit events, Executive Committee members have been granted edit access to the "Ukulele Tuesday Public Events" Google Calendar. Event colour-coding is not supported, since it is visible only to those logged into
 the Ukulele Tuesday Google account (see https://github.com/UkuleleTuesday/website/issues/107).
