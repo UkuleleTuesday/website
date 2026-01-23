@@ -12,7 +12,7 @@ const CALENDAR_API_URL = '/.netlify/functions/calendar';
  * Classification rules:
  * - #jam in description/summary → jam-session
  * - #concert in description/summary → concert
- * - Fallback: check for keywords "play-along", "jam", "session" → jam-session
+ * - Fallback: check for keywords "play-along", "jam" → jam-session
  * - Default: concert
  */
 function getEventType(event) {
