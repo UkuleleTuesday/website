@@ -60,6 +60,15 @@ To add or edit events, Executive Committee members have been granted edit access
 - The calendar automatically updates as new events are added to the Google Calendar (with a 5-minute cache)
 - The `GOOGLE_CALENDAR_API_KEY` environment variable must be set in Netlify (or GitHub repository secrets) for the calendar to work
 
+**Event Classification:**
+Events are automatically color-coded by type using hashtags in the event description:
+- **#jam** → Jam Session (orange border)
+- **#concert** → Concert (teal border)
+
+For backwards compatibility, events without hashtags are classified using keywords ("play-along", "jam", "session" → Jam Session; otherwise → Concert).
+
+To reliably classify an event, add the appropriate hashtag to the event description when creating or editing events in Google Calendar.
+
 To add or edit events, Executive Committee members have been granted edit access to the "Ukulele Tuesday Public Events" Google Calendar. Event colour-coding is not supported, since it is visible only to those logged into
 the Ukulele Tuesday Google account (see https://github.com/UkuleleTuesday/website/issues/107).
 

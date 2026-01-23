@@ -7,15 +7,30 @@
 const CALENDAR_API_URL = '/.netlify/functions/calendar';
 
 /**
- * Determine event type based on description
+ * Determine event type based on hashtags (primary) and keywords (fallback)
+ * 
+ * Classification rules:
+ * - #jam in description/summary → jam-session
+ * - #concert in description/summary → concert
+ * - Fallback: check for keywords "play-along", "jam", "session" → jam-session
+ * - Default: concert
  */
 function getEventType(event) {
   const description = (event.description || '').toLowerCase();
   const summary = (event.summary || '').toLowerCase();
   const text = description + ' ' + summary;
   
-  // Check for jam session keywords (hacky :-))
-  if (text.match(/play-along|jam/i)) {
+  // Primary check: hashtags for reliable classification
+  if (text.includes('#jam')) {
+    return 'jam-session';
+  }
+  
+  if (text.includes('#concert')) {
+    return 'concert';
+  }
+  
+  // Fallback: check for jam session keywords
+  if (text.match(/play-along|jam|session/i)) {
     return 'jam-session';
   }
   
