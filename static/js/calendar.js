@@ -10,7 +10,7 @@ const CALENDAR_API_URL = '/.netlify/functions/calendar';
  * Determine event type based on hashtags (primary) and keywords (fallback)
  * 
  * Classification rules:
- * - #jam in description/summary → jam-session
+ * - #jam or #playalong in description/summary → jam-session
  * - #concert in description/summary → concert
  * - Fallback: check for keywords "play-along", "jam" → jam-session
  * - Default: concert
@@ -21,7 +21,7 @@ function getEventType(event) {
   const text = description + ' ' + summary;
   
   // Primary check: hashtags for reliable classification
-  if (text.includes('#jam')) {
+  if (text.includes('#jam') || text.includes('#playalong')) {
     return 'jam-session';
   }
   
