@@ -38,12 +38,8 @@ function getEventType(event) {
     return 'jam-session';
   }
   
-  // Events without hashtags (and without jam keywords) go to "other" category
-  if (!hasHashtag) {
-    return 'other';
-  }
-  
-  // For events with unrecognized hashtags, default to "other"
+  // Events without hashtags (and without jam keywords) or with unrecognized hashtags
+  // default to "other" category
   return 'other';
 }
 
