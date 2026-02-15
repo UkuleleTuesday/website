@@ -293,6 +293,10 @@
   background-color: #1db1ad;
 }
 
+.legend-color.other {
+  background-color: #66023c;
+}
+
 .calendar-event {
   background-color: #f9f9f9;
   border-left: 4px solid #1db1ad;
@@ -308,6 +312,10 @@
 
 .calendar-event.concert {
   border-left-color: #1db1ad;
+}
+
+.calendar-event.other {
+  border-left-color: #66023c;
 }
 
 .calendar-event:hover {
