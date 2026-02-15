@@ -12,9 +12,9 @@ const CALENDAR_API_URL = '/.netlify/functions/calendar';
  * Classification rules:
  * - #jam or #playalong in description/summary → jam-session
  * - #concert in description/summary → concert
- * - No hashtags found → other (community group practices, etc.)
  * - Fallback: check for keywords "play-along", "jam" → jam-session
- * - Default: other
+ * - No hashtags found → other (community group practices, etc.)
+ * - Default: other (for events with unrecognized hashtags)
  */
 function getEventType(event) {
   const description = (event.description || '').toLowerCase();
@@ -30,18 +30,20 @@ function getEventType(event) {
     return 'concert';
   }
   
-  // If no hashtags found, use "other" category
+  // Check if event has any hashtags
   const hasHashtag = text.includes('#');
+  
+  // For events without hashtags, check keywords before defaulting to "other"
+  if (!hasHashtag && text.match(/play-along|jam/i)) {
+    return 'jam-session';
+  }
+  
+  // Events without hashtags (and without jam keywords) go to "other" category
   if (!hasHashtag) {
     return 'other';
   }
   
-  // Fallback: check for jam session keywords
-  if (text.match(/play-along|jam/i)) {
-    return 'jam-session';
-  }
-  
-  // Default to other for unrecognized hashtags
+  // For events with unrecognized hashtags, default to "other"
   return 'other';
 }
 
