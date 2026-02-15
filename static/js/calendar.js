@@ -21,17 +21,15 @@ function getEventType(event) {
   const summary = (event.summary || '').toLowerCase();
   const text = `${description} ${summary}`;
 
-  switch (true) {
-    case text.includes('#jam'):
-    case text.includes('#playalong'):
-      return 'jam-session';
-
-    case text.includes('#concert'):
-      return 'concert';
-
-    default:
-      return 'other';
+  if (text.includes('#jam') || text.includes('#playalong')) {
+    return 'jam-session';
   }
+
+  if (text.includes('#concert')) {
+    return 'concert';
+  }
+
+  return 'other';
 }
 
 /**
