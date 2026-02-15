@@ -19,28 +19,19 @@ const CALENDAR_API_URL = '/.netlify/functions/calendar';
 function getEventType(event) {
   const description = (event.description || '').toLowerCase();
   const summary = (event.summary || '').toLowerCase();
-  const text = description + ' ' + summary;
-  
-  // Primary check: hashtags for reliable classification
-  if (text.includes('#jam') || text.includes('#playalong')) {
-    return 'jam-session';
+  const text = `${description} ${summary}`;
+
+  switch (true) {
+    case text.includes('#jam'):
+    case text.includes('#playalong'):
+      return 'jam-session';
+
+    case text.includes('#concert'):
+      return 'concert';
+
+    default:
+      return 'other';
   }
-  
-  if (text.includes('#concert')) {
-    return 'concert';
-  }
-  
-  // Check if event has any hashtags
-  const hasHashtag = text.includes('#');
-  
-  // For events without hashtags, check keywords before defaulting to "other"
-  if (!hasHashtag && text.match(/play-along|jam/i)) {
-    return 'jam-session';
-  }
-  
-  // Events without hashtags (and without jam keywords) or with unrecognized hashtags
-  // default to "other" category
-  return 'other';
 }
 
 /**
