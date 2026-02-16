@@ -1,11 +1,10 @@
 import { test, expect } from '@playwright/test';
+import * as fs from 'fs';
+import * as path from 'path';
 
 test.describe('Calendar Netlify Function', () => {
   test('should verify calendar.js function exists and has field optimization', async () => {
     // Verify the function file exists and contains field filtering logic
-    const fs = require('fs');
-    const path = require('path');
-    
     const calendarJsPath = path.join(__dirname, '..', 'netlify', 'functions', 'calendar.js');
     const calendarJsContent = fs.readFileSync(calendarJsPath, 'utf8');
     
@@ -22,14 +21,11 @@ test.describe('Calendar Netlify Function', () => {
 
   test('should only request fields that are used by the frontend', async () => {
     // Verify that the fields parameter includes all fields used by calendar.js frontend
-    const fs = require('fs');
-    const path = require('path');
-    
     const calendarJsPath = path.join(__dirname, '..', 'netlify', 'functions', 'calendar.js');
     const calendarJsContent = fs.readFileSync(calendarJsPath, 'utf8');
     
-    // Extract the fields parameter value
-    const fieldsMatch = calendarJsContent.match(/fields['"]?\s*,\s*['"]([^'"]+)['"]/);
+    // Extract the fields parameter value using the correct pattern
+    const fieldsMatch = calendarJsContent.match(/set\(['"]fields['"],\s*['"]([^'"]+)['"]\)/);
     expect(fieldsMatch).toBeTruthy();
     
     if (fieldsMatch) {
@@ -54,3 +50,4 @@ test.describe('Calendar Netlify Function', () => {
     }
   });
 });
+
