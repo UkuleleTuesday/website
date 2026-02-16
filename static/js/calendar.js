@@ -13,29 +13,23 @@ const CALENDAR_API_URL = '/.netlify/functions/calendar';
  * - #jam or #playalong in description/summary → jam-session
  * - #concert in description/summary → concert
  * - Fallback: check for keywords "play-along", "jam" → jam-session
- * - Default: concert
+ * - No hashtags found → other (community group practices, etc.)
+ * - Default: other (for events with unrecognized hashtags)
  */
 function getEventType(event) {
   const description = (event.description || '').toLowerCase();
   const summary = (event.summary || '').toLowerCase();
-  const text = description + ' ' + summary;
-  
-  // Primary check: hashtags for reliable classification
+  const text = `${description} ${summary}`;
+
   if (text.includes('#jam') || text.includes('#playalong')) {
     return 'jam-session';
   }
-  
+
   if (text.includes('#concert')) {
     return 'concert';
   }
-  
-  // Fallback: check for jam session keywords
-  if (text.match(/play-along|jam/i)) {
-    return 'jam-session';
-  }
-  
-  // Default to concert
-  return 'concert';
+
+  return 'other';
 }
 
 /**
