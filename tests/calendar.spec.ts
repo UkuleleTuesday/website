@@ -26,9 +26,9 @@ function setupFetchMock(): { getCapturedUrl: () => string | undefined, restore: 
   };
 }
 
-// These are unit tests for the Netlify function that test actual behavior,
-// not just string matching in source files
-test.describe('Calendar Netlify Function Behavior Tests', () => {
+// Tests verify actual runtime behavior of the Netlify calendar function
+// rather than just checking for text in source files
+test.describe('Calendar Netlify Function Tests', () => {
   const MODULE_PATH = '../netlify/functions/calendar.js';
 
   test.afterEach(() => {
@@ -157,7 +157,7 @@ test.describe('Calendar Netlify Function Behavior Tests', () => {
         expect(fieldsParam).not.toContain('creator');
         expect(fieldsParam).not.toContain('organizer');
         expect(fieldsParam).not.toContain('iCalUID');
-        expect(fieldsParam).not.toContain('end'); // We only need start time
+        expect(fieldsParam).not.toContain('end'); // We only need start time, not end time
         expect(fieldsParam).not.toContain('sequence');
         expect(fieldsParam).not.toContain('status');
         expect(fieldsParam).not.toContain('recurringEventId');
