@@ -50,4 +50,3 @@ test.describe('Calendar Netlify Function', () => {
     }
   });
 });
-
