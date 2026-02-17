@@ -109,7 +109,7 @@ function renderEvents(events, containerId) {
     return;
   }
   
-  const eventsHTML = events.map(event => {
+  const eventsHTML = events.map((event, index) => {
     // Google Calendar API returns start.dateTime for timed events or start.date for all-day events
     const startDateTime = event.start.dateTime || event.start.date;
     const isAllDay = !event.start.dateTime; // If no dateTime, it's an all-day event
@@ -117,17 +117,43 @@ function renderEvents(events, containerId) {
     
     const dateStr = formatEventDate(startDateTime, isAllDay);
     const location = event.location ? `<div class="event-location">📍 ${escapeHtml(event.location)}</div>` : '';
+    const description = event.description ? `<div class="event-description" id="event-desc-${index}" style="display: none;">${escapeHtml(event.description)}</div>` : '';
     
     return `
-      <div class="calendar-event ${eventType}">
+      <div class="calendar-event ${eventType}" data-event-index="${index}" ${description ? 'role="button" tabindex="0" aria-expanded="false" aria-controls="event-desc-' + index + '"' : ''}>
         <div class="event-date">${dateStr}</div>
         <div class="event-title">${escapeHtml(event.summary || 'Untitled Event')}</div>
         ${location}
+        ${description}
       </div>
     `;
   }).join('');
   
   container.innerHTML = eventsHTML;
+  
+  // Add click/touch handlers for events with descriptions
+  events.forEach((event, index) => {
+    if (event.description) {
+      const eventElement = document.querySelector(`[data-event-index="${index}"]`);
+      const descriptionElement = document.getElementById(`event-desc-${index}`);
+      
+      if (eventElement && descriptionElement) {
+        const toggleDescription = () => {
+          const isExpanded = descriptionElement.style.display !== 'none';
+          descriptionElement.style.display = isExpanded ? 'none' : 'block';
+          eventElement.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
+        };
+        
+        eventElement.addEventListener('click', toggleDescription);
+        eventElement.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleDescription();
+          }
+        });
+      }
+    }
+  });
 }
 
 /**
