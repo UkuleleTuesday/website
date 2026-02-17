@@ -147,7 +147,7 @@ test.describe('Calendar Event Filtering', () => {
     // Verify the empty state message is shown
     const emptyMessage = page.locator('.no-events');
     await expect(emptyMessage).toBeVisible();
-    await expect(emptyMessage).toContainText('No upcoming events match your filter');
+    await expect(emptyMessage).toContainText('No upcoming events match your filter. Try adjusting your filters!');
   });
 
   test('should restore events when filters are rechecked', async ({ page }) => {

@@ -131,7 +131,7 @@ function renderEvents(events, containerId) {
   });
   
   if (filteredEvents.length === 0) {
-    container.innerHTML = '<p class="no-events">No upcoming events match your filter. Try selecting more event types!</p>';
+    container.innerHTML = '<p class="no-events">No upcoming events match your filter. Try adjusting your filters!</p>';
     return;
   }
   
