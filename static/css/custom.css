@@ -325,11 +325,17 @@
 
 .calendar-event[role="button"] {
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
 }
 
 .calendar-event[role="button"]:focus {
   outline: 2px solid #1db1ad;
   outline-offset: 2px;
+}
+
+.calendar-event[role="button"]:active {
+  outline: none;
 }
 
 .event-date {
@@ -340,12 +346,30 @@
   font-family: 'Poppins', sans-serif;
 }
 
+.event-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
 .event-title {
   color: #333;
   font-size: 18px;
   font-weight: 500;
-  margin-bottom: 6px;
   font-family: 'Poppins', sans-serif;
+  flex: 1;
+}
+
+.toggle-indicator {
+  color: #1db1ad;
+  font-size: 12px;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.toggle-indicator--expanded {
+  transform: rotate(180deg);
 }
 
 .event-location {
@@ -358,16 +382,23 @@
 .event-description {
   color: #555;
   font-size: 14px;
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid #e0e0e0;
+  margin-top: 8px;
+  margin-bottom: 8px;
   line-height: 1.5;
   font-family: 'Poppins', sans-serif;
-  white-space: pre-wrap;
 }
 
 .event-description--hidden {
   display: none;
+}
+
+.event-description a {
+  color: #1db1ad;
+  text-decoration: underline;
+}
+
+.event-description a:hover {
+  color: #006566;
 }
 
 .loading-events,

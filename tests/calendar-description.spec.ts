@@ -12,7 +12,7 @@ test.describe('Calendar Event Description Toggle', () => {
           items: [
             {
               summary: 'Test Concert Event',
-              description: 'This is a test concert with a detailed description.\n#concert',
+              description: 'This is a test concert with a <strong>detailed</strong> description and a <a href="https://example.com">link</a>.\n#concert',
               location: 'Test Venue, Dublin',
               start: {
                 dateTime: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // 7 days from now
@@ -58,7 +58,7 @@ test.describe('Calendar Event Description Toggle', () => {
     
     // Verify the description is now visible
     await expect(description).toBeVisible();
-    await expect(description).toContainText('This is a test concert with a detailed description.');
+    await expect(description).toContainText('This is a test concert with a');
   });
 
   test('should hide event description when clicked again', async ({ page }) => {
@@ -116,6 +116,10 @@ test.describe('Calendar Event Description Toggle', () => {
     // Verify it doesn't have a description element
     const description = thirdEvent.locator('.event-description');
     await expect(description).toHaveCount(0);
+    
+    // Verify it doesn't have a toggle indicator
+    const toggleIndicator = thirdEvent.locator('.toggle-indicator');
+    await expect(toggleIndicator).toHaveCount(0);
   });
 
   test('should update aria-expanded attribute when toggling', async ({ page }) => {
@@ -167,5 +171,83 @@ test.describe('Calendar Event Description Toggle', () => {
     await firstEvent.click();
     await expect(firstDescription).toBeHidden();
     await expect(secondDescription).toBeVisible();
+  });
+
+  test('should display toggle indicator for events with descriptions', async ({ page }) => {
+    const firstEvent = page.locator('.calendar-event').first();
+    const toggleIndicator = firstEvent.locator('.toggle-indicator');
+    
+    // Verify toggle indicator exists
+    await expect(toggleIndicator).toBeVisible();
+    
+    // Verify it's initially not rotated (expanded class not present)
+    await expect(toggleIndicator).not.toHaveClass(/toggle-indicator--expanded/);
+  });
+
+  test('should rotate toggle indicator when expanded', async ({ page }) => {
+    const firstEvent = page.locator('.calendar-event').first();
+    const toggleIndicator = firstEvent.locator('.toggle-indicator');
+    
+    // Click to expand
+    await firstEvent.click();
+    
+    // Verify toggle indicator has expanded class
+    await expect(toggleIndicator).toHaveClass(/toggle-indicator--expanded/);
+    
+    // Click to collapse
+    await firstEvent.click();
+    
+    // Verify toggle indicator no longer has expanded class
+    await expect(toggleIndicator).not.toHaveClass(/toggle-indicator--expanded/);
+  });
+
+  test('should render HTML content safely in descriptions', async ({ page }) => {
+    const firstEvent = page.locator('.calendar-event').first();
+    
+    // Click to show description
+    await firstEvent.click();
+    
+    const description = firstEvent.locator('.event-description');
+    
+    // Verify that <strong> tag is rendered
+    const strongElement = description.locator('strong');
+    await expect(strongElement).toBeVisible();
+    await expect(strongElement).toHaveText('detailed');
+    
+    // Verify that <a> tag is rendered with proper attributes
+    const linkElement = description.locator('a');
+    await expect(linkElement).toBeVisible();
+    await expect(linkElement).toHaveAttribute('href', 'https://example.com');
+    await expect(linkElement).toHaveAttribute('target', '_blank');
+    await expect(linkElement).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+
+  test('should show description before location', async ({ page }) => {
+    const firstEvent = page.locator('.calendar-event').first();
+    
+    // Click to show description
+    await firstEvent.click();
+    
+    // Get all child elements
+    const titleWrapper = firstEvent.locator('.event-title-wrapper');
+    const description = firstEvent.locator('.event-description');
+    const location = firstEvent.locator('.event-location');
+    
+    // Verify elements exist
+    await expect(titleWrapper).toBeVisible();
+    await expect(description).toBeVisible();
+    await expect(location).toBeVisible();
+    
+    // Get bounding boxes to verify order (description should be above location)
+    const descBox = await description.boundingBox();
+    const locBox = await location.boundingBox();
+    
+    expect(descBox).not.toBeNull();
+    expect(locBox).not.toBeNull();
+    
+    if (descBox && locBox) {
+      // Description should be above (smaller y coordinate) location
+      expect(descBox.y).toBeLessThan(locBox.y);
+    }
   });
 });
