@@ -6,6 +6,9 @@
 // Use Netlify function to fetch calendar data (handles API key)
 const CALENDAR_API_URL = '/.netlify/functions/calendar';
 
+// Store fetched events for filtering
+let cachedEvents = [];
+
 /**
  * Determine event type based on hashtags (primary) and keywords (fallback)
  * 
@@ -95,6 +98,20 @@ async function fetchCalendarEvents() {
 }
 
 /**
+ * Get active event type filters
+ */
+function getActiveFilters() {
+  const checkboxes = document.querySelectorAll('.event-filter');
+  const activeFilters = [];
+  checkboxes.forEach(checkbox => {
+    if (checkbox.checked) {
+      activeFilters.push(checkbox.value);
+    }
+  });
+  return activeFilters;
+}
+
+/**
  * Render events to the DOM
  */
 function renderEvents(events, containerId) {
@@ -104,12 +121,21 @@ function renderEvents(events, containerId) {
     return;
   }
   
-  if (events.length === 0) {
-    container.innerHTML = '<p class="no-events">No upcoming events at this time. Check back soon!</p>';
+  // Get active filters
+  const activeFilters = getActiveFilters();
+  
+  // Filter events by type
+  const filteredEvents = events.filter(event => {
+    const eventType = getEventType(event);
+    return activeFilters.includes(eventType);
+  });
+  
+  if (filteredEvents.length === 0) {
+    container.innerHTML = '<p class="no-events">No upcoming events match your filter. Try adjusting your filters!</p>';
     return;
   }
   
-  const eventsHTML = events.map((event, index) => {
+  const eventsHTML = filteredEvents.map((event, index) => {
     // Google Calendar API returns start.dateTime for timed events or start.date for all-day events
     const startDateTime = event.start.dateTime || event.start.date;
     const isAllDay = !event.start.dateTime; // If no dateTime, it's an all-day event
@@ -137,7 +163,7 @@ function renderEvents(events, containerId) {
   
   // Add click/touch handlers for events with descriptions
   const eventElements = container.querySelectorAll('.calendar-event');
-  events.forEach((event, index) => {
+  filteredEvents.forEach((event, index) => {
     if (event.description) {
       const eventElement = eventElements[index];
       const descriptionElement = document.getElementById(`event-desc-${index}`);
@@ -252,8 +278,16 @@ async function initCalendar(containerId) {
   container.innerHTML = '<p class="loading-events">Loading upcoming events...</p>';
   
   try {
-    const events = await fetchCalendarEvents();
-    renderEvents(events, containerId);
+    cachedEvents = await fetchCalendarEvents();
+    renderEvents(cachedEvents, containerId);
+    
+    // Set up filter event listeners
+    const filterCheckboxes = document.querySelectorAll('.event-filter');
+    filterCheckboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', () => {
+        renderEvents(cachedEvents, containerId);
+      });
+    });
   } catch (error) {
     container.innerHTML = '<p class="error-events">Unable to load events. Please try again later.</p>';
   }
