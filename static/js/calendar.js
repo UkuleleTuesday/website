@@ -152,7 +152,7 @@ function renderEvents(events, containerId) {
         
         eventElement.addEventListener('click', toggleDescription);
         eventElement.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
+          if (e.key === 'Enter' || e.key === ' ' || e.code === 'Space') {
             e.preventDefault();
             toggleDescription();
           }
