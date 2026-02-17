@@ -117,7 +117,7 @@ function renderEvents(events, containerId) {
     
     const dateStr = formatEventDate(startDateTime, isAllDay);
     const location = event.location ? `<div class="event-location">📍 ${escapeHtml(event.location)}</div>` : '';
-    const description = event.description ? `<div class="event-description" id="event-desc-${index}" style="display: none;">${escapeHtml(event.description)}</div>` : '';
+    const description = event.description ? `<div class="event-description event-description--hidden" id="event-desc-${index}">${escapeHtml(event.description)}</div>` : '';
     
     return `
       <div class="calendar-event ${eventType}" data-event-index="${index}" ${description ? 'role="button" tabindex="0" aria-expanded="false" aria-controls="event-desc-' + index + '"' : ''}>
@@ -139,8 +139,8 @@ function renderEvents(events, containerId) {
       
       if (eventElement && descriptionElement) {
         const toggleDescription = () => {
-          const isExpanded = descriptionElement.style.display !== 'none';
-          descriptionElement.style.display = isExpanded ? 'none' : 'block';
+          const isExpanded = eventElement.getAttribute('aria-expanded') === 'true';
+          descriptionElement.classList.toggle('event-description--hidden', isExpanded);
           eventElement.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
         };
         

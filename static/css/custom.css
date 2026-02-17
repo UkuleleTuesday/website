@@ -366,6 +366,10 @@
   white-space: pre-wrap;
 }
 
+.event-description--hidden {
+  display: none;
+}
+
 .loading-events,
 .error-events,
 .no-events {
