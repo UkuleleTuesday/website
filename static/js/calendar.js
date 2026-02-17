@@ -132,16 +132,22 @@ function renderEvents(events, containerId) {
   container.innerHTML = eventsHTML;
   
   // Add click/touch handlers for events with descriptions
+  const eventElements = container.querySelectorAll('.calendar-event');
   events.forEach((event, index) => {
     if (event.description) {
-      const eventElement = document.querySelector(`[data-event-index="${index}"]`);
+      const eventElement = eventElements[index];
       const descriptionElement = document.getElementById(`event-desc-${index}`);
       
       if (eventElement && descriptionElement) {
         const toggleDescription = () => {
           const isExpanded = eventElement.getAttribute('aria-expanded') === 'true';
-          descriptionElement.classList.toggle('event-description--hidden', isExpanded);
-          eventElement.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
+          if (isExpanded) {
+            descriptionElement.classList.add('event-description--hidden');
+            eventElement.setAttribute('aria-expanded', 'false');
+          } else {
+            descriptionElement.classList.remove('event-description--hidden');
+            eventElement.setAttribute('aria-expanded', 'true');
+          }
         };
         
         eventElement.addEventListener('click', toggleDescription);
