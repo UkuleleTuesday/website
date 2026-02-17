@@ -323,6 +323,12 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
+.calendar-event[role="button"] {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
 .event-date {
   color: #333;
   font-weight: 600;
@@ -331,12 +337,25 @@
   font-family: 'Poppins', sans-serif;
 }
 
+.event-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
 .event-title {
   color: #333;
   font-size: 18px;
   font-weight: 500;
-  margin-bottom: 6px;
   font-family: 'Poppins', sans-serif;
+  flex: 1;
+}
+
+.toggle-indicator {
+  color: #333;
+  font-size: 12px;
+  flex-shrink: 0;
 }
 
 .event-location {
@@ -344,6 +363,28 @@
   font-size: 14px;
   margin-top: 6px;
   font-family: 'Poppins', sans-serif;
+}
+
+.event-description {
+  color: #555;
+  font-size: 14px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  line-height: 1.5;
+  font-family: 'Poppins', sans-serif;
+}
+
+.event-description--hidden {
+  display: none;
+}
+
+.event-description a {
+  color: #1db1ad;
+  text-decoration: underline;
+}
+
+.event-description a:hover {
+  color: #006566;
 }
 
 .loading-events,
@@ -371,7 +412,8 @@
   }
   
   .event-date,
-  .event-location {
+  .event-location,
+  .event-description {
     font-size: 13px;
   }
 }

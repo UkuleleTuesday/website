@@ -60,6 +60,8 @@ To add or edit events, Executive Committee members have been granted edit access
 - The JavaScript client (`static/js/calendar.js`) renders the next 20 upcoming events returned by the API
 - The calendar automatically updates as new events are added to the Google Calendar (with a 5-minute cache)
 - The `GOOGLE_CALENDAR_API_KEY` environment variable must be set in Netlify (or GitHub repository secrets) for the calendar to work
+- **Event descriptions can be viewed by clicking/tapping on events** - descriptions are initially hidden and toggle on/off when the event is clicked or activated with keyboard (Enter/Space)
+- Events with descriptions display a cursor pointer and support keyboard navigation for accessibility
 
 **Event Classification:**
 Events are automatically color-coded by type using hashtags in the event description:
