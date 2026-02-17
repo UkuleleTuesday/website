@@ -56,6 +56,7 @@ To add or edit events, Executive Committee members have been granted edit access
 
 **Technical details:**
 - The calendar data is fetched via a Netlify function (`netlify/functions/calendar.js`) which uses the Google Calendar API with an API key stored in environment variables
+- The API request uses field filtering to reduce payload size by ~80-85% (from ~15KB to ~2-3KB for 10 events), requesting only the fields actually used by the frontend
 - The JavaScript client (`static/js/calendar.js`) renders the next 20 upcoming events returned by the API
 - The calendar automatically updates as new events are added to the Google Calendar (with a 5-minute cache)
 - The `GOOGLE_CALENDAR_API_KEY` environment variable must be set in Netlify (or GitHub repository secrets) for the calendar to work
