@@ -182,28 +182,29 @@ test.describe('Calendar Event Description Toggle', () => {
     const firstEvent = page.locator('.calendar-event').first();
     const toggleIndicator = firstEvent.locator('.toggle-indicator');
     
-    // Verify toggle indicator exists
+    // Verify toggle indicator exists and shows right-pointing arrow when collapsed
     await expect(toggleIndicator).toBeVisible();
-    
-    // Verify it's initially not rotated (expanded class not present)
-    await expect(toggleIndicator).not.toHaveClass(/toggle-indicator--expanded/);
+    await expect(toggleIndicator).toHaveText('▸');
   });
 
-  test('should rotate toggle indicator when expanded', async ({ page }) => {
+  test('should change toggle indicator when expanded', async ({ page }) => {
     const firstEvent = page.locator('.calendar-event').first();
     const toggleIndicator = firstEvent.locator('.toggle-indicator');
+    
+    // Initially should show right-pointing arrow
+    await expect(toggleIndicator).toHaveText('▸');
     
     // Click to expand
     await firstEvent.click();
     
-    // Verify toggle indicator has expanded class
-    await expect(toggleIndicator).toHaveClass(/toggle-indicator--expanded/);
+    // Should now show down-pointing arrow
+    await expect(toggleIndicator).toHaveText('▾');
     
     // Click to collapse
     await firstEvent.click();
     
-    // Verify toggle indicator no longer has expanded class
-    await expect(toggleIndicator).not.toHaveClass(/toggle-indicator--expanded/);
+    // Should show right-pointing arrow again
+    await expect(toggleIndicator).toHaveText('▸');
   });
 
   test('should render HTML content safely in descriptions', async ({ page }) => {

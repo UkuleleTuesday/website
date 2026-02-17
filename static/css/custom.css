@@ -355,12 +355,7 @@
 .toggle-indicator {
   color: #333;
   font-size: 12px;
-  transition: transform 0.2s ease;
   flex-shrink: 0;
-}
-
-.toggle-indicator--expanded {
-  transform: rotate(180deg);
 }
 
 .event-location {

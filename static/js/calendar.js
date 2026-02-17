@@ -118,7 +118,7 @@ function renderEvents(events, containerId) {
     const dateStr = formatEventDate(startDateTime, isAllDay);
     const location = event.location ? `<div class="event-location">📍 ${escapeHtml(event.location)}</div>` : '';
     const description = event.description ? `<div class="event-description event-description--hidden" id="event-desc-${index}">${sanitizeHtml(event.description)}</div>` : '';
-    const toggleIndicator = event.description ? `<span class="toggle-indicator" aria-hidden="true">▼</span>` : '';
+    const toggleIndicator = event.description ? `<span class="toggle-indicator" aria-hidden="true">▸</span>` : '';
     
     return `
       <div class="calendar-event ${eventType}" data-event-index="${index}" ${description ? 'role="button" tabindex="0" aria-expanded="false" aria-controls="event-desc-' + index + '"' : ''}>
@@ -150,11 +150,11 @@ function renderEvents(events, containerId) {
           if (isExpanded) {
             descriptionElement.classList.add('event-description--hidden');
             eventElement.setAttribute('aria-expanded', 'false');
-            if (toggleIndicator) toggleIndicator.classList.remove('toggle-indicator--expanded');
+            if (toggleIndicator) toggleIndicator.textContent = '▸';
           } else {
             descriptionElement.classList.remove('event-description--hidden');
             eventElement.setAttribute('aria-expanded', 'true');
-            if (toggleIndicator) toggleIndicator.classList.add('toggle-indicator--expanded');
+            if (toggleIndicator) toggleIndicator.textContent = '▾';
           }
         };
         
