@@ -214,10 +214,13 @@ function sanitizeHtml(html) {
         }
       });
       
-      // For links, ensure they don't have javascript: protocol
+      // For links, ensure they don't have dangerous protocols
       if (node.tagName === 'A' && node.hasAttribute('href')) {
-        const href = node.getAttribute('href');
-        if (href.toLowerCase().startsWith('javascript:') || href.toLowerCase().startsWith('data:')) {
+        const href = node.getAttribute('href').toLowerCase();
+        const dangerousProtocols = ['javascript:', 'data:', 'vbscript:'];
+        
+        // Check if href starts with any dangerous protocol
+        if (dangerousProtocols.some(protocol => href.startsWith(protocol))) {
           node.removeAttribute('href');
         } else {
           // Add target="_blank" and rel="noopener noreferrer" for external links
