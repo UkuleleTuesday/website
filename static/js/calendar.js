@@ -193,10 +193,17 @@ function sanitizeHtml(html) {
   
   function cleanNode(node) {
     if (node.nodeType === Node.ELEMENT_NODE) {
-      // Remove disallowed tags
+      // Remove disallowed tags but preserve their text content
       if (!allowedTags.includes(node.tagName)) {
-        const textNode = document.createTextNode(node.textContent);
-        node.parentNode.replaceChild(textNode, node);
+        // First, recursively clean all children
+        Array.from(node.childNodes).forEach(cleanNode);
+        
+        // Then replace this node with its children (unwrap it)
+        const fragment = document.createDocumentFragment();
+        while (node.firstChild) {
+          fragment.appendChild(node.firstChild);
+        }
+        node.parentNode.replaceChild(fragment, node);
         return;
       }
       

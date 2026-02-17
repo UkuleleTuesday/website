@@ -56,9 +56,14 @@ test.describe('Calendar Event Description Toggle', () => {
     // Click on the event
     await firstEvent.click();
     
-    // Verify the description is now visible
+    // Verify the description is now visible and contains both text and HTML
     await expect(description).toBeVisible();
     await expect(description).toContainText('This is a test concert with a');
+    
+    // Verify HTML elements are rendered
+    const strongElement = description.locator('strong');
+    await expect(strongElement).toBeVisible();
+    await expect(strongElement).toHaveText('detailed');
   });
 
   test('should hide event description when clicked again', async ({ page }) => {
