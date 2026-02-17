@@ -329,27 +329,6 @@
   -webkit-touch-callout: none;
 }
 
-.calendar-event[role="button"]:focus {
-  outline: 2px solid #333;
-  outline-offset: 2px;
-}
-
-.calendar-event.jam-session[role="button"]:focus {
-  outline-color: #efa537;
-}
-
-.calendar-event.concert[role="button"]:focus {
-  outline-color: #66023c;
-}
-
-.calendar-event.other[role="button"]:focus {
-  outline-color: #1db1ad;
-}
-
-.calendar-event[role="button"]:active {
-  outline: none;
-}
-
 .event-date {
   color: #333;
   font-weight: 600;
@@ -378,18 +357,6 @@
   font-size: 12px;
   transition: transform 0.2s ease;
   flex-shrink: 0;
-}
-
-.calendar-event.jam-session .toggle-indicator {
-  color: #efa537;
-}
-
-.calendar-event.concert .toggle-indicator {
-  color: #66023c;
-}
-
-.calendar-event.other .toggle-indicator {
-  color: #1db1ad;
 }
 
 .toggle-indicator--expanded {
