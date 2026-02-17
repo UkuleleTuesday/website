@@ -124,8 +124,8 @@ function renderEvents(events, containerId) {
       <div class="calendar-event ${eventType}" data-event-index="${index}" ${description ? 'role="button" tabindex="0" aria-expanded="false" aria-controls="event-desc-' + index + '"' : ''}>
         <div class="event-date">${dateStr}</div>
         <div class="event-title-wrapper">
-          <div class="event-title">${escapeHtml(event.summary || 'Untitled Event')}</div>
           ${toggleIndicator}
+          <div class="event-title">${escapeHtml(event.summary || 'Untitled Event')}</div>
         </div>
         ${description}
         ${location}
