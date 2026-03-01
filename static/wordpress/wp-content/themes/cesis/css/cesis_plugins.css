@@ -34,26 +34,13 @@
 .vc_add-element-container .wpb-content-layouts .vc_visible[data-element="vc_tour"] {
     display: block !important;
 }
-.vc_editor .wpb_animate_when_almost_visible {
-  opacity: 1 !important;
-}
+
 .cesis_row_has_overlay .vc_vc_column{
     z-index: 2;
 }
 
 /* Animations */
 
-
-.wpb_animate_when_almost_visible {
-    opacity: 0;
-    filter: alpha(opacity=0)
-}
-
-.wpb_animate_when_almost_visible:not(.wpb_start_animation) {
-    -webkit-animation: none;
-    -o-animation: none;
-    animation: none
-}
 
 .top-to-bottom,.wpb_top-to-bottom {
     -webkit-animation: wpb_ttb .7s 1 cubic-bezier(.175,.885,.32,1.275);
