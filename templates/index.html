@@ -216,16 +216,37 @@
             <p>See what’s coming up — Tuesday play-along sessions, gigs, and festival shows.</p>
             <div class="calendar-legend">
               <div class="legend-item">
-                <div class="legend-color jam-session"></div>
-                <span>Play-Along</span>
+                <input type="checkbox"
+                       id="filter-jam-session"
+                       class="event-filter"
+                       value="jam-session"
+                       checked>
+                <label for="filter-jam-session">
+                  <div class="legend-color jam-session"></div>
+                  <span>Play-Along</span>
+                </label>
               </div>
               <div class="legend-item">
-                <div class="legend-color concert"></div>
-                <span>Concert</span>
+                <input type="checkbox"
+                       id="filter-concert"
+                       class="event-filter"
+                       value="concert"
+                       checked>
+                <label for="filter-concert">
+                  <div class="legend-color concert"></div>
+                  <span>Concert</span>
+                </label>
               </div>
               <div class="legend-item">
-                <div class="legend-color other"></div>
-                <span>Other</span>
+                <input type="checkbox"
+                       id="filter-other"
+                       class="event-filter"
+                       value="other"
+                       checked>
+                <label for="filter-other">
+                  <div class="legend-color other"></div>
+                  <span>Other</span>
+                </label>
               </div>
             </div>
             <div id="upcoming-events-list"></div>
