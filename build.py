@@ -63,6 +63,13 @@ def build():
     else:
         print("Analytics will be disabled for this build.")
 
+    # Enable calendar by default; set ENABLE_CALENDAR=false to disable (e.g. for local development)
+    calendar_enabled = os.environ.get('ENABLE_CALENDAR', 'true') != 'false'
+    if calendar_enabled:
+        print("Calendar will be enabled for this build.")
+    else:
+        print("Calendar will be disabled for this build.")
+
     # Base URL for absolute paths in SEO data.
     # Use BASE_URL, with a sane default.
     base_url = os.environ.get('BASE_URL', 'https://ukuleletuesday.ie')
@@ -81,6 +88,7 @@ def build():
             # You can pass variables to your templates here, e.g., template.render(var='value')
             rendered_html = template.render(
                 analytics_enabled=analytics_enabled,
+                calendar_enabled=calendar_enabled,
                 base_url=base_url,
                 breadcrumbs=breadcrumbs,
                 page_url=page_url

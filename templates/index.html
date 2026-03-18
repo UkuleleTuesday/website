@@ -209,26 +209,28 @@
             </div>
           </div>
           <div style="margin-top: 20px; margin-bottom: 20px">
-            <h2 class="cesis_text_transform_none cesis_ar_text"
-                data-max_size=""
-                data-min_size="18"
-                id="upcoming-events">Upcoming Events</h2>
-            <p>See what’s coming up — Tuesday play-along sessions, gigs, and festival shows.</p>
-            <div class="calendar-legend">
-              <div class="legend-item">
-                <div class="legend-color jam-session"></div>
-                <span>Play-Along</span>
+            {% if calendar_enabled %}
+              <h2 class="cesis_text_transform_none cesis_ar_text"
+                  data-max_size=""
+                  data-min_size="18"
+                  id="upcoming-events">Upcoming Events</h2>
+              <p>See what’s coming up — Tuesday play-along sessions, gigs, and festival shows.</p>
+              <div class="calendar-legend">
+                <div class="legend-item">
+                  <div class="legend-color jam-session"></div>
+                  <span>Play-Along</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-color concert"></div>
+                  <span>Concert</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-color other"></div>
+                  <span>Other</span>
+                </div>
               </div>
-              <div class="legend-item">
-                <div class="legend-color concert"></div>
-                <span>Concert</span>
-              </div>
-              <div class="legend-item">
-                <div class="legend-color other"></div>
-                <span>Other</span>
-              </div>
-            </div>
-            <div id="upcoming-events-list"></div>
+              <div id="upcoming-events-list"></div>
+            {% endif %}
           </div>
           <!-- .entry-content -->
           <footer class="entry-footer">
@@ -240,4 +242,6 @@
     <!-- .container -->
   </main>
 {% endblock %}
-{% block extra_scripts %}<script src="/js/calendar.js"></script>{% endblock %}
+{% block extra_scripts %}
+  {% if calendar_enabled %}<script src="/js/calendar.js"></script>{% endif %}
+{% endblock %}
