@@ -56,24 +56,9 @@ python3 -m http.server -d public 8000
 netlify dev
 ```
 - **Serves site at:** http://localhost:8888
-- **REQUIREMENT:** Must run `uv run python build.py` first AND have `.env` set up (see below)
+- **REQUIREMENT:** Must run `uv run python build.py` first
 - Runs Netlify Functions at `/.netlify/functions/` and Edge Functions at their configured paths
 - Use this when testing or debugging dynamic features like the Events Calendar (`/.netlify/functions/calendar`) or the donate redirect (`/donate`, `/donate-qr`, `/support-us`)
-
-**Setting up `.env` for Netlify Dev:**
-
-Copy `.env.example` to `.env` and fill in your values:
-
-```bash
-cp .env.example .env
-```
-
-Required variables:
-- `GOOGLE_CALENDAR_API_KEY` — for the Events Calendar function
-- `WHATSAPP_JOIN_LINK` — for the WhatsApp gate function
-- `BMC_URL` and `BMC_DEFAULT_UTMS` — for the donate edge function (defaults provided in `.env.example`)
-
-The `.env` file is gitignored — never commit it.
 
 ### Testing Commands
 
@@ -122,7 +107,6 @@ pnpm playwright test --project="chromium" tests/snapshots.spec.ts --grep="visual
     - Visit http://localhost:8888 in browser
     - Test Events Calendar on homepage (fetches from `/.netlify/functions/calendar`)
     - Test `/donate`, `/donate-qr`, `/support-us` redirects via Edge Function
-    - Requires `.env` to be configured (see Local Development Server section)
 
 4. **Test responsive design:**
    - Resize browser window to test mobile layouts
@@ -178,8 +162,6 @@ The `static/` directory is organized as follows:
 - `BMC_URL` - Buy Me A Coffee redirect URL (used by `netlify/edge-functions/donate.js`, defaults to `https://buymeacoffee.com/ukuleletuesday`)
 - `BMC_DEFAULT_UTMS` - Default UTM params for donate redirect (used by `netlify/edge-functions/donate.js`)
 
-Set these in `.env` for local Netlify Dev use (copy from `.env.example`). Never commit `.env`.
-
 ## Troubleshooting
 
 **Build fails:** Check that `templates/` and `static/` directories exist and contain expected files.
@@ -190,11 +172,9 @@ Set these in `.env` for local Netlify Dev use (copy from `.env.example`). Never 
 
 **Server won't start:** Verify `public/` directory exists and port 8000 is not already in use.
 
-**Netlify Dev: Events Calendar not loading:** Ensure `GOOGLE_CALENDAR_API_KEY` is set in `.env`. Check the browser console for errors from `/.netlify/functions/calendar`.
+**Netlify Dev: Events Calendar not loading:** Ensure `GOOGLE_CALENDAR_API_KEY` is set. Check the browser console for errors from `/.netlify/functions/calendar`.
 
 **Netlify Dev: port conflict:** If port 8888 is in use, Netlify Dev will suggest an alternative port automatically.
-
-**Netlify Dev: `.env` missing:** Copy `.env.example` to `.env` and fill in the required API keys.
 
 ## CI/CD Integration
 
