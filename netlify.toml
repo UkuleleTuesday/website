@@ -1,6 +1,9 @@
 [build]
   publish = "public"
 
+[dev]
+  port = 8888
+
 [[edge_functions]]
   path = "/donate"
   function = "donate"

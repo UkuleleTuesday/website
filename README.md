@@ -155,3 +155,53 @@ uv run poe serve
 ```
 
 The site will be available at `http://localhost:8000`.
+
+> **Note:** This simple server does **not** run Netlify Functions or Edge Functions, so features like the Events Calendar, WhatsApp gate, and donate redirects will not work. Use [Netlify Dev](#running-with-netlify-dev) for full local functionality.
+
+### Running with Netlify Dev
+
+[Netlify Dev CLI](https://docs.netlify.com/api-and-cli-guides/cli-guides/local-development/) replicates the full Netlify production environment locally, including Functions, Edge Functions, redirects, and custom headers.
+
+**1. Install Netlify CLI:**
+
+```bash
+npm install -g netlify-cli
+```
+
+**2. Set up environment variables:**
+
+Copy `.env.example` to `.env` and fill in your values:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` with the required API keys (ask a team member for secret values). The `BMC_URL` and `BMC_DEFAULT_UTMS` variables already have sensible defaults in the example file.
+
+**3. Build the site:**
+
+```bash
+uv run python build.py
+```
+
+**4. Start Netlify Dev:**
+
+```bash
+netlify dev
+```
+
+The site will be available at `http://localhost:8888`.
+
+**What Netlify Dev provides that the simple server does not:**
+
+- ✅ Netlify Functions served at `/.netlify/functions/` (powers the Events Calendar)
+- ✅ Edge Functions at their configured paths (`/donate`, `/donate-qr`, `/support-us`)
+- ✅ Environment variables from `.env` loaded automatically
+- ✅ Netlify redirect rules applied
+- ✅ Custom response headers applied
+
+**Limitations and caveats:**
+
+- The `.env` file must be set up manually (see above). To instead pull live values from the Netlify dashboard, run `netlify link` (requires Netlify account access), then `netlify env:pull .env`.
+- Edge Functions run in a Deno runtime; minor behavioural differences from production are possible.
+- The site is not rebuilt automatically when template or static files change — re-run `uv run python build.py` after any source changes.
