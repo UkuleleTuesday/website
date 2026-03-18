@@ -126,11 +126,11 @@ jobs:
           netlify env:set BMC_DEFAULT_UTMS "utm_source=screen&utm_medium=qr&utm_campaign=donate" --context "branch:${{ github.head_ref }}"
       - name: Set Netlify deployment arguments
         id: netlify_args
+        env:
+          PR_TITLE_RAW: ${{ github.event.pull_request.title }}
         run: |
-          # Use printf %q to safely escape the PR title
-          PR_TITLE=$(printf %q "${{ github.event.pull_request.title }}")
           # Sanitize the title by removing problematic characters
-          PR_TITLE_SANITIZED=$(echo "$PR_TITLE" | sed "s/[^a-zA-Z0-9 :_.-]/ /g")
+          PR_TITLE_SANITIZED=$(echo "$PR_TITLE_RAW" | sed "s/[^a-zA-Z0-9 :_.-]/ /g")
           DEPLOY_MESSAGE="Deploy preview for PR #${{ github.event.number }} - ${PR_TITLE_SANITIZED}"
           echo "deploy_args=deploy --dir=./public --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
       - name: Deploy to Netlify
