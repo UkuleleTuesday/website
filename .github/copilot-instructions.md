@@ -11,6 +11,7 @@ Your development environment is automatically configured with:
 - ✅ Node.js and `pnpm` (JavaScript package manager)
 - ✅ All project dependencies installed (`pnpm install` already run)
 - ✅ Playwright browsers for testing
+- ✅ `netlify-cli` (Netlify Dev CLI for local function/edge-function testing)
 
 You do **not** need to run setup commands - focus on the development workflow below.
 
@@ -38,7 +39,8 @@ The development environment is pre-configured via GitHub Actions setup steps. Yo
    - Uses djLint to format Jinja2 templates in `templates/`
 
 ### Local Development Server
-Start the local development server to test your changes:
+
+**Simple static server** (no Netlify Functions or Edge Functions):
 
 ```bash
 python3 -m http.server -d public 8000
@@ -46,6 +48,32 @@ python3 -m http.server -d public 8000
 - **Serves site at:** http://localhost:8000
 - **REQUIREMENT:** Must run `uv run python build.py` first to generate `public/` directory
 - Server runs in foreground - use Ctrl+C to stop
+- ⚠️ Dynamic features (Events Calendar, WhatsApp gate, donate redirects) **will not work** — use Netlify Dev for those
+
+**Netlify Dev** (full local environment — Functions, Edge Functions, redirects, env vars):
+
+```bash
+netlify dev
+```
+- **Serves site at:** http://localhost:8888
+- **REQUIREMENT:** Must run `uv run python build.py` first AND have `.env` set up (see below)
+- Runs Netlify Functions at `/.netlify/functions/` and Edge Functions at their configured paths
+- Use this when testing or debugging dynamic features like the Events Calendar (`/.netlify/functions/calendar`) or the donate redirect (`/donate`, `/donate-qr`, `/support-us`)
+
+**Setting up `.env` for Netlify Dev:**
+
+Copy `.env.example` to `.env` and fill in your values:
+
+```bash
+cp .env.example .env
+```
+
+Required variables:
+- `GOOGLE_CALENDAR_API_KEY` — for the Events Calendar function
+- `WHATSAPP_JOIN_LINK` — for the WhatsApp gate function
+- `BMC_URL` and `BMC_DEFAULT_UTMS` — for the donate edge function (defaults provided in `.env.example`)
+
+The `.env` file is gitignored — never commit it.
 
 ### Testing Commands
 
@@ -85,6 +113,16 @@ pnpm playwright test --project="chromium" tests/snapshots.spec.ts --grep="visual
    - Navigate to different pages (concerts, songbook, etc.)
    - Verify pages load without 404 errors
    - Check that styling and JavaScript work correctly
+   - ⚠️ Dynamic features (calendar, donate, WhatsApp) will not work here — use Netlify Dev for those
+
+3a. **Test dynamic features with Netlify Dev:**
+    ```bash
+    netlify dev
+    ```
+    - Visit http://localhost:8888 in browser
+    - Test Events Calendar on homepage (fetches from `/.netlify/functions/calendar`)
+    - Test `/donate`, `/donate-qr`, `/support-us` redirects via Edge Function
+    - Requires `.env` to be configured (see Local Development Server section)
 
 4. **Test responsive design:**
    - Resize browser window to test mobile layouts
@@ -135,6 +173,12 @@ The `static/` directory is organized as follows:
 ### Environment Variables
 - `ENABLE_ANALYTICS=true` - Enable Google Analytics (production only)
 - `BASE_URL=https://ukuleletuesday.ie` - Base URL for absolute paths in SEO data
+- `GOOGLE_CALENDAR_API_KEY` - Google Calendar API key (required by `netlify/functions/calendar.js`)
+- `WHATSAPP_JOIN_LINK` - WhatsApp group invite URL (required by `netlify/functions/whatsapp-gate.js`)
+- `BMC_URL` - Buy Me A Coffee redirect URL (used by `netlify/edge-functions/donate.js`, defaults to `https://buymeacoffee.com/ukuleletuesday`)
+- `BMC_DEFAULT_UTMS` - Default UTM params for donate redirect (used by `netlify/edge-functions/donate.js`)
+
+Set these in `.env` for local Netlify Dev use (copy from `.env.example`). Never commit `.env`.
 
 ## Troubleshooting
 
@@ -145,6 +189,12 @@ The `static/` directory is organized as follows:
 **Pre-commit fails:** Run `uvx pre-commit run --all-files` to see specific formatting issues.
 
 **Server won't start:** Verify `public/` directory exists and port 8000 is not already in use.
+
+**Netlify Dev: Events Calendar not loading:** Ensure `GOOGLE_CALENDAR_API_KEY` is set in `.env`. Check the browser console for errors from `/.netlify/functions/calendar`.
+
+**Netlify Dev: port conflict:** If port 8888 is in use, Netlify Dev will suggest an alternative port automatically.
+
+**Netlify Dev: `.env` missing:** Copy `.env.example` to `.env` and fill in the required API keys.
 
 ## CI/CD Integration
 
