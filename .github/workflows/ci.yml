@@ -124,21 +124,14 @@ jobs:
           netlify env:set BMC_URL "https://buymeacoffee.com/ukuleletuesday" --context "branch:${{ github.head_ref }}"
           netlify env:set BMC_DEFAULT_UTMS "utm_source=screen&utm_medium=qr&utm_campaign=donate" --context deploy-preview
           netlify env:set BMC_DEFAULT_UTMS "utm_source=screen&utm_medium=qr&utm_campaign=donate" --context "branch:${{ github.head_ref }}"
-      - name: Set Netlify deployment arguments
-        id: netlify_args
-        run: |
-          echo "deploy_args=deploy --dir=./public --message \"Deploy preview for PR #${{ github.event.number }}\"" >> "$GITHUB_OUTPUT"
       - name: Deploy to Netlify
         id: netlify_deploy
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         run: |
-          echo "Running Netlify deploy command:"
-          echo "netlify ${{ steps.netlify_args.outputs.deploy_args }}"
-          
           # Run the deploy command and capture output to a temporary file while still showing it
-          netlify ${{ steps.netlify_args.outputs.deploy_args }} --json | tee netlify_output.json
+          netlify deploy --dir=./public --message "Deploy preview for PR #${{ github.event.number }}" --json | tee netlify_output.json
           
           # Extract the deploy URL from the JSON output
           DEPLOY_URL=$(jq -r '.deploy_url' netlify_output.json)
