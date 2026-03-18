@@ -182,24 +182,38 @@ jobs:
             }
 
   lighthouse:
-    needs: deploy-preview
+    needs: build
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: public-site
+          path: public/
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
-      - name: Install @lhci/cli
-        run: npm install -g @lhci/cli@0.15.1
+      - name: Install dependencies and http-server
+        run: npm install -g @lhci/cli@0.15.1 http-server
+      - name: Start local server
+        run: |
+          http-server ./public -p 3000 --gzip &
+          echo $! > /tmp/server.pid
+          sleep 2
       - name: Run Lighthouse CI
         id: lhci
         continue-on-error: true
         run: lhci autorun
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          LHCI_ROOT_RUN_URL: http://localhost:3000
+      - name: Stop local server
+        if: always()
+        run: kill $(cat /tmp/server.pid) || true
       - name: Upload Lighthouse report
         uses: actions/upload-artifact@v4
         if: always()
