@@ -213,17 +213,11 @@ jobs:
           netlify env:set GOOGLE_CALENDAR_API_KEY "${{ secrets.GOOGLE_CALENDAR_API_KEY }}" --context production --secret
           netlify env:set BMC_URL "https://buymeacoffee.com/ukuleletuesday" --context production
           netlify env:set BMC_DEFAULT_UTMS "utm_source=screen&utm_medium=qr&utm_campaign=donate" --context production
-      - name: Set Netlify deployment arguments
-        id: netlify_args
-        run: |
-          COMMIT_MSG=$(git log -1 --pretty=%s) # %s gets only the subject line
-          # Escape quotes and other special characters in commit message
-          COMMIT_MSG_ESCAPED=${COMMIT_MSG//\"/\\\"}
-          COMMIT_MSG_SANITIZED=$(echo "$COMMIT_MSG_ESCAPED" | sed "s/[^a-zA-Z0-9 :_.-]/ /g")
-          DEPLOY_MESSAGE="Production deploy: ${COMMIT_MSG_SANITIZED}"
-          echo "deploy_args=deploy --dir=./public --prod-if-unlocked --message \"${DEPLOY_MESSAGE}\"" >> "$GITHUB_OUTPUT"
       - name: Deploy to Netlify
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-        run: netlify ${{ steps.netlify_args.outputs.deploy_args }}
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%s)
+          COMMIT_MSG_SANITIZED=$(echo "$COMMIT_MSG" | sed "s/[^a-zA-Z0-9 :_.-]/ /g")
+          netlify deploy --dir=./public --prod-if-unlocked --message "Production deploy: ${COMMIT_MSG_SANITIZED}"
