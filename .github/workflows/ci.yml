@@ -90,6 +90,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    outputs:
+      deploy_url: ${{ steps.netlify_deploy.outputs.NETLIFY_URL }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -168,6 +170,101 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 comment_id: existing_comment.id,
+                body: commentBody,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: commentBody,
+              });
+            }
+
+  lighthouse:
+    needs: deploy-preview
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install @lhci/cli
+        run: npm install -g @lhci/cli@0.15.1
+      - name: Run Lighthouse CI
+        id: lhci
+        continue-on-error: true
+        run: lhci autorun --collect.url="${{ needs.deploy-preview.outputs.deploy_url }}"
+      - name: Upload Lighthouse report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-report
+          path: .lighthouseci/
+          retention-days: 30
+      - name: Post Lighthouse results to PR
+        uses: actions/github-script@v7
+        if: always()
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            const comment_marker = '<!-- LIGHTHOUSE_COMMENT -->';
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            let commentBody;
+            const dir = '.lighthouseci';
+
+            try {
+              const files = fs.readdirSync(dir).filter(f => f.startsWith('lhr-') && f.endsWith('.json'));
+              if (files.length === 0) throw new Error('No report files found');
+
+              const report = JSON.parse(fs.readFileSync(path.join(dir, files[0]), 'utf8'));
+              const cats = report.categories;
+
+              const fmt = (score) => {
+                if (score === null || score === undefined) return 'N/A';
+                const pct = Math.round(score * 100);
+                // 🟢 ≥90 (good), 🟡 ≥50 (needs improvement), 🔴 <50 (poor)
+                return `${pct >= 90 ? '🟢' : pct >= 50 ? '🟡' : '🔴'} ${pct}`;
+              };
+
+              commentBody = `${comment_marker}
+            ## 🔦 Lighthouse CI Results
+
+            | Category | Score |
+            |----------|-------|
+            | ⚡ Performance | ${fmt(cats.performance?.score)} |
+            | ♿ Accessibility | ${fmt(cats.accessibility?.score)} |
+            | ✅ Best Practices | ${fmt(cats['best-practices']?.score)} |
+            | 🔍 SEO | ${fmt(cats.seo?.score)} |
+
+            _Tested URL: ${report.finalUrl}_
+            _Full report available as a [GitHub Actions artifact](${runUrl}) (retained for 30 days)._`;
+            } catch (e) {
+              commentBody = `${comment_marker}
+            ## 🔦 Lighthouse CI Results
+
+            ⚠️ Could not parse Lighthouse report. Check the [GitHub Actions logs](${runUrl}) for details.`;
+            }
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find(c => c.body.includes(comment_marker));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
                 body: commentBody,
               });
             } else {
