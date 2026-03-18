@@ -197,7 +197,9 @@ jobs:
       - name: Run Lighthouse CI
         id: lhci
         continue-on-error: true
-        run: lhci autorun --collect.url="${{ needs.deploy-preview.outputs.deploy_url }}"
+        run: lhci autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
       - name: Upload Lighthouse report
         uses: actions/upload-artifact@v4
         if: always()
