@@ -260,8 +260,7 @@ jobs:
             | ✅ Best Practices | ${fmt(cats['best-practices']?.score)} |
             | 🔍 SEO | ${fmt(cats.seo?.score)} |
 
-            _Tested URL: ${report.finalUrl}_
-            _Full report available as a [GitHub Actions artifact](${runUrl}) (retained for 30 days)._`;
+            _[View full report](${runUrl})_`;
             } catch (e) {
               commentBody = `${comment_marker}
             ## 🔦 Lighthouse CI Results
