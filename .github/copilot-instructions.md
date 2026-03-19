@@ -40,17 +40,7 @@ The development environment is pre-configured via GitHub Actions setup steps. Yo
 
 ### Local Development Server
 
-**Simple static server** (no Netlify Functions or Edge Functions):
-
-```bash
-python3 -m http.server -d public 8000
-```
-- **Serves site at:** http://localhost:8000
-- **REQUIREMENT:** Must run `uv run python build.py` first to generate `public/` directory
-- Server runs in foreground - use Ctrl+C to stop
-- ⚠️ Dynamic features (Events Calendar, WhatsApp gate, donate redirects) **will not work** — use Netlify Dev for those
-
-**Netlify Dev** (full local environment — Functions, Edge Functions, redirects, env vars):
+**Netlify Dev** (recommended — full local environment with Functions, Edge Functions, redirects, env vars):
 
 ```bash
 netlify dev
@@ -59,6 +49,15 @@ netlify dev
 - **REQUIREMENT:** Must run `uv run python build.py` first
 - Runs Netlify Functions at `/.netlify/functions/` and Edge Functions at their configured paths
 - Use this when testing or debugging dynamic features like the Events Calendar (`/.netlify/functions/calendar`) or the donate redirect (`/donate`, `/donate-qr`, `/support-us`)
+
+**Fallback: simple static server** (no Netlify Functions or Edge Functions):
+
+```bash
+uv run poe serve
+```
+- **Serves site at:** http://localhost:8000
+- **REQUIREMENT:** Must run `uv run python build.py` first to generate `public/` directory
+- ⚠️ Dynamic features (Events Calendar, WhatsApp gate, donate redirects) **will not work**
 
 ### Testing Commands
 
@@ -90,23 +89,23 @@ pnpm playwright test --project="chromium" tests/snapshots.spec.ts --grep="visual
    uvx pre-commit run --all-files
    ```
 
-3. **Start local server and manually test:**
+3. **Start Netlify Dev and manually test:**
    ```bash
-   python3 -m http.server -d public 8000
+   netlify dev
    ```
-   - Visit http://localhost:8000 in browser
+   - Visit http://localhost:8888 in browser
    - Navigate to different pages (concerts, songbook, etc.)
    - Verify pages load without 404 errors
    - Check that styling and JavaScript work correctly
-   - ⚠️ Dynamic features (calendar, donate, WhatsApp) will not work here — use Netlify Dev for those
+   - Test Events Calendar on homepage (fetches from `/.netlify/functions/calendar`)
+   - Test `/donate`, `/donate-qr`, `/support-us` redirects via Edge Function
 
-3a. **Test dynamic features with Netlify Dev:**
+3a. **Fallback: test with simple static server** (if Netlify Dev is unavailable):
     ```bash
-    netlify dev
+    uv run poe serve
     ```
-    - Visit http://localhost:8888 in browser
-    - Test Events Calendar on homepage (fetches from `/.netlify/functions/calendar`)
-    - Test `/donate`, `/donate-qr`, `/support-us` redirects via Edge Function
+    - Visit http://localhost:8000 in browser
+    - ⚠️ Dynamic features (calendar, donate, WhatsApp) will not work here
 
 4. **Test responsive design:**
    - Resize browser window to test mobile layouts
@@ -170,7 +169,7 @@ The `static/` directory is organized as follows:
 
 **Pre-commit fails:** Run `uvx pre-commit run --all-files` to see specific formatting issues.
 
-**Server won't start:** Verify `public/` directory exists and port 8000 is not already in use.
+**Server won't start:** Verify `public/` directory exists (run `uv run python build.py` first) and that port 8888 (Netlify Dev) or 8000 (fallback) is not already in use.
 
 **Netlify Dev: Events Calendar not loading:** Ensure `GOOGLE_CALENDAR_API_KEY` is set. Check the browser console for errors from `/.netlify/functions/calendar`.
 

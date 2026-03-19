@@ -142,33 +142,9 @@ To ensure stable snapshots, dynamic or non-deterministic content (like embedded 
 
 ### Running Locally
 
-First, build the site:
+[Netlify Dev CLI](https://docs.netlify.com/api-and-cli-guides/cli-guides/local-development/) replicates the full Netlify production environment locally, including Functions, Edge Functions, redirects, and custom headers. This is the recommended way to run the site locally.
 
-```bash
-uv run poe build
-```
-
-Then, to serve the website locally, use the following command:
-
-```bash
-uv run poe serve
-```
-
-The site will be available at `http://localhost:8000`.
-
-> **Note:** This simple server does **not** run Netlify Functions or Edge Functions, so features like the Events Calendar, WhatsApp gate, and donate redirects will not work. Use [Netlify Dev](#running-with-netlify-dev) for full local functionality.
-
-### Running with Netlify Dev
-
-[Netlify Dev CLI](https://docs.netlify.com/api-and-cli-guides/cli-guides/local-development/) replicates the full Netlify production environment locally, including Functions, Edge Functions, redirects, and custom headers.
-
-**1. Install Netlify CLI:**
-
-```bash
-npm install -g netlify-cli
-```
-
-**2. Set up environment variables:**
+**1. Set up environment variables:**
 
 Copy `.env.example` to `.env` and fill in your values:
 
@@ -178,13 +154,15 @@ cp .env.example .env
 
 Edit `.env` with the required API keys (ask a team member for secret values). The `BMC_URL` and `BMC_DEFAULT_UTMS` variables already have sensible defaults in the example file.
 
-**3. Build the site:**
+> Alternatively, pull live values directly from the Netlify dashboard: run `netlify link` (requires Netlify account access), then `netlify env:pull .env`.
+
+**2. Build the site:**
 
 ```bash
-uv run python build.py
+uv run poe build
 ```
 
-**4. Start Netlify Dev:**
+**3. Start Netlify Dev:**
 
 ```bash
 netlify dev
@@ -192,7 +170,7 @@ netlify dev
 
 The site will be available at `http://localhost:8888`.
 
-**What Netlify Dev provides that the simple server does not:**
+**What Netlify Dev provides:**
 
 - ✅ Netlify Functions served at `/.netlify/functions/` (powers the Events Calendar)
 - ✅ Edge Functions at their configured paths (`/donate`, `/donate-qr`, `/support-us`)
@@ -202,6 +180,18 @@ The site will be available at `http://localhost:8888`.
 
 **Limitations and caveats:**
 
-- The `.env` file must be set up manually (see above). To instead pull live values from the Netlify dashboard, run `netlify link` (requires Netlify account access), then `netlify env:pull .env`.
 - Edge Functions run in a Deno runtime; minor behavioural differences from production are possible.
-- The site is not rebuilt automatically when template or static files change — re-run `uv run python build.py` after any source changes.
+- The site is not rebuilt automatically when template or static files change — re-run `uv run poe build` after any source changes.
+
+#### Fallback: Simple Static Server
+
+If you only need to check static content (HTML, CSS, JS) without dynamic features, you can use the simpler built-in server instead:
+
+```bash
+uv run poe build
+uv run poe serve
+```
+
+The site will be available at `http://localhost:8000`.
+
+> **Note:** This server does **not** run Netlify Functions or Edge Functions, so features like the Events Calendar, WhatsApp gate, and donate redirects will **not** work.
