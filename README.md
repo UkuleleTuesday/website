@@ -79,6 +79,19 @@ the Ukulele Tuesday Google account (see https://github.com/UkuleleTuesday/websit
 
 The site is automatically built and deployed to Netlify on every push to the `main` branch. Preview environments are also created for every pull request.
 
+### Lighthouse CI
+
+Every pull request automatically runs [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci) against the Netlify deploy preview, measuring performance, accessibility, best practices, and SEO.
+
+**Viewing results:**
+
+- A summary comment is posted to the PR with scores for each Lighthouse category
+- The full Lighthouse report is uploaded as a GitHub Actions artifact (retained for 30 days) — find it in the **Actions** tab under the workflow run for your PR
+
+**Configuration:**
+
+Lighthouse CI is configured in `.lighthouserc.json` at the project root. The assertions are set to `warn` only, so the CI will not fail due to low Lighthouse scores — the results are informational. Thresholds can be tightened to `error` to enforce minimum scores.
+
 ## Development
 
 ### Pre-commit Hooks
