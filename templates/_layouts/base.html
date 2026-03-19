@@ -12,7 +12,8 @@
       {% block title %}{% endblock %}
     </title>
     <meta content="{% block description %}{% endblock %}" name="description">
-    <link href="{% block canonical_url %}{% endblock %}" rel="canonical">
+    <link href="{{ base_url }}{% block canonical_url %}{% endblock %}"
+          rel="canonical">
     <meta content="en_GB" property="og:locale">
     <meta content="article" property="og:type">
     <meta content="{% block og_title %}{% endblock %}" property="og:title">

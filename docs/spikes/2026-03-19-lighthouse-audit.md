@@ -2,17 +2,17 @@
 
 **Date:** 2026-03-19  
 **Tool versions:** Lighthouse 13.0.3 · Netlify CLI 24.3.0 · Node 24.14.0  
-**Environment:** Netlify Dev (localhost:8888), static site built locally (`uv run python build.py`)
+**Environment:** Netlify Dev (localhost:8889), static site built with `BASE_URL=https://ukuleletuesday.ie`
 
 ## How this was run
 
-1. Built the static site:
+1. Built the static site (the `BASE_URL` env var defaults to `https://ukuleletuesday.ie` in `build.py`):
    ```
    uv run python build.py
    ```
 2. Started Netlify Dev (includes edge functions for `/donate`, `/donate-qr`, `/support-us`):
    ```
-   ./node_modules/.bin/netlify dev --port 8888 --no-open
+   ./node_modules/.bin/netlify dev --port 8889 --no-open
    ```
 3. Ran Lighthouse headlessly against four pages:
    ```
@@ -27,14 +27,14 @@
 
 | Page               | Performance | Accessibility | Best Practices | SEO |
 |--------------------|:-----------:|:-------------:|:--------------:|:---:|
-| `/` (Home)         | 55          | 80            | 96             | 92  |
-| `/concerts/`       | 57          | 89            | 92             | 92  |
-| `/songbook/`       | 56          | 81            | 77             | 92  |
-| `/tuesday-session/`| 57          | 73            | 96             | 92  |
+| `/` (Home)         | 55          | 80            | 96             | 100 |
+| `/concerts/`       | 57          | 89            | 92             | 100 |
+| `/songbook/`       | 56          | 81            | 77             | 100 |
+| `/tuesday-session/`| 56          | 73            | 96             | 100 |
 
 **Target thresholds** (from `.lighthouserc.json`): Performance ≥ 80 · Accessibility ≥ 90 · Best Practices ≥ 80 · SEO ≥ 80
 
-All pages **fail** the Performance target. Accessibility falls short on most pages. Songbook fails Best Practices. SEO is borderline (one audit fails but only because of a localhost canonical URL — see note below).
+All pages **fail** the Performance target. Accessibility falls short on most pages. Songbook fails Best Practices. SEO passes on all pages (100) once canonical URLs are absolute.
 
 ---
 
@@ -44,12 +44,12 @@ All pages **fail** the Performance target. Accessibility falls short on most pag
 
 | Metric                     | Value    | Rating   |
 |----------------------------|----------|----------|
-| First Contentful Paint     | 10.4 s   | 🔴 Poor  |
-| Largest Contentful Paint   | 13.5 s   | 🔴 Poor  |
-| Total Blocking Time        | 120 ms   | 🟡 Needs improvement |
+| First Contentful Paint     | 10.7 s   | 🔴 Poor  |
+| Largest Contentful Paint   | 13.7 s   | 🔴 Poor  |
+| Total Blocking Time        | 100 ms   | 🟡 Needs improvement |
 | Cumulative Layout Shift    | 0        | 🟢 Good  |
-| Speed Index                | 10.4 s   | 🔴 Poor  |
-| Time to Interactive        | 13.6 s   | 🔴 Poor  |
+| Speed Index                | 10.7 s   | 🔴 Poor  |
+| Time to Interactive        | 13.7 s   | 🔴 Poor  |
 
 *(Concerts page: FCP 8.4 s, LCP 16.2 s, TBT 0 ms, CLS 0.011)*
 
@@ -154,11 +154,7 @@ The embedded Spotify playlist iframe sets **third-party cookies** (`sp_t`, `sp_l
 
 ## SEO
 
-All pages score 92. The one failing audit is:
-
-> **Document does not have a valid `rel=canonical`** — "Is not an absolute URL (`/`)"
-
-This is a **localhost artefact**: the canonical tag in the template uses a relative URL (`/`) rather than the full production URL (`https://www.ukuleletuesday.ie/`). When built with `BASE_URL=https://ukuleletuesday.ie` the canonical is absolute and this audit passes in production. Confirmed by checking the template — `BASE_URL` is not set in the local dev `.env`, so it defaults to a relative path.
+All pages score **100**. Canonical URLs are now absolute (`https://ukuleletuesday.ie/…`) because `build.py` defaults `BASE_URL` to `https://ukuleletuesday.ie`, and the base template now prepends `{{ base_url }}` to every page's canonical path.
 
 ---
 
@@ -198,19 +194,15 @@ This does not affect production.
 
 8. **Fix heading hierarchy** on the Tuesday Session page (headings must descend sequentially).
 
-### 🟡 Medium impact — Best Practices
+### 🟢 Low impact — Best Practices / misc
 
 9. **Spotify embed / third-party cookies**: Evaluate whether the embed is still needed; if so, consider lazy-loading it behind a user interaction to avoid the cookie classification issue.
-
-### 🟢 Low impact — SEO / misc
-
-10. **Set `BASE_URL` in local dev** (`.env` or Netlify Dev config) so that canonical URLs resolve correctly when auditing locally. Production is unaffected.
 
 ---
 
 ## Netlify Dev observations
 
-- Netlify Dev started cleanly and served the static site at `http://localhost:8888` as expected.
+- Netlify Dev started cleanly and served the static site at `http://localhost:8889` as expected.
 - Edge functions (`/donate`, `/donate-qr`, `/support-us`) are loaded and routed via the Deno runtime.
 - The Netlify Function `calendar.js` fails with 500 locally (missing API key) — expected without real credentials.
 - No issues with the redirects or headers configuration.
