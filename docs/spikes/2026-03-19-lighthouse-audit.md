@@ -200,6 +200,41 @@ This does not affect production.
 
 ---
 
+## Netlify Deploy Preview vs Local Dev
+
+Lighthouse was also run against the Netlify deploy preview for this PR (`https://69bbf7ca4f9a1a16569864af--ukulele-tuesday-website.netlify.app/`).
+
+### Score comparison
+
+| Page               | Env     | Performance | Accessibility | Best Practices | SEO |
+|--------------------|---------|:-----------:|:-------------:|:--------------:|:---:|
+| `/` (Home)         | Local   | 55          | 80            | 96             | 100 |
+| `/` (Home)         | Preview | 69          | 88            | 100            | 66  |
+| `/concerts/`       | Local   | 57          | 89            | 92             | 100 |
+| `/concerts/`       | Preview | 55          | 89            | 92             | 66  |
+| `/songbook/`       | Local   | 56          | 81            | 77             | 100 |
+| `/songbook/`       | Preview | 57          | 81            | 77             | 66  |
+| `/tuesday-session/`| Local   | 56          | 73            | 96             | 100 |
+| `/tuesday-session/`| Preview | 56          | 73            | 96             | 66  |
+
+### Why SEO is 66 on the deploy preview (not a code bug)
+
+Every Netlify deploy preview automatically receives an `X-Robots-Tag: noindex` HTTP response header. This is an intentional Netlify platform feature: it prevents staging/preview content from being indexed by search engines. Lighthouse's **"Page is blocked from indexing"** audit detects this header and marks the page as failing, which drops the SEO score by ~34 points.
+
+This does **not** affect:
+- The production site at `https://ukuleletuesday.ie` (no `noindex` header there)
+- Local Lighthouse runs (no such header is emitted by Netlify Dev)
+
+The SEO score of 100 reported from the local run correctly reflects what production would score.
+
+### Why other scores differ between local and preview
+
+- **Performance (home: 55 → 69):** Netlify serves assets from a global CDN with HTTP/2 and edge caching, which significantly reduces network transfer time. The local run uses a single-threaded local server over loopback, giving a pessimistic result.
+- **Accessibility (home: 80 → 88):** Minor variation due to Lighthouse's simulated throttling model — both environments expose the same underlying issues (colour contrast, unlabelled icon links). The real score is somewhere in this range.
+- **Best Practices (home: 96 → 100):** The calendar function returns HTTP 500 locally (no API key), which generates a console error and slightly penalises the local score. On the preview the function is not configured either but the error handling path differs.
+
+---
+
 ## Netlify Dev observations
 
 - Netlify Dev started cleanly and served the static site at `http://localhost:8889` as expected.
