@@ -11,6 +11,7 @@ Your development environment is automatically configured with:
 - ✅ Node.js and `pnpm` (JavaScript package manager)
 - ✅ All project dependencies installed (`pnpm install` already run)
 - ✅ Playwright browsers for testing
+- ✅ `netlify-cli` (Netlify Dev CLI for local function/edge-function testing)
 
 You do **not** need to run setup commands - focus on the development workflow below.
 
@@ -38,14 +39,25 @@ The development environment is pre-configured via GitHub Actions setup steps. Yo
    - Uses djLint to format Jinja2 templates in `templates/`
 
 ### Local Development Server
-Start the local development server to test your changes:
+
+**Netlify Dev** (recommended — full local environment with Functions, Edge Functions, redirects, env vars):
 
 ```bash
-python3 -m http.server -d public 8000
+netlify dev
+```
+- **Serves site at:** http://localhost:8888
+- **REQUIREMENT:** Must run `uv run python build.py` first
+- Runs Netlify Functions at `/.netlify/functions/` and Edge Functions at their configured paths
+- Use this when testing or debugging dynamic features like the Events Calendar (`/.netlify/functions/calendar`) or the donate redirect (`/donate`, `/donate-qr`, `/support-us`)
+
+**Fallback: simple static server** (no Netlify Functions or Edge Functions):
+
+```bash
+uv run poe serve
 ```
 - **Serves site at:** http://localhost:8000
 - **REQUIREMENT:** Must run `uv run python build.py` first to generate `public/` directory
-- Server runs in foreground - use Ctrl+C to stop
+- ⚠️ Dynamic features (Events Calendar, WhatsApp gate, donate redirects) **will not work**
 
 ### Testing Commands
 
@@ -77,14 +89,23 @@ pnpm playwright test --project="chromium" tests/snapshots.spec.ts --grep="visual
    uvx pre-commit run --all-files
    ```
 
-3. **Start local server and manually test:**
+3. **Start Netlify Dev and manually test:**
    ```bash
-   python3 -m http.server -d public 8000
+   netlify dev
    ```
-   - Visit http://localhost:8000 in browser
+   - Visit http://localhost:8888 in browser
    - Navigate to different pages (concerts, songbook, etc.)
    - Verify pages load without 404 errors
    - Check that styling and JavaScript work correctly
+   - Test Events Calendar on homepage (fetches from `/.netlify/functions/calendar`)
+   - Test `/donate`, `/donate-qr`, `/support-us` redirects via Edge Function
+
+3a. **Fallback: test with simple static server** (if Netlify Dev is unavailable):
+    ```bash
+    uv run poe serve
+    ```
+    - Visit http://localhost:8000 in browser
+    - ⚠️ Dynamic features (calendar, donate, WhatsApp) will not work here
 
 4. **Test responsive design:**
    - Resize browser window to test mobile layouts
@@ -135,6 +156,10 @@ The `static/` directory is organized as follows:
 ### Environment Variables
 - `ENABLE_ANALYTICS=true` - Enable Google Analytics (production only)
 - `BASE_URL=https://ukuleletuesday.ie` - Base URL for absolute paths in SEO data
+- `GOOGLE_CALENDAR_API_KEY` - Google Calendar API key (required by `netlify/functions/calendar.js`)
+- `WHATSAPP_JOIN_LINK` - WhatsApp group invite URL (required by `netlify/functions/whatsapp-gate.js`)
+- `BMC_URL` - Buy Me A Coffee redirect URL (used by `netlify/edge-functions/donate.js`, defaults to `https://buymeacoffee.com/ukuleletuesday`)
+- `BMC_DEFAULT_UTMS` - Default UTM params for donate redirect (used by `netlify/edge-functions/donate.js`)
 
 ## Troubleshooting
 
@@ -144,7 +169,11 @@ The `static/` directory is organized as follows:
 
 **Pre-commit fails:** Run `uvx pre-commit run --all-files` to see specific formatting issues.
 
-**Server won't start:** Verify `public/` directory exists and port 8000 is not already in use.
+**Server won't start:** Verify `public/` directory exists (run `uv run python build.py` first) and that port 8888 (Netlify Dev) or 8000 (fallback) is not already in use.
+
+**Netlify Dev: Events Calendar not loading:** Ensure `GOOGLE_CALENDAR_API_KEY` is set. Check the browser console for errors from `/.netlify/functions/calendar`.
+
+**Netlify Dev: port conflict:** If port 8888 is in use, Netlify Dev will suggest an alternative port automatically.
 
 ## CI/CD Integration
 

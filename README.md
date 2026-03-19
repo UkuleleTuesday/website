@@ -165,16 +165,54 @@ To ensure stable snapshots, dynamic or non-deterministic content (like embedded 
 
 ### Running Locally
 
-First, build the site:
+[Netlify Dev CLI](https://docs.netlify.com/api-and-cli-guides/cli-guides/local-development/) replicates the full Netlify production environment locally, including Functions, Edge Functions, redirects, and custom headers. This is the recommended way to run the site locally.
+
+**1. Set up environment variables:**
+
+Copy `.env.example` to `.env` and fill in your values:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` with the required API keys (ask a team member for secret values). The `BMC_URL` and `BMC_DEFAULT_UTMS` variables already have sensible defaults in the example file.
+
+**2. Build the site:**
 
 ```bash
 uv run poe build
 ```
 
-Then, to serve the website locally, use the following command:
+**3. Start Netlify Dev:**
 
 ```bash
+netlify dev
+```
+
+The site will be available at `http://localhost:8888`.
+
+**What Netlify Dev provides:**
+
+- ✅ Netlify Functions served at `/.netlify/functions/` (powers the Events Calendar)
+- ✅ Edge Functions at their configured paths (`/donate`, `/donate-qr`, `/support-us`)
+- ✅ Environment variables from `.env` loaded automatically
+- ✅ Netlify redirect rules applied
+- ✅ Custom response headers applied
+
+**Limitations and caveats:**
+
+- Edge Functions run in a Deno runtime; minor behavioural differences from production are possible.
+- The site is not rebuilt automatically when template or static files change — re-run `uv run poe build` after any source changes.
+
+#### Fallback: Simple Static Server
+
+If you only need to check static content (HTML, CSS, JS) without dynamic features, you can use the simpler built-in server instead:
+
+```bash
+uv run poe build
 uv run poe serve
 ```
 
 The site will be available at `http://localhost:8000`.
+
+> **Note:** This server does **not** run Netlify Functions or Edge Functions, so features like the Events Calendar, WhatsApp gate, and donate redirects will **not** work.
