@@ -154,8 +154,6 @@ cp .env.example .env
 
 Edit `.env` with the required API keys (ask a team member for secret values). The `BMC_URL` and `BMC_DEFAULT_UTMS` variables already have sensible defaults in the example file.
 
-> Alternatively, pull live values directly from the Netlify dashboard: run `netlify link` (requires Netlify account access), then `netlify env:pull .env`.
-
 **2. Build the site:**
 
 ```bash
