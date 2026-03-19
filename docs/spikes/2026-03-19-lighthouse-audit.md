@@ -200,7 +200,7 @@ This does not affect production.
 
 10. **Mixpanel (~811 KiB unused JS, production only)**: `mixpanel.module.js` is the largest single unused-JS payload on production. Switch to Mixpanel's slim build, lazy-load it after user interaction, or evaluate whether it is still needed.
 
-11. **Align `BASE_URL` with the canonical serving domain**: `build.py` defaults to `https://ukuleletuesday.ie` (non-www), but `netlify.toml` redirects non-www → www so pages are actually served at `https://www.ukuleletuesday.ie`. After this PR merges, canonical URLs will be absolute but will point to the non-www domain; while valid (the redirect satisfies Lighthouse), crawler requests incur an extra hop. Set `BASE_URL=https://www.ukuleletuesday.ie` in the Netlify production environment variables **and** update the default in `build.py` to `https://www.ukuleletuesday.ie` to keep local dev consistent.
+11. ~~**Align `BASE_URL` with the canonical serving domain**~~ ✅ **Done in this PR**: `build.py` default updated from `https://ukuleletuesday.ie` to `https://www.ukuleletuesday.ie`. The Netlify production environment variable should also be set to `https://www.ukuleletuesday.ie` to ensure deploy-time builds use the correct origin.
 
 ---
 
@@ -210,7 +210,7 @@ Lighthouse was run across three environments: local Netlify Dev, the Netlify dep
 
 | Environment | URL |
 |-------------|-----|
-| Local       | `http://localhost:8889` (Netlify Dev, `BASE_URL=https://ukuleletuesday.ie`) |
+| Local       | `http://localhost:8889` (Netlify Dev, `BASE_URL=https://www.ukuleletuesday.ie`) |
 | Preview     | `https://69bbf7ca4f9a1a16569864af--ukulele-tuesday-website.netlify.app` |
 | Production  | `https://www.ukuleletuesday.ie` (pre-merge, old code) |
 
@@ -246,7 +246,7 @@ Running against the live domain revealed two issues not visible in local/preview
 **1. Non-www → www redirect chain (~1,030 ms wasted on home)**
 `netlify.toml` redirects `https://ukuleletuesday.ie/*` → `https://www.ukuleletuesday.ie/:splat` (HTTP 301). Every visitor hitting the bare domain (or any link using the non-www URL) incurs an extra round-trip. Lighthouse flags this as "Avoid multiple page redirects" with an estimated saving of 770–1,030 ms.
 
-Implication for canonicals: `build.py` defaults `BASE_URL` to `https://ukuleletuesday.ie` (non-www). Once this PR is merged, the canonical tag will say `https://ukuleletuesday.ie/`, but pages are actually served at `https://www.ukuleletuesday.ie/`. This is technically valid (the canonical URL redirects back to the serving URL), but every canonical link adds a redirect hop to crawler requests. Fix: set `BASE_URL=https://www.ukuleletuesday.ie` in the Netlify production environment and update the `build.py` default to match (see recommendation #11).
+Implication for canonicals: `build.py` previously defaulted `BASE_URL` to `https://ukuleletuesday.ie` (non-www). This has been fixed in this PR — `build.py` now defaults to `https://www.ukuleletuesday.ie`. The Netlify production environment variable should also be set to `https://www.ukuleletuesday.ie` to ensure deploy-time builds use the www origin (see recommendation #11).
 
 **2. Mixpanel loads ~811 KiB of unused JavaScript (production only)**
 When `ENABLE_ANALYTICS=true` (production), `mixpanel.module.js` (CDN) is loaded — 811 KiB of which Lighthouse reports as unused. This is the single largest unused-JS contributor, larger than all the WordPress CSS combined. Options: switch to Mixpanel's slim build, lazy-load it after user interaction, or evaluate whether Mixpanel is still needed.
