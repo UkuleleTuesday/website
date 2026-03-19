@@ -198,40 +198,64 @@ This does not affect production.
 
 9. **Spotify embed / third-party cookies**: Evaluate whether the embed is still needed; if so, consider lazy-loading it behind a user interaction to avoid the cookie classification issue.
 
+10. **Mixpanel (~811 KiB unused JS, production only)**: `mixpanel.module.js` is the largest single unused-JS payload on production. Switch to Mixpanel's slim build, lazy-load it after user interaction, or evaluate whether it is still needed.
+
+11. **Align `BASE_URL` with the canonical serving domain**: `build.py` defaults to `https://ukuleletuesday.ie` (non-www), but `netlify.toml` redirects non-www → www so pages are actually served at `https://www.ukuleletuesday.ie`. After this PR merges, canonical URLs will be absolute but will point to the non-www domain; while valid (the redirect satisfies Lighthouse), crawler requests incur an extra hop. Set `BASE_URL=https://www.ukuleletuesday.ie` in the Netlify production environment variables **and** update the default in `build.py` to `https://www.ukuleletuesday.ie` to keep local dev consistent.
+
 ---
 
-## Netlify Deploy Preview vs Local Dev
+## Three-environment comparison
 
-Lighthouse was also run against the Netlify deploy preview for this PR (`https://69bbf7ca4f9a1a16569864af--ukulele-tuesday-website.netlify.app/`).
+Lighthouse was run across three environments: local Netlify Dev, the Netlify deploy preview for this PR, and the live production domain.
+
+| Environment | URL |
+|-------------|-----|
+| Local       | `http://localhost:8889` (Netlify Dev, `BASE_URL=https://ukuleletuesday.ie`) |
+| Preview     | `https://69bbf7ca4f9a1a16569864af--ukulele-tuesday-website.netlify.app` |
+| Production  | `https://www.ukuleletuesday.ie` (pre-merge, old code) |
 
 ### Score comparison
 
-| Page               | Env     | Performance | Accessibility | Best Practices | SEO |
-|--------------------|---------|:-----------:|:-------------:|:--------------:|:---:|
-| `/` (Home)         | Local   | 55          | 80            | 96             | 100 |
-| `/` (Home)         | Preview | 69          | 88            | 100            | 66  |
-| `/concerts/`       | Local   | 57          | 89            | 92             | 100 |
-| `/concerts/`       | Preview | 55          | 89            | 92             | 66  |
-| `/songbook/`       | Local   | 56          | 81            | 77             | 100 |
-| `/songbook/`       | Preview | 57          | 81            | 77             | 66  |
-| `/tuesday-session/`| Local   | 56          | 73            | 96             | 100 |
-| `/tuesday-session/`| Preview | 56          | 73            | 96             | 66  |
+| Page               | Env        | Performance | Accessibility | Best Practices | SEO |
+|--------------------|------------|:-----------:|:-------------:|:--------------:|:---:|
+| `/` (Home)         | Local      | 55          | 80            | 96             | 100 |
+| `/` (Home)         | Preview    | 69          | 88            | 100            | 66  |
+| `/` (Home)         | Production | 62          | 88            | 100            | 92  |
+| `/concerts/`       | Local      | 57          | 89            | 92             | 100 |
+| `/concerts/`       | Preview    | 55          | 89            | 92             | 66  |
+| `/concerts/`       | Production | 55          | 89            | 92             | 92  |
+| `/songbook/`       | Local      | 56          | 81            | 77             | 100 |
+| `/songbook/`       | Preview    | 57          | 81            | 77             | 66  |
+| `/songbook/`       | Production | 56          | 81            | 77             | 92  |
+| `/tuesday-session/`| Local      | 56          | 73            | 96             | 100 |
+| `/tuesday-session/`| Preview    | 56          | 73            | 96             | 66  |
+| `/tuesday-session/`| Production | 55          | 73            | 96             | 92  |
 
-### Why SEO is 66 on the deploy preview (not a code bug)
+### Why SEO differs across environments
 
-Every Netlify deploy preview automatically receives an `X-Robots-Tag: noindex` HTTP response header. This is an intentional Netlify platform feature: it prevents staging/preview content from being indexed by search engines. Lighthouse's **"Page is blocked from indexing"** audit detects this header and marks the page as failing, which drops the SEO score by ~34 points.
+**Preview — SEO 66:** Every Netlify deploy preview automatically receives an `X-Robots-Tag: noindex` HTTP response header. This is an intentional Netlify platform feature that prevents staging content from being indexed. Lighthouse's **"Page is blocked from indexing"** audit detects this header and drops the SEO score by ~34 points. This is not a code issue.
 
-This does **not** affect:
-- The production site at `https://ukuleletuesday.ie` (no `noindex` header there)
-- Local Lighthouse runs (no such header is emitted by Netlify Dev)
+**Production — SEO 92 (pre-merge):** The current live site (before this PR is merged) still emits a relative canonical URL (`/`, `/concerts/`, etc.) because the canonical fix in this PR has not been deployed yet. Lighthouse flags this as "Is not an absolute URL". After this PR merges the canonical will be `https://ukuleletuesday.ie/…` and this audit will pass.
 
-The SEO score of 100 reported from the local run correctly reflects what production would score.
+**Local — SEO 100:** Absolute canonical URLs are emitted (from this PR's template fix), no `noindex` header. This is the expected production score once the PR is merged.
 
-### Why other scores differ between local and preview
+### Production-only findings
 
-- **Performance (home: 55 → 69):** Netlify serves assets from a global CDN with HTTP/2 and edge caching, which significantly reduces network transfer time. The local run uses a single-threaded local server over loopback, giving a pessimistic result.
-- **Accessibility (home: 80 → 88):** Minor variation due to Lighthouse's simulated throttling model — both environments expose the same underlying issues (colour contrast, unlabelled icon links). The real score is somewhere in this range.
-- **Best Practices (home: 96 → 100):** The calendar function returns HTTP 500 locally (no API key), which generates a console error and slightly penalises the local score. On the preview the function is not configured either but the error handling path differs.
+Running against the live domain revealed two issues not visible in local/preview runs:
+
+**1. Non-www → www redirect chain (~1,030 ms wasted on home)**
+`netlify.toml` redirects `https://ukuleletuesday.ie/*` → `https://www.ukuleletuesday.ie/:splat` (HTTP 301). Every visitor hitting the bare domain (or any link using the non-www URL) incurs an extra round-trip. Lighthouse flags this as "Avoid multiple page redirects" with an estimated saving of 770–1,030 ms.
+
+Implication for canonicals: `build.py` defaults `BASE_URL` to `https://ukuleletuesday.ie` (non-www). Once this PR is merged, the canonical tag will say `https://ukuleletuesday.ie/`, but pages are actually served at `https://www.ukuleletuesday.ie/`. This is technically valid (the canonical URL redirects back to the serving URL), but every canonical link adds a redirect hop to crawler requests. Fix: set `BASE_URL=https://www.ukuleletuesday.ie` in the Netlify production environment and update the `build.py` default to match (see recommendation #11).
+
+**2. Mixpanel loads ~811 KiB of unused JavaScript (production only)**
+When `ENABLE_ANALYTICS=true` (production), `mixpanel.module.js` (CDN) is loaded — 811 KiB of which Lighthouse reports as unused. This is the single largest unused-JS contributor, larger than all the WordPress CSS combined. Options: switch to Mixpanel's slim build, lazy-load it after user interaction, or evaluate whether Mixpanel is still needed.
+
+### Why other scores vary between environments
+
+- **Performance (home: local 55 / preview 69 / prod 62):** CDN and HTTP/2 on Netlify give faster asset delivery than localhost. Production also benefits from CDN but adds the non-www → www redirect latency.
+- **Accessibility (home: local 80 / preview+prod 88):** Minor variation from Lighthouse's simulated throttling model. All environments expose the same underlying issues (colour contrast, unlabelled icon links).
+- **Best Practices (home: local 96 / preview+prod 100):** The calendar function returns HTTP 500 locally (no API key), generating a console error that slightly penalises the local score.
 
 ---
 
