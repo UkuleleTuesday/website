@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "playwright test",
-    "postinstall": "playwright install --with-deps"
+    "postinstall": "playwright install --with-deps",
+    "optimize-css": "uv run python build.py && node optimize-css.mjs && uv run python build.py"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +15,7 @@
   "devDependencies": {
     "@playwright/test": "^1.54.2",
     "@types/node": "^24.2.1",
-    "netlify-cli": "^24.3.0"
+    "netlify-cli": "^24.3.0",
+    "purgecss": "^8.0.0"
   }
 }
