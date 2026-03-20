@@ -28,7 +28,7 @@ function getAllHtmlFiles(dirPath: string, arrayOfFiles: string[] = [], relativeD
 }
 
 const templateFiles = getAllHtmlFiles(templatesDir);
-const baseUrl = process.env.BASE_URL || 'https://ukuleletuesday.ie';
+const baseUrl = process.env.BASE_URL || 'https://www.ukuleletuesday.ie';
 
 // Define expected breadcrumbs for each page to verify against.
 // This logic mirrors the `generate_breadcrumbs` function in `build.py`.

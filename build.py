@@ -72,7 +72,7 @@ def build():
 
     # Base URL for absolute paths in SEO data.
     # Use BASE_URL, with a sane default.
-    base_url = os.environ.get('BASE_URL', 'https://ukuleletuesday.ie')
+    base_url = os.environ.get('BASE_URL', 'https://www.ukuleletuesday.ie')
     print(f"Using base URL: {base_url}")
 
     errors = []
