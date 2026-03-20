@@ -1,1 +1,720 @@
-body{background-color:#006860;font-family:Poppins;font-size:15px;font-weight:400;letter-spacing:0;line-height:24px}p{margin:0 0 17px}h1{font-family:Pattaya;font-size:60px;font-weight:400;letter-spacing:0;line-height:72px;margin-bottom:28px}h2{font-family:Quicksand;font-size:30px;line-height:36px;margin-bottom:31px}h2,h5{font-weight:700;letter-spacing:0}h5{font-size:18px;line-height:27px;margin-bottom:19px}.main_font,h5,input[type=email],input[type=number],input[type=password],input[type=text],input[type=url],legend,select,textarea{font-family:Poppins}.header_main .cesis_container{max-width:1250px}.header_main{border-color:hsla(0,0%,92%,.5);height:90px}#header_container.cesis_opaque_header,.header_main{background:#006566}.header_main:not(.header_vertical) .header_logo,.header_main:not(.header_vertical) .tt-main-additional .cesis_menu_btn a,.header_main:not(.header_vertical) .tt-main-additional .cesis_social_icons,.header_main:not(.header_vertical) .tt-main-additional .cesis_social_icons a,.header_main:not(.header_vertical) .tt-main-navigation>div>ul>li>a{height:90px;line-height:90px}.header_main:not(.header_vertical) .tt-main-additional .cesis_menu_btn a span{background:#fff;border-color:transparent;border-radius:30px;border-width:1px;color:#6d7783;font-family:Poppins;font-size:13px;font-weight:500;letter-spacing:1px;line-height:38px;text-transform:uppercase;width:160px}.header_main:not(.header_vertical) .tt-main-additional .cesis_menu_btn a span:hover{background:#66023c;border-color:#fff;color:#fff}.tt-main-navigation>div>ul>li>a{padding:0 10px}.tt-main-additional.logo_left{padding-left:10px}.tt-main-additional.logo_left:not(.edge_border):not(.nav_line_separator){padding-left:20px}.header_logo{max-width:250px}.header_logo #logo_img,.header_logo #logo_img img{max-height:90px;max-width:250px}.tt-main-navigation>div>ul>li>a span{color:#fff;font-family:Quicksand;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase}.tt-main-navigation>div>ul>li>a:hover span{color:#1db1ad}.header_logo a{color:#fff}.cesis_mobile_menu_switch .lines,.cesis_mobile_menu_switch .lines:after,.cesis_mobile_menu_switch .lines:before{background:#fff}.tt-main-additional .cesis_social_icons a{color:#1dc4b3}.tt-main-additional .cesis_social_icons a:after{background-color:#fff;border-color:#ebebeb}.tt-main-additional .cesis_social_icons a:hover{color:#fff}.tt-main-additional .cesis_social_icons a:hover:after{background-color:#2c2c2c;border-color:#2c2c2c}.tt-header-additional .cesis_social_icons a,.tt-header-additional>span{margin:0 10px}body:not(.rtl) .tt-header-additional .cesis_social_icons a:first-child,body:not(.rtl) .tt-header-additional>span:first-child{margin:0 10px 0 0}body:not(.rtl) .tt-header-additional .cesis_social_icons a:last-child,body:not(.rtl) .tt-header-additional>span:last-child{margin:0 0 0 10px}.cesis_mobile_btn a span{background:#fff;border-color:#fff;border-radius:74px;border-width:0;color:#6d7783;font-family:Poppins;font-size:13px;font-weight:500;letter-spacing:1px;line-height:40px;text-transform:uppercase;width:160px}.cesis_mobile_btn a span:hover{background:#1db1ac;border-color:#1db1ac;color:#fff}.header_mobile{background:#1db1ac}.header_mobile span{font-family:Poppins;font-size:16px;font-weight:600;letter-spacing:0;text-transform:none}.header_mobile span,.tt-mobile-additional .cesis_social_icons a{color:#fff;line-height:21px}.header_mobile li span,.tt-mobile-additional .cesis_social_icons{border-color:#f7f9fb}.header_mobile li span:after,.header_mobile li span:before{background:#fff}@media only screen and (min-width:979px){body:not(.cesis_custom_breakpoint) .header_mobile{display:none!important}body.cesis_has_header:not(.cesis_custom_breakpoint):not(.cesis_has_topbar):not(.cesis_vertical_header) #header_container.cesis_opaque_header{min-height:90px!important}}@media only screen and (max-width:978px){body:not(.cesis_custom_breakpoint) .desktop_logo{display:none!important}body:not(.cesis_custom_breakpoint) .mobile_logo{display:inline-block!important}body:not(.cesis_custom_breakpoint) .header_logo #logo_img,body:not(.cesis_custom_breakpoint) .mobile_logo{max-height:60px!important;max-width:90px!important}body:not(.cesis_custom_breakpoint) .header_logo{max-width:none;width:100%}body:not(.cesis_custom_breakpoint) .header_logo,body:not(.cesis_custom_breakpoint) .header_main{height:60px!important;line-height:60px!important;min-height:auto!important}body:not(.cesis_custom_breakpoint) #header_container.cesis_opaque_header{min-height:60px!important}body:not(.cesis_custom_breakpoint) .cesis_mobile_btn,body:not(.cesis_custom_breakpoint) .cesis_mobile_menu_switch{display:flex}body:not(.cesis_custom_breakpoint) .tt-main-additional,body:not(.cesis_custom_breakpoint) .tt-main-navigation{display:none}body:not(.cesis_custom_breakpoint) .logo_left .cesis_mobile_btn,body:not(.cesis_custom_breakpoint) .logo_left .cesis_mobile_menu_switch{float:right}body:not(.cesis_custom_breakpoint) .logo_left #logo_img{float:left}body:not(.cesis_custom_breakpoint) #cesis_colophon,body:not(.cesis_custom_breakpoint) #header_container,body:not(.cesis_custom_breakpoint) #main-content{margin-left:0!important;margin-right:0!important}body:not(.cesis_custom_breakpoint) .header_main .lines,body:not(.cesis_custom_breakpoint) .header_main .lines:after,body:not(.cesis_custom_breakpoint) .header_main .lines:before{background:#fff}}.main-container,.site-main input[type=email],.site-main input[type=number],.site-main input[type=password],.site-main input[type=text],.site-main input[type=url],.site-main select,.site-main textarea{background-color:#fff}.site-main,.site-main input[type=checkbox],.site-main input[type=date],.site-main input[type=email],.site-main input[type=number],.site-main input[type=password],.site-main input[type=radio],.site-main input[type=text],.site-main input[type=url],.site-main select,.site-main textarea,fieldset{border-color:#edf0f7}h1,h1 a,h2,h2 a,h5,h5 a,legend{color:#293340}.site-main input[type=checkbox],.site-main input[type=date],.site-main input[type=email],.site-main input[type=number],.site-main input[type=password],.site-main input[type=radio],.site-main input[type=text],.site-main input[type=url],.site-main select,.site-main textarea,body{color:#6d7783}.site-main input::-webkit-input-placeholder,.site-main textarea::-webkit-input-placeholder{color:#6d7783}.site-main input[type=checkbox]:checked:before,a{color:#efa537}.site-main input[type=radio]:checked:before{background:#efa537}::selection{background:#efa537;color:#fff}input[type=date]:focus,input[type=email]:focus,input[type=number]:focus,input[type=password]:focus,input[type=text]:focus,input[type=url]:focus,textarea:focus{border-color:#efa537!important}a:hover{color:#66023c}.cesis_cf7_btn input[type=submit]{background:#efa537;border-color:#efa537;color:#fff;font-family:Quicksand;font-size:15px;font-weight:600;letter-spacing:0;text-transform:none}.cesis_cf7_btn input[type=submit]:hover{background:#006566;border-color:#006566;color:#fff}.footer_main .cesis_container{max-width:1250px;padding-bottom:60px;padding-top:60px}.footer_main,.footer_main input[type=checkbox],.footer_main input[type=date],.footer_main input[type=email],.footer_main input[type=password],.footer_main input[type=radio],.footer_main input[type=text],.footer_main input[type=url],.footer_main select,.footer_main textarea{background-color:#1e2228;color:#aeb7c1}.footer_main h1,.footer_main h1 a,.footer_main h2,.footer_main h2 a,.footer_main h5,.footer_main h5 a{color:#fff}.footer_main input::-webkit-input-placeholder,.footer_main textarea::-webkit-input-placeholder{color:#fff}.cesis_f_widget_title{font-family:Poppins;font-size:16px;letter-spacing:1px;margin-bottom:40px;text-transform:uppercase}.cesis_f_widget{padding-bottom:70px}.footer_main a{color:#fff}.footer_main input[type=checkbox]:checked:before{background:#fff}.footer_main a:hover,.footer_main h1 a:hover,.footer_main h2 a:hover,.footer_main h5 a:hover{color:#1eb0ad}.footer_main input[type=checkbox],.footer_main input[type=email],.footer_main input[type=password],.footer_main input[type=radio],.footer_main input[type=text],.footer_main input[type=url],.footer_main select,.footer_main textarea{border-color:#331933}.footer_sub{min-height:100px}.footer_sub .cesis_container{max-width:1250px}.footer_sub{background:#191a1b;color:#aeb7c1}.footer_sub a{color:#6d7783}.footer_sub a:hover{color:#fff}.f_text_one{font-size:13px}.page .site-main .cesis_container{max-width:1250px}.page .article_ctn{padding-bottom:0;padding-top:0}body.blog .site-main .cesis_container{max-width:1250px}body.blog .article_ctn{padding-bottom:60px;padding-top:60px}
+/* 
+ * Initially extracted from the Wordpress version of the website as: /wp-admin/admin-ajax.php?action=dynamic_css&amp;ver=6.8.2
+ */
+
+/*--------------------------------------------------------------
+#0 Body settings
+--------------------------------------------------------------*/
+
+body {
+  background-color: #006860;
+}
+
+/*--------------------------------------------------------------
+#1 Fonts / Typography
+--------------------------------------------------------------*/
+
+body {
+  font-family: Poppins;
+  font-size: 15px;
+  line-height: 24px;
+  letter-spacing: 0px;
+  font-weight: 400;
+}
+p {
+  margin: 0 0 17px 0;
+}
+h1 {
+  font-family: Pattaya;
+  font-size: 60px;
+  line-height: 72px;
+  letter-spacing: 0px;
+  font-weight: 400;
+  margin-bottom: 28px;
+}
+h2 {
+  font-family: Quicksand;
+  font-size: 30px;
+  line-height: 36px;
+  letter-spacing: 0px;
+  font-weight: 700;
+  margin-bottom: 31px;
+}
+h5 {
+  font-family: Poppins;
+  font-size: 18px;
+  line-height: 27px;
+  letter-spacing: 0px;
+  font-weight: 700;
+  margin-bottom: 19px;
+}
+
+.main_font,
+input[type='text'],
+input[type='email'],
+input[type='url'],
+input[type='password'],
+input[type='number'],
+textarea,
+select {
+  font-family: Poppins;
+}
+
+
+legend {
+  font-family: Poppins;
+}
+/*--------------------------------------------------------------
+#2 Header and Navigation
+--------------------------------------------------------------*/
+
+
+.header_main .cesis_container {
+  max-width: 1250px;
+}
+
+.header_main {
+  background: #006566;
+  height: 90px;
+  border-color: rgba(235, 235, 235, 0.5);
+}
+#header_container.cesis_opaque_header {
+  background: #006566;
+}
+
+.header_main:not(.header_vertical) .tt-main-navigation > div > ul > li > a,
+.header_main:not(.header_vertical) .header_logo,
+.header_main:not(.header_vertical) .tt-main-additional .cesis_social_icons,
+.header_main:not(.header_vertical) .tt-main-additional .cesis_social_icons a,
+.header_main:not(.header_vertical) .tt-main-additional .cesis_menu_btn a {
+  line-height: 90px;
+  height: 90px;
+}
+
+.header_main:not(.header_vertical) .tt-main-additional .cesis_menu_btn a span {
+  font-size: 13px;
+  font-family: Poppins;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #6d7783;
+  background: #ffffff;
+  border-color: transparent;
+  border-radius: 30px;
+  border-width: 1px;
+  line-height: 38px;
+  width: 160px;
+}
+.header_main:not(.header_vertical) .tt-main-additional .cesis_menu_btn a span:hover {
+  color: #ffffff;
+  background: #66023c;
+  border-color: #ffffff;
+}
+
+.tt-main-navigation > div > ul > li > a {
+  padding: 0 10px;
+}
+.tt-main-additional.logo_left {
+  padding-left: 10px;
+}
+.tt-main-additional.logo_left:not(.edge_border):not(.nav_line_separator) {
+  padding-left: 20px;
+}
+
+.header_logo {
+  max-width: 250px;
+}
+.header_logo #logo_img,
+.header_logo #logo_img img {
+  max-width: 250px;
+  max-height: 90px;
+}
+
+.tt-main-navigation > div > ul > li > a span {
+  color: #ffffff;
+  font-family: Quicksand;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.tt-main-navigation > div > ul > li > a:hover span {
+  color: #1db1ad;
+}
+.header_logo a {
+  color: #ffffff;
+}
+
+.cesis_mobile_menu_switch .lines,
+.cesis_mobile_menu_switch .lines:before,
+.cesis_mobile_menu_switch .lines:after {
+  background: #ffffff;
+}
+
+.tt-main-additional .cesis_social_icons a {
+  color: #1dc4b3;
+}
+.tt-main-additional .cesis_social_icons a:after {
+  background-color: #ffffff;
+  border-color: #ebebeb;
+}
+
+.tt-main-additional .cesis_social_icons a:hover {
+  color: #ffffff;
+}
+.tt-main-additional .cesis_social_icons a:hover::after {
+  background-color: #2c2c2c;
+  border-color: #2c2c2c;
+}
+
+.tt-header-additional .cesis_social_icons a,
+.tt-header-additional > span {
+  margin: 0 10px;
+}
+body:not(.rtl) .tt-header-additional .cesis_social_icons a:first-child,
+body:not(.rtl) .tt-header-additional > span:first-child {
+  margin: 0 10px 0 0;
+}
+body:not(.rtl) .tt-header-additional .cesis_social_icons a:last-child,
+body:not(.rtl) .tt-header-additional > span:last-child {
+  margin: 0 0 0 10px;
+}
+
+/* Top bar breakpoint settings */
+
+/* Transparent header settings */
+
+/* Mobile menu settings */
+
+.cesis_mobile_btn a span {
+  font-size: 13px;
+  font-family: Poppins;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #6d7783;
+  background: #ffffff;
+  border-color: #ffffff;
+  border-radius: 74px;
+  border-width: 0px;
+  line-height: 40px;
+  width: 160px;
+}
+.cesis_mobile_btn a span:hover {
+  color: #ffffff;
+  background: #1db1ac;
+  border-color: #1db1ac;
+}
+.header_mobile {
+  background: #1db1ac;
+}
+.header_mobile span {
+  font-family: Poppins;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0px;
+  line-height: 21px;
+}
+.tt-mobile-additional .cesis_social_icons a {
+  color: #ffffff;
+  line-height: 21px;
+}
+
+.header_mobile li span,
+.tt-mobile-additional .cesis_social_icons {
+  border-color: #f7f9fb;
+}
+
+.header_mobile li span:after,
+.header_mobile li span:before {
+  background: #ffffff;
+}
+
+/* mobile breakpoint */
+@media only screen and (min-width: 979px) {
+  body:not(.cesis_custom_breakpoint) .header_mobile {
+    display: none !important;
+  }
+  body.cesis_has_header:not(.cesis_custom_breakpoint):not(.cesis_has_topbar):not(.cesis_vertical_header)
+    #header_container.cesis_opaque_header {
+    min-height: 90px !important;
+  }
+}
+@media only screen and (max-width: 978px) {
+  body:not(.cesis_custom_breakpoint) .desktop_logo {
+    display: none !important;
+  }
+  body:not(.cesis_custom_breakpoint) .mobile_logo {
+    display: inline-block !important;
+    max-height: 60px !important;
+    max-width: 90px !important;
+  }
+  body:not(.cesis_custom_breakpoint) .header_logo #logo_img {
+    max-height: 60px !important;
+    max-width: 90px !important;
+  }
+  body:not(.cesis_custom_breakpoint) .header_logo {
+    width: 100%;
+    max-width: none;
+  }
+  body:not(.cesis_custom_breakpoint) .header_main,
+  body:not(.cesis_custom_breakpoint) .header_logo {
+    height: 60px !important;
+    min-height: auto !important;
+    line-height: 60px !important;
+  }
+  body:not(.cesis_custom_breakpoint) #header_container.cesis_opaque_header {
+    min-height: 60px !important;
+  }
+
+  body:not(.cesis_custom_breakpoint) .cesis_mobile_menu_switch,
+  body:not(.cesis_custom_breakpoint) .cesis_mobile_btn {
+    display: flex;
+  }
+  body:not(.cesis_custom_breakpoint) .tt-main-additional,
+  body:not(.cesis_custom_breakpoint) .tt-main-navigation {
+    display: none;
+  }
+
+  
+  body:not(.cesis_custom_breakpoint) .logo_left .cesis_mobile_menu_switch,
+  body:not(.cesis_custom_breakpoint) .logo_left .cesis_mobile_btn {
+    float: right;
+  }
+
+  
+  body:not(.cesis_custom_breakpoint) .logo_left #logo_img {
+    float: left;
+  }
+
+  
+  body:not(.cesis_custom_breakpoint) #header_container,
+  body:not(.cesis_custom_breakpoint) #main-content,
+  body:not(.cesis_custom_breakpoint) #cesis_colophon {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+  }
+
+  body:not(.cesis_custom_breakpoint) .header_main .lines,
+  body:not(.cesis_custom_breakpoint) .header_main .lines:after,
+  body:not(.cesis_custom_breakpoint) .header_main .lines:before {
+    background: #ffffff;
+  }
+}
+/* end mobile breakpoint */
+
+/* Dropdown settings */
+
+/*--------------------------------------------------------------
+#3 Title and Breadcrumbs
+--------------------------------------------------------------*/
+
+/* title container */
+/* title */
+
+/* breadcrumb */
+
+/* post title */
+/* title */
+
+/* breadcrumb */
+
+/* portfolio title */
+/* title */
+
+/* breadcrumb */
+
+/* staff title */
+/* title */
+
+/* breadcrumb */
+
+/*--------------------------------------------------------------
+#4 Main Content
+--------------------------------------------------------------*/
+
+/* background */
+
+.site-main input[type='text'],
+.site-main input[type='email'],
+.site-main input[type='url'],
+.site-main input[type='password'],
+.site-main input[type='number'],
+.site-main textarea,
+.site-main select,
+.main-container {
+  background-color: #ffffff;
+}
+
+/* border */
+fieldset,
+.site-main input[type='checkbox'],
+.site-main input[type='radio'],
+.site-main select,
+.site-main input[type='text'],
+.site-main input[type='email'],
+.site-main input[type='url'],
+.site-main input[type='password'],
+.site-main input[type='number'],
+.site-main input[type='date'],
+.site-main textarea,
+.site-main {
+  border-color: #edf0f7;
+}
+
+/* heading */
+
+h1,
+h2,
+h5,
+h1 a,
+h2 a,
+h5 a,
+legend {
+  color: #293340;
+}
+
+/* text color */
+
+body,
+.site-main input[type='checkbox'],
+.site-main input[type='radio'],
+.site-main select,
+.site-main input[type='text'],
+.site-main input[type='email'],
+.site-main input[type='url'],
+.site-main input[type='password'],
+.site-main input[type='number'],
+.site-main input[type='date'],
+.site-main textarea {
+  color: #6d7783;
+}
+
+.site-main textarea::-webkit-input-placeholder,
+.site-main input::-webkit-input-placeholder {
+  color: #6d7783;
+}
+
+/* light text color */
+
+/* accent color one */
+
+a,
+.site-main input[type='checkbox']:checked:before {
+  color: #efa537;
+}
+
+.site-main input[type='radio']:checked:before {
+  background: #efa537;
+}
+
+::selection {
+  background: #efa537;
+  color: white;
+}
+
+input[type='text']:focus,
+input[type='email']:focus,
+input[type='url']:focus,
+input[type='password']:focus,
+input[type='number']:focus,
+input[type='date']:focus,
+textarea:focus {
+  border-color: #efa537 !important;
+}
+
+/* accent color two */
+
+a:hover {
+  color: #66023c;
+}
+
+/* alternative background */
+
+/* alternative border */
+
+/* alternative heading */
+
+/* alternative text */
+
+/* alternative light text color */
+
+/* alternative accent color */
+
+/* buttons settings */
+
+
+.cesis_cf7_btn input[type='submit'] {
+  color: #ffffff;
+  background: rgba(239, 165, 55, 1);
+  border-color: rgba(239, 165, 55, 1);
+  font-family: Quicksand;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0px;
+}
+
+
+.cesis_cf7_btn input[type='submit']:hover {
+  color: #ffffff;
+  background: rgba(0, 101, 102, 1);
+  border-color: rgba(0, 101, 102, 1);
+}
+
+/*--------------------------------------------------------------
+#5 Footer main and sub area
+--------------------------------------------------------------*/
+
+/*--------
+  MAIN
+-------*/
+
+/* container settings */
+.footer_main .cesis_container {
+  max-width: 1250px;
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+
+/* Footer main settings */
+.footer_main,
+.footer_main input[type='checkbox'],
+.footer_main input[type='radio'],
+.footer_main select,
+.footer_main input[type='text'],
+.footer_main input[type='email'],
+.footer_main input[type='url'],
+.footer_main input[type='password'],
+.footer_main input[type='date'],
+.footer_main textarea,
+.footer_main select {
+  background-color: #1e2228;
+  color: #aeb7c1;
+}
+
+/* heading */
+
+.footer_main h1,
+.footer_main h2,
+.footer_main h5,
+.footer_main h1 a,
+.footer_main h2 a,
+.footer_main h5 a {
+  color: #ffffff;
+}
+.footer_main input::-webkit-input-placeholder,
+.footer_main textarea::-webkit-input-placeholder {
+  color: #ffffff;
+}
+
+.cesis_f_widget_title {
+  font-family: Poppins;
+  font-size: 16px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+}
+
+/* widget space */
+
+.cesis_f_widget {
+  padding-bottom: 70px;
+}
+
+/* accent color */
+
+.footer_main a {
+  color: #ffffff;
+}
+
+
+.footer_main input[type='checkbox']:checked:before {
+  background: #ffffff;
+}
+
+/* hover color */
+
+.footer_main a:hover,
+.footer_main h1 a:hover,
+.footer_main h2 a:hover,
+.footer_main h5 a:hover {
+  color: #1eb0ad;
+}
+
+/* border color */
+
+.footer_main input[type='checkbox'],
+.footer_main input[type='radio'],
+.footer_main select,
+.footer_main input[type='text'],
+.footer_main input[type='email'],
+.footer_main input[type='url'],
+.footer_main input[type='password'],
+.footer_main textarea {
+  border-color: #331933;
+}
+
+/*--------
+   SUB
+-------*/
+
+/* container settings */
+
+.footer_sub {
+  min-height: 100px;
+}
+
+.footer_sub .cesis_container {
+  max-width: 1250px;
+}
+
+/* Footer sub main settings */
+
+.footer_sub {
+  background: #191a1b;
+  color: #aeb7c1;
+}
+
+/* accent color */
+
+.footer_sub a {
+  color: #6d7783;
+}
+
+/* hover color */
+
+.footer_sub a:hover {
+  color: #ffffff;
+}
+
+/* footer menu settings */
+.f_text_one {
+  font-size: 13px;
+}
+
+/*--------------------------------------------------------------
+#6 Sidebar
+--------------------------------------------------------------*/
+
+/* Sidebar and Content size settings */
+
+/* Sidebar Widget Default settings / Mutual settings between sidebar type  */
+
+/* layout one */
+
+/* layout two */
+
+/* layout three */
+
+/*--------------------------------------------------------------
+#7 Page Settings
+--------------------------------------------------------------*/
+
+/* width settings */
+.page .site-main .cesis_container {
+  max-width: 1250px;
+}
+
+/* top and bottom padding settings */
+
+.page .article_ctn {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/*--------------------------------------------------------------
+#8 Blog Settings
+--------------------------------------------------------------*/
+
+/* width settings */
+
+/* top and bottom padding settings */
+
+/* stacked gallery */
+
+/* width settings */
+body.blog .site-main .cesis_container {
+  max-width: 1250px;
+}
+
+/* top and bottom padding settings */
+body.blog .article_ctn {
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+
+/*--------------------------------------------------------------
+#9 Portfolio Settings
+--------------------------------------------------------------*/
+
+/* width settings */
+
+/* top and bottom padding settings */
+
+/* stacked gallery */
+
+/* width settings */
+
+/* top and bottom padding settings */
+
+/*--------------------------------------------------------------
+#10 Staff Settings
+--------------------------------------------------------------*/
+
+/* width settings */
+
+/* top and bottom padding settings */
+
+/* width settings */
+
+/* top and bottom padding settings */
+
+/*--------------------------------------------------------------
+#11 Career Position Settings
+--------------------------------------------------------------*/
+
+/* width settings */
+
+/* top and bottom padding settings */
+
+/* width settings */
+
+/* top and bottom padding settings */
+
+/*--------------------------------------------------------------
+#12 Woocommerce Settings
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+#13 Buddypress Settings
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+#14 bbpress Settings
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+#15 404 Page Settings
+--------------------------------------------------------------*/
+
+/* width settings */
+
+/* top and bottom padding settings */
+
+/*--------------------------------------------------------------
+#16 Search Settings
+--------------------------------------------------------------*/
+
+/* width settings */
+
+/* top and bottom padding settings */
+
+
+
+/*--------------------------------------------------------------
+#17 Custom css
+--------------------------------------------------------------*/

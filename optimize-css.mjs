@@ -1,7 +1,7 @@
 /**
  * CSS Optimization Script
  *
- * Removes unused CSS rules using PurgeCSS and minifies the result using cssnano.
+ * Removes unused CSS rules using PurgeCSS.
  * Run this script after building the site:
  *   node optimize-css.mjs
  *
@@ -10,8 +10,6 @@
  */
 
 import { PurgeCSS } from 'purgecss';
-import postcss from 'postcss';
-import cssnano from 'cssnano';
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'fs';
 import { join, basename, extname } from 'path';
 
@@ -72,7 +70,7 @@ async function optimizeCSS(cssPath) {
   const originalContent = readFileSync(cssPath, 'utf8');
   const originalSize = Buffer.byteLength(originalContent);
 
-  // Step 1: PurgeCSS – remove unused selectors
+  // PurgeCSS – remove unused selectors
   const purgeResults = await new PurgeCSS().purge({
     content: contentFiles,
     css: [cssPath],
@@ -85,23 +83,16 @@ async function optimizeCSS(cssPath) {
 
   const purgedContent = purgeResults[0].css;
 
-  // Step 2: cssnano – minify
-  const result = await postcss([cssnano({ preset: 'default' })]).process(
-    purgedContent,
-    { from: cssPath, to: cssPath }
-  );
-  const minifiedContent = result.css;
-
-  const finalSize = Buffer.byteLength(minifiedContent);
+  const finalSize = Buffer.byteLength(purgedContent);
   const reduction = (((originalSize - finalSize) / originalSize) * 100).toFixed(1);
 
-  writeFileSync(cssPath, minifiedContent, 'utf8');
+  writeFileSync(cssPath, purgedContent, 'utf8');
   console.log(
     `${basename(cssPath).padEnd(35)} ${(originalSize / 1024).toFixed(1).padStart(7)} KiB → ${(finalSize / 1024).toFixed(1).padStart(7)} KiB  (${reduction}% reduction)`
   );
 }
 
-console.log('Optimizing CSS files (PurgeCSS + cssnano)...\n');
+console.log('Optimizing CSS files (PurgeCSS)...\n');
 console.log('File'.padEnd(35) + 'Before'.padStart(12) + '  After'.padStart(12) + '  Reduction');
 console.log('-'.repeat(70));
 
