@@ -39,6 +39,7 @@
           name="twitter:data1">
     {% include "_partials/json_ld.html" with context %}
     <link href="//fonts.googleapis.com" rel="dns-prefetch">
+    <link href="//fonts.gstatic.com" rel="preconnect" crossorigin>
     <link href="/wordpress/wp-content/themes/cesis/style.css"
           id="cesis-style-css"
           media="all"
@@ -60,11 +61,18 @@
           rel="stylesheet"
           type="text/css">
     <!-- Canonical Google Fonts import - consolidated from multiple legacy imports -->
+    <!-- Loaded asynchronously (media=print → media=all) to avoid render-blocking -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Pattaya:wght@400&family=Quicksand:wght@500;600;700&family=Roboto:wght@400;500;700;900&display=swap"
           id="canonical-google-fonts-css"
-          media="all"
+          media="print"
+          onload="this.media='all'"
           rel="stylesheet"
           type="text/css">
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Pattaya:wght@400&family=Quicksand:wght@500;600;700&family=Roboto:wght@400;500;700;900&display=swap"
+            rel="stylesheet"
+            type="text/css">
+    </noscript>
     <link href="/css/main.css"
           id="dynamic-css-css"
           media="all"
@@ -77,12 +85,6 @@
           type="text/css">
     <!-- Renamed to force cache reloads due to incorrect caching config: https://github.com/UkuleleTuesday/website/issues/77 -->
     <link href="/css/custom.css?v=2" rel="stylesheet" type="text/css">
-    <script id="jquery-core-js"
-            src="/js/jquery/jquery.min.js"
-            type="text/javascript"></script>
-    <script id="jquery-migrate-js"
-            src="/js/jquery/jquery-migrate.min.js"
-            type="text/javascript"></script>
     {% block extra_head %}{% endblock %}
     {% if analytics_enabled %}
       <script type="importmap">
@@ -110,6 +112,12 @@
     <script type="speculationrules">
   {"prefetch":[{"source":"document","where":{"and":[{"href_matches":"\/*"},{"not":{"href_matches":["\/wp-*.php","\/wordpress\/wp-admin\/*","\/assets\/*","\/wordpress\/wp-content\/*","\/wordpress\/wp-content\/plugins\/*","\/wordpress\/wp-content\/themes\/*","\/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
     </script>
+    <script id="jquery-core-js"
+            src="/js/jquery/jquery.min.js"
+            type="text/javascript"></script>
+    <script id="jquery-migrate-js"
+            src="/js/jquery/jquery-migrate.min.js"
+            type="text/javascript"></script>
     <script id="collapse-js"
             src="/wordpress/wp-content/themes/cesis/js/cesis_collapse.js"
             type="text/javascript"></script>

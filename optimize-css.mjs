@@ -44,40 +44,28 @@ const cssFiles = [
   'static/css/custom.css',
 ];
 
-// Safelist: patterns for classes that may be added dynamically by JavaScript
-// and therefore won't appear literally in HTML files.
+// Safelist: classes added dynamically by JavaScript that won't appear
+// literally in the static HTML files. Everything else is found by scanning
+// the HTML and JS content files.
 const safelist = {
   standard: [
-    // jQuery collapse plugin (cesis_collapse.js)
+    // cesis_collapse.js – Bootstrap-style collapse state classes
     'collapse',
     'collapsing',
     'collapsed',
     'in',
-    // Mobile menu toggle (mobile-menu.js)
+    // mobile-menu.js – hamburger/drawer toggle
     'open',
-    // ScrollMagic pin spacer
-    'scrollmagic-pin-spacer',
+    // isotope.js – drag-and-drop positioning helpers
+    'is-positioning-post-drag',
+    'packery-drop-placeholder',
+    // jquery-ui effect.min.js – animation wrappers
+    'ui-effects-placeholder',
+    'ui-effects-wrapper',
   ],
-  deep: [
-    // WPBakery / Visual Composer (used in HTML and possibly added via JS)
-    /^\.?vc_/,
-    /^\.?wpb_/,
-    // Cesis theme state classes
-    /^\.?cesis_/,
-    // Font Awesome icons
-    /^\.?fa/,
-    // Smart menu hover/active states
-    /^\.?sm/,
-    /^\.?sub-arrow/,
-    // Active / hover states that jQuery might add
-    /^\.?current/,
-    /^\.?highlighted/,
-  ],
-  greedy: [
-    // Keep all @font-face and @keyframes references
-    /^@font-face/,
-    /^@keyframes/,
-  ],
+  // Keep any selector that contains a SmartMenu state suffix, which the
+  // SmartMenus library adds at runtime (e.g. .sm-dox.highlighted, .sub-arrow)
+  deep: [/sub-arrow/, /\.highlighted/, /\.current-menu/],
 };
 
 async function optimizeCSS(cssPath) {
