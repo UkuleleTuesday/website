@@ -35,6 +35,23 @@ test.beforeAll(async () => {
 async function setupPageForSnapshot(page: Page, templateFile: string): Promise<Error | null> {
     try {
         await page.goto(templateFile, { waitUntil: 'networkidle', timeout: 20000 });
+        // Wait for all images to load, especially lazy-loaded ones
+        await page.evaluate(() => {
+            return Promise.all(
+                Array.from(document.querySelectorAll('img')).map(img => {
+                    return new Promise<void>((resolve) => {
+                        if (img.complete) {
+                            resolve();
+                        } else {
+                            img.onload = () => resolve();
+                            img.onerror = () => resolve();
+                        }
+                    });
+                })
+            );
+        });
+        // Small delay to ensure images are rendered
+        await page.waitForTimeout(500);
         return null;
     } catch (e) {
         console.log(`Navigation issue on ${templateFile}: ${e}`);
