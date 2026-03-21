@@ -17,7 +17,11 @@
 {% endblock %}
 {% block twitter_image %}/assets/images/Ukulele-Tuesday-jam-crowd.jpg{% endblock %}
 {% block twitter_reading_time %}1 minute{% endblock %}
-{% block extra_head %}<style>.hidden { display: none; }</style>{% endblock %}
+{% block lcp_preload %}
+  <link as="image"
+        href="/assets/images/banner-ukulele-tuesday-mic-crowd.jpg"
+        rel="preload">
+{% endblock %}
 {% block content %}
   <main class="site-main vc_full_width_row_container no no no"
         id="cesis_main"

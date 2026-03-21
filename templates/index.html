@@ -17,7 +17,11 @@
 {% endblock %}
 {% block twitter_image %}/assets/images/Ukulele-Tuesday-Band-playing.jpg{% endblock %}
 {% block twitter_reading_time %}2 minutes{% endblock %}
-{% block extra_head %}<style>.hidden { display: none; }</style>{% endblock %}
+{% block lcp_preload %}
+  <link as="image"
+        href="/assets/images/ukulele-tuesday-showcase-01.jpg"
+        rel="preload">
+{% endblock %}
 {% block content %}
   <main class="site-main vc_full_width_row_container no no no"
         id="cesis_main"
