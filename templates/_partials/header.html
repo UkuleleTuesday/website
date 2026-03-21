@@ -1,4 +1,5 @@
 <div class="cesis_opaque_header" id="header_container">
+  {% from "_macros/images.html" import static_picture %}
   <header class="top-header cesis_sticky cesis_header_hiding cesis_header_shadow"
           id="cesis_header">
     <div class="header_main">
@@ -6,24 +7,9 @@
         <div class="header_logo logo_left">
           <div id="logo_img">
             <a href="/">
-              <img alt="Ukulele Tuesday"
-                   class="white_logo desktop_logo"
-                   height="233"
-                   src="/assets/images/ut-logo-white-green.png"
-                   title="Ukulele Tuesday"
-                   width="1178">
-              <img alt="Ukulele Tuesday"
-                   class="dark_logo desktop_logo"
-                   height="233"
-                   src="/assets/images/ut-logo-white-green.png"
-                   title="Ukulele Tuesday"
-                   width="1178">
-              <img alt="Ukulele Tuesday"
-                   class="mobile_logo"
-                   height="380"
-                   src="/assets/images/ut-icon-white-green-header-1.png"
-                   title="Ukulele Tuesday"
-                   width="237">
+              {{ static_picture("ut-logo-white-green", "png", "Ukulele Tuesday", 1178, 233, class="white_logo desktop_logo", title="Ukulele Tuesday") }}
+              {{ static_picture("ut-logo-white-green", "png", "Ukulele Tuesday", 1178, 233, class="dark_logo desktop_logo", title="Ukulele Tuesday") }}
+              {{ static_picture("ut-icon-white-green-header-1", "png", "Ukulele Tuesday", 237, 380, class="mobile_logo", title="Ukulele Tuesday") }}
             </a>
           </div>
           <div class="cesis_menu_button cesis_mobile_menu_switch">

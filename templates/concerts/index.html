@@ -1,4 +1,5 @@
 {% extends "_layouts/base.html" %}
+{% from "_macros/images.html" import content_picture %}
 {% block title %}Ukulele Tuesday Concerts{% endblock %}
 {% block description %}
   The Ukulele Tuesday gig group plays festivals across Ireland (and beyond!). Get in touch to book us for your event.
@@ -19,8 +20,9 @@
 {% block twitter_reading_time %}2 minutes{% endblock %}
 {% block lcp_preload %}
   <link as="image"
-        href="/assets/images/banner-ukulele-tuesday-mic-crowd.jpg"
-        rel="preload">
+        href="/assets/images/banner-ukulele-tuesday-mic-crowd.webp"
+        rel="preload"
+        type="image/webp">
 {% endblock %}
 {% block extra_head %}
   <style>
@@ -395,20 +397,12 @@
                     <div class="wpb_single_image wpb_content_element vc_align_center img-border-green">
                       <figure class="wpb_wrapper vc_figure">
                         <div class="vc_single_image-wrapper vc_box_border_grey">
-                          <img alt=""
-                               class="vc_single_image-img attachment-full"
-                               decoding="async"
-                               height="667"
-                               loading="lazy"
-                               sizes="auto, (max-width: 1000px) 100vw,
-                                      1000px"
-                               src="/assets/images/Ukulele-Tuesday-Band-at-TedX.jpg"
-                               srcset="/assets/images/Ukulele-Tuesday-Band-at-TedX.jpg 1000w,
-                                       /assets/images/Ukulele-Tuesday-Band-at-TedX-300x200.jpg 300w,
-                                       /assets/images/Ukulele-Tuesday-Band-at-TedX-768x512.jpg 768w,
-                                       /assets/images/Ukulele-Tuesday-Band-at-TedX-500x334.jpg 500w"
-                               title="Ukulele-Tuesday-Band-at-TedX"
-                               width="1000">
+                          {{ content_picture("Ukulele-Tuesday-Band-at-TedX",
+                                                    "",
+                                                    667,
+                                                    "auto, (max-width: 1000px) 100vw, 1000px",
+                                                    title="Ukulele-Tuesday-Band-at-TedX") 
+                          }}
                         </div>
                       </figure>
                     </div>
@@ -421,20 +415,12 @@
                     <div class="wpb_single_image wpb_content_element vc_align_center img-border-yellow">
                       <figure class="wpb_wrapper vc_figure">
                         <div class="vc_single_image-wrapper vc_box_border_grey">
-                          <img alt="Ukulele Tuesday band"
-                               class="vc_single_image-img attachment-full"
-                               decoding="async"
-                               height="667"
-                               loading="lazy"
-                               sizes="auto, (max-width: 1000px) 100vw,
-                                      1000px"
-                               src="/assets/images/Ukulele-Tuesday-Band-at-Cobh-2019.jpg"
-                               srcset="/assets/images/Ukulele-Tuesday-Band-at-Cobh-2019.jpg 1000w,
-                                       /assets/images/Ukulele-Tuesday-Band-at-Cobh-2019-300x200.jpg 300w,
-                                       /assets/images/Ukulele-Tuesday-Band-at-Cobh-2019-768x512.jpg 768w,
-                                       /assets/images/Ukulele-Tuesday-Band-at-Cobh-2019-500x334.jpg 500w"
-                               title="Ukulele Tuesday band"
-                               width="1000">
+                          {{ content_picture("Ukulele-Tuesday-Band-at-Cobh-2019",
+                                                    "Ukulele Tuesday band",
+                                                    667,
+                                                    "auto, (max-width: 1000px) 100vw, 1000px",
+                                                    title="Ukulele Tuesday band") 
+                          }}
                         </div>
                       </figure>
                     </div>
@@ -447,20 +433,12 @@
                     <div class="wpb_single_image wpb_content_element vc_align_center img-border-maroon">
                       <figure class="wpb_wrapper vc_figure">
                         <div class="vc_single_image-wrapper vc_box_border_grey">
-                          <img alt="Ukulele Tuesday with John Sheahan"
-                               class="vc_single_image-img attachment-full"
-                               decoding="async"
-                               height="667"
-                               loading="lazy"
-                               sizes="auto, (max-width: 1000px) 100vw,
-                                      1000px"
-                               src="/assets/images/Gig-Group-Uke.jpg"
-                               srcset="/assets/images/Gig-Group-Uke.jpg 1000w,
-                                       /assets/images/Gig-Group-Uke-300x200.jpg 300w,
-                                       /assets/images/Gig-Group-Uke-768x512.jpg 768w,
-                                       /assets/images/Gig-Group-Uke-500x334.jpg 500w"
-                               title="Ukulele Tuesday with John Sheahan"
-                               width="1000">
+                          {{ content_picture("Gig-Group-Uke",
+                                                    "Ukulele Tuesday with John Sheahan",
+                                                    667,
+                                                    "auto, (max-width: 1000px) 100vw, 1000px",
+                                                    title="Ukulele Tuesday with John Sheahan") 
+                          }}
                         </div>
                       </figure>
                     </div>

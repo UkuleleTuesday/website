@@ -1,4 +1,5 @@
 {% extends "_layouts/base.html" %}
+{% from "_macros/images.html" import content_picture %}
 {% block title %}Ukulele Tuesday - Home{% endblock %}
 {% block description %}
   Ukulele Tuesday is an open play-along session and a gigging group based in Dublin, Ireland. We play ukes every Tuesday in the Stag's Head pub, and perform around Ireland (and beyond!).
@@ -19,8 +20,9 @@
 {% block twitter_reading_time %}2 minutes{% endblock %}
 {% block lcp_preload %}
   <link as="image"
-        href="/assets/images/ukulele-tuesday-showcase-01.jpg"
-        rel="preload">
+        href="/assets/images/ukulele-tuesday-showcase-01.webp"
+        rel="preload"
+        type="image/webp">
 {% endblock %}
 {% block content %}
   <main class="site-main vc_full_width_row_container no no no"
@@ -107,19 +109,12 @@
                     <div class="wpb_single_image wpb_content_element vc_align_center img-border-green">
                       <figure class="wpb_wrapper vc_figure">
                         <div class="vc_single_image-wrapper vc_box_border_grey">
-                          <img alt="Play-along session in Stags Head crowd"
-                               class="vc_single_image-img attachment-full"
-                               decoding="async"
-                               height="667"
-                               sizes="(max-width: 1000px) 100vw,
-                                      1000px"
-                               src="/assets/images/Ukulele-Tuesday-jam-crowd.jpg"
-                               srcset="/assets/images/Ukulele-Tuesday-jam-crowd.jpg 1000w,
-                                       /assets/images/Ukulele-Tuesday-jam-crowd-300x200.jpg 300w,
-                                       /assets/images/Ukulele-Tuesday-jam-crowd-768x512.jpg 768w,
-                                       /assets/images/Ukulele-Tuesday-jam-crowd-500x334.jpg 500w"
-                               title="Play-along session in Stags Head crowd"
-                               width="1000">
+                          {{ content_picture("Ukulele-Tuesday-jam-crowd",
+                                                    "Play-along session in Stags Head crowd",
+                                                    667,
+                                                    "(max-width: 1000px) 100vw, 1000px",
+                                                    title="Play-along session in Stags Head crowd") 
+                          }}
                         </div>
                       </figure>
                     </div>
@@ -136,19 +131,12 @@
                     <div class="wpb_single_image wpb_content_element vc_align_center img-border-maroon">
                       <figure class="wpb_wrapper vc_figure">
                         <div class="vc_single_image-wrapper vc_box_border_grey">
-                          <img alt="Ukulele Tuesday band"
-                               class="vc_single_image-img attachment-full"
-                               decoding="async"
-                               height="666"
-                               sizes="(max-width: 1000px) 100vw,
-                                      1000px"
-                               src="/assets/images/Ukulele-Tuesday-Band-new.jpg"
-                               srcset="/assets/images/Ukulele-Tuesday-Band-new.jpg 1000w,
-                                       /assets/images/Ukulele-Tuesday-Band-new-300x200.jpg 300w,
-                                       /assets/images/Ukulele-Tuesday-Band-new-768x512.jpg 768w,
-                                       /assets/images/Ukulele-Tuesday-Band-new-500x334.jpg 500w"
-                               title="Ukulele Tuesday band"
-                               width="1000">
+                          {{ content_picture("Ukulele-Tuesday-Band-new",
+                                                    "Ukulele Tuesday band",
+                                                    666,
+                                                    "(max-width: 1000px) 100vw, 1000px",
+                                                    title="Ukulele Tuesday band") 
+                          }}
                         </div>
                       </figure>
                     </div>
