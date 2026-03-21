@@ -46,19 +46,8 @@ const cssFiles = [
 // the HTML and JS content files.
 const safelist = {
   standard: [
-    // cesis_collapse.js – Bootstrap-style collapse state classes
-    'collapse',
-    'collapsing',
-    'collapsed',
-    'in',
     // mobile-menu.js – hamburger/drawer toggle
     'open',
-    // isotope.js – drag-and-drop positioning helpers
-    'is-positioning-post-drag',
-    'packery-drop-placeholder',
-    // jquery-ui effect.min.js – animation wrappers
-    'ui-effects-placeholder',
-    'ui-effects-wrapper',
   ],
   // Keep any selector that contains a SmartMenu state suffix, which the
   // SmartMenus library adds at runtime (e.g. .sm-dox.highlighted, .sub-arrow)
