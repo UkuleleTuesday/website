@@ -37,6 +37,14 @@ jobs:
         env:
           ENABLE_ANALYTICS: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
         run: uv run build.py
+      - name: Setup Node.js for CSS optimization
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install pnpm and dependencies for CSS optimization
+        run: npm install -g pnpm && pnpm install
+      - name: Optimize CSS
+        run: node optimize-css.mjs
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:

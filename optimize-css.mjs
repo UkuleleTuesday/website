@@ -5,8 +5,11 @@
  * Run this script after building the site:
  *   node optimize-css.mjs
  *
- * The script overwrites the CSS files in static/ with their optimized versions.
- * Re-run `uv run python build.py` afterwards to copy to public/.
+ * The script reads CSS from static/ (the canonical source) and writes
+ * the optimized output to public/ only. The static/ files are never mutated,
+ * so re-cloning always gives a predictable state.
+ *
+ * This script is wired into the build pipeline via CI (see .github/workflows/ci.yml).
  */
 
 import { PurgeCSS } from 'purgecss';
@@ -31,15 +34,11 @@ const htmlFiles = collectFiles('public', ['.html']);
 const jsFiles = collectFiles('public', ['.js']);
 const contentFiles = [...htmlFiles, ...jsFiles];
 
-// CSS files to optimize (source paths in static/)
+// CSS source files (read from static/) mapped to their output paths (written to public/).
+// All legacy Cesis/WPBakery CSS has been consolidated into main.css (Task 9).
 const cssFiles = [
-  'static/wordpress/wp-content/themes/cesis/style.css',
-  'static/wordpress/wp-content/themes/cesis/css/cesis_plugins.css',
-  'static/wordpress/wp-content/themes/cesis/css/cesis_media_queries.css',
-  'static/wordpress/wp-content/themes/cesis/includes/fonts/cesis_icons/cesis_icons.css',
-  'static/css/main.css',
-  'static/js/js_composer.min.css',
-  'static/css/custom.css',
+  { src: 'static/css/main.css', dest: 'public/css/main.css' },
+  { src: 'static/css/custom.css', dest: 'public/css/custom.css' },
 ];
 
 // Safelist: classes added dynamically by JavaScript that won't appear
@@ -66,14 +65,14 @@ const safelist = {
   deep: [/sub-arrow/, /\.highlighted/, /\.current-menu/],
 };
 
-async function optimizeCSS(cssPath) {
-  const originalContent = readFileSync(cssPath, 'utf8');
+async function optimizeCSS({ src, dest }) {
+  const originalContent = readFileSync(src, 'utf8');
   const originalSize = Buffer.byteLength(originalContent);
 
   // PurgeCSS – remove unused selectors
   const purgeResults = await new PurgeCSS().purge({
     content: contentFiles,
-    css: [cssPath],
+    css: [src],
     safelist,
     // Preserve @font-face, @keyframes and CSS variables
     variables: true,
@@ -86,9 +85,9 @@ async function optimizeCSS(cssPath) {
   const finalSize = Buffer.byteLength(purgedContent);
   const reduction = (((originalSize - finalSize) / originalSize) * 100).toFixed(1);
 
-  writeFileSync(cssPath, purgedContent, 'utf8');
+  writeFileSync(dest, purgedContent, 'utf8');
   console.log(
-    `${basename(cssPath).padEnd(35)} ${(originalSize / 1024).toFixed(1).padStart(7)} KiB → ${(finalSize / 1024).toFixed(1).padStart(7)} KiB  (${reduction}% reduction)`
+    `${basename(src).padEnd(35)} ${(originalSize / 1024).toFixed(1).padStart(7)} KiB → ${(finalSize / 1024).toFixed(1).padStart(7)} KiB  (${reduction}% reduction)`
   );
 }
 
@@ -100,4 +99,4 @@ for (const cssFile of cssFiles) {
   await optimizeCSS(cssFile);
 }
 
-console.log('\nDone. Re-run `uv run python build.py` to copy optimized files to public/.');
+console.log('\nDone. CSS optimization written to public/ only; static/ source files are unchanged.');
