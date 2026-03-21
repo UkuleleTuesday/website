@@ -86,6 +86,7 @@
     <!-- Renamed to force cache reloads due to incorrect caching config: https://github.com/UkuleleTuesday/website/issues/77 -->
     <link href="/css/custom.css?v=2" rel="stylesheet" type="text/css">
     {% block extra_head %}{% endblock %}
+    {% block lcp_preload %}{% endblock %}
     {% if analytics_enabled %}
       <script type="importmap">
     {
