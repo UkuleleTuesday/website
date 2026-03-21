@@ -35,20 +35,24 @@ test.beforeAll(async () => {
 async function setupPageForSnapshot(page: Page, templateFile: string): Promise<Error | null> {
     try {
         await page.goto(templateFile, { waitUntil: 'networkidle', timeout: 20000 });
-        // Wait for all images to load, especially lazy-loaded ones
+        // Wait for in-viewport images to load (lazy images off-screen are excluded via a timeout
+        // to avoid hanging indefinitely on pages like concerts that have many off-screen lazy images)
         await page.evaluate(() => {
-            return Promise.all(
-                Array.from(document.querySelectorAll('img')).map(img => {
-                    return new Promise<void>((resolve) => {
-                        if (img.complete) {
-                            resolve();
-                        } else {
-                            img.onload = () => resolve();
-                            img.onerror = () => resolve();
-                        }
-                    });
-                })
-            );
+            const imagePromises = Array.from(document.querySelectorAll('img')).map(img => {
+                return new Promise<void>((resolve) => {
+                    if (img.complete) {
+                        resolve();
+                    } else {
+                        img.onload = () => resolve();
+                        img.onerror = () => resolve();
+                    }
+                });
+            });
+            // Race against a 5s timeout so that off-screen lazy images never block the test
+            return Promise.race([
+                Promise.all(imagePromises),
+                new Promise<void>(resolve => setTimeout(resolve, 5000)),
+            ]);
         });
         // Small delay to ensure images are rendered
         await page.waitForTimeout(500);
