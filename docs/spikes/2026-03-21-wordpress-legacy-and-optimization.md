@@ -134,9 +134,12 @@ This adds no functionality and exposes implementation details to public HTML.
              &family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
 ```
 
+Note: the `dns-prefetch` links use protocol-relative `//` URLs — a legacy pattern that should be
+updated to `https://` for correctness with HTTP/2 and Service Workers.
+
 Four font families are requested (Poppins, Pattaya, Quicksand, Roboto) across multiple weights.
-This is a render-blocking external request added latency to FCP. Only a subset of these families
-and weights are likely used by the current custom CSS.
+This is a render-blocking external request that adds latency to FCP. Only a subset of these
+families and weights are likely used by the current custom CSS.
 
 ---
 
