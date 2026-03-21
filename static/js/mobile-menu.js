@@ -5,7 +5,7 @@
 
 // Wait for DOM to be ready
 document.addEventListener('DOMContentLoaded', function() {
-    const hamburger = document.querySelector('.cesis_mobile_menu_switch');
+    const hamburger = document.querySelector('.mobile-menu-toggle');
     const mobileMenu = document.querySelector('.header_mobile');
     
     if (hamburger && mobileMenu) {

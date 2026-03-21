@@ -25,15 +25,15 @@
 {% endblock %}
 {% block extra_head %}
   <style>
-  #cesis_cf7_eeyx7fnc381c12e1wtv2 input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]),
-        #cesis_cf7_eeyx7fnc381c12e1wtv2 textarea,#cesis_cf7_eeyx7fnc381c12e1wtv2 select{border-radius:20px;}#cesis_cf7_eeyx7fnc381c12e1wtv2 input[type="submit"]{border-radius:100px;}
+  #contact-form-wrapper input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+        #contact-form-wrapper textarea,#contact-form-wrapper select{border-radius:20px;}#contact-form-wrapper input[type="submit"]{border-radius:100px;}
   </style>
 {% endblock %}
 {% block content %}
-  <main class="site-main vc_full_width_row_container no no no"
-        id="cesis_main"
+  <main class="site-main full-width-container no no no"
+        id="page-main"
         role="main">
-    <div class="cesis_container">
+    <div class="site-container">
       <div class="article_ctn">
         <article class="post-20 page type-page status-publish hentry" id="post-20">
           <header class="entry-content-header">
@@ -44,19 +44,19 @@
             {% set banner_image_url = "/assets/images/banner-ukulele-tuesday-mic-crowd.jpg" %}
             {% set banner_class = "banner-padding-large mb-25" %}
             {% include "_partials/banner.html" %}
-            <div class="vc_row-full-width vc_clearfix"></div>
-            <div class="vc_row wpb_row vc_row-fluid">
-              <div class="wpb_column vc_column_container vc_col-sm-3">
-                <div class="vc_column-inner">
-                  <div class="wpb_wrapper"></div>
+            <div class="row-full-width clearfix"></div>
+            <div class="content-row">
+              <div class="col col-3">
+                <div class="col-inner">
+                  <div class="col-content"></div>
                 </div>
               </div>
-              <div class="wpb_column vc_column_container vc_col-sm-6">
-                <div class="vc_column-inner">
-                  <div class="wpb_wrapper">
-                    <div class="cesis_cf7_ctn cesis_cf7_horizontal_2 cesis_cf7_medium cesis_cf7_btn cesis_cf7_medium_btn cesis_cf7_fw_btn wpb_slideInRight slideInRight cesis_cf7_400 cesis_cf7_none wpb_slideInRight slideInRight"
+              <div class="col col-6">
+                <div class="col-inner">
+                  <div class="col-content">
+                    <div class="contact-form contact-form-horizontal contact-form-md contact-form-btn contact-form-md-btn contact-form-fw-btn slideInRight contact-form-regular contact-form-no-transform slideInRight"
                          data-delay="15"
-                         id="cesis_cf7_eeyx7fnc381c12e1wtv2"
+                         id="contact-form-wrapper"
                          style="font-weight:400;
                                 margin-top:0px;
                                 margin-bottom:40px">
@@ -180,9 +180,9 @@
                   </div>
                 </div>
               </div>
-              <div class="wpb_column vc_column_container vc_col-sm-3">
-                <div class="vc_column-inner">
-                  <div class="wpb_wrapper"></div>
+              <div class="col col-3">
+                <div class="col-inner">
+                  <div class="col-content"></div>
                 </div>
               </div>
               <div class="tt-shape tt-shape-top" data-negative="false"></div>
