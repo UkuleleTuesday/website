@@ -1,4 +1,5 @@
 <footer class="site-footer scrollmagic-pin-spacer no" id="cesis_colophon">
+  {% from "_macros/images.html" import static_picture %}
   <div class="footer_main">
     <div class="cesis_container">
       <div class="footer_widget_ctn">
@@ -32,10 +33,7 @@
           <div class="textwidget custom-html-widget">
             <p style="text-align: center">
               <a href="https://www.ukuleletuesday.ie/">
-                <img alt="Ukulele Tuesday icon"
-                     height="128"
-                     src="/assets/images/ut-icon-white-green-header-1.png"
-                     width="80">
+                {{ static_picture("ut-icon-white-green-header-1", "png", "Ukulele Tuesday icon", 80, 128, loading="lazy") }}
               </a>
             </p>
           </div>

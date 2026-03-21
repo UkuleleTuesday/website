@@ -1,0 +1,66 @@
+{#
+  content_picture — renders a <picture> with AVIF, WebP, and JPEG sources for
+  content images that have responsive variants at 300 w, 500 w, and 768 w.
+
+  Parameters
+  ----------
+  basename  image filename without extension, e.g. "Ukulele-Tuesday-jam-crowd"
+  alt       alt text for the <img> element
+  height    full-size image height in pixels
+  sizes     value for the sizes attribute, e.g. "(max-width: 1000px) 100vw, 1000px"
+  width     full-size image width in pixels (default: 1000)
+  title     optional title attribute value
+  loading   loading attribute value (default: "lazy")
+#}
+{% macro content_picture(basename, alt, height, sizes, width=1000, title="", loading="lazy") -%}
+  <picture>
+    <source sizes="{{ sizes }}"
+            srcset="/assets/images/{{ basename }}.avif {{ width }}w,
+                    /assets/images/{{ basename }}-300w.avif 300w,
+                    /assets/images/{{ basename }}-500w.avif 500w,
+                    /assets/images/{{ basename }}-768w.avif 768w"
+            type="image/avif">
+    <source sizes="{{ sizes }}"
+            srcset="/assets/images/{{ basename }}.webp {{ width }}w,
+                    /assets/images/{{ basename }}-300w.webp 300w,
+                    /assets/images/{{ basename }}-500w.webp 500w,
+                    /assets/images/{{ basename }}-768w.webp 768w"
+            type="image/webp">
+    <img alt="{{ alt }}"
+         class="vc_single_image-img attachment-full"
+         decoding="async"
+         height="{{ height }}"
+         loading="{{ loading }}"
+         sizes="{{ sizes }}"
+         src="/assets/images/{{ basename }}.jpg"
+         {%- if title %}title="{{ title }}"{% endif %}
+         width="{{ width }}">
+  </picture>
+{%- endmacro %}
+{#
+  static_picture — renders a <picture> for a single-size image (logo, icon, etc.)
+  with a WebP source and an original-format fallback.
+
+  Parameters
+  ----------
+  basename  filename without extension, e.g. "ut-logo-white-green"
+  ext       original file extension without dot, e.g. "png" or "jpg"
+  alt       alt text for the <img> element
+  width     image width in pixels
+  height    image height in pixels
+  class     optional CSS class for the <img> element
+  title     optional title attribute value
+  loading   optional loading attribute value (omitted if empty)
+#}
+{% macro static_picture(basename, ext, alt, width, height, class="", title="", loading="") -%}
+  <picture>
+    <source srcset="/assets/images/{{ basename }}.webp" type="image/webp">
+    <img alt="{{ alt }}"
+         {%- if class %}class="{{ class }}"{% endif %}
+         height="{{ height }}"
+         {%- if loading %}loading="{{ loading }}"{% endif %}
+         src="/assets/images/{{ basename }}.{{ ext }}"
+         {%- if title %}title="{{ title }}"{% endif %}
+         width="{{ width }}">
+  </picture>
+{%- endmacro %}

@@ -45,6 +45,8 @@ jobs:
         run: npm install -g pnpm && pnpm install
       - name: Optimize CSS
         run: node optimize-css.mjs
+      - name: Optimize images (WebP + AVIF conversion)
+        run: node optimize-images.mjs
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:

@@ -134,6 +134,11 @@
 }
 .hero-banner {
   background-image: url(/assets/images/ukulele-tuesday-showcase-01.jpg);
+  background-image: image-set(
+    url(/assets/images/ukulele-tuesday-showcase-01.avif) type("image/avif"),
+    url(/assets/images/ukulele-tuesday-showcase-01.webp) type("image/webp"),
+    url(/assets/images/ukulele-tuesday-showcase-01.jpg) type("image/jpeg")
+  );
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
