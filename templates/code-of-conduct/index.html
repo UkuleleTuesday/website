@@ -16,7 +16,12 @@
 {% endblock %}
 {% block twitter_image %}/assets/images/Ukulele-Tuesday-jam-crowd.jpg{% endblock %}
 {% block twitter_reading_time %}2 minutes{% endblock %}
-{% block extra_head %}<style>.hidden { display: none; }</style>{% endblock %}
+{% block extra_head %}
+  <link as="image"
+        href="/assets/images/jam-session-in-stags-head-banner.jpg"
+        rel="preload">
+  <style>.hidden { display: none; }</style>
+{% endblock %}
 {% block content %}
   <main class="site-main vc_full_width_row_container no no no"
         id="cesis_main"

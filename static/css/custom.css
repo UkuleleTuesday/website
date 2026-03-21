@@ -89,7 +89,7 @@
 }
 
 .rev-btn {
-  background-color: #1db1ad;
+  background-color: #006566;
   color: white;
   font-family: 'Poppins', sans-serif;
   text-transform: uppercase;
@@ -411,4 +411,11 @@
   .event-description {
     font-size: 13px;
   }
+}
+
+/* Ensure inline links in content are distinguishable by more than colour */
+.wpb_wrapper p a,
+.entry-content p a,
+.textwidget p a {
+  text-decoration: underline;
 }
