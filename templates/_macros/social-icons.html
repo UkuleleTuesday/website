@@ -1,4 +1,4 @@
-{# Social icons macro using embedded SVGs from Simple Icons CDN #}
+{# Social icons macro using inline SVG markup (paths sourced from Simple Icons) #}
 {% macro social_icons(variant="default") %}
   <span class="social-icons{% if variant == 'simple' %} social-icons--simple{% endif %}">
     <a aria-label="Instagram"
