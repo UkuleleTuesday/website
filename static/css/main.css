@@ -401,29 +401,10 @@ a:hover, a:active {
  .updated:not(.published) {
 	display: none;
 }
-/*--------------------------------------------------------------
-## Comments
---------------------------------------------------------------*/
-/*--------------------------------------------------------------
-## Post information
---------------------------------------------------------------*/
-/*--------------------------------------------------------------
-# Media
---------------------------------------------------------------*/
 /* Make sure embeds and iframes fit their containers. */
 embed, iframe, object {
 	max-width: 100%;
 }
-/*--------------------------------------------------------------
-## Captions
---------------------------------------------------------------*/
-/*--------------------------------------------------------------
-## Sticky post
---------------------------------------------------------------*/
-/*--------------------------------------------------------------
-## Galleries
---------------------------------------------------------------*/
-
 
 /*--------------------------------------------------------------
 #0 Reset, Container, Global animations
@@ -1215,9 +1196,6 @@ text-align:left;
     transition: transform 500ms ease;
   }
 
-/*--------------------------------------------------------------
-#12 Isotope & Filter & Navigation
---------------------------------------------------------------*/
 .full{
 	width:100%;
 }
@@ -1471,10 +1449,6 @@ text-align:left;
     opacity: 0;
   }
 }
-
-/*! lightgallery - v1.3.8 - 2017-01-22
-* http://sachinchoolur.github.io/lightGallery/
-* Copyright (c) 2017 Sachin N; Licensed GPLv3 */
 
 .group:after {
   content: "";
@@ -1794,12 +1768,6 @@ body:not(.rtl) .tt-header-additional > span:last-child {
   margin: 0 0 0 10px;
 }
 
-/* Top bar breakpoint settings */
-
-/* Transparent header settings */
-
-/* Mobile menu settings */
-
 .header-cta a span {
   font-size: 13px;
   font-family: Poppins;
@@ -1921,32 +1889,6 @@ body:not(.rtl) .tt-header-additional > span:last-child {
 }
 /* end mobile breakpoint */
 
-/* Dropdown settings */
-
-/*--------------------------------------------------------------
-#3 Title and Breadcrumbs
---------------------------------------------------------------*/
-
-/* title container */
-/* title */
-
-/* breadcrumb */
-
-/* post title */
-/* title */
-
-/* breadcrumb */
-
-/* portfolio title */
-/* title */
-
-/* breadcrumb */
-
-/* staff title */
-/* title */
-
-/* breadcrumb */
-
 /*--------------------------------------------------------------
 #4 Main Content
 --------------------------------------------------------------*/
@@ -2046,21 +1988,6 @@ textarea:focus {
 a:hover {
   color: #66023c;
 }
-
-/* alternative background */
-
-/* alternative border */
-
-/* alternative heading */
-
-/* alternative text */
-
-/* alternative light text color */
-
-/* alternative accent color */
-
-/* buttons settings */
-
 
 .contact-form-btn input[type='submit'] {
   color: #ffffff;
@@ -2211,19 +2138,6 @@ a:hover {
   font-size: 13px;
 }
 
-/*--------------------------------------------------------------
-#6 Sidebar
---------------------------------------------------------------*/
-
-/* Sidebar and Content size settings */
-
-/* Sidebar Widget Default settings / Mutual settings between sidebar type  */
-
-/* layout one */
-
-/* layout two */
-
-/* layout three */
 
 /*--------------------------------------------------------------
 #7 Page Settings
@@ -2241,17 +2155,6 @@ a:hover {
   padding-bottom: 0;
 }
 
-/*--------------------------------------------------------------
-#8 Blog Settings
---------------------------------------------------------------*/
-
-/* width settings */
-
-/* top and bottom padding settings */
-
-/* stacked gallery */
-
-/* width settings */
 body.blog .site-main .site-container {
   max-width: 1250px;
 }
@@ -2261,77 +2164,4 @@ body.blog .article_ctn {
   padding-top: 60px;
   padding-bottom: 60px;
 }
-
-/*--------------------------------------------------------------
-#9 Portfolio Settings
---------------------------------------------------------------*/
-
-/* width settings */
-
-/* top and bottom padding settings */
-
-/* stacked gallery */
-
-/* width settings */
-
-/* top and bottom padding settings */
-
-/*--------------------------------------------------------------
-#10 Staff Settings
---------------------------------------------------------------*/
-
-/* width settings */
-
-/* top and bottom padding settings */
-
-/* width settings */
-
-/* top and bottom padding settings */
-
-/*--------------------------------------------------------------
-#11 Career Position Settings
---------------------------------------------------------------*/
-
-/* width settings */
-
-/* top and bottom padding settings */
-
-/* width settings */
-
-/* top and bottom padding settings */
-
-/*--------------------------------------------------------------
-#12 Woocommerce Settings
---------------------------------------------------------------*/
-
-/*--------------------------------------------------------------
-#13 Buddypress Settings
---------------------------------------------------------------*/
-
-/*--------------------------------------------------------------
-#14 bbpress Settings
---------------------------------------------------------------*/
-
-/*--------------------------------------------------------------
-#15 404 Page Settings
---------------------------------------------------------------*/
-
-/* width settings */
-
-/* top and bottom padding settings */
-
-/*--------------------------------------------------------------
-#16 Search Settings
---------------------------------------------------------------*/
-
-/* width settings */
-
-/* top and bottom padding settings */
-
-
-
-/*--------------------------------------------------------------
-#17 Custom css
---------------------------------------------------------------*/
-
 
