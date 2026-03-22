@@ -1850,6 +1850,11 @@ text-align:left;
   transition: all 0.2s ease-in-out;
 }
 
+/* Ensure SVG paths inherit fill color */
+.social-icon-svg path {
+  fill: inherit;
+}
+
 /* Inherit text color from parent */
 .social-icons a {
   color: inherit;
