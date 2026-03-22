@@ -9,8 +9,7 @@
  *  2. Cesis plugin styles (cesis_plugins.css)
  *  3. Cesis media queries (cesis_media_queries.css)
  *  4. SVG Social Icons
- *  5. WPBakery Page Builder styles (js_composer.min.css)
- *  6. Dynamic/custom theme CSS (formerly /wp-admin/admin-ajax.php?action=dynamic_css)
+ *  5. Dynamic/custom theme CSS (formerly /wp-admin/admin-ajax.php?action=dynamic_css)
  */
 
 /*==============================================================
@@ -1877,20 +1876,10 @@ text-align:left;
   height: 16px;
 }
 
-/*==============================================================
- * 5. WPBakery Page Builder styles
- * Source: static/js/js_composer.min.css
- *==============================================================*/
-/*!
- * WPBakery Page Builder v6.0.0 (https://wpbakery.com)
- * Copyright 2011-2022 Michael M, WPBakery
- * License: Commercial. More details: http://go.wpbakery.com/licensing
- */
-
 .content-row:after,.content-row:before{content:" ";display:table}.content-row:after{clear:both}.col{width:100%}.content-row{margin-left:-15px;margin-right:-15px}.col-12,.col-2,.col-3,.col-4,.col-6,.col-8{position:relative;min-height:1px;padding-left:15px;padding-right:15px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}@media (min-width:768px){.col-12,.col-2,.col-3,.col-4,.col-6,.col-8{float:left}.col-12{width:100%}.col-8{width:66.66666667%}.col-6{width:50%}.col-4{width:33.33333333%}.col-3{width:25%}.col-2{width:16.66666667%}}.clearfix:after,.clearfix:before{content:" ";display:table}.clearfix:after{clear:both}.clearfix:after,.clearfix:before{content:" ";display:table}.clearfix:after{clear:both}i.icon{display:inline-block;width:16px;height:16px;line-height:16px;vertical-align:text-top;margin-left:5px}#content .text-block :last-child,#content .text-block p:last-child,.text-block :last-child,.text-block p:last-child{margin-bottom:0}.content-element{margin-bottom:35px}.parallax{position:relative;overflow:hidden}.parallax>*{position:relative;z-index:1}.content-row[data-vc-full-width]{-webkit-transition:opacity .5s ease;-o-transition:opacity .5s ease;transition:opacity .5s ease;overflow:hidden}.content-row.row-flex{box-sizing:border-box;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-wrap:wrap;-ms-flex-wrap:wrap;flex-wrap:wrap}.content-row.row-flex>.col{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}.content-row.row-flex>.col>.col-inner{-webkit-box-flex:1;-webkit-flex-grow:1;-ms-flex-positive:1;flex-grow:1;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;z-index:1}@media (-ms-high-contrast:active),(-ms-high-contrast:none){.content-row.row-flex>.col>.col-inner>*{min-height:1em}}.content-row.row-flex::after,.content-row.row-flex::before{display:none}.content-row.row-equal-height>.col{-webkit-box-align:stretch;-webkit-align-items:stretch;-ms-flex-align:stretch;align-items:stretch}.content-row.row-content-middle>.col>.col-inner{-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center}.content-row.row-content-middle:not(.row-equal-height)>.col{-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;align-items:center}.col-inner::after,.col-inner::before{content:" ";display:table}.col-inner::after{clear:both}.content-row.row-gap{margin-left:-27.5px;margin-right:-27.5px}.content-row.row-gap>.col{padding:12.5px}.col{padding-left:0;padding-right:0}.col>.col-inner{box-sizing:border-box;padding-left:15px;padding-right:15px;width:100%}.col-fill>.col-inner,.row-fill+.row-full-width+.content-row>.col>.col-inner,.row-fill+.content-row>.col>.col-inner,.row-fill>.col>.col-inner{padding-top:35px}.content-row.row-equal-height>.col{-webkit-box-align:stretch;-webkit-align-items:stretch;-ms-flex-align:stretch;align-items:stretch}.map-block .col-content{background-color:#f7f7f7;padding:5px}.map-block .map-wrapper iframe{margin-bottom:0;padding:0;display:block;width:100%;border:none}.image-block a{border:none;outline:0}.image-block img{height:auto;max-width:100%;vertical-align:top}.image-block .image-wrapper{display:inline-block;vertical-align:top;max-width:100%}.image-block.align-center{text-align:center}.image-block .image-figure{display:inline-block;vertical-align:top;margin:0;max-width:100%}.icon-element{line-height:0;font-size:14px;margin-bottom:35px}.icon-element.icon-outer{box-sizing:border-box;text-align:center}.icon-element.icon-outer.icon-center{text-align:center}.icon-element.icon-outer .icon-inner{text-align:center;display:inline-block;border:2px solid transparent;width:4em;height:4em;box-sizing:content-box;position:relative}.icon-element.icon-outer .icon-inner.icon-md{max-width:100%!important;line-height:2.15em!important}.icon-element.icon-outer .icon-inner.icon-md.icon-has-style-inner{width:4em!important;height:4em!important}.icon-element.icon-outer .icon-inner.icon-rounded{border-radius:50%}
 
 /*==============================================================
- * 6. Dynamic/custom theme CSS
+ * 5. Dynamic/custom theme CSS
  * Source: formerly /wp-admin/admin-ajax.php?action=dynamic_css
  *==============================================================*/
 /* 
