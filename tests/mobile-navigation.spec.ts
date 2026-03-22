@@ -8,7 +8,7 @@ test.describe('Mobile Navigation', () => {
     await page.setViewportSize({ width: 1200, height: 800 });
     
     // Mobile menu button should not be visible on desktop
-    const hamburger = page.locator('.cesis_mobile_menu_switch');
+    const hamburger = page.locator('.mobile-menu-toggle');
     await expect(hamburger).not.toBeVisible();
     
     // Desktop navigation should be visible
@@ -31,7 +31,7 @@ test.describe('Mobile Navigation', () => {
     await page.setViewportSize({ width: 375, height: 667 });
     
     // Mobile menu button should be visible on mobile
-    const hamburger = page.locator('.cesis_mobile_menu_switch');
+    const hamburger = page.locator('.mobile-menu-toggle');
     await expect(hamburger).toBeVisible();
     
     // Mobile menu should be initially hidden
@@ -61,7 +61,7 @@ test.describe('Mobile Navigation', () => {
     // Set mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
     
-    const hamburger = page.locator('.cesis_mobile_menu_switch');
+    const hamburger = page.locator('.mobile-menu-toggle');
     const mobileMenu = page.locator('.header_mobile');
     
     // Open mobile menu
@@ -85,7 +85,7 @@ test.describe('Mobile Navigation', () => {
     // Set mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
     
-    const hamburger = page.locator('.cesis_mobile_menu_switch');
+    const hamburger = page.locator('.mobile-menu-toggle');
     
     // Initially should not have 'open' class
     await expect(hamburger).not.toHaveClass(/open/);

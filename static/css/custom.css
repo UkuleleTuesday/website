@@ -1,5 +1,5 @@
 /* Full-width rows */
-.vc_row[data-vc-full-width="true"] {
+.content-row[data-vc-full-width="true"] {
   width: 100vw;
   position: relative;
   left: 50%;
@@ -166,7 +166,7 @@
   }
   
   /* Force display of mobile menu button on smaller screens */
-  .header_main .cesis_mobile_menu_switch {
+  .header_main .mobile-menu-toggle {
     display: flex !important;
     align-items: center;
     justify-content: center;
@@ -182,12 +182,12 @@
   }
   
   /* Position mobile extra button in the center */
-  .header_logo .cesis_mobile_extra {
+  .header_logo .header-mobile-extras {
     order: 2;
   }
   
   /* Ensure the mobile menu hamburger lines are visible */
-  .cesis_mobile_menu_switch .lines {
+  .mobile-menu-toggle .lines {
     display: block;
     width: 20px;
     height: 2px;
@@ -196,8 +196,8 @@
     transition: background 0.3s;
   }
   
-  .cesis_mobile_menu_switch .lines:before,
-  .cesis_mobile_menu_switch .lines:after {
+  .mobile-menu-toggle .lines:before,
+  .mobile-menu-toggle .lines:after {
     content: '';
     display: block;
     width: 20px;
@@ -208,25 +208,25 @@
     transition: transform 0.3s, opacity 0.3s;
   }
   
-  .cesis_mobile_menu_switch .lines:before {
+  .mobile-menu-toggle .lines:before {
     top: -6px;
   }
   
-  .cesis_mobile_menu_switch .lines:after {
+  .mobile-menu-toggle .lines:after {
     top: 6px;
   }
   
   /* Hamburger animation when open */
-  .cesis_mobile_menu_switch.open .lines {
+  .mobile-menu-toggle.open .lines {
     background: transparent;
   }
   
-  .cesis_mobile_menu_switch.open .lines:before {
+  .mobile-menu-toggle.open .lines:before {
     transform: rotate(45deg);
     top: 0;
   }
   
-  .cesis_mobile_menu_switch.open .lines:after {
+  .mobile-menu-toggle.open .lines:after {
     transform: rotate(-45deg);
     top: 0;
   }
@@ -419,7 +419,7 @@
 }
 
 /* Ensure inline links in content are distinguishable by more than colour */
-.wpb_wrapper p a,
+.col-content p a,
 .entry-content p a,
 .textwidget p a {
   text-decoration: underline;
