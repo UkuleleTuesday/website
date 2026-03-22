@@ -8,7 +8,7 @@
  *  1. Cesis theme base styles (cesis/style.css)
  *  2. Cesis plugin styles (cesis_plugins.css)
  *  3. Cesis media queries (cesis_media_queries.css)
- *  4. Cesis icon font (cesis_icons.css)
+ *  4. SVG Social Icons
  *  5. WPBakery Page Builder styles (js_composer.min.css)
  *  6. Dynamic/custom theme CSS (formerly /wp-admin/admin-ajax.php?action=dynamic_css)
  */
@@ -192,8 +192,7 @@ input[type="checkbox"]:checked:before {
     position: absolute;
     left: 0px;
     top: 0px;
-    font-family: "tticons";
-    content: "\f00c";
+    content: "✓";
 		font-weight: 400;
     text-align: center;
     top: 0;
@@ -1832,51 +1831,50 @@ text-align:left;
 
 
 /*==============================================================
- * 4. Cesis icon font
- * Source: static/wordpress/wp-content/themes/cesis/includes/fonts/cesis_icons/cesis_icons.css
+ * 4. SVG Social Icons
  *==============================================================*/
-@font-face {
-  font-family: 'tticons';
-  src:  url('/wordpress/wp-content/themes/cesis/includes/fonts/cesis_icons/fonts/tticons.eot?7siik9');
-  src:  url('/wordpress/wp-content/themes/cesis/includes/fonts/cesis_icons/fonts/tticons.eot?7siik9#iefix') format('embedded-opentype'),
-    url('/wordpress/wp-content/themes/cesis/includes/fonts/cesis_icons/fonts/tticons.ttf?7siik9') format('truetype'),
-    url('/wordpress/wp-content/themes/cesis/includes/fonts/cesis_icons/fonts/tticons.woff?7siik9') format('woff'),
-    url('/wordpress/wp-content/themes/cesis/includes/fonts/cesis_icons/fonts/tticons.svg?7siik9#tticons') format('svg');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+/* SVG Social Icons */
+.social-icon {
+  display: inline-block;
+  text-decoration: none;
+  outline: none;
 }
 
-.fa,[class*="fa-"] {
-  /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'tticons' !important;
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.social-icon-svg {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+  fill: currentColor;
+  transition: all 0.2s ease-in-out;
 }
 
-/* Only the icons actually used in the website */
-.fa-facebook:before {
-  content: "\f09a";
+/* Ensure SVG paths inherit fill color */
+.social-icon-svg path {
+  fill: inherit;
 }
-.fa-instagram:before {
-  content: "\f16d";
+
+/* Inherit text color from parent */
+.social-icons a {
+  color: inherit;
 }
-.fa-tripadvisor:before {
-  content: "\f262";
+
+/* Header desktop social icons */
+.tt-header-additional .social-icon-svg {
+  width: 16px;
+  height: 16px;
 }
-.fa-whatsapp:before {
-  content: "\f232";
+
+/* Mobile menu social icons */
+.tt-mobile-additional .social-icon-svg {
+  width: 16px;
+  height: 16px;
 }
-.fa-youtube:before {
-  content: "\f167";
+
+/* Footer social icons */
+.footer_sub .social-icon-svg {
+  width: 16px;
+  height: 16px;
 }
 
 /*==============================================================

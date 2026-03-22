@@ -1,5 +1,6 @@
 <footer class="site-footer scrollmagic-pin-spacer no" id="site-colophon">
   {% from "_macros/images.html" import static_picture %}
+  {% from "_macros/social-icons.html" import social_icons %}
   <div class="footer_main">
     <div class="site-container">
       <div class="footer_widget_ctn">
@@ -54,21 +55,7 @@
     </div>
     <div class="footer_sub_center"></div>
     <div class="footer_sub_right">
-      <div class="f_si">
-        <span class="social-icons social-icons--simple"><a aria-label="Instagram"
-   class="fa fa-instagram"
-   href="https://www.instagram.com/ukuleletuesday/"
-   target="_blank"></a><a aria-label="Facebook"
-   class="fa fa-facebook"
-   href="https://www.facebook.com/UkuleleTuesday"
-   target="_blank"></a><a aria-label="WhatsApp" class="fa fa-whatsapp" href="/whatsapp/"></a><a aria-label="TripAdvisor"
-   class="fa fa-tripadvisor"
-   href="https://www.tripadvisor.com/Attraction_Review-g186605-d25399502-Reviews-Ukulele_Tuesday-Dublin_County_Dublin.html"
-   target="_blank"></a><a aria-label="YouTube"
-   class="fa fa-youtube"
-   href="https://www.youtube.com/c/UkuleleTuesday/videos"
-   target="_blank"></a></span>
-      </div>
+      <div class="f_si">{{ social_icons("simple") }}</div>
     </div>
   </div>
   <!-- .container -->

@@ -1,5 +1,6 @@
 <div class="header-opaque" id="header_container">
   {% from "_macros/images.html" import static_picture %}
+  {% from "_macros/social-icons.html" import social_icons %}
   <header class="top-header header-sticky header-hiding header-shadow"
           id="site-header">
     <div class="header_main">
@@ -23,19 +24,7 @@
         </div>
         <!-- .header_logo -->
         <div class="tt-header-additional tt-main-additional additional_simple logo_left nav_normal">
-          <span class="social-icons"><a aria-label="Instagram"
-   class="fa fa-instagram"
-   href="https://www.instagram.com/ukuleletuesday/"
-   target="_blank"></a><a aria-label="Facebook"
-   class="fa fa-facebook"
-   href="https://www.facebook.com/UkuleleTuesday"
-   target="_blank"></a><a aria-label="WhatsApp" class="fa fa-whatsapp" href="/whatsapp/"></a><a aria-label="TripAdvisor"
-   class="fa fa-tripadvisor"
-   href="https://www.tripadvisor.com/Attraction_Review-g186605-d25399502-Reviews-Ukulele_Tuesday-Dublin_County_Dublin.html"
-   target="_blank"></a><a aria-label="YouTube"
-   class="fa fa-youtube"
-   href="https://www.youtube.com/c/UkuleleTuesday/videos"
-   target="_blank"></a></span><span class="header-book-btn"><a href="/contact-us" target= "_self"><span>Book Us!</span></a></span>
+          {{ social_icons() }}<span class="header-book-btn"><a href="/contact-us" target= "_self"><span>Book Us!</span></a></span>
         </div>
         <!-- .tt-main-additional -->
         <nav class="tt-main-navigation logo_left menu_center nav_normal"
@@ -88,21 +77,7 @@
         </div>
       </nav>
       <!-- #site-navigation -->
-      <div class="tt-mobile-additional">
-        <span class="social-icons social-icons--simple"><a aria-label="Instagram"
-   class="fa fa-instagram"
-   href="https://www.instagram.com/ukuleletuesday/"
-   target="_blank"></a><a aria-label="Facebook"
-   class="fa fa-facebook"
-   href="https://www.facebook.com/UkuleleTuesday"
-   target="_blank"></a><a aria-label="WhatsApp" class="fa fa-whatsapp" href="/whatsapp/"></a><a aria-label="TripAdvisor"
-   class="fa fa-tripadvisor"
-   href="https://www.tripadvisor.com/Attraction_Review-g186605-d25399502-Reviews-Ukulele_Tuesday-Dublin_County_Dublin.html"
-   target="_blank"></a><a aria-label="YouTube"
-   class="fa fa-youtube"
-   href="https://www.youtube.com/c/UkuleleTuesday/videos"
-   target="_blank"></a></span>
-      </div>
+      <div class="tt-mobile-additional">{{ social_icons("simple") }}</div>
       <!-- .tt-mmobile-additional -->
     </div>
     <!-- .header_mobile -->
