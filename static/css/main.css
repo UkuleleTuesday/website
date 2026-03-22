@@ -192,8 +192,7 @@ input[type="checkbox"]:checked:before {
     position: absolute;
     left: 0px;
     top: 0px;
-    font-family: "tticons";
-    content: "\f00c";
+    content: "✓";
 		font-weight: 400;
     text-align: center;
     top: 0;
