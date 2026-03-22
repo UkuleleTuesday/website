@@ -1453,18 +1453,6 @@ text-align:left;
 }
 
 
-/*
- *  Spinning animation
- */
-
-/*
- *  Like Plugin
- */
-
-/*
- *  Owl Carousel - Animate Plugin
- */
-
 @-webkit-keyframes fadeOut {
   0% {
     opacity: 1;
@@ -1483,24 +1471,6 @@ text-align:left;
     opacity: 0;
   }
 }
-
-/*
- * 	Owl Carousel - Auto Height Plugin
- */
-
-/*
- *  Core Owl Carousel CSS File
- */
-
-/* No Js */
-
-/*
- * 	Owl Carousel - Lazy Load Plugin
- */
-
-/*
- * 	Owl Carousel - Video Plugin
- */
 
 /*! lightgallery - v1.3.8 - 2017-01-22
 * http://sachinchoolur.github.io/lightGallery/
