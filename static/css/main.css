@@ -1879,6 +1879,45 @@ text-align:left;
   content: "\f167";
 }
 
+/* SVG Social Icons */
+.social-icon {
+  display: inline-block;
+  text-decoration: none;
+  outline: none;
+}
+
+.social-icon-svg {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+  fill: currentColor;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Inherit text color from parent */
+.social-icons a {
+  color: inherit;
+}
+
+/* Header desktop social icons */
+.tt-header-additional .social-icon-svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Mobile menu social icons */
+.tt-mobile-additional .social-icon-svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Footer social icons */
+.footer_sub .social-icon-svg {
+  width: 16px;
+  height: 16px;
+}
+
 /*==============================================================
  * 5. WPBakery Page Builder styles
  * Source: static/js/js_composer.min.css
