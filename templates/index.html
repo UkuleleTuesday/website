@@ -20,6 +20,7 @@
 {% block twitter_reading_time %}2 minutes{% endblock %}
 {% block lcp_preload %}
   <link as="image"
+        fetchpriority="high"
         href="/assets/images/ukulele-tuesday-showcase-01.avif"
         rel="preload"
         type="image/avif">
@@ -36,6 +37,17 @@
           <!-- .entry-content-header -->
           <div class="entry-content">
             <section class="hero-banner">
+              <picture class="hero-banner-bg">
+                <source srcset="/assets/images/ukulele-tuesday-showcase-01.avif"
+                        type="image/avif">
+                <source srcset="/assets/images/ukulele-tuesday-showcase-01.webp"
+                        type="image/webp">
+                <img alt=""
+                     fetchpriority="high"
+                     height="1044"
+                     src="/assets/images/ukulele-tuesday-showcase-01.jpg"
+                     width="1800">
+              </picture>
               <h1 style="color: white;
                          font-family: 'Pattaya', sans-serif;
                          font-size: 72px;
