@@ -26,6 +26,40 @@ const templateFiles = getAllHtmlFiles(templatesDir);
 
 const expectedFamilies = (process.env.EXPECT_FONTS || 'Quicksand,Pattaya').split(',').map(f => f.trim()).filter(Boolean);
 
+
+async function waitForImages(page: Page): Promise<void> {
+  // RC2 step 1: trigger lazy images that are already in the DOM
+  await page.evaluate(() => {
+    for (const img of document.querySelectorAll<HTMLImageElement>('img[loading="lazy"]')) {
+      img.setAttribute('loading', 'eager');
+    }
+  });
+
+  await page.evaluate(async () => {
+    const imgs = [...document.querySelectorAll<HTMLImageElement>('img')];
+
+    // RC2: img.decode() waits for fetch + decode (img.complete fires too early
+    //      for decoding="async" images).
+    // RC4: document.fonts.ready prevents font-swap reflow between frames.
+    await Promise.all([...imgs.map((img) => img.decode().catch(() => {})), document.fonts.ready]);
+
+    // RC5: blur whatever Firefox auto-focused on page load
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+
+    // RC3: CSS columns/masonry layout reflows AFTER img.decode() resolves.
+    // Double-rAF: first frame = layout scheduled, second = layout painted.
+    await new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+    // Extra rAF for font rendering to ensure fonts are visually painted
+    await new Promise<void>((r) => requestAnimationFrame(r));
+  });
+
+  // Catch any secondary requests the image loads may have triggered
+  await page.waitForLoadState('networkidle');
+}
+
 test.beforeAll(async () => {
     if (!fs.existsSync(artifactsDir)) {
         fs.mkdirSync(artifactsDir, { recursive: true });
@@ -35,27 +69,8 @@ test.beforeAll(async () => {
 async function setupPageForSnapshot(page: Page, templateFile: string): Promise<Error | null> {
     try {
         await page.goto(templateFile, { waitUntil: 'networkidle', timeout: 20000 });
-        // Wait for in-viewport images to load (lazy images off-screen are excluded via a timeout
-        // to avoid hanging indefinitely on pages like concerts that have many off-screen lazy images)
-        await page.evaluate(() => {
-            const imagePromises = Array.from(document.querySelectorAll('img')).map(img => {
-                return new Promise<void>((resolve) => {
-                    if (img.complete) {
-                        resolve();
-                    } else {
-                        img.onload = () => resolve();
-                        img.onerror = () => resolve();
-                    }
-                });
-            });
-            // Race against a 5s timeout so that off-screen lazy images never block the test
-            return Promise.race([
-                Promise.all(imagePromises),
-                new Promise<void>(resolve => setTimeout(resolve, 5000)),
-            ]);
-        });
-        // Small delay to ensure images are rendered
-        await page.waitForTimeout(500);
+        await waitForImages(page);
+        await waitForFonts(page);
         return null;
     } catch (e) {
         console.log(`Navigation issue on ${templateFile}: ${e}`);
@@ -88,7 +103,6 @@ test.describe('Visual Regression Tests', () => {
             test(`with hover states`, async ({ page }, testInfo) => {
                 test.skip(testInfo.project.name.includes('Android') || testInfo.project.name.includes('iOS'), 'Hover states are not applicable on touch devices');
                 test.slow();
-                await waitForFonts(page);
                 await withAllHoverStates(page, async () => {
                     await expect(page).toHaveScreenshot(`${templateFile}-hover.png`, {
                         animations: 'disabled',
