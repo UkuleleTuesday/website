@@ -186,7 +186,7 @@ pnpm build
 **3. Start Netlify Dev:**
 
 ```bash
-netlify dev
+pnpm dev
 ```
 
 The site will be available at `http://localhost:8888`.

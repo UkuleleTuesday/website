@@ -6,6 +6,7 @@
   "scripts": {
     "build": "uv run python build.py",
     "build:all": "pnpm run build && pnpm run optimize-css && pnpm run optimize-images",
+    "dev": "netlify dev",
     "serve": "uv run python -m http.server --directory public",
     "lint": "uvx pre-commit run --all-files",
     "test": "playwright test",
