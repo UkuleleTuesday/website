@@ -15,7 +15,7 @@ The rare dynamic parts of the site are handled via:
 ## Prerequisites
 
 - Python 3.12+ with [uv](https://github.com/astral-sh/uv) package manager
-- Node + `pnpm` to run the regression test suite.
+- Node.js with [pnpm](https://pnpm.io/) package manager — used as the primary task runner for building, linting, testing, and optimising assets
 
 ## Usage
 
@@ -24,7 +24,7 @@ The rare dynamic parts of the site are handled via:
 To build the static site from the Jinja templates:
 
 ```bash
-uv run python build.py
+pnpm build
 ```
 
 This will generate the static HTML files in the `public/` directory.
@@ -59,7 +59,7 @@ To add or edit events, Executive Committee members have been granted edit access
 The calendar is enabled by default. To disable it (e.g. for local development where the Netlify function is not available), set the `ENABLE_CALENDAR` environment variable to `false` before building:
 
 ```bash
-ENABLE_CALENDAR=false uv run python build.py
+ENABLE_CALENDAR=false pnpm build
 ```
 
 When disabled, the calendar section and its JavaScript are completely omitted from the built HTML, so no calendar-related errors will appear in the browser console.
@@ -117,7 +117,7 @@ uvx pre-commit install
 To run the hooks on all files at any time:
 
 ```bash
-uvx pre-commit run --all-files
+pnpm lint
 ```
 
 ### Visual Regression Testing
@@ -180,13 +180,13 @@ Edit `.env` with the required API keys (ask a team member for secret values). Th
 **2. Build the site:**
 
 ```bash
-uv run poe build
+pnpm build
 ```
 
 **3. Start Netlify Dev:**
 
 ```bash
-netlify dev
+pnpm dev
 ```
 
 The site will be available at `http://localhost:8888`.
@@ -202,15 +202,15 @@ The site will be available at `http://localhost:8888`.
 **Limitations and caveats:**
 
 - Edge Functions run in a Deno runtime; minor behavioural differences from production are possible.
-- The site is not rebuilt automatically when template or static files change — re-run `uv run poe build` after any source changes.
+- The site is not rebuilt automatically when template or static files change — re-run `pnpm build` after any source changes.
 
 #### Fallback: Simple Static Server
 
 If you only need to check static content (HTML, CSS, JS) without dynamic features, you can use the simpler built-in server instead:
 
 ```bash
-uv run poe build
-uv run poe serve
+pnpm build
+pnpm serve
 ```
 
 The site will be available at `http://localhost:8000`.

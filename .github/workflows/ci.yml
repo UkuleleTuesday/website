@@ -24,6 +24,12 @@ jobs:
         uses: astral-sh/setup-uv@v4
         with:
           enable-cache: true
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install pnpm and project dependencies
+        run: npm install -g pnpm && pnpm install --ignore-scripts
       - name: Cache pre-commit hooks
         uses: actions/cache@v4
         with:
@@ -32,21 +38,15 @@ jobs:
           restore-keys: |
             pre-commit-${{ runner.os }}-
       - name: Run pre-commit hooks
-        run: uvx pre-commit run --all-files
+        run: pnpm run lint
       - name: Build static site
         env:
           ENABLE_ANALYTICS: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
-        run: uv run build.py
-      - name: Setup Node.js for CSS optimization
-        uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-      - name: Install pnpm and dependencies for CSS optimization
-        run: npm install -g pnpm && pnpm install
+        run: pnpm run build
       - name: Optimize CSS
-        run: node optimize-css.mjs
+        run: pnpm run optimize-css
       - name: Optimize images (WebP + AVIF conversion)
-        run: node optimize-images.mjs
+        run: pnpm run optimize-images
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
@@ -74,7 +74,7 @@ jobs:
         with:
           node-version: lts/*
       - name: Install dependencies
-        run: npm install -g pnpm && pnpm install
+        run: npm install -g pnpm && pnpm install --ignore-scripts
       - name: Cache Playwright browsers
         uses: actions/cache@v4
         with:
@@ -87,7 +87,7 @@ jobs:
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
       - name: Run Playwright tests
-        run: pnpm exec playwright test --project "${{ matrix.project }}"
+        run: pnpm run test --project "${{ matrix.project }}"
       - name: Upload Playwright report
         uses: actions/upload-artifact@v4
         if: always()
