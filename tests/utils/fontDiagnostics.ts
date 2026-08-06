@@ -28,35 +28,3 @@ export async function waitForFonts(page, opts: { timeoutMs?: number } = {}) {
   });
   return fontStatus;
 }
-
-export function setupFontNetworkLogging(page, collector) {
-  page.on('request', req => {
-    const url = req.url();
-    if (/\.(woff2?|ttf|otf)(\?|$)/i.test(url) || /fonts\.googleapis|fonts\.gstatic/.test(url)) {
-      collector.requests.push({ url, method: req.method(), state: 'requested', start: Date.now() });
-    }
-  });
-  page.on('requestfinished', req => {
-    const url = req.url();
-    if (/\.(woff2?|ttf|otf)(\?|$)/i.test(url) || /fonts\.googleapis|fonts\.gstatic/.test(url)) {
-      const entry = collector.requests.find(r => r.url === url && r.state === 'requested');
-      if (entry) {
-        entry.state = 'finished';
-        entry.end = Date.now();
-      }
-    }
-  });
-  page.on('requestfailed', req => {
-    const url = req.url();
-    if (/\.(woff2?|ttf|otf)(\?|$)/i.test(url) || /fonts\.googleapis|fonts\.gstatic/.test(url)) {
-      const entry = collector.requests.find(r => r.url === url && r.state === 'requested');
-        if (entry) {
-          entry.state = 'failed';
-          entry.error = req.failure();
-          entry.end = Date.now();
-        } else {
-          collector.requests.push({ url, method: req.method(), state: 'failed', error: req.failure(), end: Date.now() });
-        }
-    }
-  });
-}

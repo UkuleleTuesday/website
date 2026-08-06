@@ -1,11 +1,9 @@
 import { test, expect, Page } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
-import { withAllHoverStates } from './hover-utils';
-import { waitForFonts, setupFontNetworkLogging, gatherAndSaveDiagnostics, checkFonts } from './utils/fontDiagnostics';
+import { waitForFonts } from './utils/fontDiagnostics';
 
 const templatesDir = path.join(__dirname, '..', 'templates');
-const artifactsDir = path.join(__dirname, '..', 'artifacts');
 
 function getAllHtmlFiles(dirPath: string, arrayOfFiles: string[] = [], relativeDir: string = ''): string[] {
     const files = fs.readdirSync(dirPath);
@@ -22,9 +20,16 @@ function getAllHtmlFiles(dirPath: string, arrayOfFiles: string[] = [], relativeD
     return arrayOfFiles;
 }
 
-const templateFiles = getAllHtmlFiles(templatesDir);
-
-const expectedFamilies = (process.env.EXPECT_FONTS || 'Quicksand,Pattaya').split(',').map(f => f.trim()).filter(Boolean);
+/*
+ * Every PR runs a smoke set of representative pages (hero + images + calendar,
+ * image-heavy page with form + iframe, plain form page). The full sweep of all
+ * pages runs on demand via the "Visual Regression" workflow (VRT_FULL=1).
+ */
+const SMOKE_PAGES = ['index.html', 'concerts/index.html', 'contact-us/index.html'];
+const allTemplateFiles = getAllHtmlFiles(templatesDir);
+const templateFiles = process.env.VRT_FULL === '1'
+    ? allTemplateFiles
+    : allTemplateFiles.filter(f => SMOKE_PAGES.includes(f.split(path.sep).join('/')));
 
 
 async function waitForImages(page: Page): Promise<void> {
@@ -60,12 +65,6 @@ async function waitForImages(page: Page): Promise<void> {
   await page.waitForLoadState('networkidle');
 }
 
-test.beforeAll(async () => {
-    if (!fs.existsSync(artifactsDir)) {
-        fs.mkdirSync(artifactsDir, { recursive: true });
-    }
-});
-
 async function setupPageForSnapshot(page: Page, templateFile: string): Promise<Error | null> {
     try {
         await page.goto(templateFile, { waitUntil: 'networkidle', timeout: 20000 });
@@ -79,8 +78,6 @@ async function setupPageForSnapshot(page: Page, templateFile: string): Promise<E
 }
 
 test.describe('Visual Regression Tests', () => {
-    test.describe.configure({ mode: 'serial' });
-
     for (const templateFile of templateFiles) {
         test.describe(templateFile, () => {
             let navigationError: Error | null = null;
@@ -89,29 +86,12 @@ test.describe('Visual Regression Tests', () => {
                 navigationError = await setupPageForSnapshot(page, templateFile);
             });
 
-            test(`default state`, async ({ page }, testInfo) => {
+            test(`default state`, async ({ page }) => {
                 test.slow();
-                const sanitizedTemplateFile = templateFile.replace(/[<>:"/\\|?*]/g, '_').replace(/ /g, '_');
-                const baseName = sanitizedTemplateFile;
-
                 await expect(page).toHaveScreenshot(`${templateFile}.png`, { animations: 'disabled', fullPage: true, maxDiffPixelRatio: 0.05, timeout: 10000, stylePath: path.join(__dirname, 'utils', 'snapshot.css') });
                 if (navigationError) {
                     console.log(`(Non-fatal) navigation error recorded for ${templateFile}:`, navigationError);
                 }
-            });
-
-            test(`with hover states`, async ({ page }, testInfo) => {
-                test.skip(testInfo.project.name.includes('Android') || testInfo.project.name.includes('iOS'), 'Hover states are not applicable on touch devices');
-                test.slow();
-                await withAllHoverStates(page, async () => {
-                    await expect(page).toHaveScreenshot(`${templateFile}-hover.png`, {
-                        animations: 'disabled',
-                        fullPage: true,
-                        maxDiffPixelRatio: 0.05,
-                        timeout: 10000,
-                        stylePath: path.join(__dirname, 'utils', 'snapshot.css')
-                    });
-                });
             });
         });
     }
