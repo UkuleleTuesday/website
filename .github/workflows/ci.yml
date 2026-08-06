@@ -17,6 +17,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # The build steps below are mirrored in visual-regression.yml (keep in sync)
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
