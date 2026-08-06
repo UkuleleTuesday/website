@@ -217,7 +217,6 @@ jobs:
           sleep 2
       - name: Run Lighthouse CI
         id: lhci
-        continue-on-error: true
         run: lhci autorun
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
