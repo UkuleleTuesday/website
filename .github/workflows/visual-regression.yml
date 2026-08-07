@@ -1,0 +1,94 @@
+name: Visual Regression
+
+# On-demand full visual sweep and baseline regeneration.
+# Per-PR CI only runs a 3-page smoke set (see tests/snapshots.spec.ts);
+# dispatch this workflow on a branch to run all pages, or to regenerate
+# the committed baselines on the exact runners CI compares against.
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "check = run the full sweep and report; update = regenerate baselines and push them to this branch"
+        type: choice
+        options:
+          - check
+          - update
+        default: check
+
+concurrency:
+  group: visual-regression-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  visual-regression:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # update mode pushes regenerated baselines
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      # Build public/ exactly like ci.yml's build job (keep these steps in sync)
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+      - name: Build static site
+        run: uv run build.py
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install pnpm and dependencies
+        run: npm install -g pnpm && pnpm install
+      - name: Optimize CSS
+        run: node optimize-css.mjs
+      - name: Optimize images (WebP + AVIF conversion)
+        run: node optimize-images.mjs
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/ms-playwright
+            ~/.cache/playwright-browsers
+          key: playwright-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
+      # No --project flag: all three browser projects run in one process so
+      # update mode produces a single commit covering every baseline.
+      - name: Run full visual sweep
+        if: inputs.mode == 'check'
+        env:
+          VRT_FULL: "1"
+        run: pnpm exec playwright test tests/snapshots.spec.ts
+      - name: Regenerate baselines
+        if: inputs.mode == 'update'
+        env:
+          VRT_FULL: "1"
+        run: pnpm exec playwright test tests/snapshots.spec.ts --update-snapshots
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-visual-regression
+          path: playwright-report/
+          retention-days: 30
+      - name: Commit and push updated baselines
+        if: inputs.mode == 'update'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tests/snapshots.spec.ts-snapshots
+          if git diff --cached --quiet; then
+            echo "No baseline changes." >> "$GITHUB_STEP_SUMMARY"
+          else
+            git commit -m "chore: update visual regression baselines"
+            git push origin "HEAD:${{ github.ref_name }}"
+            echo "> [!NOTE]" >> "$GITHUB_STEP_SUMMARY"
+            echo "> Baselines were pushed with GITHUB_TOKEN, which does not retrigger the PR's CI workflow. Re-run CI from the PR's checks tab if needed - this run already validated the suite against the fresh build." >> "$GITHUB_STEP_SUMMARY"
+          fi

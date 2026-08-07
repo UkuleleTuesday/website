@@ -91,16 +91,11 @@ The site is automatically built and deployed to Netlify on every push to the `ma
 
 ### Lighthouse CI
 
-Every pull request automatically runs [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci) against the Netlify deploy preview, measuring performance, accessibility, best practices, and SEO.
-
-**Viewing results:**
-
-- A summary comment is posted to the PR with scores for each Lighthouse category
-- The full Lighthouse report is uploaded as a GitHub Actions artifact (retained for 30 days) — find it in the **Actions** tab under the workflow run for your PR
+Every pull request automatically runs [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci) against the built site, measuring performance, accessibility, best practices, and SEO.
 
 **Configuration:**
 
-Lighthouse CI is configured in `.lighthouserc.json` at the project root. The assertions are set to `warn` only, so the CI will not fail due to low Lighthouse scores — the results are informational. Thresholds can be tightened to `error` to enforce minimum scores.
+Lighthouse CI is configured in `.lighthouserc.json` at the project root. The accessibility assertion is set to `error` (minimum score 0.9) and will fail CI if a PR regresses accessibility. Performance, best-practices, and SEO assertions are `warn` only — informational, since performance scores are noisy on shared CI runners.
 
 ## Development
 
@@ -122,42 +117,29 @@ uvx pre-commit run --all-files
 
 ### Visual Regression Testing
 
-This project uses [Playwright](https://playwright.dev/) for visual regression testing. It takes screenshots of every page and compares them against baseline snapshots to prevent unintended visual changes. The test dependencies and scripts are managed with `pnpm`.
+This project uses [Playwright](https://playwright.dev/) for visual regression testing. It takes full-page screenshots and compares them against baseline snapshots to prevent unintended visual changes. The test dependencies and scripts are managed with `pnpm`.
 
-**Running Tests**
+**Smoke set vs. full sweep**
 
-To execute the visual regression tests:
+Pull request CI runs a **smoke set** of three representative pages (home, concerts, contact-us) across the desktop and mobile browser projects. The full sweep of every page runs on demand:
 
 ```bash
+# smoke set (what PR CI runs)
 pnpm playwright test
-```
 
-The test suite includes two types of visual regression tests for each page:
-- **Normal state tests**: Capture pages in their default appearance
-- **Hover state tests**: Capture pages with all interactive elements (buttons, links, etc.) forced into their hover state
+# full sweep, all pages
+VRT_FULL=1 pnpm playwright test tests/snapshots.spec.ts
+```
 
 **Updating Snapshots**
 
-If you make intentional changes to the UI, you will need to update the baseline snapshots. After verifying that the changes are correct, run:
+Baselines must be generated on Linux with the pinned Playwright browser builds, so they are updated in CI rather than locally: go to **Actions → Visual Regression**, select your PR branch, and run it with mode `update`. The workflow rebuilds the site exactly as CI does, regenerates all baselines, and pushes a commit to your branch. Review the changed PNGs in the PR diff like any other change.
 
-```bash
-pnpm playwright test --update-snapshots
-```
+Note: the workflow pushes with `GITHUB_TOKEN`, which does not retrigger the PR's CI checks — re-run them from the PR's checks tab if needed (the workflow run itself already validated the suite against the fresh baselines).
 
-If running under Windows, you should instead run:
+The same workflow with mode `check` runs the full sweep against the committed baselines without updating anything — useful before merging a CSS or template refactor.
 
-```
-powershell -ExecutionPolicy Bypass -File .\update-snapshots.ps1
-```
-
-And if running under a Linux distribution which has trouble with WebKit (e.g. KDE), use:
-
-```
-chmod +x update-snapshots.sh
-./update-snapshots.sh
-```
-
-Commit the updated snapshot files in the `tests/snapshots.spec.ts-snapshots/` directory along with your code changes.
+Snapshots produced by a bare local `--update-snapshots` run will be skewed by your OS and browser version — don't commit them.
 
 **Hiding Dynamic Content**
 
