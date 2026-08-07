@@ -43,7 +43,11 @@ jobs:
         with:
           node-version: lts/*
       - name: Install pnpm and dependencies for CSS optimization
-        run: npm install -g pnpm && pnpm install
+        # --ignore-scripts skips the postinstall hook (playwright install --with-deps).
+        # This job only needs purgecss + sharp for CSS/image optimization, not a
+        # browser; the postinstall otherwise hangs downloading Chromium. The test
+        # job installs Playwright browsers explicitly in its own step.
+        run: npm install -g pnpm && pnpm install --ignore-scripts
       - name: Optimize CSS
         run: node optimize-css.mjs
       - name: Optimize images (WebP + AVIF conversion)
@@ -75,7 +79,10 @@ jobs:
         with:
           node-version: lts/*
       - name: Install dependencies
-        run: npm install -g pnpm && pnpm install
+        # --ignore-scripts skips the postinstall hook (playwright install
+        # --with-deps), which otherwise downloads browsers here uncached and can
+        # hang. Browsers are installed below via the dedicated cached step.
+        run: npm install -g pnpm && pnpm install --ignore-scripts
       - name: Cache Playwright browsers
         uses: actions/cache@v4
         with:
@@ -86,7 +93,26 @@ jobs:
           restore-keys: |
             playwright-${{ runner.os }}-
       - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
+        # `playwright install --with-deps` intermittently hangs on this runner
+        # (browser download or the apt `--with-deps` step), stalling the job for
+        # hours. Cap each attempt with `timeout` and retry so a stuck attempt is
+        # killed and retried instead of hanging. dpkg is reconfigured between
+        # attempts in case an apt run was interrupted mid-install.
+        shell: bash
+        run: |
+          for attempt in 1 2 3; do
+            echo "::group::Playwright install attempt $attempt"
+            if timeout 360 pnpm exec playwright install --with-deps; then
+              echo "::endgroup::"
+              exit 0
+            fi
+            echo "::endgroup::"
+            echo "Attempt $attempt failed or timed out (6m); retrying..." >&2
+            sudo dpkg --configure -a || true
+            sleep 10
+          done
+          echo "Playwright browser install failed after 3 attempts" >&2
+          exit 1
       - name: Run Playwright tests
         run: pnpm exec playwright test --project "${{ matrix.project }}"
       - name: Upload Playwright report
