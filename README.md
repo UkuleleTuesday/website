@@ -115,35 +115,26 @@ To run the hooks on all files at any time:
 uvx pre-commit run --all-files
 ```
 
-### Visual Regression Testing
+### Visual Regression Testing (on demand)
 
-This project uses [Playwright](https://playwright.dev/) for visual regression testing. It takes full-page screenshots and compares them against baseline snapshots to prevent unintended visual changes. The test dependencies and scripts are managed with `pnpm`.
+The [Playwright](https://playwright.dev/) suite in `tests/snapshots.spec.ts` takes full-page screenshots of every page and compares them against the baselines in `tests/snapshots.spec.ts-snapshots/`. It is **not part of pull request CI**: `playwright.config.ts` ignores it unless `VRT=1` is set, so `pnpm playwright test` only runs the functional suites (SEO, navigation, calendar, donate).
 
-**Smoke set vs. full sweep**
+**Running it**
 
-Pull request CI runs a **smoke set** of three representative pages (home, concerts, contact-us) across the desktop and mobile browser projects. The full sweep of every page runs on demand:
+The suite runs on demand via **Actions → Visual Regression** (`.github/workflows/visual-regression.yml`), which builds the site exactly like CI:
+
+- mode `check` runs the sweep against the committed baselines and reports — useful before merging a CSS or template refactor.
+- mode `update` regenerates every baseline and pushes a `chore: update visual regression baselines` commit to the selected branch. Review the changed PNGs like any other change. The push uses `GITHUB_TOKEN`, which does not retrigger the branch's CI checks.
+
+Baselines must be generated on Linux with the pinned Playwright browser builds, so always update them through the workflow. A local run is only useful for a quick look, and its snapshots must not be committed:
 
 ```bash
-# smoke set (what PR CI runs)
-pnpm playwright test
-
-# full sweep, all pages
-VRT_FULL=1 pnpm playwright test tests/snapshots.spec.ts
+VRT=1 pnpm playwright test tests/snapshots.spec.ts
 ```
-
-**Updating Snapshots**
-
-Baselines must be generated on Linux with the pinned Playwright browser builds, so they are updated in CI rather than locally: go to **Actions → Visual Regression**, select your PR branch, and run it with mode `update`. The workflow rebuilds the site exactly as CI does, regenerates all baselines, and pushes a commit to your branch. Review the changed PNGs in the PR diff like any other change.
-
-Note: the workflow pushes with `GITHUB_TOKEN`, which does not retrigger the PR's CI checks — re-run them from the PR's checks tab if needed (the workflow run itself already validated the suite against the fresh baselines).
-
-The same workflow with mode `check` runs the full sweep against the committed baselines without updating anything — useful before merging a CSS or template refactor.
-
-Snapshots produced by a bare local `--update-snapshots` run will be skewed by your OS and browser version — don't commit them.
 
 **Hiding Dynamic Content**
 
-To ensure stable snapshots, dynamic or non-deterministic content (like embedded calendars or videos) can be hidden during tests. Any styles to be applied only during snapshot tests should be added to `tests/utils/snapshot.css`. This stylesheet is automatically injected into every page when a snapshot is taken.
+To keep snapshots stable, dynamic or non-deterministic content (like embedded calendars or videos) is hidden during screenshots by `tests/utils/snapshot.css`, which Playwright injects into every page when a snapshot is taken.
 
 ### Running Locally
 
