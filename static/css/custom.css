@@ -34,6 +34,11 @@
   padding-bottom: 60px !important;
 }
 
+/* Form labels sit on the maroon background: the default grey (#6d7783) is unreadable there. */
+.section-maroon .contact-form label {
+  color: #ffffff;
+}
+
 /* Spacing */
 .mt-15 {
   margin-top: 15px !important;
