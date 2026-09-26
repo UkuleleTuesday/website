@@ -67,12 +67,12 @@ pnpm playwright test
 ```
 - **TIMING: Takes a few minutes when browsers are available**
 - **TIMEOUT: Set to 300+ seconds** - NEVER CANCEL test runs
-- Tests include SEO validation and visual regression smoke testing (3 representative pages; run the full sweep with `VRT_FULL=1 pnpm playwright test tests/snapshots.spec.ts`)
+- Tests cover SEO validation, mobile navigation, the calendar and the donate flow. The visual regression suite is not part of this run; include it with `VRT=1 pnpm playwright test tests/snapshots.spec.ts`
 - **NOTE:** Playwright browsers are pre-installed in the development environment
 
 **Run specific test:**
 ```bash
-pnpm playwright test --project="chromium" tests/snapshots.spec.ts --grep "index.html"
+pnpm playwright test --project="chromium" tests/seo.spec.ts --grep "index.html"
 ```
 
 ## Validation Scenarios
@@ -119,7 +119,7 @@ pnpm playwright test --project="chromium" tests/snapshots.spec.ts --grep "index.
 
 - **Build site:** <1 second ⚡ (extremely fast)
 - **Pre-commit hooks:** ~24 seconds (first run)
-- **Full test suite:** a few minutes (visual smoke set + functional tests)
+- **Full test suite:** a few minutes (functional tests; visual regression runs on demand)
 - **Asset analysis:** <1 second
 
 **NEVER CANCEL any of these operations** - they are all necessary for proper development workflow.
@@ -179,12 +179,12 @@ The `static/` directory is organized as follows:
 
 The project uses GitHub Actions (`.github/workflows/ci.yml`) with these stages:
 1. **Build:** Runs `uv run build.py` and pre-commit hooks
-2. **Test:** Runs Playwright tests (visual smoke set + functional tests) across multiple browsers (PRs only)
+2. **Test:** Runs the functional Playwright tests across multiple browsers (PRs only)
 3. **Deploy Preview:** Creates Netlify preview for PRs
 4. **Lighthouse:** Runs Lighthouse CI against the built site (accessibility score is enforced)
 5. **Deploy Production:** Deploys to production on main branch
 
-The full visual sweep and baseline regeneration run on demand via the **Visual Regression** workflow (`.github/workflows/visual-regression.yml`, Actions tab).
+The visual regression sweep and baseline regeneration run on demand only, via the **Visual Regression** workflow (`.github/workflows/visual-regression.yml`, Actions tab); they are not part of PR CI.
 
 **Always verify your changes pass all these stages locally before pushing.**
 

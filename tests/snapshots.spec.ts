@@ -21,15 +21,11 @@ function getAllHtmlFiles(dirPath: string, arrayOfFiles: string[] = [], relativeD
 }
 
 /*
- * Every PR runs a smoke set of representative pages (hero + images + calendar,
- * image-heavy page with form + iframe, plain form page). The full sweep of all
- * pages runs on demand via the "Visual Regression" workflow (VRT_FULL=1).
+ * This suite is not part of pull request CI: playwright.config.ts ignores it
+ * unless VRT=1 is set. It runs on demand via the "Visual Regression" workflow,
+ * which also regenerates the committed baselines on the CI runners.
  */
-const SMOKE_PAGES = ['index.html', 'concerts/index.html', 'contact-us/index.html'];
-const allTemplateFiles = getAllHtmlFiles(templatesDir);
-const templateFiles = process.env.VRT_FULL === '1'
-    ? allTemplateFiles
-    : allTemplateFiles.filter(f => SMOKE_PAGES.includes(f.split(path.sep).join('/')));
+const templateFiles = getAllHtmlFiles(templatesDir);
 
 
 async function waitForImages(page: Page): Promise<void> {

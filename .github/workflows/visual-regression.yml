@@ -1,9 +1,9 @@
 name: Visual Regression
 
-# On-demand full visual sweep and baseline regeneration.
-# Per-PR CI only runs a 3-page smoke set (see tests/snapshots.spec.ts);
-# dispatch this workflow on a branch to run all pages, or to regenerate
-# the committed baselines on the exact runners CI compares against.
+# On-demand visual regression sweep and baseline regeneration.
+# The snapshot suite (tests/snapshots.spec.ts) is not part of PR CI;
+# dispatch this workflow on a branch to run it against the committed
+# baselines, or to regenerate them on the exact runners it compares against.
 
 on:
   workflow_dispatch:
@@ -61,15 +61,15 @@ jobs:
         run: pnpm exec playwright install --with-deps
       # No --project flag: all three browser projects run in one process so
       # update mode produces a single commit covering every baseline.
-      - name: Run full visual sweep
+      - name: Run visual regression sweep
         if: inputs.mode == 'check'
         env:
-          VRT_FULL: "1"
+          VRT: "1"
         run: pnpm exec playwright test tests/snapshots.spec.ts
       - name: Regenerate baselines
         if: inputs.mode == 'update'
         env:
-          VRT_FULL: "1"
+          VRT: "1"
         run: pnpm exec playwright test tests/snapshots.spec.ts --update-snapshots
       - name: Upload Playwright report
         uses: actions/upload-artifact@v4

@@ -13,6 +13,8 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './tests',
+  /* The visual regression suite runs on demand only (see README); set VRT=1 to include it. */
+  testIgnore: process.env.VRT === '1' ? [] : ['**/snapshots.spec.ts'],
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
