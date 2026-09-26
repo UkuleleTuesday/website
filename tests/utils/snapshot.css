@@ -3,20 +3,11 @@
   visibility: hidden !important;
 }
 
-iframe[src*="youtube.com"]::before, iframe[src*="youtu.be"]::before, .vc_video-bg::before {
-  content: 'Video Placeholder'; 
-  visibility: visible !important; 
-  position: absolute;
-  top: 0; 
-  left: 0; 
-  width: 100%; 
-  height: 100%; 
-  display: flex;
-  align-items: center; 
-  justify-content: center; 
-  background: #e0e0e0;
-  color: #666; 
-  font-family: sans-serif; 
-  border: 2px dashed #999;
-  box-sizing: border-box;
+/* YouTube embeds paint third-party, nondeterministic content (and are often
+   blank on CI). Keep the layout box, hide the pixels. The previous ::before
+   "placeholder" rule never rendered: pseudo-elements do not apply to <iframe>. */
+iframe[src*="youtube.com"],
+iframe[src*="youtube-nocookie.com"],
+iframe[src*="youtu.be"] {
+  visibility: hidden !important;
 }

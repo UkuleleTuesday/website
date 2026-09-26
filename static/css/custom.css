@@ -88,6 +88,17 @@
   border-radius: 10px !important;
 }
 
+/* Responsive 16:9 video embeds. Wrap a YouTube <iframe> in .video-embed so it
+   fills its column and keeps its aspect ratio; the 560x315 attributes stay as
+   an intrinsic-size fallback for browsers without aspect-ratio support. */
+.video-embed iframe {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: 0;
+}
+
 .rev-btn {
   background-color: #006566;
   color: white;
