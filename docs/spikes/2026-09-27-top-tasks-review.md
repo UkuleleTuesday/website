@@ -874,9 +874,9 @@ page's own `article_modified_time`, or the sitemap `lastmod` where the template 
 - Nielsen Norman Group, [Social Proof in UX](https://www.nngroup.com/videos/social-proof-ux/)
   and ["About Us" information on websites](https://www.nngroup.com/articles/about-us-information-on-websites/).
 - Google Search Central, [Event structured data](https://developers.google.com/search/docs/appearance/structured-data/event).
-- Data: `docs/spikes/data/2026-09-top-tasks/search-console/`, the Google Search Console export
-  for the twelve months to 24 September 2026, a second export for the last three months under
-  `last-3-months/`, a README, and the scripts that produce the tables in sections 3.1 and 3.2.
+- Data: `docs/spikes/data/2026-09-top-tasks/search-console/`, the Google Search Console exports
+  for the twelve months to 24 September 2026 (`last-12-months/`) and for the last three months
+  (`last-3-months/`), a README, and the scripts that produce the tables in sections 3.1 and 3.2.
 - Internal: *UT Press Kit 2025, working document* (shared drive). The seed for the Book Us page,
   the tech rider and the refreshed proof.
 - Earlier spikes in this folder: the 2026-03-19 Lighthouse audit and the 2026-03-21 WordPress

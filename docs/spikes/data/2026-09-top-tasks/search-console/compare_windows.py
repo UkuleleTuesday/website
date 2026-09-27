@@ -2,7 +2,7 @@ import csv, re, collections, datetime
 def load(d,name):
     with open(f"{d}/{name}", encoding='utf-8-sig') as f: return list(csv.DictReader(f))
 def num(s): s=s.replace('%','').replace(',',''); return float(s) if s else 0.0
-A='.'; B='last-3-months'
+A='last-12-months'; B='last-3-months'
 ca=load(A,'Chart.csv'); cb=load(B,'Chart.csv')
 da=len(ca); db=len(cb)
 print(f"12m: {da} days, 3m: {db} days")

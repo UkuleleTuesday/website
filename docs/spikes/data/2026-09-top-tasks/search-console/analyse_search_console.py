@@ -1,6 +1,7 @@
-import csv, re, collections, datetime
+import csv, re, collections, datetime, os, sys
+DATA_DIR = sys.argv[1] if len(sys.argv) > 1 else 'last-12-months'
 def load(name):
-    with open(name, encoding='utf-8-sig') as f:
+    with open(os.path.join(DATA_DIR, name), encoding='utf-8-sig') as f:
         return list(csv.DictReader(f))
 def num(s):
     s=s.replace('%','').replace(',','')

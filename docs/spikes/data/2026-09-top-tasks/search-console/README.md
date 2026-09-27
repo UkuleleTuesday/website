@@ -13,7 +13,7 @@ and 3.2) and for issue #177.
 
 | Folder | Period | Preset |
 |---|---|---|
-| this folder | 2025-09-25 to 2026-09-24 | "Last 12 months" |
+| `last-12-months/` | 2025-09-25 to 2026-09-24 | "Last 12 months" |
 | `last-3-months/` | 2026-06-25 to 2026-09-24 | "Last 3 months" |
 
 The three-month export was taken to check whether the twelve-month picture is still current,
@@ -37,7 +37,7 @@ before committing; none were present (the only name matches are song titles).
 
 ```bash
 cd docs/spikes/data/2026-09-top-tasks/search-console
-python3 analyse_search_console.py   # section 3.1 tables, twelve-month window
+python3 analyse_search_console.py   # section 3.1 tables; reads last-12-months/ (pass another folder as an argument)
 python3 compare_windows.py          # section 3.2 tables, twelve months against the last three
 ```
 
