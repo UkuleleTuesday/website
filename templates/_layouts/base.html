@@ -64,13 +64,7 @@
     {% block extra_head %}{% endblock %}
     {% block lcp_preload %}{% endblock %}
     {% if analytics_enabled %}
-      <script type="importmap">
-    {
-      "imports": {
-        "mixpanel-browser": "https://cdn.mxpnl.com/libs/mixpanel-js/dist/mixpanel.module.js"
-      }
-    }
-      </script>
+      {# Self-hosted Mixpanel SDK, see static/js/mixpanel.js #}
       <script src="/js/mixpanel.js" type="module"></script>
     {% endif %}
   </head>

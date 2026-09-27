@@ -23,6 +23,17 @@
   force = true
   headers = { Cache-Control = "public, max-age=31536000" }
 
+# Mixpanel analytics proxy: static/js/mixpanel.js sends its tracking requests
+# to /mp/* on our own origin and Netlify forwards them to Mixpanel's EU
+# ingestion API. Requests made directly to *.mixpanel.com are blocked by
+# Firefox's Enhanced Tracking Protection and by ad blockers, which logged a
+# CORS error on every page (issue #125).
+[[redirects]]
+  from = "/mp/*"
+  to = "https://api-eu.mixpanel.com/:splat"
+  status = 200
+  force = true
+
 # --- Headers ---
 # HTML: short cache, revalidate in background
 [[headers]]

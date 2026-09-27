@@ -1,0 +1,43 @@
+{#
+  youtube_video — renders a click-to-load YouTube embed (a "facade").
+
+  Up front only the video's thumbnail (from i.ytimg.com) and a play button are
+  rendered in a 16:9 box. The YouTube player iframe is created by
+  /js/youtube-embed.js when the visitor clicks, on the privacy-enhanced
+  youtube-nocookie.com domain and with autoplay so that the same click starts
+  playback. Without JavaScript the play button is a plain link to the video on
+  YouTube. Pages that use this macro must load /js/youtube-embed.js (see the
+  extra_scripts block in templates/concerts/index.html).
+
+  Why: a YouTube player pulls in about 1 MB of third-party JavaScript per video
+  and logs a stream of console warnings and errors (Feature Policy, doubleclick,
+  cookies) before anyone has pressed play — see issue #125.
+
+  Parameters
+  ----------
+  video_id  the YouTube video ID, e.g. "t7B2ez6Uodk"
+  title     what the video is; used as the play button's accessible name and
+            as the player's title
+  loading   loading attribute for the thumbnail (default: "lazy"); use "eager"
+            for a video that is visible without scrolling
+#}
+{% macro youtube_video(video_id, title, loading="lazy") -%}
+  <div class="youtube-facade"
+       data-title="{{ title }}"
+       data-video-id="{{ video_id }}">
+    <a class="youtube-facade__link"
+       href="https://www.youtube.com/watch?v={{ video_id }}"
+       rel="noopener"
+       target="_blank">
+      <img alt=""
+           class="youtube-facade__thumbnail"
+           decoding="async"
+           height="360"
+           loading="{{ loading }}"
+           src="https://i.ytimg.com/vi/{{ video_id }}/hqdefault.jpg"
+           width="480">
+      <span aria-hidden="true" class="youtube-facade__play"></span>
+      <span class="youtube-facade__label">Play video: {{ title }}</span>
+    </a>
+  </div>
+{%- endmacro %}
