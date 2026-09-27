@@ -122,7 +122,6 @@ pnpm playwright test --project="chromium" tests/seo.spec.ts --grep "index.html"
 - **Build site:** <1 second ⚡ (extremely fast)
 - **Pre-commit hooks:** ~24 seconds (first run)
 - **Full test suite:** a few minutes (functional tests; visual regression runs on demand)
-- **Asset analysis:** <1 second
 
 **NEVER CANCEL any of these operations** - they are all necessary for proper development workflow.
 
@@ -133,7 +132,7 @@ pnpm playwright test --project="chromium" tests/seo.spec.ts --grep "index.html"
 ### Template Structure
 - **Templates:** `templates/` - Jinja2 templates (processed during build)
 - **Static files:** `static/` - Copied as-is to `public/`
-- **Generated site:** `public/` - Final output (9.7M size)
+- **Generated site:** `public/` - Final output (about 4 MB)
 - **Partials:** `templates/_partials/` - Reusable template components
 - **Layouts:** `templates/_layouts/` - Base template layouts
 
@@ -152,9 +151,6 @@ The `static/` directory is organized as follows:
 - **`vendor/`** - Third-party front-end libraries copied unmodified (`lite-youtube-embed/`, used by the `youtube_video` macro)
 - **`sitemaps/`** - SEO sitemap files
   - `sitemap.xml`, `sitemap_index.xml`, `page-sitemap.xml`, `main-sitemap.xsl`
-- **`wordpress/`** - Legacy WordPress theme/plugin files
-  - `wp-admin/` - WordPress admin assets
-  - `wp-content/` - WordPress themes, plugins, and fonts
 
 ### Environment Variables
 - `ENABLE_ANALYTICS=true` - Include the Mixpanel analytics module (production only)
@@ -195,14 +191,10 @@ The visual regression sweep and baseline regeneration run on demand only, via th
 
 This is an extremely fast static site:
 - **Build time:** Sub-second
-- **Site size:** 9.7M (includes WordPress legacy assets)
+- **Site size:** about 4 MB
 - **Pages:** 8 main pages
 - **Technology:** Pure static HTML/CSS/JS (no runtime dependencies)
 
 ## Legacy Notes
 
-This site originated from a WordPress export, which explains:
-- WordPress theme/plugin files in `static/wordpress/` directory
-- WordPress-style URL structure maintained for SEO
-- Asset checking script to identify unused legacy files
-- All WordPress assets moved under `wordpress/` subdirectory for better organization
+This site originated from a WordPress export. The WordPress-style URL structure is kept for SEO and image files keep their WordPress names, flattened out of the date hierarchy. The legacy theme and plugin files were removed in #147; nothing under `static/` comes from WordPress any more.

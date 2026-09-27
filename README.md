@@ -31,6 +31,8 @@ The rare dynamic parts of the site are handled via:
 * Netlify Forms for forms
 * Netlify functions/edge functions for everything else.
 
+The songbook itself is a separate site, `songbooks.ukuleletuesday.ie`, built weekly from [UkuleleTuesday/songbooks](https://github.com/UkuleleTuesday/songbooks); this site only links to it.
+
 ## Prerequisites
 
 - Python 3.12+ with [uv](https://github.com/astral-sh/uv) package manager
