@@ -1,5 +1,1 @@
 blank_issues_enabled: true
-contact_links:
-  - name: Contributor guide — what makes an issue "ready-to-pull"
-    url: https://github.com/UkuleleTuesday/website/blob/main/CONTRIBUTING.md
-    about: Read this before filing, so your issue is scoped enough to be picked up directly.

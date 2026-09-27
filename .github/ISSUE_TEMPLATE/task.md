@@ -8,8 +8,8 @@ labels: enhancement
 <!--
 This template nudges issues toward "ready-to-pull": well-specified enough that
 someone (or a coding agent) can open a mergeable PR with no further clarification.
-See CONTRIBUTING.md for the full criteria. Keep it to ONE deliverable per issue —
-split "and also…" work into separate issues.
+Keep it to ONE deliverable per issue — split "and also…" work into separate
+issues.
 
 If the change touches copy, navigation or page structure, check it against the
 Purpose section of README.md first — that's the yardstick for what goes on the site.

@@ -7,8 +7,8 @@ labels: bug
 
 <!--
 Keep one bug per issue. A grab-bag of observations is harder to action — file the
-distinct problems separately (see CONTRIBUTING.md). If these notes came from a single
-walkthrough of the site, link them with a parent issue and split the children out.
+distinct problems separately. If these notes came from a single walkthrough of the
+site, link them with a parent issue and split the children out.
 -->
 
 ## Observed behaviour
