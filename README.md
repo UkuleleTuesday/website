@@ -39,7 +39,7 @@ Two rules follow from that list:
 
 ### How we measure
 
-- **Mixpanel** (`static/js/mixpanel.js`) runs autocapture with persistence disabled. It counts page views and clicks but sets no cookies and cannot follow a visitor from one page to the next, so there are no sessions, journeys or funnels. It is only included in production builds (`ENABLE_ANALYTICS=true`).
+- **Mixpanel** (`static/js/mixpanel.js`) runs autocapture with persistence deliberately disabled. Following a visitor from one page to the next needs an identifier stored on their device, which under EU ePrivacy rules needs consent, and a cookie banner is a price we have chosen not to pay. So Mixpanel counts page views and clicks, sets no cookies, and gives no sessions, journeys or funnels. Turning persistence on means adding that banner, and any replacement for Mixpanel ([#162](https://github.com/UkuleleTuesday/website/issues/162)) has to keep the same property. It is only included in production builds (`ENABLE_ANALYTICS=true`).
 - **Task completions** are recorded elsewhere: booking enquiries arrive as Netlify Forms submissions, the donate redirect sends a `Donate link opened` event to Mixpanel with its UTM source (QR code, menu or direct), and WhatsApp joins are not recorded at all.
 - **Google Search Console** has a Domain property for `ukuleletuesday.ie`, covering the apex host, `www` and the songbooks microsite. Exports and the scripts that analyse them live under [`docs/spikes/data/`](docs/spikes/data/).
 
