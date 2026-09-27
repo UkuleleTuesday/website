@@ -164,6 +164,15 @@ The `static/` directory is organized as follows:
 - `BMC_URL` - Buy Me A Coffee redirect URL (used by `netlify/edge-functions/donate.js`, defaults to `https://buymeacoffee.com/ukuleletuesday`)
 - `BMC_DEFAULT_UTMS` - Default UTM params for donate redirect (used by `netlify/edge-functions/donate.js`)
 
+## Issue Tracker Conventions
+
+When opening or editing issues, use the repo's canonical templates and labels — don't invent your own:
+
+- **Template:** pick the matching one in `.github/ISSUE_TEMPLATE/` (Task, Bug report, or Discussion) and fill in its sections; it declares its own type label. `CONTRIBUTING.md` explains what makes an issue "ready-to-pull".
+- **Labels:** apply only those in `.github/labels.yml`, verbatim — one type, one readiness (`ready-to-pull` / `needs-detail` / `needs-shaping`), zero or more `area:*`. New labels go in that file (synced by `.github/workflows/sync-labels.yml`), not onto GitHub directly.
+- **Readiness labels are the triage verdict.** Only the `issue-triager` agent (`.github/agents/issue-triager.md`) or a human sets them; new issues carry `needs-triage` until then.
+- **Sub-issues:** when an issue is too broad for one PR, split it into sub-issues (one deliverable each) linked to the parent.
+
 ## Troubleshooting
 
 **Build fails:** Check that `templates/` and `static/` directories exist and contain expected files.

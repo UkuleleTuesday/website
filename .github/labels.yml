@@ -1,0 +1,82 @@
+# Canonical label set for the triage-relevant labels in UkuleleTuesday/website.
+#
+# This file is the SOURCE OF TRUTH for the type, readiness, and area labels that the
+# issue-triager agent (.github/agents/issue-triager.md) applies. The `.github/workflows/
+# sync-labels.yml` workflow applies it on push to main (or via manual dispatch): it
+# creates missing labels, updates colour/description, and renames via `aliases` (preserving
+# the label's current issue assignments). You can also apply it by hand with `gh label`.
+# Shape: a list of {name, color, description, aliases}; colours are 6-digit hex, no '#'.
+#
+# Scope note: labels not listed here are left alone — the sync never deletes.
+
+# --- Type (exactly one per issue; mirrors .github/ISSUE_TEMPLATE/) ---
+- name: enhancement
+  color: a2eeef
+  description: Task / implementation work (task.md template)
+- name: bug
+  color: d73a4a
+  description: Something behaves wrong (bug.md template)
+- name: discussion
+  color: d4c5f9
+  description: Idea / exploration, not yet actionable (discussion.md template)
+
+# --- Inbox (zero or one per issue; removed once a readiness label is set) ---
+- name: needs-triage
+  color: e4e669
+  description: Filed but not yet triaged — replaced by a readiness label once the issue-triager or a human has looked at it
+
+# --- Readiness (exactly one per issue) ---
+# Write ownership: only an issue-triage agent (the issue-triager) or a human may set or change
+# a readiness label — it is the triage verdict. No other agent or automation writes these.
+- name: ready-to-pull
+  color: 0e8a16
+  description: Scoped & specified enough for an unsupervised agent to take to a merged PR
+- name: needs-detail
+  color: fbca04
+  description: One clear deliverable but under-specified, or needs a human asset/decision
+- name: needs-shaping
+  color: d93f0b
+  description: Not yet actionable — ideation, an epic/bundle, blocked, or open design questions
+
+# --- Status (zero or one per issue; orthogonal to readiness) ---
+- name: possibly-stale
+  color: ededed
+  description: Suspected outdated (premise already done/superseded) or long dormant — a human should re-check whether it's still worth doing
+  aliases: [stale]
+
+# --- Effort (zero or one per issue; only meaningful alongside ready-to-pull) ---
+- name: quickfix
+  color: c2e0c6
+  description: Small, self-contained, low-risk change — a quick PR; set only alongside ready-to-pull
+
+# --- Area (zero or more per issue; uniform colour so the namespace groups) ---
+- name: area:content
+  color: 1d76db
+  description: "Page copy, headings, menu labels, page structure and what belongs where (templates/, README Purpose)"
+- name: area:design
+  color: 1d76db
+  description: "Layout, CSS, responsive/mobile behaviour, images and visual polish (static/css, static/assets)"
+- name: area:netlify
+  color: 1d76db
+  description: "Netlify Functions & Edge Functions (calendar, WhatsApp gate, donate redirects), Forms, _redirects, netlify.toml"
+- name: area:seo
+  color: 1d76db
+  description: "Titles, meta descriptions, structured data, sitemaps, canonical host and redirect hygiene"
+- name: area:analytics
+  color: 1d76db
+  description: "Mixpanel events, Search Console, measuring whether visitors complete their task"
+- name: area:accessibility
+  color: 1d76db
+  description: "Contrast, focus states, keyboard and screen-reader behaviour, Lighthouse accessibility score"
+- name: area:performance
+  color: 1d76db
+  description: "Page weight, lazy-loading, asset optimisation, Lighthouse performance"
+- name: area:infra
+  color: 1d76db
+  description: "CI/CD workflows, Netlify config and deploys, build.py and the asset pipeline, dependency bumps"
+- name: area:testing
+  color: 1d76db
+  description: "Playwright functional tests, visual regression snapshots, Lighthouse CI gates"
+- name: area:docs
+  color: 1d76db
+  description: "README, docs/, contributor and agent docs"

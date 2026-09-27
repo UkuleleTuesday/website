@@ -1,0 +1,90 @@
+name: Sync labels
+
+# Applies .github/labels.yml to the repo's labels: creates missing ones, updates
+# colour/description on existing ones, and renames via `aliases` (preserving the
+# label's current issue assignments). Never deletes labels not listed in the file.
+#
+# Runs on push to main that touches the manifest (or this workflow), plus manual
+# dispatch. Uses the built-in GITHUB_TOKEN — no PAT needed.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/labels.yml
+      - .github/workflows/sync-labels.yml
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+# `permissions:` is exhaustive — anything omitted is `none`. checkout needs
+# `contents: read` to clone; the github-script step needs `issues: write` to
+# manage labels.
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  sync-labels:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Convert manifest to JSON
+        run: yq -o=json '.' .github/labels.yml > "$RUNNER_TEMP/labels.json"
+
+      - uses: actions/github-script@v7
+        env:
+          LABELS_PATH: ${{ runner.temp }}/labels.json
+        with:
+          script: |
+            const fs = require('fs');
+            const labels = JSON.parse(fs.readFileSync(process.env.LABELS_PATH, 'utf8'));
+            const { owner, repo } = context.repo;
+
+            // Snapshot existing label names (lower-cased) for create-vs-update-vs-rename.
+            const existing = new Set();
+            for await (const res of github.paginate.iterator(
+              github.rest.issues.listLabelsForRepo,
+              { owner, repo, per_page: 100 },
+            )) {
+              for (const l of res.data) existing.add(l.name.toLowerCase());
+            }
+            const has = (n) => existing.has(String(n).toLowerCase());
+
+            for (const label of labels) {
+              const name = label.name;
+              const color = String(label.color);
+              const description = label.description || '';
+              const aliases = label.aliases || [];
+              try {
+                if (!has(name)) {
+                  const from = aliases.find(has);
+                  if (from) {
+                    await github.rest.issues.updateLabel({
+                      owner, repo, name: from, new_name: name, color, description,
+                    });
+                    existing.delete(from.toLowerCase());
+                    existing.add(name.toLowerCase());
+                    console.log(`Renamed '${from}' -> '${name}'`);
+                  } else {
+                    await github.rest.issues.createLabel({ owner, repo, name, color, description });
+                    existing.add(name.toLowerCase());
+                    console.log(`Created '${name}'`);
+                  }
+                } else {
+                  await github.rest.issues.updateLabel({ owner, repo, name, color, description });
+                  console.log(`Updated '${name}'`);
+                  for (const a of aliases) {
+                    if (has(a) && a.toLowerCase() !== name.toLowerCase()) {
+                      console.log(`::warning::Alias '${a}' still exists alongside '${name}' — delete it manually to merge.`);
+                    }
+                  }
+                }
+              } catch (error) {
+                console.log(`::error::Label '${name}': ${error.status || ''} ${error.message}`);
+              }
+            }
