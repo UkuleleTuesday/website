@@ -34,7 +34,6 @@ const CONTENT_IMAGES = new Set([
   'Ukulele-Tuesday-Band-at-Cobh-2019.jpg',
   'Gig-Group-Uke.jpg',
   'Ukulele-Tuesday-play-along-Monopolele-2023.jpg',
-  'Ukulele-Tuesday-Hooley-2025-Friday-jam-songbooks.jpg',
   'Ukulele-Tuesday-community-group-Darkness-Into-Light.jpg',
 ]);
 

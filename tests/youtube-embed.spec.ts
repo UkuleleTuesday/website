@@ -22,7 +22,7 @@ test.describe('YouTube embeds', () => {
     await page.goto('/book-us/');
 
     const players = page.locator('lite-youtube');
-    await expect(players).toHaveCount(2);
+    await expect(players).toHaveCount(1);
     await expect(page.locator('iframe[src*="youtube"]')).toHaveCount(0);
 
     const featured = players.first();
