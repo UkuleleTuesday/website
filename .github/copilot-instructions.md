@@ -169,8 +169,8 @@ The `static/` directory is organized as follows:
 When opening or editing issues, use the repo's canonical templates and labels — don't invent your own:
 
 - **Template:** pick the matching one in `.github/ISSUE_TEMPLATE/` (Task, Bug report, or Discussion) and fill in its sections; it declares its own type label.
-- **Labels:** apply only those in `.github/labels.yml`, verbatim — one type, one readiness (`ready-to-pull` / `needs-detail` / `needs-shaping`), zero or more `area:*`. New labels go in that file (synced by `.github/workflows/sync-labels.yml`), not onto GitHub directly.
-- **Readiness labels are the triage verdict.** Only the `issue-triager` agent (`.github/agents/issue-triager.md`) or a human sets them; new issues carry `needs-triage` until then.
+- **Labels:** apply only those in `.github/labels.yml`, verbatim — one type (the template sets it) and zero or more `area:*`. New labels go in that file (synced by `.github/workflows/sync-labels.yml`), not onto GitHub directly.
+- **Never set or change a readiness label** (`ready-to-pull` / `needs-detail` / `needs-shaping`), `quickfix` or `possibly-stale`. They are the triage verdict, written only by the `issue-triager` agent (`.github/agents/issue-triager.md`) or a human. Leave `needs-triage` on a new issue so it gets picked up.
 - **Sub-issues:** when an issue is too broad for one PR, split it into sub-issues (one deliverable each) linked to the parent.
 
 ## Troubleshooting
