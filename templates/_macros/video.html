@@ -1,43 +1,25 @@
 {#
-  youtube_video — renders a click-to-load YouTube embed (a "facade").
+  youtube_video — a click-to-load YouTube player, rendered with
+  lite-youtube-embed (static/vendor/lite-youtube-embed/, see README
+  "YouTube embeds"). This is the library's own progressive-enhancement
+  markup: only the poster and a play button load with the page, the player is
+  created on youtube-nocookie.com when the visitor presses play, and without
+  JavaScript the button is a link to the video on YouTube.
 
-  Up front only the video's thumbnail (from i.ytimg.com) and a play button are
-  rendered in a 16:9 box. The YouTube player iframe is created by
-  /js/youtube-embed.js when the visitor clicks, on the privacy-enhanced
-  youtube-nocookie.com domain and with autoplay so that the same click starts
-  playback. Without JavaScript the play button is a plain link to the video on
-  YouTube. Pages that use this macro must load /js/youtube-embed.js (see the
-  extra_scripts block in templates/concerts/index.html).
-
-  Why: a YouTube player pulls in about 1 MB of third-party JavaScript per video
-  and logs a stream of console warnings and errors (Feature Policy, doubleclick,
-  cookies) before anyone has pressed play — see issue #125.
+  Pages using it must include the library's stylesheet and script, see the
+  extra_head and extra_scripts blocks of templates/concerts/index.html.
 
   Parameters
   ----------
   video_id  the YouTube video ID, e.g. "t7B2ez6Uodk"
-  title     what the video is; used as the play button's accessible name and
-            as the player's title
-  loading   loading attribute for the thumbnail (default: "lazy"); use "eager"
-            for a video that is visible without scrolling
+  title     what the video is; becomes the play button's accessible name and
+            the player's title
 #}
-{% macro youtube_video(video_id, title, loading="lazy") -%}
-  <div class="youtube-facade"
-       data-title="{{ title }}"
-       data-video-id="{{ video_id }}">
-    <a class="youtube-facade__link"
-       href="https://www.youtube.com/watch?v={{ video_id }}"
-       rel="noopener"
-       target="_blank">
-      <img alt=""
-           class="youtube-facade__thumbnail"
-           decoding="async"
-           height="360"
-           loading="{{ loading }}"
-           src="https://i.ytimg.com/vi/{{ video_id }}/hqdefault.jpg"
-           width="480">
-      <span aria-hidden="true" class="youtube-facade__play"></span>
-      <span class="youtube-facade__label">Play video: {{ title }}</span>
-    </a>
-  </div>
+{% macro youtube_video(video_id, title) -%}
+  <lite-youtube videoid="{{ video_id }}" style="background-image: url('https://i.ytimg.com/vi/{{ video_id }}/hqdefault.jpg')">
+  <a class="lyt-playbtn"
+     href="https://www.youtube.com/watch?v={{ video_id }}">
+    <span class="lyt-visually-hidden">Play video: {{ title }}</span>
+  </a>
+  </lite-youtube>
 {%- endmacro %}

@@ -144,10 +144,10 @@ The `static/` directory is organized as follows:
 - **`css/`** - Stylesheets
 - **`js/`** - JavaScript files
   - `mixpanel.js` - Mixpanel loader snippet and init (production builds only; see README "Analytics")
-  - `youtube-embed.js` - Click-to-load YouTube embeds (with the `youtube_video` macro)
   - `whatsapp.js` - WhatsApp form handler
   - `mobile-menu.js` - Mobile navigation
   - `calendar.js` - Events Calendar client
+- **`vendor/`** - Third-party front-end libraries copied unmodified (`lite-youtube-embed/`, used by the `youtube_video` macro)
 - **`sitemaps/`** - SEO sitemap files
   - `sitemap.xml`, `sitemap_index.xml`, `page-sitemap.xml`, `main-sitemap.xsl`
 - **`wordpress/`** - Legacy WordPress theme/plugin files

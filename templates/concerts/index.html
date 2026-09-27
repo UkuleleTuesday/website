@@ -26,6 +26,7 @@
         type="image/avif">
 {% endblock %}
 {% block extra_head %}
+  <link href="/vendor/lite-youtube-embed/lite-yt-embed.css" rel="stylesheet">
   <style>
   #contact-form-wrapper input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]),
         #contact-form-wrapper textarea,#contact-form-wrapper select{border-radius:20px;}#contact-form-wrapper input[type="submit"]{border-radius:100px;}
@@ -181,7 +182,7 @@
                   <div class="col-content">
                     <div class="raw-html-block content-element video-embed youtube-embed">
                       <div class="col-content">
-                        {{ youtube_video("t7B2ez6Uodk", "Ukulele Tuesday playing Dreams live with Daniel Ho at Monopolele 2026", loading="eager") }}
+                        {{ youtube_video('t7B2ez6Uodk', 'Ukulele Tuesday playing Dreams live with Daniel Ho at Monopolele 2026') }}
                       </div>
                     </div>
                   </div>
@@ -434,4 +435,4 @@
     <!-- .container -->
   </main>
 {% endblock %}
-{% block extra_scripts %}<script defer src="/js/youtube-embed.js"></script>{% endblock %}
+{% block extra_scripts %}<script defer src="/vendor/lite-youtube-embed/lite-yt-embed.js"></script>{% endblock %}
