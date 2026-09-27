@@ -2,6 +2,25 @@
 
 This project contains the source code and build process for the [Ukulele Tuesday website](https://www.ukuleletuesday.ie/), published on Netlify.
 
+## Purpose
+
+Ukulele Tuesday runs a free weekly play-along session in Dublin and performs as a band at concerts and festivals. The site follows Gerry McGovern's [Top Tasks](https://gerrymcgovern.com/top-tasks/) method: it is built around the tasks visitors come to do, ranked by how often they come up and what each is worth to us. A year of Search Console data and our own experience of running the group put five at the top: come to a session, use the songbook, book us, support us, join the community. The evidence and reasoning are in the [top-tasks review](docs/spikes/2026-09-27-top-tasks-review.md).
+
+Do:
+
+- Give every page and menu item one of those tasks to serve; anything else (story, governance, press) goes on an About page ([what belongs there](https://www.nngroup.com/articles/about-us-information-on-websites/)) or into the footer.
+- Weigh value as well as frequency: event organisers are a tiny share of visits and by far the most valuable, so their needs count more than their numbers.
+- Make each top task reachable in one tap from the homepage, and answer the first-timer's questions (when, where, is it free, is it on this week) in its first screen, as facts rather than prose.
+- Write titles, headings, menu labels and meta descriptions in the words people search for; keep the playful voice for body copy.
+- Put proof next to the decision it supports ([social proof](https://www.nngroup.com/videos/social-proof-ux/)), FAQs and policies likewise, and use the footer for what every page needs: contact, Code of Conduct, WhatsApp, session time and venue.
+- Design for a phone in the pub first; organisers, on desktop, are the exception.
+- Judge a change by whether more visitors complete their task, not by page views.
+
+Don't:
+
+- Add a page, section or menu item because the content exists.
+- Greet or be clever where a visitor needs a literal answer: the H1, a page title, a button label.
+
 ## Overview
 
 The initial version of this site was created on WordPress.
@@ -91,6 +110,8 @@ Mixpanel is only included in production builds (`ENABLE_ANALYTICS=true`, set by 
 
 - `MIXPANEL_CUSTOM_LIB_URL = '/mp-lib/mixpanel-2-latest.min.js'`: the SDK is fetched from our origin; `netlify.toml` proxies `/mp-lib/*` to `https://cdn.mxpnl.com/libs/`.
 - `api_host: '/mp'`: events are sent to our origin; `netlify.toml` proxies `/mp/*` to Mixpanel's EU ingestion API (`https://api-eu.mixpanel.com`).
+
+The init also sets `disable_persistence: true`, on purpose: Mixpanel then stores nothing on the visitor's device, so the site needs no cookie consent banner. The cost is that it cannot follow a visitor from one page to the next: page views and clicks are counted, but there are no sessions, journeys or funnels.
 
 Neither proxy exists on the local static server, so `tests/analytics.spec.ts` and `tests/console-errors.spec.ts` stub them and serve the SDK from the `mixpanel-browser` dev dependency (its only use). To upgrade the snippet, copy `node_modules/mixpanel-browser/dist/mixpanel-jslib-snippet.min.js` over the snippet part of `static/js/mixpanel.js`.
 
