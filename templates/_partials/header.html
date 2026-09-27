@@ -18,13 +18,15 @@
           </div>
           <div class="header-mobile-extras">
             <div class="header-cta">
-              <a href="/book-us/" target="_self"><span>Book Us!</span></a>
+              <a href="{% if page_url == '/book-us/' %}#enquire{% else %}/book-us/{% endif %}"
+                 target="_self"><span>Book Us!</span></a>
             </div>
           </div>
         </div>
         <!-- .header_logo -->
         <div class="tt-header-additional tt-main-additional additional_simple logo_left nav_normal">
-          {{ social_icons() }}<span class="header-book-btn"><a href="/book-us/" target="_self"><span>Book Us!</span></a></span>
+          {{ social_icons() }}<span class="header-book-btn"><a href="{% if page_url == '/book-us/' %}#enquire{% else %}/book-us/{% endif %}"
+   target="_self"><span>Book Us!</span></a></span>
         </div>
         <!-- .tt-main-additional -->
         <nav class="tt-main-navigation logo_left menu_center nav_normal"

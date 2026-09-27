@@ -508,39 +508,30 @@
   text-align: center;
 }
 
+/* Facts: label and value pairs, set as a small table. Labels in the theme's
+   label grey, hairline rules between rows; nothing else. */
 .entry-content .offer-facts {
-  list-style: none;
+  display: grid;
+  grid-template-columns: minmax(auto, 10.5em) 1fr;
+  column-gap: 20px;
   margin: 0 0 35px;
-  padding: 18px 0 0;
-  border-top: 3px solid #efa537;
-}
-
-.entry-content .offer-facts li {
-  margin: 0 0 8px;
   padding: 0;
+  border-top: 1px solid #dfe3e6;
 }
 
-/* The home page's orange call-to-action button (there written as inline styles). */
-.entry-content .btn-cta {
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.05);
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 64px;
-  text-transform: uppercase;
-  letter-spacing: 0;
-  border: 0 solid #efa537;
-  border-radius: 100px;
-  background: #efa537;
-  color: #ffffff;
-  transition: background-color 0.3s, box-shadow 0.3s;
+.entry-content .offer-facts > div {
+  display: contents;
 }
 
-.entry-content .btn-cta:hover,
-.entry-content .btn-cta:focus-visible {
-  box-shadow: none;
-  border-color: #66023c;
-  background: #006566;
-  color: #ffffff;
+.entry-content .offer-facts dt,
+.entry-content .offer-facts dd {
+  margin: 0;
+  padding: 9px 0;
+  border-bottom: 1px solid #dfe3e6;
+}
+
+.entry-content .offer-facts dt {
+  color: #6d7783;
 }
 
 /* On phones the columns stack in the home page's order: heading, media, then the
