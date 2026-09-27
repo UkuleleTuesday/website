@@ -10,8 +10,11 @@ analytics setup. Performance and accessibility are covered by the March 2026 spi
 referenced here where they touch a task.
 **Not done:** No user research exists yet. The task ranking in this document is a hypothesis built
 from the site's own evidence, and section 7 describes the cheap poll that would confirm or
-overturn it. Live analytics were not available to this review; the Mixpanel figures quoted by the
-team (very low traffic to `/testimonials/`) are taken on trust.
+overturn it. Twelve months of Google Search Console data were added on 27 September 2026 and are
+analysed in section 3.1. Mixpanel data is still pending
+([#177](https://github.com/UkuleleTuesday/website/issues/177)); the Mixpanel figure quoted by the
+team (very low traffic to `/testimonials/`) is taken on trust, though the search data points the
+same way.
 
 ---
 
@@ -45,6 +48,13 @@ sessions and workshops), and gives their sound engineer nothing to plan from. Se
 2025 press kit working document that the group emails when hunting for gigs (bios, a
 live-requirements table, sample work with view counts, notable performances, a fuller and fresher
 set of press quotes). It is simply not on the site.
+
+Twelve months of Google Search data (section 3.1) sharpen the picture rather than change it. The
+songbook is the biggest named task arriving from search. Clicks run two and a half times higher on
+Tuesdays than on any other day. People who do not know the name find us by searching for a ukulele
+group, club or class in Dublin, and the pages that answer them have titles that use none of those
+words. Band-hire searches were shown about 1,350 times in the year and clicked once. And the dead
+`/faq/` URL was shown 679 times.
 
 **Recommendation:** adopt a short list of top tasks as the organising principle, confirm the
 ranking with a two-week one-question poll, restructure the homepage, navigation and footer around
@@ -138,6 +148,105 @@ dominate on phones.
 Ranked by frequency alone, T4 sits fourth. Weighted by what each visit is worth, it is first or
 second, and the site should be judged on it accordingly. Section 4.1 and finding F10 treat it that
 way.
+
+### 3.1 Evidence: twelve months of Google Search (25 September 2025 to 24 September 2026)
+
+**Source.** The Search Console performance export for the `www.ukuleletuesday.ie` property, web
+search only, committed under `docs/spikes/data/2026-09-top-tasks/search-console/` together with
+the script that produced these tables. **Limits.** Google web search only: no Maps, no Tripadvisor,
+no social, no direct or WhatsApp traffic. Google withholds rare queries, so the query table
+accounts for about half of all clicks. A click is still not a task, and nothing here says what
+happened after it.
+
+| Measure | Twelve months |
+|---|---|
+| Clicks | 3,151, about 9 a day |
+| Impressions | 38,181 |
+| Mobile share of clicks | 65% (desktop 29%, tablet 6%) |
+| Ireland share of clicks | 65%, then United States 9%, United Kingdom 7%, Germany 4% |
+| Tuesday | 17.6 clicks a day against 7.2 on the other six days, a 2.5 times spike |
+| Seasonality | Flat: 220 to 300 clicks every month, no summer bump |
+
+**Where the clicks land**
+
+| Page | Clicks | Share | Impressions | CTR | Avg. position |
+|---|--:|--:|--:|--:|--:|
+| `/` | 1,917 | 59% | 20,101 | 9.5% | 8.2 |
+| `/songbook/` | 855 | 26% | 16,034 | 5.3% | 16.6 |
+| `songbooks.ukuleletuesday.ie` | 173 | 5% | 3,395 | 5.1% | 5.4 |
+| `ukuleletuesday.ie/` (apex host, no www) | 129 | 4% | 6,015 | 2.1% | 5.9 |
+| `/tuesday-session/` | 87 | 3% | 5,385 | 1.6% | 5.9 |
+| `/concerts/` | 26 | 1% | 4,495 | 0.6% | 9.5 |
+| `/whatsapp/` | 26 | 1% | 1,519 | 1.7% | 4.8 |
+| `/assets/Code-of-Conduct.pdf` | 8 | | 372 | 2.2% | 19.3 |
+| `/contact-us/` | 2 | | 1,316 | 0.15% | 3.7 |
+| `/testimonials/` | 2 | | 749 | 0.3% | 4.3 |
+| `/faq/` (no longer exists) | 2 | | 679 | 0.3% | 5.4 |
+| `/code-of-conduct/` | 2 | | 185 | 1.1% | 4.0 |
+| `/support-us` | 0 | | 161 | 0% | 3.0 |
+
+**What people typed** (the visible half of clicks, grouped by intent)
+
+| Intent | Clicks | Impressions | Typical queries |
+|---|--:|--:|---|
+| Brand | 977 | 1,702 | "ukulele tuesday", "ukulele tuesday dublin", "stags head ukulele tuesday" |
+| Brand plus songbook | 345 | 425 | "ukulele tuesday songbook", 81% click-through |
+| Generic songbook and chords | ~94 | ~4,100 | "ukulele songbook" (1,453 impressions at position 18), "ukulele songbook pdf", "3 chord ukulele songs pdf" |
+| Finding a group to join | ~139 | ~4,000 | "ukulele dublin" (980), "ukulele groups near me", "ukulele group dublin", "ukulele clubs near me", "… for adults", "… for beginners", "ukulele ireland" (840, zero clicks) |
+| Learning | ~5 | ~640 | "ukulele lessons dublin" (382), "ukulele classes dublin", "ukulele classes near me", "ukulele workshops" |
+| Booking a band | 1 | ~1,350 | "ukulele bands ireland" (698 at position 5), "ukulele band ireland", "ukulele wedding band ireland", "ukulele concert" |
+| Tonight, this week, times | 0 | ~10 | almost nothing |
+| WhatsApp, Code of Conduct, donate, press | 0 | ~10 | nothing |
+
+**What it confirms and what it changes**
+
+1. **The songbook is the largest named task arriving from search.** "ukulele tuesday songbook" is
+   the second biggest query on the site with an 81% click-through, and the two songbook URLs take
+   32% of all clicks. T2 moves up to joint first for the web audience. The data also shows a second
+   audience the report had not weighed: ukulele players anywhere looking for a songbook. That is
+   16,000 impressions on `/songbook/` at an average position of 17, and it is most of the 35% of
+   clicks that come from outside Ireland. Reach rather than a top task, but a reason to keep the
+   songbook page strong and linked back to the site
+   ([#69](https://github.com/UkuleleTuesday/website/issues/69)).
+2. **T1 shows up as a day, not as words.** Nobody types "is ukulele tuesday on tonight"; they type
+   the brand name on a Tuesday, and Tuesday clicks run at two and a half times any other day. Brand
+   clicks cannot be split by intent in this data, which is exactly the gap the poll fills. The
+   weekday pattern is nonetheless the strongest evidence in the file that the first screen should
+   answer tonight's question.
+3. **T3 is the main way in for people who do not know the name.** About 140 visible clicks and
+   roughly 4,000 impressions come from people looking for a ukulele group, club or class in Dublin
+   or Ireland, with "for adults" and "for beginners" in the long tail. The pages that answer them
+   rank well and convert badly: `/tuesday-session/` gets 1.6% of clicks at an average position of 6
+   because its title, "Ukulele Tuesday Play-Along Session", contains none of the words those people
+   typed. "ukulele ireland" and "uke ireland" alone are 1,400 impressions with zero clicks. Titles
+   and descriptions written in the searcher's words are the cheapest fix in this report.
+4. **T4 demand exists, and the site fails it.** Around 1,350 impressions in the year for band-hire
+   queries, including "ukulele bands ireland" shown 698 times at position 5, produced one click.
+   The Concerts page appears for these searches and nothing in its title or snippet says "a band
+   you can book". Wedding-band queries also appear; whether private events are wanted is a decision
+   for [#178](https://github.com/UkuleleTuesday/website/issues/178). This is the search evidence for
+   F10.
+5. **Learning is a demand the site does not name.** About 640 impressions for lessons, classes and
+   workshops in Dublin. The session is beginner-friendly and workshops are a real offer; neither is
+   discoverable.
+6. **The secondary pages rank in the order the report guessed.** Google shows them as sitelinks
+   under the brand result, and their click rates order them: WhatsApp 1.7% and Session 1.6%,
+   Concerts 0.6%, Testimonials 0.3%, Contact 0.15%, Support Us 0%. The Press page was shown 749
+   times and clicked twice, which settles
+   [#174](https://github.com/UkuleleTuesday/website/issues/174).
+7. **The hygiene findings come with numbers.** `/faq/` was shown 679 times in the year and still
+   is. The apex host without www was served as a separate result 6,015 times with 129 clicks, and a
+   WordPress-era `/sample-page/` still appears under it. Both are canonicalisation work for Phase 0.
+8. **Phones are the audience, not a slogan.** Two thirds of clicks are on phones, and phone users
+   click twice as often as desktop users (10.5% against 5.3%), because desktop impressions are
+   dominated by generic songbook searches.
+
+**Revised view of the ranking for the web audience.** T2 (songbook) and T1 (come to a session)
+share first place. T3 (discovery by people who do not know the name) is third and the best growth
+lever. T4 (booking) is fourth by volume and first by value, with demonstrated unmet demand. T5 to
+T10 are on-site tasks with no search demand at all. The people in the room and the WhatsApp
+community are still unmeasured, and brand clicks are still unsplit by intent, so the poll
+([#179](https://github.com/UkuleleTuesday/website/issues/179)) stands.
 
 ---
 
@@ -316,6 +425,8 @@ post, portfolio, staff, partners and careers sitemaps that do not exist. There i
 pointing at the sitemap. None of this stops indexing (Lighthouse SEO is 100), but it wastes crawl
 attention and the `/faq/` dead end is real for anyone who bookmarked or linked it. The sitemap is
 also the last hand-maintained artefact of the WordPress era; `build.py` already knows every page.
+Search Console confirms the cost: `/faq/` was shown in Google results 679 times in the twelve
+months to September 2026 (section 3.1).
 
 **F6. Structured data does not describe what we are.**
 `json_ld.html` emits Organization, WebSite, WebPage and BreadcrumbList. There is no `Event` for the
@@ -340,7 +451,10 @@ The site's voice is one of its assets and should stay in body copy. But several 
 visitor needs a literal answer get a flourish instead: the H1 "Welcome to Ukulele Tuesday", two
 "Read More →" buttons, a "Concerts" label on a booking page, and a meta description that jokes
 about a lost Mumford & Sons link. Headings, buttons, labels and meta descriptions should say
-exactly what the visitor gets.
+exactly what the visitor gets. The search data shows the price of not doing so: the Session page
+is shown for "ukulele group dublin", "ukulele groups near me" and "ukulele classes dublin" at an
+average position of 6 and earns 1.6% of the clicks, because its title says "Play-Along Session"
+and none of the words people typed (section 3.1).
 
 **F9. Fragmented properties.**
 The organisation's presence is spread over `ukuleletuesday.ie`, `songbooks.ukuleletuesday.ie`
@@ -350,7 +464,10 @@ site at `ukulele.ie`, which is still live and indexed with a 2011 origin story a
 details. That legacy site competes with this one for the brand query and gives searchers stale
 information; it should redirect here or at minimum link here prominently. For T1 the source of
 truth is the Google Calendar, so the site should be the canonical answer and every other property
-should point at it.
+should point at it. Search Console adds one more split: the apex host `ukuleletuesday.ie` without
+www was served as a separate search result 6,015 times in the year, with 129 clicks, and a
+WordPress-era `/sample-page/` still appears under it, so the redirect in `netlify.toml` should be
+verified on the live site and Search Console should measure both hosts as one Domain property.
 
 **F10. The organiser audience is under-served in proportion to its value.**
 Organisers are a tiny share of visits and a large share of the value the site can create, which is
@@ -362,7 +479,8 @@ of format, numbers, travel or fee basis. The enquiry form then arrives with no i
 of those things the organiser wanted, so we cannot even count the demand after the fact. The
 2025 press kit working document already covers the bio, live requirements, sample work, notable
 performances and press, but it lives in a shared drive rather than on the site, so the emailed PDF
-says more about the act than the website does. Tracked in
+says more about the act than the website does. Search data puts a number on the cost: about 1,350
+band-hire impressions in a year, one click (section 3.1). Tracked in
 [#178](https://github.com/UkuleleTuesday/website/issues/178).
 
 ---
@@ -477,6 +595,14 @@ build time.
 - Add `Event` (weekly session), `Place` and `sameAs` to the JSON-LD.
 - Rewrite meta descriptions to state the page's job in one sentence.
 - Ask whoever controls `ukulele.ie` to redirect it here.
+- Rewrite every page title and meta description in the searcher's words, using the query table in
+  section 3.1. For example: "Ukulele Tuesday: free weekly ukulele group in Dublin, beginners
+  welcome" for the Session page; "Book Ukulele Tuesday: a ukulele band for festivals and events in
+  Ireland" for Book Us; "Ukulele Tuesday Songbook: free ukulele songbook with chords" for the
+  songbook page.
+- Verify on the live site that the apex host redirects to www, add a Domain property in Search
+  Console so both hosts are measured together, and request removal of `/sample-page/` and `/faq/`
+  from the index once the redirects are in place.
 
 ---
 
@@ -526,8 +652,8 @@ Either way, instrument the endpoints of the top tasks rather than the pages:
 | T6 | WhatsApp gate success | `whatsapp-gate` function (add a log line or event) |
 | T10 | Code of Conduct viewed | Page view |
 
-Connect Search Console if it is not already, because "what did people search for before landing
-here" is the cheapest task evidence available and it is free.
+Search Console is connected and its twelve-month export is analysed in section 3.1. Keep it as the
+standing source of search intent, and re-export it once a year alongside the task scorecard.
 
 ### 7.3 A quarterly task scorecard
 
@@ -540,7 +666,7 @@ one thing that would move it. Report it alongside the AGM "year in key numbers".
 
 | Phase | What | Effort | Impact | Related issues |
 |---|---|---|---|---|
-| **0. Hygiene** (this week) | `/faq/` redirect; footer page list, CoC and WhatsApp links, dynamic year; rename "Read More" buttons; fix maps link; text link to WhatsApp on the Session page; sitemap generated by `build.py`; `robots.txt` | S | Medium | [#159](https://github.com/UkuleleTuesday/website/issues/159), [#155](https://github.com/UkuleleTuesday/website/issues/155), [#84](https://github.com/UkuleleTuesday/website/issues/84) |
+| **0. Hygiene** (this week) | `/faq/` redirect; footer page list, CoC and WhatsApp links, dynamic year; rename "Read More" buttons; fix maps link; text link to WhatsApp on the Session page; sitemap generated by `build.py`; `robots.txt`; page titles and meta descriptions rewritten in searchers' words; apex-host redirect verified and a Domain property added in Search Console | S | Medium to High (the titles alone address 4,000 impressions a year that convert at 1.6%) | [#159](https://github.com/UkuleleTuesday/website/issues/159), [#155](https://github.com/UkuleleTuesday/website/issues/155), [#84](https://github.com/UkuleleTuesday/website/issues/84) |
 | **1. Learn** (two weeks) | Top-tasks poll live on site, QR at two sessions, WhatsApp post; analytics decision; Search Console; `Event` structured data; assemble the organiser offer sheet and tech rider from the 2025 press kit working document ([#178](https://github.com/UkuleleTuesday/website/issues/178)), since they are needed whatever the poll says | S to M | High (everything after depends on it) | [#162](https://github.com/UkuleleTuesday/website/issues/162) |
 | **2. Restructure** (after the poll) | Homepage as task hub with "Next session" line; nav rename; Book Us page rebuilt as an offer sheet with the tech rider, absorbing Concerts, the community group and the press quotes; Support Us on-site page; About page with CoC as HTML and governance | M to L | High | [#93](https://github.com/UkuleleTuesday/website/issues/93), [#94](https://github.com/UkuleleTuesday/website/issues/94), [#174](https://github.com/UkuleleTuesday/website/issues/174), [#117](https://github.com/UkuleleTuesday/website/issues/117) |
 | **3. Measure and maintain** | Task-endpoint events; quarterly scorecard; photo refresh; legacy `ukulele.ie` redirect; songbook subdomain nav back | S to M | Medium | [#9](https://github.com/UkuleleTuesday/website/issues/9), [#69](https://github.com/UkuleleTuesday/website/issues/69) |
@@ -567,6 +693,7 @@ sitemap generated by the build)
 - Next action: rename the two "Read More →" buttons to "About the Tuesday session" and "About
   performances and booking".
 - Next action: write the sitemap from `build.py`'s template list and delete the WordPress paths.
+- Next action: rewrite the page titles and meta descriptions using the wording in section 6.6.
 
 **Project: Top tasks confirmed by a poll** (outcome: a ranked list backed by at least 200 answers
 from at least two populations)
@@ -594,7 +721,8 @@ the site what we sound like, what they can book, and what their sound engineer n
 **Project: Task success measurable** (outcome: a quarterly scorecard with one number per top task)
 - Next action: decide Mixpanel-with-consent versus a cookieless counter, and record the decision
   on [#162](https://github.com/UkuleleTuesday/website/issues/162).
-- Next action: connect Search Console for `ukuleletuesday.ie`.
+- Next action: add a Domain property in Search Console so the apex and www hosts are measured
+  together.
 - Next action: add a success log line to `whatsapp-gate.js`.
 
 ---
@@ -639,6 +767,9 @@ page's own `article_modified_time`, or the sitemap `lastmod` where the template 
 - Nielsen Norman Group, [Social Proof in UX](https://www.nngroup.com/videos/social-proof-ux/)
   and ["About Us" information on websites](https://www.nngroup.com/articles/about-us-information-on-websites/).
 - Google Search Central, [Event structured data](https://developers.google.com/search/docs/appearance/structured-data/event).
+- Data: `docs/spikes/data/2026-09-top-tasks/search-console/`, the Google Search Console export
+  for the twelve months to 24 September 2026, with a README and the script that produces the
+  tables in section 3.1.
 - Internal: *UT Press Kit 2025, working document* (shared drive). The seed for the Book Us page,
   the tech rider and the refreshed proof.
 - Earlier spikes in this folder: the 2026-03-19 Lighthouse audit and the 2026-03-21 WordPress
