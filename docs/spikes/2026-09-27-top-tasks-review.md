@@ -35,6 +35,17 @@ in six places:
 6. **We cannot measure task success.** Mixpanel runs with persistence disabled, so every page load
    is a new anonymous visitor; there are no journeys, funnels, or task-completion counts.
 
+One audience needs separate mention: event and festival organisers. Their traffic is tiny and
+each of their visits is worth more than hundreds of others, which is exactly what a page-view
+ranking hides. The site currently tells them neither what kind of act we are (a band, with
+ukuleles through line-in and effects, further instrumentation and multiple layers of vocal
+harmony, not an acoustic ukulele ensemble) nor what they can book beyond a set (play-along jam
+sessions and workshops), and gives their sound engineer nothing to plan from. Sections 4.1, 5
+(F10) and 6.5 treat this as a first-class gap. Much of the missing material already exists in the
+2025 press kit working document that the group emails when hunting for gigs (bios, a
+live-requirements table, sample work with view counts, notable performances, a fuller and fresher
+set of press quotes). It is simply not on the site.
+
 **Recommendation:** adopt a short list of top tasks as the organising principle, confirm the
 ranking with a two-week one-question poll, restructure the homepage, navigation and footer around
 the confirmed top tasks, and fix measurement so each top task has a success metric. A phased
@@ -62,6 +73,9 @@ The practical corollaries used throughout this review:
 - Labels are written in the visitor's words, not the organisation's.
 - Supporting content (proof, FAQs, policies) lives next to the decision it supports.
 - Success is measured as task completion, not page views.
+- Frequency is not the only weight. A task that few visitors have but that carries most of the
+  value, such as a festival booking, is a top task by importance. The method allows a strategic
+  weighting alongside the vote, and this site needs one.
 
 ### Evidence used
 
@@ -83,7 +97,7 @@ The practical corollaries used throughout this review:
 | **First-timer (local)** | Heard about it, deciding whether to come | What is it, is it for me as a beginner, when, where, is it free, can I borrow a uke | Google, Instagram, word of mouth |
 | **Tourist** | In Dublin on a Tuesday | Is it on tonight, where exactly, what time, is it free | Tripadvisor, Google Maps, the Stag's Head site |
 | **Regular** | Before or during a session | Open the songbook, check it is on this week (bank holidays, festivals), theme nights, WhatsApp | Direct, bookmark, WhatsApp |
-| **Event or festival organiser** | Planning a programme | What do you offer, what does it look and sound like, past gigs, availability, fee basis, how to book | Google, referrals from other festivals |
+| **Event or festival organiser** | Planning a programme, usually with a sound engineer to brief | What kind of act are you and what do you actually sound like, what can I book besides a set (jam session, workshop), what do you need technically, past gigs, availability, fee basis, how to book | Google, referrals from other festivals |
 | **Journalist or blogger** | Writing a piece | Boilerplate, facts, photos, a contact | Google |
 | **Supporter** | At a session (QR code) or afterwards | Donate in two taps; know what the money funds | QR codes, nav |
 | **Community member** | Wants the chat, wants to sell a uke | Join WhatsApp, read the Code of Conduct | Session, socials |
@@ -105,7 +119,7 @@ poll in section 7 is how it gets confirmed.
 | T1 | **Is the session on this Tuesday? What time, where, is it free?** | First FAQ on the Session page; repeated in the footer; the Tripadvisor listing and the Stag's Head event page exist for exactly this question; needed by every audience except organisers |
 | T2 | **Open the songbook** | First hero button; nav item; linked three times from the Session page; used every week by regulars and by the 100+ WhatsApp members |
 | T3 | **What is this, and can I join as a beginner or without a ukulele?** | Nine-question FAQ exists to answer it; "first-timers come back" is an exec priority |
-| T4 | **Book the group for an event** | "Book Us!" on every page; a form on two pages; the Concerts copy is a pitch. Fewer people, highest value per visit |
+| T4 | **Book the group for an event** | "Book Us!" on every page; a form on two pages; the Concerts copy is a pitch. Fewest visits of the top five and by far the highest value per visit; the exec's "money raised" priority leans on it |
 | T5 | **Support us / donate** | Nav item; two QR redirect routes; tips paragraph in the FAQ; "money raised" is an exec priority |
 | T6 | **Join the WhatsApp community** | Gate page exists; "Join 100+ members" |
 | T7 | **Watch or listen to the group** | Videos, Spotify and YouTube on Concerts; socials everywhere |
@@ -120,6 +134,10 @@ poll in section 7 is how it gets confirmed.
 
 If the top-tasks pattern holds, T1 to T5 will collect well over half the votes and T1 to T3 will
 dominate on phones.
+
+Ranked by frequency alone, T4 sits fourth. Weighted by what each visit is worth, it is first or
+second, and the site should be judged on it accordingly. Section 4.1 and finding F10 treat it that
+way.
 
 ---
 
@@ -155,13 +173,38 @@ first-class section.
 
 **T4: Book us.**
 Served by the most prominent element on every page (the "Book Us!" button), a Concerts page with
-videos and a form, and a Contact page. Gaps: the Concerts page opens with history ("started life as
-a small jam session…") rather than with what an organiser gets, which is exactly what
+videos and a form, and a Contact page. The mechanics exist; the substance does not.
+
+The page never says what kind of act Ukulele Tuesday is. The word "ukulele" and the festival list
+lead an organiser to expect an acoustic ukulele ensemble. What turns up is a band: ukuleles
+through line-in with effects, further instrumentation, and multiple layers of vocal harmony. That
+mismatch costs twice. Programmers may put us in the wrong slot or on the wrong stage, or pass on us
+because they wanted something we are not. And the sound engineer meets the input list on the day,
+because there is no tech rider, stage plot, PA or soundcheck information anywhere on the site.
+
+The page also undersells. A festival booking can include a play-along jam session for the
+festival's own audience, and we can run workshops, and neither is mentioned. Those are exactly the
+things a festival programmer buys, and they are the difference between "a band" and "a day of
+programme".
+
+Some of this has already been written down, just not here. The 2025 press kit working document,
+which the group sends when hunting for gigs, holds short and extended bios, a live-requirements
+table (five vocal mics, eight ukulele line-ins, bass, percussion, flute and cajon mics), sample
+work with view counts, notable performances (headline slots at Monopolele Fringe, Galway and
+Wexford; opening for Andrew Molina, Daniel Ho, Dead Man's Uke and Charlotte Pelgen; a
+collaboration with six-time Grammy winner Daniel Ho), and fourteen press quotes and mentions,
+among them Aldrine Guerrero and a 2024 Newstalk feature. None of it is on the website, so the
+site's own booking page is thinner than the PDF the group emails. The kit in turn still lacks the
+jam session and workshop offers, a stage plot, PA and monitor needs, set lengths, numbers on
+stage, photos and a logo.
+
+The remaining gaps are the ones already on file: the page opens with history ("started life as a
+small jam session…") rather than with what an organiser gets, which is what
 [#93](https://github.com/UkuleleTuesday/website/issues/93) proposes fixing; there is no
 information on formats, set length, group size, travel or fee basis; there is no social proof
-beside the form ([#174](https://github.com/UkuleleTuesday/website/issues/174)); and the Contact
-page is a bare form with no indication of who reads it or how fast. The hero's "Get In touch"
-button is ambiguous: a first-timer reads it as "ask a question", an organiser as "book".
+beside the form ([#174](https://github.com/UkuleleTuesday/website/issues/174)); the Contact page
+is a bare form with no indication of who reads it or how fast; and the hero's "Get In touch"
+button is ambiguous, read as "ask a question" by a first-timer and as "book" by an organiser.
 
 **T5: Support us.**
 Served mechanically: nav item, `/donate` and `/donate-qr` redirects for printed QR codes, and a
@@ -196,7 +239,9 @@ Orphaned: one inbound link, from the WhatsApp gate. The page embeds a PDF that d
 phones ([#84](https://github.com/UkuleleTuesday/website/issues/84)). Not in the footer. A code of
 conduct that cannot be found is not doing its job.
 
-**T11 to T15.** Not served today. [#93](https://github.com/UkuleleTuesday/website/issues/93),
+**T11 to T15.** Not served on the site today. For T13 a press kit exists as a working PDF that
+the group emails; putting its content on the Book Us page is part of
+[#178](https://github.com/UkuleleTuesday/website/issues/178). [#93](https://github.com/UkuleleTuesday/website/issues/93),
 [#94](https://github.com/UkuleleTuesday/website/issues/94) and
 [#174](https://github.com/UkuleleTuesday/website/issues/174) already describe three of them.
 
@@ -209,7 +254,7 @@ Legend: ● served well, ◐ served but with friction or buried, ○ not served.
 | T1 Is it on, when, where | ○ | ◐ ("Play-Along Session") | ● | ● (time, address) | ◐ |
 | T2 Songbook | ● | ● | ◐ (extra hop) | ○ | ● |
 | T3 What is it, beginners | ○ | ◐ | ● | ○ | ◐ |
-| T4 Book us | ◐ ("Get In touch") | ● (button) | ◐ | ◐ ("Say hi") | ◐ |
+| T4 Book us | ◐ ("Get In touch") | ● (button) | ◐ (no sound, offer or tech information) | ◐ ("Say hi") | ◐ |
 | T5 Support us | ○ | ◐ (new tab, off-site) | ○ | ○ | ◐ |
 | T6 WhatsApp | ○ | ◐ (icon only) | ● | ◐ (icon only) | ◐ |
 | T7 Watch, listen | ○ | ○ | ● (Concerts) | ◐ (icons) | ● |
@@ -307,6 +352,19 @@ information; it should redirect here or at minimum link here prominently. For T1
 truth is the Google Calendar, so the site should be the canonical answer and every other property
 should point at it.
 
+**F10. The organiser audience is under-served in proportion to its value.**
+Organisers are a tiny share of visits and a large share of the value the site can create, which is
+exactly the audience a page-view ranking undercounts. Today the booking page describes our history
+and our viral videos; it does not describe the act. It does not say that we are a band rather than
+an acoustic ukulele ensemble, it offers nothing a sound engineer can plan from, it does not mention
+that a festival booking can include a play-along jam session or a workshop, and it gives no sense
+of format, numbers, travel or fee basis. The enquiry form then arrives with no indication of which
+of those things the organiser wanted, so we cannot even count the demand after the fact. The
+2025 press kit working document already covers the bio, live requirements, sample work, notable
+performances and press, but it lives in a shared drive rather than on the site, so the emailed PDF
+says more about the act than the website does. Tracked in
+[#178](https://github.com/UkuleleTuesday/website/issues/178).
+
 ---
 
 ## 6. What a task-first structure looks like
@@ -370,9 +428,31 @@ build time.
   community" block, a short "Get involved" block for volunteers, promote accessibility to a
   section with a link to the contact form, and give the FAQ an `id="faq"` so `/faq/` can redirect
   to it.
-- **Book Us (today: Concerts).** Lead with what an organiser gets (format, duration, group size,
-  travel, what we need from the venue), then proof (video, quotes, past festivals), then upcoming
-  public gigs from a concerts-only calendar, then the form. Move the history to About.
+- **Book Us (today: Concerts).** Rewrite it as an offer sheet, in this order:
+  1. *What we are.* Two or three plain sentences on the sound: a band, ukuleles through line-in
+     with effects, further instrumentation, multiple layers of vocal harmony, a pop repertoire,
+     loud and joyful. Say explicitly what we are not: an acoustic strum-along. Put the video that
+     best conveys the real sound right here.
+  2. *What you can book.* Three offers, a paragraph each: a performance (set lengths, group size,
+     travel radius); a play-along jam session for your audience (house ukes, projected songbook,
+     what it needs from the venue); a workshop (what we run, for whom, numbers).
+  3. *What we need.* A tech rider as an HTML page and a PDF: input list, stage plot, PA and
+     monitor needs, soundcheck time, a contact for the sound engineer. Also the practical answers
+     organisers ask for: fee basis, minimum notice, what we bring.
+  4. *Proof.* The press quotes from [#174](https://github.com/UkuleleTuesday/website/issues/174),
+     the festival list, the community group
+     ([#93](https://github.com/UkuleleTuesday/website/issues/93)).
+  5. *Where to see us next.* A concerts-only view of the calendar
+     ([#117](https://github.com/UkuleleTuesday/website/issues/117)).
+  6. *The form*, with one added field: "What are you enquiring about?" with performance, jam
+     session, workshop and other as options. That field is also how we start counting T4 demand.
+
+  Move the history to About. Seed all of this from the 2025 press kit working document rather
+  than writing from scratch, and publish it once: the page is the kit, with a PDF generated from
+  the same content for organisers who want an attachment. Use the kit's stronger and fresher
+  proof (Aldrine Guerrero, the 2024 Newstalk feature, Dublin by Locals 2025, the Daniel Ho
+  collaboration, Dirty Old Town's 1.3 million views) rather than the six quotes on the current
+  Press page. Tracked in [#178](https://github.com/UkuleleTuesday/website/issues/178).
 - **Contact.** Keep the form; add two sentences on what to use it for, who reads it, and how
   quickly to expect a reply; list the alternatives (Instagram DM for borrowing a uke) in one
   place instead of scattering them through the FAQ.
@@ -414,6 +494,11 @@ WhatsApp group, each with its own `source` value. Report the three populations s
 visitors, people in the room, and community members are different people with different top
 tasks.
 
+Add two organiser-facing options that the longlist folds into T4: "Find out what kind of act you
+are and what you need technically" and "Ask about a jam session or workshop at my event".
+Organisers will be a handful of answers at most; the point is that their answers stay legible
+instead of disappearing into "book the group".
+
 Expect a few hundred answers. If the top-tasks pattern holds, three to five tasks will carry more
 than half the votes, and the ranking of T1 to T5 in section 3 will either be confirmed or, more
 usefully, corrected before any redesign work starts.
@@ -436,7 +521,7 @@ Either way, instrument the endpoints of the top tasks rather than the pages:
 | T1 | Calendar rendered; "Next session" line shown; an event expanded | Client event or function log |
 | T2 | Click through to `songbooks.ukuleletuesday.ie` | Outbound click |
 | T3 | Session page read past the FAQ heading | Scroll or anchor event |
-| T4 | Contact form submitted, with subject classified | Netlify Forms (already) |
+| T4 | Contact form submitted, with the new enquiry-type field (performance, jam session, workshop, other) | Netlify Forms (already), one added field |
 | T5 | `/donate`, `/donate-qr`, `/support-us` redirects | Edge function (already) |
 | T6 | WhatsApp gate success | `whatsapp-gate` function (add a log line or event) |
 | T10 | Code of Conduct viewed | Page view |
@@ -456,8 +541,8 @@ one thing that would move it. Report it alongside the AGM "year in key numbers".
 | Phase | What | Effort | Impact | Related issues |
 |---|---|---|---|---|
 | **0. Hygiene** (this week) | `/faq/` redirect; footer page list, CoC and WhatsApp links, dynamic year; rename "Read More" buttons; fix maps link; text link to WhatsApp on the Session page; sitemap generated by `build.py`; `robots.txt` | S | Medium | [#159](https://github.com/UkuleleTuesday/website/issues/159), [#155](https://github.com/UkuleleTuesday/website/issues/155), [#84](https://github.com/UkuleleTuesday/website/issues/84) |
-| **1. Learn** (two weeks) | Top-tasks poll live on site, QR at two sessions, WhatsApp post; analytics decision; Search Console; `Event` structured data | S | High (everything after depends on it) | [#162](https://github.com/UkuleleTuesday/website/issues/162) |
-| **2. Restructure** (after the poll) | Homepage as task hub with "Next session" line; nav rename; Book Us page absorbs Concerts, community group and press quotes; Support Us on-site page; About page with CoC as HTML and governance | M to L | High | [#93](https://github.com/UkuleleTuesday/website/issues/93), [#94](https://github.com/UkuleleTuesday/website/issues/94), [#174](https://github.com/UkuleleTuesday/website/issues/174), [#117](https://github.com/UkuleleTuesday/website/issues/117) |
+| **1. Learn** (two weeks) | Top-tasks poll live on site, QR at two sessions, WhatsApp post; analytics decision; Search Console; `Event` structured data; assemble the organiser offer sheet and tech rider from the 2025 press kit working document ([#178](https://github.com/UkuleleTuesday/website/issues/178)), since they are needed whatever the poll says | S to M | High (everything after depends on it) | [#162](https://github.com/UkuleleTuesday/website/issues/162) |
+| **2. Restructure** (after the poll) | Homepage as task hub with "Next session" line; nav rename; Book Us page rebuilt as an offer sheet with the tech rider, absorbing Concerts, the community group and the press quotes; Support Us on-site page; About page with CoC as HTML and governance | M to L | High | [#93](https://github.com/UkuleleTuesday/website/issues/93), [#94](https://github.com/UkuleleTuesday/website/issues/94), [#174](https://github.com/UkuleleTuesday/website/issues/174), [#117](https://github.com/UkuleleTuesday/website/issues/117) |
 | **3. Measure and maintain** | Task-endpoint events; quarterly scorecard; photo refresh; legacy `ukulele.ie` redirect; songbook subdomain nav back | S to M | Medium | [#9](https://github.com/UkuleleTuesday/website/issues/9), [#69](https://github.com/UkuleleTuesday/website/issues/69) |
 
 Effort: S under a day, M one to three days, L a week of part-time volunteer work.
@@ -495,6 +580,16 @@ screen answers T1, nav labels name tasks, Concerts becomes Book Us, Support Us s
 - Next action: sketch the five-block homepage and the six-item nav on one page and circulate it.
 - Next action: write the "Next session" calendar line as a function of the existing calendar
   feed.
+
+**Project: Organiser offer sheet and tech rider published** (outcome: an organiser can tell from
+the site what we sound like, what they can book, and what their sound engineer needs)
+- Next action: write the three-sentence description of the sound and agree it with the gig group.
+- Next action: move the press kit's bios, live requirements, sample work, highlights and quotes
+  into a Book Us page draft.
+- Next action: turn the kit's live-requirements table into a full rider with the sound person:
+  stage plot, PA and monitors, soundcheck time.
+- Next action: list what a festival jam session needs from a venue, and which workshops we offer.
+- Next action: add the "What are you enquiring about?" field to the contact form.
 
 **Project: Task success measurable** (outcome: a quarterly scorecard with one number per top task)
 - Next action: decide Mixpanel-with-consent versus a cookieless counter, and record the decision
@@ -544,6 +639,8 @@ page's own `article_modified_time`, or the sitemap `lastmod` where the template 
 - Nielsen Norman Group, [Social Proof in UX](https://www.nngroup.com/videos/social-proof-ux/)
   and ["About Us" information on websites](https://www.nngroup.com/articles/about-us-information-on-websites/).
 - Google Search Central, [Event structured data](https://developers.google.com/search/docs/appearance/structured-data/event).
+- Internal: *UT Press Kit 2025, working document* (shared drive). The seed for the Book Us page,
+  the tech rider and the refreshed proof.
 - Earlier spikes in this folder: the 2026-03-19 Lighthouse audit and the 2026-03-21 WordPress
   legacy and optimisation review.
 - External pages that currently answer T1 for searchers: the
