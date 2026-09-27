@@ -30,9 +30,6 @@ const RESPONSIVE_WIDTHS = [300, 500, 768];
 const CONTENT_IMAGES = new Set([
   'Ukulele-Tuesday-jam-crowd.jpg',
   'Ukulele-Tuesday-Band-new.jpg',
-  'Ukulele-Tuesday-Band-at-TedX.jpg',
-  'Ukulele-Tuesday-Band-at-Cobh-2019.jpg',
-  'Gig-Group-Uke.jpg',
   'Ukulele-Tuesday-play-along-Monopolele-2023.jpg',
   'Ukulele-Tuesday-community-group-Darkness-Into-Light.jpg',
   'Ukulele-Tuesday-workshop-hands-close-up.jpg',
