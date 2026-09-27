@@ -486,13 +486,11 @@
   .media-after-heading .wpbsctn { order: 4; }
 }
 
-/* Book Us page (#178): four offers, each with its facts list and captioned media */
-.offer {
-  margin-bottom: 50px;
-}
-
-.offer .section-heading {
-  margin-bottom: 20px;
+/* Book Us page (#178): each offer is a home-page style row, copy on one side and
+   framed media (the theme's .youtube-embed and .img-border-* frames) on the other.
+   Offers without media yet (#200) keep the copy in the left two thirds. */
+.offer-row {
+  margin-bottom: 40px;
 }
 
 .offer-media {
@@ -500,26 +498,15 @@
 }
 
 .offer-media figcaption {
-  margin-top: 8px;
+  margin-top: 10px;
   font-size: 14px;
   line-height: 20px;
   color: #595959;
 }
 
-.offer-media-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-  margin-bottom: 25px;
-}
-
-.offer-media-grid .offer-media {
-  margin-bottom: 0;
-}
-
 .entry-content .offer-facts {
   list-style: none;
-  margin: 0 0 25px;
+  margin: 0 0 35px;
   padding: 18px 0 0;
   border-top: 3px solid #efa537;
 }
@@ -529,21 +516,53 @@
   padding: 0;
 }
 
-@media (min-width: 768px) {
-  .offer-media-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  }
-
-  .entry-content .offer-facts {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 30px;
-  }
+/* The home page's orange call-to-action button (there written as inline styles). */
+.entry-content .btn-cta {
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.05);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 64px;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  border: 0 solid #efa537;
+  border-radius: 100px;
+  background: #efa537;
+  color: #ffffff;
+  transition: background-color 0.3s, box-shadow 0.3s;
 }
 
-.offer-cta {
-  display: inline-block;
-  margin: 5px 0 10px;
+.entry-content .btn-cta:hover,
+.entry-content .btn-cta:focus-visible {
+  box-shadow: none;
+  border-color: #66023c;
+  background: #006566;
+  color: #ffffff;
+}
+
+/* On phones the columns stack in the home page's order: heading, media, then the
+   rest of the copy, whichever side the media sits on at desktop widths. */
+@media (max-width: 767px) {
+  .content-row.row-flex.offer-row > .col.col-copy,
+  .content-row.row-flex.offer-row > .col.col-copy > .col-inner,
+  .content-row.row-flex.offer-row > .col.col-copy > .col-inner > .col-content {
+    display: contents;
+  }
+
+  .content-row.row-flex.offer-row > .col.col-copy > .col-inner > .col-content > * {
+    width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+    box-sizing: border-box;
+    order: 3;
+  }
+
+  .content-row.row-flex.offer-row > .col.col-copy > .col-inner > .col-content > .section-heading {
+    order: 1;
+  }
+
+  .content-row.row-flex.offer-row > .col.col-media {
+    order: 2;
+  }
 }
 
 #enquire {
