@@ -1,31 +1,5 @@
 import { test, expect } from '@playwright/test';
-import * as fs from 'fs';
-import * as path from 'path';
-
-const templatesDir = path.join(__dirname, '..', 'templates');
-
-// Utility function to recursively find all HTML files in a directory, excluding partials.
-function getAllHtmlFiles(dirPath: string, arrayOfFiles: string[] = [], relativeDir: string = ''): string[] {
-    const files = fs.readdirSync(dirPath);
-
-    files.forEach(function (file) {
-        const currentRelativePath = path.join(relativeDir, file);
-
-        if (file.startsWith('_') || file.startsWith('.')) {
-            return;
-        }
-        
-        const fullPath = path.join(dirPath, file);
-
-        if (fs.statSync(fullPath).isDirectory()) {
-            arrayOfFiles = getAllHtmlFiles(fullPath, arrayOfFiles, currentRelativePath);
-        } else if (file.endsWith('.html')) {
-            arrayOfFiles.push(currentRelativePath);
-        }
-    });
-
-    return arrayOfFiles;
-}
+import { getAllHtmlFiles, templatesDir } from './utils/pages';
 
 const templateFiles = getAllHtmlFiles(templatesDir);
 const baseUrl = process.env.BASE_URL || 'https://www.ukuleletuesday.ie';

@@ -1,24 +1,7 @@
 import { test, expect, Page } from '@playwright/test';
-import * as fs from 'fs';
 import * as path from 'path';
 import { waitForFonts } from './utils/fontDiagnostics';
-
-const templatesDir = path.join(__dirname, '..', 'templates');
-
-function getAllHtmlFiles(dirPath: string, arrayOfFiles: string[] = [], relativeDir: string = ''): string[] {
-    const files = fs.readdirSync(dirPath);
-    for (const file of files) {
-        if (file.startsWith('_') || file.startsWith('.')) continue;
-        const currentRelativePath = path.join(relativeDir, file);
-        const fullPath = path.join(dirPath, file);
-        if (fs.statSync(fullPath).isDirectory()) {
-            arrayOfFiles = getAllHtmlFiles(fullPath, arrayOfFiles, currentRelativePath);
-        } else if (file.endsWith('.html')) {
-            arrayOfFiles.push(currentRelativePath);
-        }
-    }
-    return arrayOfFiles;
-}
+import { getAllHtmlFiles, templatesDir } from './utils/pages';
 
 /*
  * This suite is not part of pull request CI: playwright.config.ts ignores it

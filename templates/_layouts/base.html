@@ -64,14 +64,8 @@
     {% block extra_head %}{% endblock %}
     {% block lcp_preload %}{% endblock %}
     {% if analytics_enabled %}
-      <script type="importmap">
-    {
-      "imports": {
-        "mixpanel-browser": "https://cdn.mxpnl.com/libs/mixpanel-js/dist/mixpanel.module.js"
-      }
-    }
-      </script>
-      <script src="/js/mixpanel.js" type="module"></script>
+      {# Mixpanel loader snippet; the SDK and API are proxied through our origin, see static/js/mixpanel.js #}
+      <script defer src="/js/mixpanel.js"></script>
     {% endif %}
   </head>
   <body class="has-site-header">

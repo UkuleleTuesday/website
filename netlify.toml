@@ -23,6 +23,24 @@
   force = true
   headers = { Cache-Control = "public, max-age=31536000" }
 
+# Mixpanel analytics (issue #125). Tracking protection and ad blockers refuse
+# Mixpanel's own hosts, so static/js/mixpanel.js loads the SDK and sends events
+# through our own origin and Netlify proxies both (status 200 = rewrite), the
+# setup Mixpanel documents for proxies.
+# The SDK (MIXPANEL_CUSTOM_LIB_URL and lib_base_path in mixpanel.js):
+[[redirects]]
+  from = "/mp-lib/*"
+  to = "https://cdn.mxpnl.com/libs/:splat"
+  status = 200
+  force = true
+
+# The tracking API (api_host in mixpanel.js; EU data residency):
+[[redirects]]
+  from = "/mp/*"
+  to = "https://api-eu.mixpanel.com/:splat"
+  status = 200
+  force = true
+
 # --- Headers ---
 # HTML: short cache, revalidate in background
 [[headers]]

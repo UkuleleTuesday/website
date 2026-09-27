@@ -3,11 +3,13 @@
   visibility: hidden !important;
 }
 
-/* YouTube embeds paint third-party, nondeterministic content (and are often
-   blank on CI). Keep the layout box, hide the pixels. The previous ::before
-   "placeholder" rule never rendered: pseudo-elements do not apply to <iframe>. */
+/* YouTube iframes and lite-youtube-embed players (posters from i.ytimg.com)
+   paint third-party, nondeterministic content (and are often blank on CI).
+   Keep the layout box, hide the pixels. The previous ::before "placeholder"
+   rule never rendered: pseudo-elements do not apply to <iframe>. */
 iframe[src*="youtube.com"],
 iframe[src*="youtube-nocookie.com"],
-iframe[src*="youtu.be"] {
+iframe[src*="youtu.be"],
+lite-youtube {
   visibility: hidden !important;
 }
