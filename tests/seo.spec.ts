@@ -82,5 +82,24 @@ for (const templateFile of templateFiles) {
                 }
             });
         });
+
+        test('should carry the MusicGroup schema on the Book Us page only', () => {
+            const band = jsonLdContent['@graph'].find(item => item['@type'] === 'MusicGroup');
+            if (templateFile !== 'book-us/index.html') {
+                expect(band, 'Only the Book Us page describes the band.').toBeUndefined();
+                return;
+            }
+            expect(band, 'The Book Us page should describe the band.').toBeDefined();
+            expect(band['@id']).toBe(`${baseUrl}/#band`);
+            expect(band.name).toBe('Ukulele Tuesday');
+            expect(band.url).toBe(`${baseUrl}/book-us/`);
+            expect(band.parentOrganization).toEqual({ '@id': `${baseUrl}/#organization` });
+            expect(band.sameAs).toEqual([
+                'https://www.instagram.com/ukuleletuesday/',
+                'https://www.facebook.com/UkuleleTuesday',
+                'https://www.tripadvisor.com/Attraction_Review-g186605-d25399502-Reviews-Ukulele_Tuesday-Dublin_County_Dublin.html',
+                'https://www.youtube.com/c/UkuleleTuesday/videos',
+            ]);
+        });
     });
 }

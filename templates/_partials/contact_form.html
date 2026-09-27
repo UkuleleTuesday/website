@@ -1,3 +1,5 @@
+{# enquiry_options: set it before including this partial to offer other choices; the field name stays enquiry-type on every form. #}
+{% set enquiry_options = enquiry_options | default(["The band, for a festival or event", "A play-along session", "Live music for a charity or community event", "A workshop", "Something else"]) %}
 {#
   contact_form — the Netlify "contact" form shared by the Book Us and Contact
   pages. Netlify Forms registers the fields from the built HTML, so both pages
@@ -61,11 +63,7 @@
                     name="enquiry-type"
                     required>
               <option value="">Choose one</option>
-              <option>The band, for a festival or event</option>
-              <option>A play-along session</option>
-              <option>Live music for a charity or community event</option>
-              <option>A workshop</option>
-              <option>Something else</option>
+              {% for option in enquiry_options %}<option>{{ option }}</option>{% endfor %}
             </select>
           </span>
         </label>
