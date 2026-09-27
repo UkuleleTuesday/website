@@ -57,7 +57,9 @@ words. Band-hire searches were shown about 1,350 times in the year and clicked o
 URL was shown 679 times, though Google has dropped it in the last three months. And the apex
 host without www still appears as a separate result at the same rate as a year ago, despite a
 redirect that has existed since November 2025, which points to a redirect that is not being served
-(section 3.2).
+(section 3.2). The search data also shows the main-site songbook page and the songbook microsite
+competing for the same searches, with the wrong one winning: five in six songbook searchers land
+on the page that links to the songbook rather than on the songbook (F11).
 
 **Recommendation:** adopt a short list of top tasks as the organising principle, confirm the
 ranking with a two-week one-question poll, restructure the homepage, navigation and footer around
@@ -211,7 +213,11 @@ happened after it.
    16,000 impressions on `/songbook/` at an average position of 17, and it is most of the 35% of
    clicks that come from outside Ireland. Reach rather than a top task, but a reason to keep the
    songbook page strong and linked back to the site
-   ([#69](https://github.com/UkuleleTuesday/website/issues/69)).
+   ([#69](https://github.com/UkuleleTuesday/website/issues/69)). It also shows which of the two
+   songbook URLs wins the brand query: "ukulele tuesday songbook" earns 345 clicks a year at
+   position 1, and the microsite has only 173 clicks in total, so the main-site page is the one
+   capturing those searchers and sending them on with a second click (F11,
+   [#180](https://github.com/UkuleleTuesday/website/issues/180)).
 2. **T1 shows up as a day, not as words.** Nobody types "is ukulele tuesday on tonight"; they type
    the brand name on a Tuesday, and Tuesday clicks run at two and a half times any other day. Brand
    clicks cannot be split by intent in this data, which is exactly the gap the poll fills. The
@@ -280,7 +286,9 @@ Figures are per 30 days.
 - **The songbooks subdomain is growing.** Clicks per month are up by almost half and impressions by
   57%, while `/songbook/` slipped from position 18 to 23 on generic songbook queries. Google is
   starting to send songbook searchers straight to the subdomain, which strengthens the case for a
-  way back to the main site ([#69](https://github.com/UkuleleTuesday/website/issues/69)).
+  way back to the main site ([#69](https://github.com/UkuleleTuesday/website/issues/69)) and for
+  letting the microsite be the only songbook target (F11,
+  [#180](https://github.com/UkuleleTuesday/website/issues/180)).
 - **Demand for lessons is rising.** "ukulele lessons dublin" earned 147 impressions in three
   months, more than a third of its annual total, and the long tail adds "for beginners" and "for
   adults".
@@ -321,7 +329,9 @@ Strong: hero button, nav item, dedicated page, three links from the Session page
 task takes two hops (site, then the `/songbook/` page, then the songbooks subdomain in a new tab),
 and the subdomain has no way back ([#69](https://github.com/UkuleleTuesday/website/issues/69)).
 The `/songbook/` page front-loads a slogan and a paragraph before the button. For someone on a
-phone in a noisy pub, one tap fewer matters.
+phone in a noisy pub, one tap fewer matters. The search data shows how often that tap is paid:
+the main-site page, not the microsite, wins the query "ukulele tuesday songbook", so roughly five
+in six songbook searchers arrive one click short of the songbook (F11).
 
 **T3: What is it, can I join as a beginner?**
 The Session page does this well: 823 words, a clear intro, honest accessibility information
@@ -536,6 +546,30 @@ says more about the act than the website does. Search data puts a number on the 
 band-hire impressions in a year, one click (section 3.1). Tracked in
 [#178](https://github.com/UkuleleTuesday/website/issues/178).
 
+**F11. The songbook page and the songbook microsite compete, and the wrong one wins.**
+`songbooks.ukuleletuesday.ie` has existed since last year: a static microsite, rebuilt weekly,
+that always carries the current songbook. The main site still has `/songbook/`, a page whose job
+is to link to it. Both carry "Ukulele Tuesday" and "Songbook" in their titles, so Google splits
+the ranking signal between them, and the split falls the wrong way.
+
+| | `/songbook/` on the main site | `songbooks.ukuleletuesday.ie` |
+|---|--:|--:|
+| Clicks, twelve months | 855 | 173 |
+| Impressions | 16,034 | 3,395 |
+| Average position | 16.6 | 5.4 |
+| Clicks per 30 days, last three months | 72 | 21 |
+| Trend on generic "ukulele songbook" queries | slipped from position 18 to 23 | impressions up 57% |
+
+"ukulele tuesday songbook" is the second biggest query on the site, 345 clicks a year at position
+1 with an 81% click-through, and the microsite has only 173 clicks in total, so the main-site page
+is the one winning that query. Every one of those visitors wanted the songbook, landed on a page
+that links to it, and clicked again into a new tab. Roughly five in six songbook-intent search
+arrivals take that detour, many of them on a phone in the pub on a Tuesday. From the homepage the
+path is three taps: brand search, Songbook in the nav, then the button. The recent window shows
+Google already starting to prefer the microsite for generic songbook queries while the main-site
+page slides, yet the main-site page still captures the brand query. Section 6.5 gives the fix;
+tracked in [#180](https://github.com/UkuleleTuesday/website/issues/180).
+
 ---
 
 ## 6. What a task-first structure looks like
@@ -577,7 +611,7 @@ The H1 should state what this is ("Dublin's free weekly ukulele play-along sessi
 |---|---|---|
 | Concerts | **Book Us** (page: performances) | Names the task; absorbs the community group ([#93](https://github.com/UkuleleTuesday/website/issues/93)) and the press quotes ([#174](https://github.com/UkuleleTuesday/website/issues/174)) |
 | Play-Along Session | **Tuesday Session** | Newcomer's words; matches the brand |
-| Songbook | **Songbook** | Unchanged |
+| Songbook | **Songbook**, pointing straight at the songbook microsite | One tap instead of two for the joint top task; the main-site page redirects there (F11, [#180](https://github.com/UkuleleTuesday/website/issues/180)) |
 | Press | **About** | Story, community group, governance ([#94](https://github.com/UkuleleTuesday/website/issues/94)), Code of Conduct ([#84](https://github.com/UkuleleTuesday/website/issues/84)), press kit if ever needed |
 | Support Us (new tab, off-site) | **Support Us** (on-site page, same tab) | Explains what it funds, then sends to Buy Me a Coffee; QR redirects unchanged |
 | Book Us! button | Keep on desktop. Consider **Songbook** as the sticky button on phones and test it | The phone audience in the pub is the majority; the organiser audience is on desktop |
@@ -633,9 +667,18 @@ build time.
   constitution ([#94](https://github.com/UkuleleTuesday/website/issues/94)), Code of Conduct as
   HTML ([#84](https://github.com/UkuleleTuesday/website/issues/84)), photos
   ([#9](https://github.com/UkuleleTuesday/website/issues/9)).
-- **Songbook.** Button first, explanation second; link back from the subdomain
-  ([#69](https://github.com/UkuleleTuesday/website/issues/69)); click-to-load Spotify
-  ([#165](https://github.com/UkuleleTuesday/website/issues/165)).
+- **Songbook.** Stop running two songbook pages. Redirect `/songbook/` and everything under it to
+  the microsite with a 301, point the nav item, the homepage button and the Session-page links
+  straight at the microsite in the same tab, and move the two things the page carries (the
+  editions paragraph and the Spotify playlist, click-to-load per
+  [#165](https://github.com/UkuleleTuesday/website/issues/165)) to the microsite or the Session
+  page. Check the microsite's title and description so it ranks cleanly for "ukulele tuesday
+  songbook" once it is the only target, give it a way back to the main site
+  ([#69](https://github.com/UkuleleTuesday/website/issues/69)), and put the same cookieless
+  counter on it so the top task stays measurable. The longer-term alternative is to serve the
+  microsite under `/songbook/` through a Netlify proxy rewrite, one host and one navigation, which
+  depends on the songbook build tolerating a sub-path
+  ([#180](https://github.com/UkuleleTuesday/website/issues/180)).
 - **WhatsApp.** Unchanged, but linked in text from the Session page, About and the footer.
 - **Testimonials.** Folded away per [#174](https://github.com/UkuleleTuesday/website/issues/174).
 
@@ -700,7 +743,7 @@ Either way, instrument the endpoints of the top tasks rather than the pages:
 | Task | Success event | Where it is counted |
 |---|---|---|
 | T1 | Calendar rendered; "Next session" line shown; an event expanded | Client event or function log |
-| T2 | Click through to `songbooks.ukuleletuesday.ie` | Outbound click |
+| T2 | Songbook opened: the outbound click today, page views on the microsite once `/songbook/` redirects there | Outbound click now; the same cookieless counter on the microsite after [#180](https://github.com/UkuleleTuesday/website/issues/180) |
 | T3 | Session page read past the FAQ heading | Scroll or anchor event |
 | T4 | Contact form submitted, with the new enquiry-type field (performance, jam session, workshop, other) | Netlify Forms (already), one added field |
 | T5 | `/donate`, `/donate-qr`, `/support-us` redirects | Edge function (already) |
@@ -721,7 +764,7 @@ one thing that would move it. Report it alongside the AGM "year in key numbers".
 
 | Phase | What | Effort | Impact | Related issues |
 |---|---|---|---|---|
-| **0. Hygiene** (this week) | `/faq/` redirect; footer page list, CoC and WhatsApp links, dynamic year; rename "Read More" buttons; fix maps link; text link to WhatsApp on the Session page; sitemap generated by `build.py`; `robots.txt`; page titles and meta descriptions rewritten in searchers' words; apex-host redirect checked live and fixed if it is not a 301 | S | Medium to High (the titles alone address 4,000 impressions a year that convert at 1.6%) | [#159](https://github.com/UkuleleTuesday/website/issues/159), [#155](https://github.com/UkuleleTuesday/website/issues/155), [#84](https://github.com/UkuleleTuesday/website/issues/84) |
+| **0. Hygiene** (this week) | `/faq/` redirect; footer page list, CoC and WhatsApp links, dynamic year; rename "Read More" buttons; fix maps link; text link to WhatsApp on the Session page; sitemap generated by `build.py`; `robots.txt`; page titles and meta descriptions rewritten in searchers' words; apex-host redirect checked live and fixed if it is not a 301; `/songbook/` redirected to the microsite and the nav pointed straight at it ([#180](https://github.com/UkuleleTuesday/website/issues/180)) | S | Medium to High (the titles alone address 4,000 impressions a year that convert at 1.6%) | [#159](https://github.com/UkuleleTuesday/website/issues/159), [#155](https://github.com/UkuleleTuesday/website/issues/155), [#84](https://github.com/UkuleleTuesday/website/issues/84) |
 | **1. Learn** (two weeks) | Top-tasks poll live on site, QR at two sessions, WhatsApp post; analytics decision; Search Console; `Event` structured data; assemble the organiser offer sheet and tech rider from the 2025 press kit working document ([#178](https://github.com/UkuleleTuesday/website/issues/178)), since they are needed whatever the poll says | S to M | High (everything after depends on it) | [#162](https://github.com/UkuleleTuesday/website/issues/162) |
 | **2. Restructure** (after the poll) | Homepage as task hub with "Next session" line; nav rename; Book Us page rebuilt as an offer sheet with the tech rider, absorbing Concerts, the community group and the press quotes; Support Us on-site page; About page with CoC as HTML and governance | M to L | High | [#93](https://github.com/UkuleleTuesday/website/issues/93), [#94](https://github.com/UkuleleTuesday/website/issues/94), [#174](https://github.com/UkuleleTuesday/website/issues/174), [#117](https://github.com/UkuleleTuesday/website/issues/117) |
 | **3. Measure and maintain** | Task-endpoint events; quarterly scorecard; photo refresh; legacy `ukulele.ie` redirect; songbook subdomain nav back | S to M | Medium | [#9](https://github.com/UkuleleTuesday/website/issues/9), [#69](https://github.com/UkuleleTuesday/website/issues/69) |
@@ -762,6 +805,15 @@ screen answers T1, nav labels name tasks, Concerts becomes Book Us, Support Us s
 - Next action: sketch the five-block homepage and the six-item nav on one page and circulate it.
 - Next action: write the "Next session" calendar line as a function of the existing calendar
   feed.
+
+**Project: Songbook one tap away** (outcome: a search for "ukulele tuesday songbook" and the nav
+item both land on the songbook itself, and songbook use is counted there)
+- Next action: check the microsite's title, description and canonical in the songbooks repo.
+- Next action: move the editions paragraph and the Spotify playlist to the Session page or the
+  microsite.
+- Next action: add the `/songbook/*` 301 to `static/_redirects` and point the nav item, hero
+  button and Session-page links at the microsite.
+- Next action: add a "back to ukuleletuesday.ie" link on the microsite.
 
 **Project: Organiser offer sheet and tech rider published** (outcome: an organiser can tell from
 the site what we sound like, what they can book, and what their sound engineer needs)
