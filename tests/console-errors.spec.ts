@@ -1,29 +1,27 @@
 import { test, expect } from '@playwright/test';
-import { getAllPageUrls } from './utils/pages';
+import { getAllHtmlFiles, templatesDir } from './utils/pages';
 import { collectConsoleProblems } from './utils/console';
+import { blockOtherOrigins, stubNetlifyEndpoints } from './utils/network';
 
 /**
  * Every page must load without errors in the browser console (issue #125):
  * no console.error output, no uncaught exceptions and no failed requests for
  * our own assets.
  *
- * Only our own code and assets are covered. Requests to other origins
- * (YouTube, Spotify, Google Maps and Fonts, ...) are blocked so the test is
- * hermetic, and the "Failed to load resource" errors that blocking produces
- * are ignored. The Events Calendar's Netlify function and the /mp/* analytics
- * proxy are stubbed because the static test server runs neither.
+ * Only our own code and assets are covered. Requests to other origins are
+ * blocked so the test is hermetic, and the "Failed to load resource" errors
+ * that blocking produces are ignored. What only Netlify provides (the Events
+ * Calendar function, the Mixpanel proxy) is stubbed.
  */
 test.describe('Browser console', () => {
-  for (const url of getAllPageUrls()) {
-    test(`${url} loads without console errors`, async ({ page, baseURL }) => {
+  for (const templateFile of getAllHtmlFiles(templatesDir)) {
+    test(`${templateFile} loads without console errors`, async ({ page, baseURL }) => {
       const origin = new URL(baseURL!).origin;
-      await page.route((address) => address.origin !== origin, (route) => route.abort('blockedbyclient'));
-      await page.route('**/.netlify/functions/**', (route) => route.fulfill({ json: { items: [] } }));
-      await page.route('**/mp/**', (route) => route.fulfill({ status: 200, contentType: 'text/plain', body: '1' }));
-
+      await blockOtherOrigins(page, origin);
+      await stubNetlifyEndpoints(page);
       const problems = collectConsoleProblems(page, origin);
 
-      await page.goto(url, { waitUntil: 'networkidle' });
+      await page.goto(templateFile, { waitUntil: 'networkidle' });
 
       expect(problems).toEqual([]);
     });
