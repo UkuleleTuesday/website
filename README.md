@@ -4,18 +4,24 @@ This project contains the source code and build process for the [Ukulele Tuesday
 
 ## Purpose
 
-Ukulele Tuesday runs a free weekly play-along session in Dublin and performs as a band at concerts and festivals. The site serves five visitor tasks, roughly in order of frequency: come to a session, use the songbook, book us, support us, join the community. Two rules follow:
+Ukulele Tuesday runs a free weekly play-along session in Dublin and performs as a band at concerts and festivals. The site is built around the tasks visitors come to do, ranked by how often they come up and what each is worth to us. A year of Search Console data and our own experience of running the group put five at the top: come to a session, use the songbook, book us, support us, join the community. The evidence and reasoning are in the [top-tasks review](docs/spikes/2026-09-27-top-tasks-review.md).
 
-- A page or menu item exists to serve one of those tasks. Anything else goes a level down or into the footer.
-- Event organisers are a tiny share of visits and the most valuable, so their needs outweigh their numbers. Copy for them must describe the actual act (an amplified band with layered vocal harmonies and other instruments, not an acoustic ukulele ensemble) and the jam-session and workshop offers.
+Do:
 
-Titles, headings, menu labels and meta descriptions use the words people search for. The playful voice stays in body copy.
+- Give every page and menu item one of those tasks to serve; anything else goes a level down or into the footer ([§6.1](docs/spikes/2026-09-27-top-tasks-review.md#61-organising-principle)).
+- Weigh value as well as frequency: event organisers are a tiny share of visits and by far the most valuable, so their needs count more than their numbers ([§1](docs/spikes/2026-09-27-top-tasks-review.md#1-method)).
+- Make each top task reachable in one tap from the homepage, and answer the first-timer's questions (when, where, is it free, is it on this week) in its first screen, as facts rather than prose ([§6.2](docs/spikes/2026-09-27-top-tasks-review.md#62-homepage-as-a-task-hub)).
+- Write titles, headings, menu labels and meta descriptions in the words people search for; keep the playful voice for body copy ([§6.3](docs/spikes/2026-09-27-top-tasks-review.md#63-navigation)).
+- Put proof, FAQs and policies next to the decision they support, and use the footer for what every page needs: contact, Code of Conduct, WhatsApp, session time and venue ([§6.4](docs/spikes/2026-09-27-top-tasks-review.md#64-footer-as-utility-navigation)).
+- Design for a phone in the pub first; organisers, on desktop, are the exception.
+- Judge a change by whether more visitors complete their task, not by page views.
 
-The songbook itself lives on `songbooks.ukuleletuesday.ie`, a separate GitHub Pages site rebuilt weekly, not in this repository.
+Don't:
 
-Analytics is deliberately cookie-free: Mixpanel runs with persistence off, so there are page views and clicks but no sessions, journeys or funnels. Turning persistence on would mean a consent banner.
-
-The work on the site's structure is tracked in [#176](https://github.com/UkuleleTuesday/website/issues/176). [`docs/spikes/`](docs/spikes/) holds dated studies, including the [top-tasks review](docs/spikes/2026-09-27-top-tasks-review.md) behind this section.
+- Add a page, section or menu item because the content exists.
+- Greet or be clever where a visitor needs a literal answer: the H1, a page title, a button label.
+- Track visitors across pages. Analytics is deliberately cookie-free: Mixpanel runs with persistence off, so there are page views and clicks but no sessions, journeys or funnels, and turning persistence on would mean a consent banner.
+- Rebuild the songbook here. It is a separate site, `songbooks.ukuleletuesday.ie`, built weekly from [UkuleleTuesday/songbooks](https://github.com/UkuleleTuesday/songbooks).
 
 ## Overview
 
