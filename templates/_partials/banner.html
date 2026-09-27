@@ -15,6 +15,7 @@
             style="color: #ffffff;
                    text-align: center;
                    letter-spacing:0px">{{ banner_title | safe }}</h1>
+        {% if banner_subtitle %}<p class="banner-subtitle">{{ banner_subtitle }}</p>{% endif %}
         {% block banner_extra_content %}{% endblock %}
       </div>
     </div>

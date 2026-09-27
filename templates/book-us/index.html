@@ -1,21 +1,21 @@
 {% extends "_layouts/base.html" %}
 {% from "_macros/video.html" import youtube_video %}
 {% from "_macros/images.html" import content_picture %}
-{% block title %}Book Ukulele Tuesday: a ukulele band for festivals and events in Ireland{% endblock %}
+{% block title %}Ukulele band for festivals and events in Ireland | Ukulele Tuesday{% endblock %}
 {% block description %}
-  Book Ukulele Tuesday for your festival or event in Ireland: a 12-piece ukulele band, a play-along jam session for your crowd, live music for charity and community events, and workshops.
+  A 12-piece ukulele band from Dublin for festivals and events across Ireland. Book the band, a play-along jam session for your crowd, or a workshop.
 {% endblock %}
 {% block canonical_url %}/book-us/{% endblock %}
 {% block og_title %}Book Ukulele Tuesday{% endblock %}
 {% block og_description %}
-  Book Ukulele Tuesday for your festival or event in Ireland: a 12-piece ukulele band, a play-along jam session for your crowd, live music for charity and community events, and workshops.
+  A 12-piece ukulele band from Dublin for festivals and events across Ireland. Book the band, a play-along jam session for your crowd, or a workshop.
 {% endblock %}
 {% block og_url %}/book-us/{% endblock %}
 {% block article_modified_time %}2026-09-27T00:00:00+00:00{% endblock %}
 {% block og_image %}/assets/images/Ukulele-Tuesday-Band-playing.jpg{% endblock %}
 {% block twitter_title %}Book Ukulele Tuesday{% endblock %}
 {% block twitter_description %}
-  Book Ukulele Tuesday for your festival or event in Ireland: a 12-piece ukulele band, a play-along jam session for your crowd, live music for charity and community events, and workshops.
+  A 12-piece ukulele band from Dublin for festivals and events across Ireland. Book the band, a play-along jam session for your crowd, or a workshop.
 {% endblock %}
 {% block twitter_image %}/assets/images/Ukulele-Tuesday-Band-playing.jpg{% endblock %}
 {% block twitter_reading_time %}3 minutes{% endblock %}
@@ -43,6 +43,7 @@
           </header>
           <div class="entry-content">
             {% set banner_title = "Book Us" %}
+            {% set banner_subtitle = "A ukulele band from Dublin, for festivals and events across Ireland." %}
             {% set banner_image_url = "/assets/images/banner-ukulele-tuesday-mic-crowd.jpg" %}
             {% set banner_class = "banner-padding mb-25" %}
             {% include "_partials/banner.html" %}
@@ -67,11 +68,13 @@
                           </p>
                         </div>
                       </div>
+                      <figure class="offer-media">
+                        {{ youtube_video('t7B2ez6Uodk', 'Ukulele Tuesday playing Dreams live with Daniel Ho at Monopolele 2026') }}
+                        <figcaption>
+                          Sharing the stage with six-time Grammy winner Daniel Ho: Dreams, live at Monopolele Festival 2026
+                        </figcaption>
+                      </figure>
                       <div class="offer-media-grid">
-                        <figure class="offer-media">
-                          {{ youtube_video('t7B2ez6Uodk', 'Ukulele Tuesday playing Dreams live with Daniel Ho at Monopolele 2026') }}
-                          <figcaption>Sharing the stage with six-time Grammy winner Daniel Ho: Dreams, live at Monopolele Festival 2026</figcaption>
-                        </figure>
                         <figure class="offer-media">
                           {{ youtube_video('jzuXqVVW3i8', 'Ukulele Tuesday playing Highway To Hell live at Monopolele 2023') }}
                           <figcaption>Highway to Hell, live at Monopolele Festival 2023</figcaption>
@@ -128,17 +131,28 @@
                             It’s a spectrum. At one end, minimal and jammy: a screen, the band taking turns leading, and whoever turns up with a uke. At the other, the full Tuesday experience, with proper sound and a room singing its head off.
                           </p>
                           <p>
-                            We’ve run this every week for years, and we build our own songbooks and song sheets. For your event we put together a custom songbook from our classics, pitched at your crowd: we adapt the difficulty. Have a look at <a href="https://songbooks.ukuleletuesday.ie/ukulele-hooley-2026" rel="noopener" target="_blank">the one we built for the Ukulele Hooley 2026</a>. We can bring a projector and printed songbooks if you need them, just tell us in advance.
+                            We’ve run this every week for years, and we build our own songbooks and song sheets. For your event we put together a custom songbook from our classics, pitched at your crowd: we adapt the difficulty. Have a look at <a href="https://songbooks.ukuleletuesday.ie/ukulele-hooley-2026"
+    rel="noopener"
+    target="_blank">the one we built for the Ukulele Hooley 2026</a>. We can bring a projector and printed songbooks if you need them, just tell us in advance.
                           </p>
                         </div>
                       </div>
-                      <figure class="offer-media">
-                        {{ content_picture("Ukulele-Tuesday-jam-crowd",
-                                                  "A packed room of people playing ukulele together at a Ukulele Tuesday play-along session",
-                                                  667,
-                                                  "(max-width: 1000px) 100vw, 1000px") }}
-                        <figcaption>A Tuesday play-along at the Stag’s Head, Dublin</figcaption>
-                      </figure>
+                      <div class="offer-media-grid">
+                        <figure class="offer-media">
+                          {{ content_picture("Ukulele-Tuesday-play-along-Monopolele-2023",
+                                                    "Ukulele Tuesday leading a play-along on the port of Monopoli at night: the band on stage, the chords on a big screen and a crowd playing along",
+                                                    1000,
+                                                    "(max-width: 767px) 100vw, 390px") }}
+                          <figcaption>Leading a play-along on the port of Monopoli, Monopolele Festival 2023</figcaption>
+                        </figure>
+                        <figure class="offer-media">
+                          {{ content_picture("Ukulele-Tuesday-Hooley-2025-Friday-jam-songbooks",
+                                                    "A stack of printed Ukulele Hooley 2025 Friday Jam songbooks, presented by Ukulele Tuesday",
+                                                    1000,
+                                                    "(max-width: 767px) 100vw, 390px") }}
+                          <figcaption>Printed songbooks for the Friday jam we ran at the Ukulele Hooley 2025</figcaption>
+                        </figure>
+                      </div>
                       <ul class="offer-facts">
                         <li>
                           <strong>Format:</strong> anywhere from a minimal jam to the full play-along with sound

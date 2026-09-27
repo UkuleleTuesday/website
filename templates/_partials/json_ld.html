@@ -46,7 +46,32 @@
         }{% if not loop.last %},{% endif %}
         {% endfor %}
       ]
-    }
+    }{% if page_url == '/book-us/' %},
+    {
+      "@type": "MusicGroup",
+      "@id": "{{ base_url }}/#band",
+      "name": "Ukulele Tuesday",
+      "url": "{{ base_url }}/book-us/",
+      "mainEntityOfPage": "{{ base_url }}/book-us/",
+      "image": "{{ base_url }}/assets/images/Ukulele-Tuesday-Band-playing.jpg",
+      "foundingLocation": {
+        "@type": "City",
+        "name": "Dublin"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "Ireland"
+      },
+      "parentOrganization": {
+        "@id": "{{ base_url }}/#organization"
+      },
+      "sameAs": [
+        "https://www.instagram.com/ukuleletuesday/",
+        "https://www.facebook.com/UkuleleTuesday",
+        "https://www.tripadvisor.com/Attraction_Review-g186605-d25399502-Reviews-Ukulele_Tuesday-Dublin_County_Dublin.html",
+        "https://www.youtube.com/c/UkuleleTuesday/videos"
+      ]
+    }{% endif %}
   ]
 }
 </script>

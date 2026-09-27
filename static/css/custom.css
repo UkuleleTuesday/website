@@ -531,7 +531,7 @@
 
 @media (min-width: 768px) {
   .offer-media-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   }
 
   .entry-content .offer-facts {
@@ -548,4 +548,14 @@
 
 #enquire {
   scroll-margin-top: 90px;
+}
+
+.entry-content .banner-subtitle {
+  max-width: 640px;
+  margin: 12px auto 0;
+  padding: 0 16px;
+  color: #fff;
+  font-size: 18px;
+  line-height: 26px;
+  text-align: center;
 }
