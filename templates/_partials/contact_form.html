@@ -1,0 +1,114 @@
+{#
+  contact_form — the Netlify "contact" form shared by the Book Us and Contact
+  pages. Netlify Forms registers the fields from the built HTML, so both pages
+  must post the same field names. The "enquiry-type" select is how booking
+  demand gets counted by offer (issues #178 and #191).
+#}
+<div class="contact-form contact-form-horizontal contact-form-md contact-form-btn contact-form-md-btn contact-form-fw-btn contact-form-regular contact-form-no-transform"
+     id="contact-form-wrapper"
+     style="font-weight:400;
+            margin-top:0px;
+            margin-bottom:0px">
+  <div class="wpcf7 no-js" dir="ltr" lang="en-US">
+    <div class="screen-reader-response">
+      <p aria-atomic="true" aria-live="polite" role="status"></p>
+    </div>
+    <form aria-label="Contact form"
+          class="wpcf7-form init"
+          data-netlify="true"
+          method="post"
+          name="contact"
+          netlify-honeypot="bot-field"
+          id="contact">
+      <input name="form-name" type="hidden" value="contact">
+      <p>
+        <label>
+          Your name
+          <br>
+          <span class="wpcf7-form-control-wrap" data-name="your-name">
+            <input aria-required="true"
+                   class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required"
+                   maxlength="400"
+                   name="your-name"
+                   required
+                   size="40"
+                   type="text">
+          </span>
+        </label>
+      </p>
+      <p>
+        <label>
+          Your email
+          <br>
+          <span class="wpcf7-form-control-wrap" data-name="your-email">
+            <input aria-required="true"
+                   class="wpcf7-form-control wpcf7-email wpcf7-validates-as-required wpcf7-text wpcf7-validates-as-email"
+                   maxlength="400"
+                   name="your-email"
+                   required
+                   size="40"
+                   type="email">
+          </span>
+        </label>
+      </p>
+      <p>
+        <label>
+          What are you enquiring about?
+          <br>
+          <span class="wpcf7-form-control-wrap" data-name="enquiry-type">
+            <select aria-required="true"
+                    class="wpcf7-form-control wpcf7-select wpcf7-validates-as-required"
+                    name="enquiry-type"
+                    required>
+              <option value="">Choose one</option>
+              <option>The band, for a festival or event</option>
+              <option>A play-along session</option>
+              <option>Live music for a charity or community event</option>
+              <option>A workshop</option>
+              <option>Something else</option>
+            </select>
+          </span>
+        </label>
+      </p>
+      <p>
+        <label>
+          Subject
+          <br>
+          <span class="wpcf7-form-control-wrap" data-name="your-subject">
+            <input aria-required="true"
+                   class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required"
+                   maxlength="400"
+                   name="your-subject"
+                   required
+                   size="40"
+                   type="text">
+          </span>
+        </label>
+      </p>
+      <p>
+        <label>
+          Your message (optional)
+          <br>
+          <span class="wpcf7-form-control-wrap" data-name="your-message">
+            <textarea class="wpcf7-form-control wpcf7-textarea"
+                      cols="40"
+                      maxlength="2000"
+                      name="your-message"
+                      rows="10"></textarea>
+          </span>
+        </label>
+      </p>
+      <br>
+      <input class="wpcf7-form-control wpcf7-submit has-spinner"
+             type="submit"
+             value="Send">
+      <div aria-hidden="true" class="wpcf7-response-output"></div>
+      <p class="hidden">
+        <label>
+          Don’t fill this out if you’re human:
+          <input name="bot-field" type="text">
+        </label>
+      </p>
+    </form>
+  </div>
+</div>

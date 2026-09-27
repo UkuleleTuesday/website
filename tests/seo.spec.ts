@@ -9,11 +9,10 @@ const baseUrl = process.env.BASE_URL || 'https://www.ukuleletuesday.ie';
 const expectedBreadcrumbs = {
     'index.html': [{ name: 'Home', url: '/' }],
     'code-of-conduct/index.html': [{ name: 'Home', url: '/' }, { name: 'Code Of Conduct', url: '/code-of-conduct/' }],
-    'concerts/index.html': [{ name: 'Home', url: '/' }, { name: 'Concerts', url: '/concerts/' }],
+    'book-us/index.html': [{ name: 'Home', url: '/' }, { name: 'Book Us', url: '/book-us/' }],
     'contact-us/index.html': [{ name: 'Home', url: '/' }, { name: 'Contact Us', url: '/contact-us/' }],
     'faq/index.html': [{ name: 'Home', url: '/' }, { name: 'Faq', url: '/faq/' }],
     'songbook/index.html': [{ name: 'Home', url: '/' }, { name: 'Songbook', url: '/songbook/' }],
-    'testimonials/index.html': [{ name: 'Home', url: '/' }, { name: 'Testimonials', url: '/testimonials/' }],
     'tuesday-session/index.html': [{ name: 'Home', url: '/' }, { name: 'Tuesday Session', url: '/tuesday-session/' }],
     'whatsapp/index.html': [{ name: 'Home', url: '/' }, { name: 'Whatsapp', url: '/whatsapp/' }],
 };

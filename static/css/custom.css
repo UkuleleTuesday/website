@@ -485,3 +485,67 @@
   .media-after-heading .text-block { order: 3; }
   .media-after-heading .wpbsctn { order: 4; }
 }
+
+/* Book Us page (#178): four offers, each with its facts list and captioned media */
+.offer {
+  margin-bottom: 50px;
+}
+
+.offer .section-heading {
+  margin-bottom: 20px;
+}
+
+.offer-media {
+  margin: 0 0 25px;
+}
+
+.offer-media figcaption {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 20px;
+  color: #595959;
+}
+
+.offer-media-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.offer-media-grid .offer-media {
+  margin-bottom: 0;
+}
+
+.entry-content .offer-facts {
+  list-style: none;
+  margin: 0 0 25px;
+  padding: 18px 0 0;
+  border-top: 3px solid #efa537;
+}
+
+.entry-content .offer-facts li {
+  margin: 0 0 8px;
+  padding: 0;
+}
+
+@media (min-width: 768px) {
+  .offer-media-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .entry-content .offer-facts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 30px;
+  }
+}
+
+.offer-cta {
+  display: inline-block;
+  margin: 5px 0 10px;
+}
+
+#enquire {
+  scroll-margin-top: 90px;
+}

@@ -17,7 +17,7 @@ test.describe('Mobile Navigation', () => {
     
     // Check that all navigation links are visible in the main navigation
     const mainNav = page.locator('.tt-main-navigation');
-    await expect(mainNav.getByRole('link', { name: 'Concerts' })).toBeVisible();
+    await expect(mainNav.getByRole('link', { name: 'Book Us' })).toBeVisible();
     await expect(mainNav.getByRole('link', { name: 'Play-Along Session' })).toBeVisible();
     await expect(mainNav.getByRole('link', { name: 'Songbook' })).toBeVisible();
     await expect(mainNav.getByRole('link', { name: 'Support Us' })).toBeVisible();
@@ -47,7 +47,7 @@ test.describe('Mobile Navigation', () => {
     await expect(mobileMenu).toBeVisible();
     
     // Check that all navigation links are accessible in mobile menu
-    await expect(mobileMenu.getByRole('link', { name: 'Concerts' })).toBeVisible();
+    await expect(mobileMenu.getByRole('link', { name: 'Book Us' })).toBeVisible();
     await expect(mobileMenu.getByRole('link', { name: 'Play-Along Session' })).toBeVisible();
     await expect(mobileMenu.getByRole('link', { name: 'Songbook' })).toBeVisible();
     await expect(mobileMenu.getByRole('link', { name: 'Support Us' })).toBeVisible();
@@ -71,10 +71,10 @@ test.describe('Mobile Navigation', () => {
     await expect(mobileMenu).toBeVisible();
     
     // Click on a navigation link
-    await mobileMenu.getByRole('link', { name: 'Concerts' }).click();
+    await mobileMenu.getByRole('link', { name: 'Book Us' }).click();
     
-    // Should navigate to concerts page
-    await expect(page).toHaveURL('/concerts/');
+    // Should navigate to the Book Us page
+    await expect(page).toHaveURL('/book-us/');
     
     // Mobile menu should be closed after navigation (check after page loads)
     await page.waitForLoadState();
