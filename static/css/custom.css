@@ -497,11 +497,15 @@
   margin: 0 0 25px;
 }
 
+/* Captions read as captions: smaller, italic, centred under the frame, in the theme's label grey. */
 .offer-media figcaption {
   margin-top: 10px;
-  font-size: 14px;
-  line-height: 20px;
-  color: #595959;
+  padding: 0 15px;
+  font-size: 13px;
+  font-style: italic;
+  line-height: 19px;
+  color: #6d7783;
+  text-align: center;
 }
 
 .entry-content .offer-facts {
