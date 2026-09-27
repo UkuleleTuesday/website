@@ -1,0 +1,25 @@
+{#
+  youtube_video — a click-to-load YouTube player, rendered with
+  lite-youtube-embed (static/vendor/lite-youtube-embed/, see README
+  "YouTube embeds"). This is the library's own progressive-enhancement
+  markup: only the poster and a play button load with the page, the player is
+  created on youtube-nocookie.com when the visitor presses play, and without
+  JavaScript the button is a link to the video on YouTube.
+
+  Pages using it must include the library's stylesheet and script, see the
+  extra_head and extra_scripts blocks of templates/concerts/index.html.
+
+  Parameters
+  ----------
+  video_id  the YouTube video ID, e.g. "t7B2ez6Uodk"
+  title     what the video is; becomes the play button's accessible name and
+            the player's title
+#}
+{% macro youtube_video(video_id, title) -%}
+  <lite-youtube videoid="{{ video_id }}" style="background-image: url('https://i.ytimg.com/vi/{{ video_id }}/hqdefault.jpg')">
+  <a class="lyt-playbtn"
+     href="https://www.youtube.com/watch?v={{ video_id }}">
+    <span class="lyt-visually-hidden">Play video: {{ title }}</span>
+  </a>
+  </lite-youtube>
+{%- endmacro %}

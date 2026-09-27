@@ -39,7 +39,7 @@ Two rules follow from that list:
 
 ### How we measure
 
-- **Mixpanel** (`static/js/mixpanel.js`) runs autocapture with persistence deliberately disabled. Following a visitor from one page to the next needs an identifier stored on their device, which under EU ePrivacy rules needs consent, and a cookie banner is a price we have chosen not to pay. So Mixpanel counts page views and clicks, sets no cookies, and gives no sessions, journeys or funnels. Turning persistence on means adding that banner, and any replacement for Mixpanel ([#162](https://github.com/UkuleleTuesday/website/issues/162)) has to keep the same property. It is only included in production builds (`ENABLE_ANALYTICS=true`).
+- **Mixpanel** (`static/js/mixpanel.js`) runs autocapture with persistence deliberately disabled. Following a visitor from one page to the next needs an identifier stored on their device, which under EU ePrivacy rules needs consent, and a cookie banner is a price we have chosen not to pay. So Mixpanel counts page views and clicks, sets no cookies, and gives no sessions, journeys or funnels. Turning persistence on means adding that banner, and any replacement for Mixpanel ([#162](https://github.com/UkuleleTuesday/website/issues/162)) has to keep the same property. How it is wired up is under [Analytics (Mixpanel)](#analytics-mixpanel).
 - **Task completions** are recorded elsewhere: booking enquiries arrive as Netlify Forms submissions, the donate redirect sends a `Donate link opened` event to Mixpanel with its UTM source (QR code, menu or direct), and WhatsApp joins are not recorded at all.
 - **Google Search Console** has a Domain property for `ukuleletuesday.ie`, covering the apex host, `www` and the songbooks microsite. Exports and the scripts that analyse them live under [`docs/spikes/data/`](docs/spikes/data/).
 
@@ -130,6 +130,21 @@ To reliably classify an event, add the appropriate hashtag to the event descript
 
 To add or edit events, Executive Committee members have been granted edit access to the "Ukulele Tuesday Public Events" Google Calendar. Event colour-coding is not supported, since it is visible only to those logged into
 the Ukulele Tuesday Google account (see https://github.com/UkuleleTuesday/website/issues/107).
+
+#### Analytics (Mixpanel)
+
+Mixpanel is only included in production builds (`ENABLE_ANALYTICS=true`, set by CI for deploys from `main`). It is the standard integration: Mixpanel's loader snippet in `static/js/mixpanel.js` (an unmodified copy of `mixpanel-browser/dist/mixpanel-jslib-snippet.min.js`) followed by `mixpanel.init(...)` with the project token and options, plus the two proxy settings Mixpanel documents, so the browser never talks to Mixpanel's own domains (tracking protection and ad blockers block them, which logged a CORS error on every page, see [#125](https://github.com/UkuleleTuesday/website/issues/125)):
+
+- `MIXPANEL_CUSTOM_LIB_URL = '/mp-lib/mixpanel-2-latest.min.js'`: the SDK is fetched from our origin; `netlify.toml` proxies `/mp-lib/*` to `https://cdn.mxpnl.com/libs/`.
+- `api_host: '/mp'`: events are sent to our origin; `netlify.toml` proxies `/mp/*` to Mixpanel's EU ingestion API (`https://api-eu.mixpanel.com`).
+
+Neither proxy exists on the local static server, so `tests/analytics.spec.ts` and `tests/console-errors.spec.ts` stub them and serve the SDK from the `mixpanel-browser` dev dependency (its only use). To upgrade the snippet, copy `node_modules/mixpanel-browser/dist/mixpanel-jslib-snippet.min.js` over the snippet part of `static/js/mixpanel.js`.
+
+`disable_persistence: true` in the init options is deliberate: with no identifier stored on the visitor's device the site needs no cookie consent banner, at the cost of sessions, journeys and funnels. See [How we measure](#how-we-measure) before changing it.
+
+#### YouTube embeds
+
+YouTube videos are embedded with [lite-youtube-embed](https://github.com/paulirish/lite-youtube-embed) (`<lite-youtube>`, v0.3.4, copied unmodified to `static/vendor/lite-youtube-embed/` together with its licence). The page shows only the video's poster and a play button; the real player is created on the privacy-enhanced `youtube-nocookie.com` domain when the visitor presses play. A full YouTube player costs about 1 MB of third-party JavaScript per video and logs a stream of console warnings before anyone has pressed play ([#125](https://github.com/UkuleleTuesday/website/issues/125)). Use the `youtube_video(video_id, title)` macro from `templates/_macros/video.html` and include the library's stylesheet and script on the page (see the `extra_head` and `extra_scripts` blocks of `templates/concerts/index.html`). Without JavaScript the play button is a plain link to the video on YouTube. To upgrade the library, copy `src/lite-yt-embed.js`, `src/lite-yt-embed.css` and `LICENSE` from the new release and update the version here. If a video really has to autoplay, use a plain `<iframe>` on `https://www.youtube-nocookie.com/embed/...` as on the Play-Along Session page.
 
 ### Automated Deployment
 

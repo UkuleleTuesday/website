@@ -69,7 +69,7 @@ pnpm playwright test
 ```
 - **TIMING: Takes a few minutes when browsers are available**
 - **TIMEOUT: Set to 300+ seconds** - NEVER CANCEL test runs
-- Tests cover SEO validation, mobile navigation, the calendar and the donate flow. The visual regression suite is not part of this run; include it with `VRT=1 pnpm playwright test tests/snapshots.spec.ts`
+- Tests cover SEO validation, mobile navigation, the calendar, the donate flow, YouTube embeds, analytics and a console-errors check on every page. The visual regression suite is not part of this run; include it with `VRT=1 pnpm playwright test tests/snapshots.spec.ts`
 - **NOTE:** Playwright browsers are pre-installed in the development environment
 
 **Run specific test:**
@@ -145,10 +145,11 @@ The `static/` directory is organized as follows:
   - PDF files and other documents
 - **`css/`** - Stylesheets
 - **`js/`** - JavaScript files
-  - `jquery/` - jQuery library files
-  - `mixpanel.js` - Analytics module
+  - `mixpanel.js` - Mixpanel loader snippet and init (production builds only; see README "Analytics")
   - `whatsapp.js` - WhatsApp form handler
   - `mobile-menu.js` - Mobile navigation
+  - `calendar.js` - Events Calendar client
+- **`vendor/`** - Third-party front-end libraries copied unmodified (`lite-youtube-embed/`, used by the `youtube_video` macro)
 - **`sitemaps/`** - SEO sitemap files
   - `sitemap.xml`, `sitemap_index.xml`, `page-sitemap.xml`, `main-sitemap.xsl`
 - **`wordpress/`** - Legacy WordPress theme/plugin files
@@ -156,7 +157,7 @@ The `static/` directory is organized as follows:
   - `wp-content/` - WordPress themes, plugins, and fonts
 
 ### Environment Variables
-- `ENABLE_ANALYTICS=true` - Include the Mixpanel analytics module (production only; see README, Purpose and strategy)
+- `ENABLE_ANALYTICS=true` - Include the Mixpanel analytics module (production only; see README, Analytics)
 - `BASE_URL=https://www.ukuleletuesday.ie` - Base URL for canonical and other absolute URLs in SEO data (the `www` host is canonical; the apex host redirects to it)
 - `GOOGLE_CALENDAR_API_KEY` - Google Calendar API key (required by `netlify/functions/calendar.js`)
 - `WHATSAPP_JOIN_LINK` - WhatsApp group invite URL (required by `netlify/functions/whatsapp-gate.js`)
