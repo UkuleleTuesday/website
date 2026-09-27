@@ -4,15 +4,15 @@ This project contains the source code and build process for the [Ukulele Tuesday
 
 ## Purpose
 
-Ukulele Tuesday runs a free weekly play-along session in Dublin and performs as a band at concerts and festivals. The site is built around the tasks visitors come to do, ranked by how often they come up and what each is worth to us. A year of Search Console data and our own experience of running the group put five at the top: come to a session, use the songbook, book us, support us, join the community. The evidence and reasoning are in the [top-tasks review](docs/spikes/2026-09-27-top-tasks-review.md).
+Ukulele Tuesday runs a free weekly play-along session in Dublin and performs as a band at concerts and festivals. The site follows Gerry McGovern's [Top Tasks](https://gerrymcgovern.com/top-tasks/) method: it is built around the tasks visitors come to do, ranked by how often they come up and what each is worth to us. A year of Search Console data and our own experience of running the group put five at the top: come to a session, use the songbook, book us, support us, join the community. The evidence and reasoning are in the [top-tasks review](docs/spikes/2026-09-27-top-tasks-review.md).
 
 Do:
 
-- Give every page and menu item one of those tasks to serve; anything else goes a level down or into the footer ([§6.1](docs/spikes/2026-09-27-top-tasks-review.md#61-organising-principle)).
-- Weigh value as well as frequency: event organisers are a tiny share of visits and by far the most valuable, so their needs count more than their numbers ([§1](docs/spikes/2026-09-27-top-tasks-review.md#1-method)).
-- Make each top task reachable in one tap from the homepage, and answer the first-timer's questions (when, where, is it free, is it on this week) in its first screen, as facts rather than prose ([§6.2](docs/spikes/2026-09-27-top-tasks-review.md#62-homepage-as-a-task-hub)).
-- Write titles, headings, menu labels and meta descriptions in the words people search for; keep the playful voice for body copy ([§6.3](docs/spikes/2026-09-27-top-tasks-review.md#63-navigation)).
-- Put proof, FAQs and policies next to the decision they support, and use the footer for what every page needs: contact, Code of Conduct, WhatsApp, session time and venue ([§6.4](docs/spikes/2026-09-27-top-tasks-review.md#64-footer-as-utility-navigation)).
+- Give every page and menu item one of those tasks to serve; anything else (story, governance, press) goes on an About page ([what belongs there](https://www.nngroup.com/articles/about-us-information-on-websites/)) or into the footer.
+- Weigh value as well as frequency: event organisers are a tiny share of visits and by far the most valuable, so their needs count more than their numbers.
+- Make each top task reachable in one tap from the homepage, and answer the first-timer's questions (when, where, is it free, is it on this week) in its first screen, as facts rather than prose.
+- Write titles, headings, menu labels and meta descriptions in the words people search for; keep the playful voice for body copy.
+- Put proof next to the decision it supports ([social proof](https://www.nngroup.com/videos/social-proof-ux/)), FAQs and policies likewise, and use the footer for what every page needs: contact, Code of Conduct, WhatsApp, session time and venue.
 - Design for a phone in the pub first; organisers, on desktop, are the exception.
 - Judge a change by whether more visitors complete their task, not by page views.
 
