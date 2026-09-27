@@ -20,8 +20,10 @@ test.describe('Mobile Navigation', () => {
     await expect(mainNav.getByRole('link', { name: 'Concerts' })).toBeVisible();
     await expect(mainNav.getByRole('link', { name: 'Play-Along Session' })).toBeVisible();
     await expect(mainNav.getByRole('link', { name: 'Songbook' })).toBeVisible();
-    await expect(mainNav.getByRole('link', { name: 'Press' })).toBeVisible();
     await expect(mainNav.getByRole('link', { name: 'Support Us' })).toBeVisible();
+
+    // The Press page is hidden from navigation while it is folded into other pages (#174).
+    await expect(mainNav.getByRole('link', { name: 'Press' })).toHaveCount(0);
   });
 
   test('mobile menu should work on mobile viewport', async ({ page }) => {
@@ -48,8 +50,8 @@ test.describe('Mobile Navigation', () => {
     await expect(mobileMenu.getByRole('link', { name: 'Concerts' })).toBeVisible();
     await expect(mobileMenu.getByRole('link', { name: 'Play-Along Session' })).toBeVisible();
     await expect(mobileMenu.getByRole('link', { name: 'Songbook' })).toBeVisible();
-    await expect(mobileMenu.getByRole('link', { name: 'Press' })).toBeVisible();
     await expect(mobileMenu.getByRole('link', { name: 'Support Us' })).toBeVisible();
+    await expect(mobileMenu.getByRole('link', { name: 'Press' })).toHaveCount(0);
     
     // Hamburger should have 'open' class when menu is open
     await expect(hamburger).toHaveClass(/open/);
