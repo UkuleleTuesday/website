@@ -457,3 +457,31 @@
 .hidden {
   display: none;
 }
+
+/* Homepage "Play Along With Us" / "See Us Live" rows: on phones the columns
+   stack, which put the picture after the button (or before the heading).
+   Flatten the copy column into the row's flex items and order them
+   heading -> picture -> text -> button. Desktop keeps the two columns. */
+@media (max-width: 767px) {
+  .media-after-heading {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .content-row.row-flex.media-after-heading > .col.col-copy,
+  .content-row.row-flex.media-after-heading > .col.col-copy > .col-inner,
+  .content-row.row-flex.media-after-heading > .col.col-copy > .col-inner > .col-content {
+    display: contents;
+  }
+  .media-after-heading .section-heading,
+  .media-after-heading .text-block,
+  .media-after-heading .wpbsctn {
+    width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+    box-sizing: border-box;
+  }
+  .media-after-heading .section-heading { order: 1; }
+  .media-after-heading > .col-media { order: 2; }
+  .media-after-heading .text-block { order: 3; }
+  .media-after-heading .wpbsctn { order: 4; }
+}
