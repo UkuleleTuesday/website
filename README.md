@@ -20,8 +20,6 @@ Don't:
 
 - Add a page, section or menu item because the content exists.
 - Greet or be clever where a visitor needs a literal answer: the H1, a page title, a button label.
-- Track visitors across pages. Analytics is deliberately cookie-free: Mixpanel runs with persistence off, so there are page views and clicks but no sessions, journeys or funnels, and turning persistence on would mean a consent banner.
-- Rebuild the songbook here. It is a separate site, `songbooks.ukuleletuesday.ie`, built weekly from [UkuleleTuesday/songbooks](https://github.com/UkuleleTuesday/songbooks).
 
 ## Overview
 
@@ -112,6 +110,8 @@ Mixpanel is only included in production builds (`ENABLE_ANALYTICS=true`, set by 
 
 - `MIXPANEL_CUSTOM_LIB_URL = '/mp-lib/mixpanel-2-latest.min.js'`: the SDK is fetched from our origin; `netlify.toml` proxies `/mp-lib/*` to `https://cdn.mxpnl.com/libs/`.
 - `api_host: '/mp'`: events are sent to our origin; `netlify.toml` proxies `/mp/*` to Mixpanel's EU ingestion API (`https://api-eu.mixpanel.com`).
+
+The init also sets `disable_persistence: true`, on purpose: Mixpanel then stores nothing on the visitor's device, so the site needs no cookie consent banner. The cost is that it cannot follow a visitor from one page to the next: page views and clicks are counted, but there are no sessions, journeys or funnels.
 
 Neither proxy exists on the local static server, so `tests/analytics.spec.ts` and `tests/console-errors.spec.ts` stub them and serve the SDK from the `mixpanel-browser` dev dependency (its only use). To upgrade the snippet, copy `node_modules/mixpanel-browser/dist/mixpanel-jslib-snippet.min.js` over the snippet part of `static/js/mixpanel.js`.
 
