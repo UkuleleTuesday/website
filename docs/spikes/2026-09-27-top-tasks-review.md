@@ -53,8 +53,11 @@ Twelve months of Google Search data (section 3.1) sharpen the picture rather tha
 songbook is the biggest named task arriving from search. Clicks run two and a half times higher on
 Tuesdays than on any other day. People who do not know the name find us by searching for a ukulele
 group, club or class in Dublin, and the pages that answer them have titles that use none of those
-words. Band-hire searches were shown about 1,350 times in the year and clicked once. And the dead
-`/faq/` URL was shown 679 times.
+words. Band-hire searches were shown about 1,350 times in the year and clicked once. The dead `/faq/`
+URL was shown 679 times, though Google has dropped it in the last three months. And the apex
+host without www still appears as a separate result at the same rate as a year ago, despite a
+redirect that has existed since November 2025, which points to a redirect that is not being served
+(section 3.2).
 
 **Recommendation:** adopt a short list of top tasks as the organising principle, confirm the
 ranking with a two-week one-question poll, restructure the homepage, navigation and footer around
@@ -151,7 +154,8 @@ way.
 
 ### 3.1 Evidence: twelve months of Google Search (25 September 2025 to 24 September 2026)
 
-**Source.** The Search Console performance export for the `www.ukuleletuesday.ie` property, web
+**Source.** The Search Console performance export for the `ukuleletuesday.ie` Domain property
+(all hosts and protocols, which is why the apex host and the songbooks subdomain appear below), web
 search only, committed under `docs/spikes/data/2026-09-top-tasks/search-console/` together with
 the script that produced these tables. **Limits.** Google web search only: no Maps, no Tripadvisor,
 no social, no direct or WhatsApp traffic. Google withholds rare queries, so the query table
@@ -234,9 +238,12 @@ happened after it.
    Concerts 0.6%, Testimonials 0.3%, Contact 0.15%, Support Us 0%. The Press page was shown 749
    times and clicked twice, which settles
    [#174](https://github.com/UkuleleTuesday/website/issues/174).
-7. **The hygiene findings come with numbers.** `/faq/` was shown 679 times in the year and still
-   is. The apex host without www was served as a separate result 6,015 times with 129 clicks, and a
-   WordPress-era `/sample-page/` still appears under it. Both are canonicalisation work for Phase 0.
+7. **The hygiene findings come with numbers.** `/faq/` was shown 679 times in the year, though
+   none of them in the last three months (section 3.2), so Google has already dropped it and the
+   redirect now matters for bookmarks and inbound links rather than for search. The apex host
+   without www was served as a separate result 6,015 times with 129 clicks, at an unchanged rate in
+   the most recent three months, and a WordPress-era `/sample-page/` appeared under it earlier in
+   the year. The apex is canonicalisation work for Phase 0 and needs a live check, not more data.
 8. **Phones are the audience, not a slogan.** Two thirds of clicks are on phones, and phone users
    click twice as often as desktop users (10.5% against 5.3%), because desktop impressions are
    dominated by generic songbook searches.
@@ -247,6 +254,50 @@ lever. T4 (booking) is fourth by volume and first by value, with demonstrated un
 T10 are on-site tasks with no search demand at all. The people in the room and the WhatsApp
 community are still unmeasured, and brand clicks are still unsplit by intent, so the poll
 ([#179](https://github.com/UkuleleTuesday/website/issues/179)) stands.
+
+### 3.2 Three-month check (25 June to 24 September 2026)
+
+A second export covering only the last three months, committed under `last-3-months/` beside
+the first with a comparison script, tests whether the twelve-month picture is still current.
+Figures are per 30 days.
+
+| | Twelve-month average | Last three months |
+|---|--:|--:|
+| Clicks, all pages | 259 | 277 |
+| Homepage clicks | 158 | 167 |
+| `/songbook/` clicks | 70 | 72 |
+| `songbooks.ukuleletuesday.ie` clicks | 14 | 21 |
+| `/tuesday-session/` clicks | 7 | 9 |
+| `/concerts/` clicks | 2 | 3 |
+| Apex host `ukuleletuesday.ie/`, impressions and clicks | 494 and 11 | 517 and 12 |
+| `/testimonials/` impressions | 62 | 41 |
+| `/faq/` impressions | 56 | 0 |
+| Tuesday clicks a day, against the other six days | 17.6 against 7.2 | 17.7 against 7.9 |
+
+- **Nothing in the ranking changes.** Brand, songbook and discovery clicks per month are within a
+  few percent of the annual average, the Tuesday spike is intact, phones are 68% of clicks and
+  Ireland 65%.
+- **The songbooks subdomain is growing.** Clicks per month are up by almost half and impressions by
+  57%, while `/songbook/` slipped from position 18 to 23 on generic songbook queries. Google is
+  starting to send songbook searchers straight to the subdomain, which strengthens the case for a
+  way back to the main site ([#69](https://github.com/UkuleleTuesday/website/issues/69)).
+- **Demand for lessons is rising.** "ukulele lessons dublin" earned 147 impressions in three
+  months, more than a third of its annual total, and the long tail adds "for beginners" and "for
+  adults".
+- **Wedding-band queries are seasonal.** They are absent from the summer window, so judge that
+  demand on the annual figure. "ukulele bands ireland" continues at 136 impressions and one click.
+- **`/faq/` has gone from results**, and `/testimonials/` is fading on its own at 41 impressions
+  and about one click a month. Neither changes the plan; both lower the urgency.
+- **The apex host has not faded.** It is served as a separate result at the rate of a year ago,
+  about 520 impressions and 12 clicks a month at an average position of 6, although the redirect
+  in `netlify.toml` dates from 17 November 2025 and the apex resolves to Netlify's load balancer.
+  A working 301 would have let Google fold the two hosts together within weeks. The redirect is
+  therefore probably not being served, and the next step is a live check rather than more data:
+  `curl -I https://ukuleletuesday.ie/`; the URL Inspection tool in Search Console for that URL,
+  which reports the fetched status and Google's chosen canonical; the Netlify domain settings (is
+  the apex added as an alias, is www the primary domain); and the deploy log for a rejected rule,
+  since the rule carries a `headers` option that Netlify documents for proxy rules only. Until
+  then it stays open in Phase 0.
 
 ---
 
@@ -425,8 +476,9 @@ post, portfolio, staff, partners and careers sitemaps that do not exist. There i
 pointing at the sitemap. None of this stops indexing (Lighthouse SEO is 100), but it wastes crawl
 attention and the `/faq/` dead end is real for anyone who bookmarked or linked it. The sitemap is
 also the last hand-maintained artefact of the WordPress era; `build.py` already knows every page.
-Search Console confirms the cost: `/faq/` was shown in Google results 679 times in the twelve
-months to September 2026 (section 3.1).
+Search Console puts a number on it: `/faq/` was shown in Google results 679 times in the twelve
+months to September 2026, none of them in the last three (sections 3.1 and 3.2), so Google has
+dropped it and the redirect now protects bookmarks and inbound links rather than search traffic.
 
 **F6. Structured data does not describe what we are.**
 `json_ld.html` emits Organization, WebSite, WebPage and BreadcrumbList. There is no `Event` for the
@@ -465,9 +517,10 @@ details. That legacy site competes with this one for the brand query and gives s
 information; it should redirect here or at minimum link here prominently. For T1 the source of
 truth is the Google Calendar, so the site should be the canonical answer and every other property
 should point at it. Search Console adds one more split: the apex host `ukuleletuesday.ie` without
-www was served as a separate search result 6,015 times in the year, with 129 clicks, and a
-WordPress-era `/sample-page/` still appears under it, so the redirect in `netlify.toml` should be
-verified on the live site and Search Console should measure both hosts as one Domain property.
+www was served as a separate search result 6,015 times in the year, with 129 clicks, and at the
+same rate in the most recent three months, although the redirect in `netlify.toml` has existed
+since November 2025 and the apex resolves to Netlify. A working 301 would have consolidated the
+two hosts long ago, so the redirect is probably not being served; section 3.2 lists the checks.
 
 **F10. The organiser audience is under-served in proportion to its value.**
 Organisers are a tiny share of visits and a large share of the value the site can create, which is
@@ -600,9 +653,11 @@ build time.
   welcome" for the Session page; "Book Ukulele Tuesday: a ukulele band for festivals and events in
   Ireland" for Book Us; "Ukulele Tuesday Songbook: free ukulele songbook with chords" for the
   songbook page.
-- Verify on the live site that the apex host redirects to www, add a Domain property in Search
-  Console so both hosts are measured together, and request removal of `/sample-page/` and `/faq/`
-  from the index once the redirects are in place.
+- Check the apex host on the live site with `curl -I https://ukuleletuesday.ie/` and the URL
+  Inspection tool; if it answers anything other than a 301 to www, fix it in Netlify's domain
+  settings or the redirect rule (section 3.2). Search Console already measures the domain as one
+  property, so nothing is needed there. Request removal of `/sample-page/` once the redirect is
+  confirmed; `/faq/` has already dropped out of results.
 
 ---
 
@@ -666,7 +721,7 @@ one thing that would move it. Report it alongside the AGM "year in key numbers".
 
 | Phase | What | Effort | Impact | Related issues |
 |---|---|---|---|---|
-| **0. Hygiene** (this week) | `/faq/` redirect; footer page list, CoC and WhatsApp links, dynamic year; rename "Read More" buttons; fix maps link; text link to WhatsApp on the Session page; sitemap generated by `build.py`; `robots.txt`; page titles and meta descriptions rewritten in searchers' words; apex-host redirect verified and a Domain property added in Search Console | S | Medium to High (the titles alone address 4,000 impressions a year that convert at 1.6%) | [#159](https://github.com/UkuleleTuesday/website/issues/159), [#155](https://github.com/UkuleleTuesday/website/issues/155), [#84](https://github.com/UkuleleTuesday/website/issues/84) |
+| **0. Hygiene** (this week) | `/faq/` redirect; footer page list, CoC and WhatsApp links, dynamic year; rename "Read More" buttons; fix maps link; text link to WhatsApp on the Session page; sitemap generated by `build.py`; `robots.txt`; page titles and meta descriptions rewritten in searchers' words; apex-host redirect checked live and fixed if it is not a 301 | S | Medium to High (the titles alone address 4,000 impressions a year that convert at 1.6%) | [#159](https://github.com/UkuleleTuesday/website/issues/159), [#155](https://github.com/UkuleleTuesday/website/issues/155), [#84](https://github.com/UkuleleTuesday/website/issues/84) |
 | **1. Learn** (two weeks) | Top-tasks poll live on site, QR at two sessions, WhatsApp post; analytics decision; Search Console; `Event` structured data; assemble the organiser offer sheet and tech rider from the 2025 press kit working document ([#178](https://github.com/UkuleleTuesday/website/issues/178)), since they are needed whatever the poll says | S to M | High (everything after depends on it) | [#162](https://github.com/UkuleleTuesday/website/issues/162) |
 | **2. Restructure** (after the poll) | Homepage as task hub with "Next session" line; nav rename; Book Us page rebuilt as an offer sheet with the tech rider, absorbing Concerts, the community group and the press quotes; Support Us on-site page; About page with CoC as HTML and governance | M to L | High | [#93](https://github.com/UkuleleTuesday/website/issues/93), [#94](https://github.com/UkuleleTuesday/website/issues/94), [#174](https://github.com/UkuleleTuesday/website/issues/174), [#117](https://github.com/UkuleleTuesday/website/issues/117) |
 | **3. Measure and maintain** | Task-endpoint events; quarterly scorecard; photo refresh; legacy `ukulele.ie` redirect; songbook subdomain nav back | S to M | Medium | [#9](https://github.com/UkuleleTuesday/website/issues/9), [#69](https://github.com/UkuleleTuesday/website/issues/69) |
@@ -721,8 +776,8 @@ the site what we sound like, what they can book, and what their sound engineer n
 **Project: Task success measurable** (outcome: a quarterly scorecard with one number per top task)
 - Next action: decide Mixpanel-with-consent versus a cookieless counter, and record the decision
   on [#162](https://github.com/UkuleleTuesday/website/issues/162).
-- Next action: add a Domain property in Search Console so the apex and www hosts are measured
-  together.
+- Next action: run `curl -I https://ukuleletuesday.ie/` and the URL Inspection tool on the apex
+  URL, and fix the redirect in Netlify if the answer is not a 301 to www.
 - Next action: add a success log line to `whatsapp-gate.js`.
 
 ---
@@ -768,8 +823,8 @@ page's own `article_modified_time`, or the sitemap `lastmod` where the template 
   and ["About Us" information on websites](https://www.nngroup.com/articles/about-us-information-on-websites/).
 - Google Search Central, [Event structured data](https://developers.google.com/search/docs/appearance/structured-data/event).
 - Data: `docs/spikes/data/2026-09-top-tasks/search-console/`, the Google Search Console export
-  for the twelve months to 24 September 2026, with a README and the script that produces the
-  tables in section 3.1.
+  for the twelve months to 24 September 2026, a second export for the last three months under
+  `last-3-months/`, a README, and the scripts that produce the tables in sections 3.1 and 3.2.
 - Internal: *UT Press Kit 2025, working document* (shared drive). The seed for the Book Us page,
   the tech rider and the refreshed proof.
 - Earlier spikes in this folder: the 2026-03-19 Lighthouse audit and the 2026-03-21 WordPress
