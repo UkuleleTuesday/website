@@ -2,51 +2,20 @@
 
 This project contains the source code and build process for the [Ukulele Tuesday website](https://www.ukuleletuesday.ie/), published on Netlify.
 
-## Purpose and strategy
+## Purpose
 
-Ukulele Tuesday runs a free weekly ukulele play-along session in Dublin and performs as a band at concerts and festivals. The site exists to get five things done. In rough order of how often visitors need them (to be confirmed by a visitor poll, [#179](https://github.com/UkuleleTuesday/website/issues/179)):
+Ukulele Tuesday runs a free weekly play-along session in Dublin and performs as a band at concerts and festivals. The site serves five visitor tasks, roughly in order of frequency: come to a session, use the songbook, book us, support us, join the community. Two rules follow:
 
-1. **Come to a session**: is it on this Tuesday, when and where, is it free, is it for beginners.
-2. **Use the songbook**: regulars open it at the session, on their phones.
-3. **Book us**: event and festival organisers deciding whether to hire the group.
-4. **Support us**: donate, and see what the money funds.
-5. **Join the community**: WhatsApp group, Code of Conduct, volunteering.
+- A page or menu item exists to serve one of those tasks. Anything else goes a level down or into the footer.
+- Event organisers are a tiny share of visits and the most valuable, so their needs outweigh their numbers. Copy for them must describe the actual act (an amplified band with layered vocal harmonies and other instruments, not an acoustic ukulele ensemble) and the jam-session and workshop offers.
 
-Two rules follow from that list:
+Titles, headings, menu labels and meta descriptions use the words people search for. The playful voice stays in body copy.
 
-- **Every page and menu item earns its place by serving one of these tasks.** Content that serves none of them (press coverage, history, governance) goes one level down or into the footer rather than competing for attention. Taking the Press page out of the menu ([#174](https://github.com/UkuleleTuesday/website/issues/174)) was the first application of this rule.
-- **Value counts, not just traffic.** Organisers are a tiny share of visits and by far the most valuable, so their needs weigh more than their numbers. Copy aimed at them must describe what actually turns up: an amplified band, with ukuleles through line-in and effects, further instrumentation and layered vocal harmonies, not an acoustic ukulele ensemble. It should also say that play-along jam sessions and workshops can be booked alongside a set. Getting this wrong misleads the organiser and their sound engineer alike ([#178](https://github.com/UkuleleTuesday/website/issues/178)).
+The songbook itself lives on `songbooks.ukuleletuesday.ie`, a separate GitHub Pages site rebuilt weekly, not in this repository.
 
-**Writing convention.** The playful voice belongs in body copy. Page titles, headings, menu labels and meta descriptions use the literal words people search for, because many visitors arrive from a search with a specific question.
+Analytics is deliberately cookie-free: Mixpanel runs with persistence off, so there are page views and clicks but no sessions, journeys or funnels. Turning persistence on would mean a consent banner.
 
-### Pages and what each is for
-
-| Page | Task it serves |
-|---|---|
-| `/` | Hub: route each visitor to their task in one tap, plus upcoming events from the public Google Calendar |
-| `/tuesday-session/` | Come to a session: practical details, FAQ, what to expect |
-| `/songbook/` | Use the songbook. The songbook itself lives on the microsite below; how the two should relate is tracked in [#180](https://github.com/UkuleleTuesday/website/issues/180) |
-| `/concerts/`, `/contact-us/` | Book us: what you get, proof it works, enquiry form (Netlify Forms) |
-| `/support-us`, `/donate`, `/donate-qr` | Support us: edge-function redirects to Buy Me a Coffee, also behind the QR codes used at sessions |
-| `/whatsapp/`, `/code-of-conduct/` | Join the community |
-| `/testimonials/` | Press quotes. Out of navigation and search while it is folded into other pages ([#174](https://github.com/UkuleleTuesday/website/issues/174)) |
-
-### Related properties
-
-- `www.ukuleletuesday.ie` is this site; the apex host redirects to it (`netlify.toml`).
-- `songbooks.ukuleletuesday.ie` is a separate GitHub Pages microsite, rebuilt weekly with the latest songbook. It is not in this repository.
-- The community lives on WhatsApp (joined through `/whatsapp/`), Instagram, Facebook, YouTube and the group's Tripadvisor listing. The site is the hub that points to them.
-
-### How we measure
-
-- **Mixpanel** (`static/js/mixpanel.js`) runs autocapture with persistence deliberately disabled. Following a visitor from one page to the next needs an identifier stored on their device, which under EU ePrivacy rules needs consent, and a cookie banner is a price we have chosen not to pay. So Mixpanel counts page views and clicks, sets no cookies, and gives no sessions, journeys or funnels. Turning persistence on means adding that banner, and any replacement for Mixpanel ([#162](https://github.com/UkuleleTuesday/website/issues/162)) has to keep the same property. How it is wired up is under [Analytics (Mixpanel)](#analytics-mixpanel).
-- **Task completions** are recorded elsewhere: booking enquiries arrive as Netlify Forms submissions, the donate redirect sends a `Donate link opened` event to Mixpanel with its UTM source (QR code, menu or direct), and WhatsApp joins are not recorded at all.
-- **Google Search Console** has a Domain property for `ukuleletuesday.ie`, covering the apex host, `www` and the songbooks microsite. Exports and the scripts that analyse them live under [`docs/spikes/data/`](docs/spikes/data/).
-
-### Where the plan lives
-
-- [#176](https://github.com/UkuleleTuesday/website/issues/176) is the live tracker for the site restructure; its sub-issues hold status and decisions. New ideas get the `needs-triage` label.
-- [`docs/spikes/`](docs/spikes/) holds dated, point-in-time studies. They are snapshots of the evidence and reasoning at the time, not maintained documents. The [2026-09-27 top-tasks review](docs/spikes/2026-09-27-top-tasks-review.md) sets out the strategy above in full.
+The work on the site's structure is tracked in [#176](https://github.com/UkuleleTuesday/website/issues/176). [`docs/spikes/`](docs/spikes/) holds dated studies, including the [top-tasks review](docs/spikes/2026-09-27-top-tasks-review.md) behind this section.
 
 ## Overview
 
@@ -139,8 +108,6 @@ Mixpanel is only included in production builds (`ENABLE_ANALYTICS=true`, set by 
 - `api_host: '/mp'`: events are sent to our origin; `netlify.toml` proxies `/mp/*` to Mixpanel's EU ingestion API (`https://api-eu.mixpanel.com`).
 
 Neither proxy exists on the local static server, so `tests/analytics.spec.ts` and `tests/console-errors.spec.ts` stub them and serve the SDK from the `mixpanel-browser` dev dependency (its only use). To upgrade the snippet, copy `node_modules/mixpanel-browser/dist/mixpanel-jslib-snippet.min.js` over the snippet part of `static/js/mixpanel.js`.
-
-`disable_persistence: true` in the init options is deliberate: with no identifier stored on the visitor's device the site needs no cookie consent banner, at the cost of sessions, journeys and funnels. See [How we measure](#how-we-measure) before changing it.
 
 #### YouTube embeds
 

@@ -4,7 +4,7 @@ This repository contains a static website built with Python 3.12+, Jinja2 templa
 
 **ALWAYS reference these instructions first and fallback to search or bash commands only when you encounter unexpected information that does not match the info here.**
 
-Before changing copy, navigation or page structure, read the **Purpose and strategy** section of `README.md`. It says which visitor tasks the site serves, how the pages map to them, and the writing conventions for titles and organiser-facing copy.
+Before changing copy, navigation or page structure, read the **Purpose** section of `README.md`.
 
 ## Pre-configured Environment
 
@@ -157,8 +157,8 @@ The `static/` directory is organized as follows:
   - `wp-content/` - WordPress themes, plugins, and fonts
 
 ### Environment Variables
-- `ENABLE_ANALYTICS=true` - Include the Mixpanel analytics module (production only; see README, Analytics)
-- `BASE_URL=https://www.ukuleletuesday.ie` - Base URL for canonical and other absolute URLs in SEO data (the `www` host is canonical; the apex host redirects to it)
+- `ENABLE_ANALYTICS=true` - Include the Mixpanel analytics module (production only)
+- `BASE_URL=https://www.ukuleletuesday.ie` - Base URL for canonical and other absolute URLs in SEO data (`www` is the canonical host)
 - `GOOGLE_CALENDAR_API_KEY` - Google Calendar API key (required by `netlify/functions/calendar.js`)
 - `WHATSAPP_JOIN_LINK` - WhatsApp group invite URL (required by `netlify/functions/whatsapp-gate.js`)
 - `BMC_URL` - Buy Me A Coffee redirect URL (used by `netlify/edge-functions/donate.js`, defaults to `https://buymeacoffee.com/ukuleletuesday`)
