@@ -1,2 +1,2 @@
-# Generated, minified third-party bundle (see vendor-mixpanel.mjs)
-static/js/vendor/** linguist-generated
+# Third-party front-end libraries copied unmodified (see README "YouTube embeds")
+static/vendor/** linguist-vendored

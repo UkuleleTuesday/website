@@ -1,41 +1,36 @@
 import { test, expect } from '@playwright/test';
 import { collectConsoleProblems } from './utils/console';
+import { blockOtherOrigins, stubNetlifyEndpoints } from './utils/network';
 
 /**
- * The Mixpanel SDK is self-hosted (static/js/vendor/) and reached through the
- * same-origin /mp/* proxy defined in netlify.toml, so tracking protection has
- * nothing to block and the console stays clean (issue #125).
+ * Mixpanel is loaded through its official snippet with the SDK and the
+ * tracking API proxied through our own origin (see static/js/mixpanel.js and
+ * netlify.toml), so tracking protection has nothing to block and the console
+ * stays clean (issue #125).
  *
- * Production builds include /js/mixpanel.js in every page; the build under
- * test (ENABLE_ANALYTICS unset) does not, so the module is loaded here the
- * same way base.html does and its first tracking request is inspected.
+ * Production builds include /js/mixpanel.js in every page; a build with
+ * ENABLE_ANALYTICS unset does not, so the script is added here the same way
+ * base.html does (unless the page already has it) and its requests are
+ * inspected.
  */
-test('the analytics module loads from our origin and only talks to the /mp proxy', async ({ page, baseURL }) => {
+test('Mixpanel loads through our origin and only talks to the Netlify proxies', async ({ page, baseURL }) => {
   const origin = new URL(baseURL!).origin;
-
-  const mixpanelRequests: string[] = [];
-  page.on('request', (request) => {
-    if (/(^|\.)(mixpanel\.com|mxpnl\.com)$/.test(new URL(request.url()).hostname)) mixpanelRequests.push(request.url());
-  });
-  await page.route((address) => address.origin !== origin, (route) => route.abort('blockedbyclient'));
-  await page.route('**/.netlify/functions/**', (route) => route.fulfill({ json: { items: [] } }));
-
-  // Netlify applies the /mp/* proxy rule; the static test server does not.
-  const proxiedRequests: string[] = [];
-  await page.route('**/mp/**', (route) => {
-    proxiedRequests.push(route.request().url());
-    return route.fulfill({ status: 200, contentType: 'text/plain', body: '1' });
-  });
-
+  const requests: string[] = [];
+  page.on('request', (request) => requests.push(request.url()));
+  await blockOtherOrigins(page, origin);
+  await stubNetlifyEndpoints(page);
   const problems = collectConsoleProblems(page, origin);
 
   await page.goto('/');
-  await page.addScriptTag({ type: 'module', url: '/js/mixpanel.js' });
+  if ((await page.locator('script[src="/js/mixpanel.js"]').count()) === 0) {
+    await page.addScriptTag({ url: '/js/mixpanel.js' });
+  }
 
+  // The SDK batches events; the page view is flushed within a few seconds.
   await expect
-    .poll(() => proxiedRequests.length, { message: 'expected the page view to be sent to /mp/track/', timeout: 15_000 })
-    .toBeGreaterThan(0);
-  expect(proxiedRequests[0]).toMatch(new RegExp(`^${origin}/mp/track/\\?`));
-  expect(mixpanelRequests).toEqual([]);
+    .poll(() => requests.find((url) => url.includes('/mp/track/')), { timeout: 15_000 })
+    .toMatch(new RegExp(`^${origin}/mp/track/\\?`));
+  expect(requests).toContain(`${origin}/mp-lib/mixpanel-2-latest.min.js`);
+  expect(requests.filter((url) => /(^|\.)(mixpanel\.com|mxpnl\.com)$/.test(new URL(url).hostname))).toEqual([]);
   expect(problems).toEqual([]);
 });
