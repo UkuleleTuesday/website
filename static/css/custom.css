@@ -630,6 +630,13 @@
   scroll-margin-top: 90px;
 }
 
+/* The form sits in the same 820px column as the offers above it. */
+#enquire > .col > .col-inner {
+  max-width: 820px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* The wave sits in the band's top 50px; keep the heading clear of it. */
 .entry-content #enquire.section-maroon {
   padding-top: 100px !important;
