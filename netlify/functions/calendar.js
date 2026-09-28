@@ -43,7 +43,7 @@ exports.handler = async (event) => {
   apiUrl.searchParams.set('orderBy', "startTime");
   apiUrl.searchParams.set('maxResults', MAX_RESULTS.toString());
   // Only request the fields we actually use to reduce payload size
-  apiUrl.searchParams.set('fields', 'items(summary,description,location,start(dateTime,date))');
+  apiUrl.searchParams.set('fields', 'items(summary,description,location,start(dateTime,date),end(dateTime,date))');
 
   try {
     // Fetch events from Google Calendar API

@@ -239,23 +239,128 @@ function sanitizeHtml(html) {
 }
 
 /**
- * Initialize the calendar
+ * Convert calendar HTML to plain text and drop the #hashtags used for classification
+ */
+function toPlainText(html) {
+  const text = new DOMParser().parseFromString(html || '', 'text/html').body.textContent || '';
+  return text.replace(/#\w+/g, '').replace(/\s+/g, ' ').trim();
+}
+
+/**
+ * Build a schema.org Event for a play-along or concert, or null if it doesn't qualify
+ * See https://developers.google.com/search/docs/appearance/structured-data/event
+ */
+function buildEventNode(event, organization, venue, image) {
+  const eventType = getEventType(event);
+  if (eventType === 'other' || !event.location) {
+    return null;
+  }
+
+  const node = {
+    '@type': 'Event',
+    name: event.summary || 'Untitled Event',
+    startDate: event.start.dateTime || event.start.date,
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode'
+  };
+
+  if (event.end && (event.end.dateTime || event.end.date)) {
+    node.endDate = event.end.dateTime || event.end.date;
+  }
+
+  const description = toPlainText(event.description);
+  if (description) {
+    node.description = description;
+  }
+
+  if (venue && /stag/i.test(event.location)) {
+    // The weekly session venue: use its full address and mark the session free
+    node.location = venue;
+    node.isAccessibleForFree = true;
+    node.offers = {
+      '@type': 'Offer',
+      price: 0,
+      priceCurrency: 'EUR',
+      availability: 'https://schema.org/InStock',
+      url: `${organization.url.replace(/\/$/, '')}/tuesday-session/`
+    };
+  } else {
+    node.location = {
+      '@type': 'Place',
+      name: event.location.split(',')[0].trim(),
+      address: event.location
+    };
+  }
+
+  const organizer = { '@type': 'Organization', '@id': organization['@id'], name: organization.name, url: organization.url };
+  node.organizer = organizer;
+  node.performer = organizer;
+
+  if (image) {
+    node.image = [image];
+  }
+
+  return node;
+}
+
+/**
+ * Add the upcoming play-alongs and concerts to the page's JSON-LD graph so search
+ * engines can show them. Only pages that declare the session venue get Events.
+ */
+function addEventsToStructuredData(events) {
+  const script = document.querySelector('script[type="application/ld+json"]');
+  if (!script) {
+    return;
+  }
+
+  try {
+    const data = JSON.parse(script.textContent);
+    const graph = data['@graph'] || [];
+    const organization = graph.find(node => (node['@id'] || '').endsWith('/#organization'));
+    const venue = graph.find(node => (node['@id'] || '').endsWith('/#stags-head'));
+    if (!organization || !venue) {
+      return;
+    }
+
+    const ogImage = document.querySelector('meta[property="og:image"]');
+    const image = ogImage && ogImage.content ? new URL(ogImage.content, organization.url).href : null;
+
+    const eventNodes = events
+      .map(event => buildEventNode(event, organization, venue, image))
+      .filter(Boolean);
+    if (eventNodes.length === 0) {
+      return;
+    }
+
+    data['@graph'] = graph.concat(eventNodes);
+    script.textContent = JSON.stringify(data);
+  } catch (error) {
+    console.warn('Could not add events to structured data:', error);
+  }
+}
+
+/**
+ * Initialize the calendar. The event list is rendered when the page has one;
+ * the structured data is added either way.
  */
 async function initCalendar(containerId) {
   const container = document.getElementById(containerId);
-  if (!container) {
-    console.error(`Container with id "${containerId}" not found`);
-    return;
-  }
-  
+
   // Show loading state
-  container.innerHTML = '<p class="loading-events">Loading upcoming events...</p>';
-  
+  if (container) {
+    container.innerHTML = '<p class="loading-events">Loading upcoming events...</p>';
+  }
+
   try {
     const events = await fetchCalendarEvents();
-    renderEvents(events, containerId);
+    if (container) {
+      renderEvents(events, containerId);
+    }
+    addEventsToStructuredData(events);
   } catch (error) {
-    container.innerHTML = '<p class="error-events">Unable to load events. Please try again later.</p>';
+    if (container) {
+      container.innerHTML = '<p class="error-events">Unable to load events. Please try again later.</p>';
+    }
   }
 }
 

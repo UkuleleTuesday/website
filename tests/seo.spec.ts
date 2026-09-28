@@ -54,6 +54,18 @@ for (const templateFile of templateFiles) {
             expect(actualCrumbs).toEqual(expectedCrumbs);
         });
 
+        test('should link the social profiles from the Organization', () => {
+            const organization = jsonLdContent['@graph'].find(item => item['@type'] === 'Organization');
+            expect(organization, 'Organization schema should exist.').toBeDefined();
+            expect(organization.sameAs).toEqual(expect.arrayContaining([
+                'https://www.instagram.com/ukuleletuesday/',
+                'https://www.facebook.com/UkuleleTuesday',
+                'https://www.youtube.com/c/UkuleleTuesday',
+                'https://open.spotify.com/artist/1I58ohDDrb0BK55KuVvtjM',
+                'https://www.tripadvisor.com/Attraction_Review-g186605-d25399502-Reviews-Ukulele_Tuesday-Dublin_County_Dublin.html',
+            ]));
+        });
+
         test('should use absolute URLs for all IDs and URLs in the schema', () => {
             const graph = jsonLdContent['@graph'];
             expect(Array.isArray(graph)).toBe(true);
@@ -94,12 +106,10 @@ for (const templateFile of templateFiles) {
             expect(band.name).toBe('Ukulele Tuesday');
             expect(band.url).toBe(`${baseUrl}/book-us/`);
             expect(band.parentOrganization).toEqual({ '@id': `${baseUrl}/#organization` });
-            expect(band.sameAs).toEqual([
-                'https://www.instagram.com/ukuleletuesday/',
-                'https://www.facebook.com/UkuleleTuesday',
-                'https://www.tripadvisor.com/Attraction_Review-g186605-d25399502-Reviews-Ukulele_Tuesday-Dublin_County_Dublin.html',
-                'https://www.youtube.com/c/UkuleleTuesday/videos',
-            ]);
+            // The band links the same profiles as the Organization (one list, in _macros/social-icons.html).
+            const organization = jsonLdContent['@graph'].find(item => item['@type'] === 'Organization');
+            expect(band.sameAs).toEqual(organization.sameAs);
+            expect(band.sameAs).toContain('https://open.spotify.com/artist/1I58ohDDrb0BK55KuVvtjM');
         });
     });
 }
