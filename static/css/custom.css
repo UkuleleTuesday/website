@@ -486,9 +486,12 @@
   .media-after-heading .wpbsctn { order: 4; }
 }
 
-/* Book Us page (#178): each offer is a home-page style row, copy on one side and
-   framed media (the theme's .youtube-embed and .img-border-* frames) on the other.
-   Offers without media yet (#200) keep the copy in the left two thirds. */
+/* Book Us page (#178): each offer reads the same way at every width, in one
+   centred column: heading, framed media (the theme's .youtube-embed and
+   .img-border-* frames) with its caption, then the copy, the practical details
+   and the closing line. The markup keeps the theme's two-column row so the frames
+   and spacing match the home page; the rules below stack it. Two columns on
+   desktop left a hole wherever copy and media differed in height (PR #201). */
 .offer-row {
   margin-bottom: 40px;
 }
@@ -586,30 +589,41 @@
   color: #6d7783;
 }
 
-/* On phones the columns stack in the home page's order: heading, media, then the
-   rest of the copy, whichever side the media sits on at desktop widths. */
-@media (max-width: 767px) {
-  .content-row.row-flex.offer-row > .col.col-copy,
-  .content-row.row-flex.offer-row > .col.col-copy > .col-inner,
-  .content-row.row-flex.offer-row > .col.col-copy > .col-inner > .col-content {
-    display: contents;
-  }
+/* The stack, in the home page's phone order: heading, media, then the rest of the
+   copy, whichever side the media sits on in the markup. The copy column is
+   flattened into the row's flex items so the heading can sit above the media. */
+.content-row.row-flex.offer-row {
+  max-width: 820px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
-  .content-row.row-flex.offer-row > .col.col-copy > .col-inner > .col-content > * {
-    width: 100%;
-    padding-left: 15px;
-    padding-right: 15px;
-    box-sizing: border-box;
-    order: 3;
-  }
+.content-row.row-flex.offer-row > .col.col-copy,
+.content-row.row-flex.offer-row > .col.col-copy > .col-inner,
+.content-row.row-flex.offer-row > .col.col-copy > .col-inner > .col-content {
+  display: contents;
+}
 
-  .content-row.row-flex.offer-row > .col.col-copy > .col-inner > .col-content > .section-heading {
-    order: 1;
-  }
+.content-row.row-flex.offer-row > .col.col-copy > .col-inner > .col-content > * {
+  width: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+  box-sizing: border-box;
+  order: 3;
+}
 
-  .content-row.row-flex.offer-row > .col.col-media {
-    order: 2;
-  }
+.content-row.row-flex.offer-row > .col.col-copy > .col-inner > .col-content > .section-heading {
+  order: 1;
+}
+
+.content-row.row-flex.offer-row > .col.col-media {
+  order: 2;
+  width: 100%;
+}
+
+/* lite-youtube caps itself at 720px; the frame is the column's width. */
+.offer-media lite-youtube {
+  max-width: none;
 }
 
 #enquire {
