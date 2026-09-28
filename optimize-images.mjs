@@ -32,7 +32,7 @@ const CONTENT_IMAGES = new Set([
   'Ukulele-Tuesday-Band-new.jpg',
   'Ukulele-Tuesday-play-along-Monopolele-2023.jpg',
   'Ukulele-Tuesday-community-group-Darkness-Into-Light.jpg',
-  'Ukulele-Tuesday-workshop-hands-close-up.jpg',
+  'Ukulele-Tuesday-songwriting-workshop-Galway-Uke-Fest-2026.jpg',
 ]);
 
 // WebP quality (0–100). 85 gives excellent quality with ~30 % size reduction vs JPEG.
