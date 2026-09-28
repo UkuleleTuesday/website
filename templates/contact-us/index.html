@@ -1,19 +1,19 @@
 {% extends "_layouts/base.html" %}
 {% block title %}Ukulele Tuesday Contact Form{% endblock %}
 {% block description %}
-  The Ukulele Tuesday contact form can be found here. We also monitor our social channels, but if you want to book a ukulele band, this page is your best bet.
+  Contact Ukulele Tuesday: book the band or a jam session for your event, ask about the Tuesday session in Dublin, or request accessibility help. Volunteers reply within a few days.
 {% endblock %}
 {% block canonical_url %}/contact-us/{% endblock %}
 {% block og_title %}Ukulele Tuesday Contact Form{% endblock %}
 {% block og_description %}
-  The Ukulele Tuesday contact form can be found here. We also monitor our social channels, but if you want to book a ukulele band, this page is your best bet.
+  Contact Ukulele Tuesday: book the band or a jam session for your event, ask about the Tuesday session in Dublin, or request accessibility help. Volunteers reply within a few days.
 {% endblock %}
 {% block og_url %}/contact-us/{% endblock %}
 {% block article_modified_time %}2022-08-15T21:41:51+00:00{% endblock %}
 {% block og_image %}/assets/images/Ukulele-Tuesday-Band-playing.jpg{% endblock %}
 {% block twitter_title %}Ukulele Tuesday Contact Form{% endblock %}
 {% block twitter_description %}
-  The Ukulele Tuesday contact form can be found here. We also monitor our social channels, but if you want to book a ukulele band, this page is your best bet.
+  Contact Ukulele Tuesday: book the band or a jam session for your event, ask about the Tuesday session in Dublin, or request accessibility help. Volunteers reply within a few days.
 {% endblock %}
 {% block twitter_image %}/assets/images/Ukulele-Tuesday-Band-playing.jpg{% endblock %}
 {% block twitter_reading_time %}1 minute{% endblock %}
@@ -27,6 +27,7 @@
   <style>
   #contact-form-wrapper input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]),
         #contact-form-wrapper textarea,#contact-form-wrapper select{border-radius:20px;}#contact-form-wrapper input[type="submit"]{border-radius:100px;}
+  #contact-form-wrapper select{width:100%;}
   </style>
 {% endblock %}
 {% block content %}
@@ -54,6 +55,31 @@
               <div class="col col-6">
                 <div class="col-inner">
                   <div class="col-content">
+                    <div class="text-block content-element text-normal" id="contact-intro">
+                      <p>
+                        Use this form to book us for a performance or a jam session at your
+                        event, to ask about the Tuesday session, to tell us about any
+                        accessibility needs, or for anything else.
+                      </p>
+                      <p>
+                        Ukulele Tuesday is run by volunteers, and one of our organisers reads
+                        every message. We usually reply by email within a few days; if your
+                        event is soon, say so in your message.
+                      </p>
+                      <h2 style="font-size:20px;line-height:28px;margin-bottom:12px">Other ways to reach us</h2>
+                      <ul>
+                        <li>
+                          <strong>Borrowing a ukulele on the night:</strong> send us a DM on
+                          <a href="https://www.instagram.com/ukuleletuesday/">Instagram</a> or
+                          <a href="https://www.facebook.com/UkuleleTuesday/">Facebook</a> and
+                          we’ll set a house uke aside for you.
+                        </li>
+                        <li>
+                          <strong>Regulars:</strong> join our
+                          <a href="/whatsapp/">WhatsApp community</a> for session news and chat.
+                        </li>
+                      </ul>
+                    </div>
                     <div class="contact-form contact-form-horizontal contact-form-md contact-form-btn contact-form-md-btn contact-form-fw-btn slideInRight contact-form-regular contact-form-no-transform slideInRight"
                          data-delay="15"
                          id="contact-form-wrapper"
@@ -111,6 +137,27 @@
                                        size="40"
                                        type="email"
                                        value="">
+                              </span>
+                            </label>
+                          </p>
+                          <p>
+                            <label>
+                              What are you enquiring about?
+                              <br>
+                              <span class="wpcf7-form-control-wrap" data-name="enquiry-type">
+                                <select aria-invalid="false"
+                                        aria-required="true"
+                                        class="wpcf7-form-control wpcf7-select wpcf7-validates-as-required"
+                                        name="enquiry-type"
+                                        required>
+                                  <option value="">Please choose…</option>
+                                  <option value="Performance booking">Performance booking</option>
+                                  <option value="Jam session or workshop at my event">Jam session or workshop at my event</option>
+                                  <option value="Tuesday session question">Tuesday session question</option>
+                                  <option value="Accessibility">Accessibility</option>
+                                  <option value="Press">Press</option>
+                                  <option value="Other">Other</option>
+                                </select>
                               </span>
                             </label>
                           </p>

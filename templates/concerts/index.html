@@ -30,6 +30,7 @@
   <style>
   #contact-form-wrapper input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]),
         #contact-form-wrapper textarea,#contact-form-wrapper select{border-radius:20px;}#contact-form-wrapper input[type="submit"]{border-radius:100px;}
+  #contact-form-wrapper select{width:100%;}
   </style>
 {% endblock %}
 {% block content %}
@@ -307,6 +308,27 @@
                                        size="40"
                                        type="email"
                                        value="">
+                              </span>
+                            </label>
+                          </p>
+                          <p>
+                            <label>
+                              What are you enquiring about?
+                              <br>
+                              <span class="wpcf7-form-control-wrap" data-name="enquiry-type">
+                                <select aria-invalid="false"
+                                        aria-required="true"
+                                        class="wpcf7-form-control wpcf7-select wpcf7-validates-as-required"
+                                        name="enquiry-type"
+                                        required>
+                                  <option value="">Please choose…</option>
+                                  <option selected value="Performance booking">Performance booking</option>
+                                  <option value="Jam session or workshop at my event">Jam session or workshop at my event</option>
+                                  <option value="Tuesday session question">Tuesday session question</option>
+                                  <option value="Accessibility">Accessibility</option>
+                                  <option value="Press">Press</option>
+                                  <option value="Other">Other</option>
+                                </select>
                               </span>
                             </label>
                           </p>
