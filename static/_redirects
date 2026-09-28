@@ -1,3 +1,4 @@
 # Netlify Redirects
 # Redirect donate page to Buy Me A Coffee (fallback for Edge Function)
 /donate https://buymeacoffee.com/ukuleletuesday?utm_source=screen&utm_medium=qr&utm_campaign=donate 302
+/faq/ /tuesday-session/#faq 301
