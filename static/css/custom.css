@@ -564,6 +564,11 @@
   scroll-margin-top: 90px;
 }
 
+/* The wave sits in the band's top 50px; keep the heading clear of it. */
+.entry-content #enquire.section-maroon {
+  padding-top: 100px !important;
+}
+
 .entry-content .banner-subtitle {
   max-width: 640px;
   margin: 12px auto 0;
