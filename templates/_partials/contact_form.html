@@ -85,13 +85,15 @@
       </p>
       <p>
         <label>
-          Your message (optional)
+          Your message
           <br>
           <span class="wpcf7-form-control-wrap" data-name="your-message">
-            <textarea class="wpcf7-form-control wpcf7-textarea"
+            <textarea aria-required="true"
+                      class="wpcf7-form-control wpcf7-textarea wpcf7-validates-as-required"
                       cols="40"
                       maxlength="2000"
                       name="your-message"
+                      required
                       rows="10"></textarea>
           </span>
         </label>
