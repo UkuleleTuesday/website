@@ -1,3 +1,4 @@
+{% from "_macros/social-icons.html" import social_profiles %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -10,8 +11,33 @@
       "logo": {
         "@type": "ImageObject",
         "url": "{{ base_url }}/assets/images/ut-icon-white-green.png"
+      },
+      "sameAs": [
+        {% for url in social_profiles.values() %}
+        "{{ url }}"{% if not loop.last %},{% endif %}
+        {% endfor %}
+      ]
+    },
+    {% if page_url in ['/', '/tuesday-session/'] %}
+    {# The session venue. static/js/calendar.js copies it into the Events it adds for play-alongs held here. #}
+    {
+      "@type": "Place",
+      "@id": "{{ base_url }}/#stags-head",
+      "name": "The Stag's Head",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "1 Dame Court",
+        "addressLocality": "Dublin",
+        "postalCode": "D02 TW84",
+        "addressCountry": "IE"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 53.3438,
+        "longitude": -6.2658
       }
     },
+    {% endif %}
     {
       "@type": "WebSite",
       "@id": "{{ base_url }}/#website",
