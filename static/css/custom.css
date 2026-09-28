@@ -508,15 +508,67 @@
   text-align: center;
 }
 
-/* Facts: label and value pairs, set as a small table. Labels in the theme's
-   label grey, hairline rules between rows; nothing else. */
+/* Practical details: a native disclosure per offer, closed by default, holding
+   the label and value pairs as a small table. Labels in the theme's label grey,
+   hairline rules between rows; nothing else. */
+.entry-content .offer-details {
+  margin: 0 0 35px;
+  border-top: 1px solid #dfe3e6;
+  border-bottom: 1px solid #dfe3e6;
+}
+
+.entry-content .offer-details summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+
+.entry-content .offer-details summary::-webkit-details-marker {
+  display: none;
+}
+
+/* The disclosure's own marker does not survive the theme's resets: a plus that
+   becomes a minus says what the row does. */
+.entry-content .offer-details summary::after {
+  content: "+";
+  margin-left: 15px;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1;
+  color: #006566;
+}
+
+.entry-content .offer-details[open] summary::after {
+  content: "\2212";
+}
+
+.entry-content .offer-details summary:hover {
+  color: #006566;
+}
+
+.entry-content .offer-details summary:focus-visible {
+  outline: 2px solid #006566;
+  outline-offset: 2px;
+}
+
+.entry-content .offer-details[open] summary {
+  border-bottom: 1px solid #dfe3e6;
+}
+
 .entry-content .offer-facts {
   display: grid;
   grid-template-columns: minmax(auto, 10.5em) 1fr;
   column-gap: 20px;
-  margin: 0 0 35px;
+  margin: 0;
   padding: 0;
-  border-top: 1px solid #dfe3e6;
+}
+
+.entry-content .offer-facts > div:last-child > * {
+  border-bottom: 0;
 }
 
 .entry-content .offer-facts > div {
