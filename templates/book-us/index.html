@@ -1,0 +1,379 @@
+{% extends "_layouts/base.html" %}
+{% from "_macros/video.html" import youtube_video %}
+{% from "_macros/images.html" import content_picture %}
+{% block title %}Ukulele band for festivals and events in Ireland | Ukulele Tuesday{% endblock %}
+{% block description %}
+  A 12-piece ukulele band from Dublin for festivals and events across Ireland. Book the band, a play-along jam session for your crowd, or a workshop.
+{% endblock %}
+{% block canonical_url %}/book-us/{% endblock %}
+{% block og_title %}Book Ukulele Tuesday{% endblock %}
+{% block og_description %}
+  A 12-piece ukulele band from Dublin for festivals and events across Ireland. Book the band, a play-along jam session for your crowd, or a workshop.
+{% endblock %}
+{% block og_url %}/book-us/{% endblock %}
+{% block article_modified_time %}2026-09-27T00:00:00+00:00{% endblock %}
+{% block og_image %}/assets/images/Ukulele-Tuesday-Band-playing.jpg{% endblock %}
+{% block twitter_title %}Book Ukulele Tuesday{% endblock %}
+{% block twitter_description %}
+  A 12-piece ukulele band from Dublin for festivals and events across Ireland. Book the band, a play-along jam session for your crowd, or a workshop.
+{% endblock %}
+{% block twitter_image %}/assets/images/Ukulele-Tuesday-Band-playing.jpg{% endblock %}
+{% block twitter_reading_time %}3 minutes{% endblock %}
+{% block lcp_preload %}
+  <link as="image"
+        href="/assets/images/banner-ukulele-tuesday-mic-crowd.avif"
+        rel="preload"
+        type="image/avif">
+{% endblock %}
+{% block extra_head %}
+  <link href="/vendor/lite-youtube-embed/lite-yt-embed.css" rel="stylesheet">
+  <style>
+  #contact-form-wrapper input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+        #contact-form-wrapper textarea,#contact-form-wrapper select{border-radius:20px;}#contact-form-wrapper input[type="submit"]{border-radius:100px;}
+  </style>
+{% endblock %}
+{% block content %}
+  <main class="site-main full-width-container no no no"
+        id="page-main"
+        role="main">
+    <div class="site-container">
+      <div class="article_ctn">
+        <article class="page type-page status-publish hentry" id="page-book-us">
+          <header class="entry-content-header">
+          </header>
+          <div class="entry-content">
+            {% set banner_title = "Book Us" %}
+            {% set banner_subtitle = "Ukulele Tuesday is available for a variety of events across Ireland and abroad, including festivals, play-along sessions, and workshops." %}
+            {% set banner_image_url = "/assets/images/banner-ukulele-tuesday-mic-crowd.jpg" %}
+            {% set banner_class = "banner-padding mb-25" %}
+            {% include "_partials/banner.html" %}
+            <div class="row-full-width clearfix"></div>
+            {# Each offer is one centred column at every width (heading, framed media and caption, then the copy): the markup keeps the theme's two-column row for its frames and spacing, custom.css stacks it. #}
+            <div class="content-row mt-25 row-flex offer-row" id="the-band">
+              <div class="col col-6 col-copy">
+                <div class="col-inner">
+                  <div class="col-content">
+                    <h2 class="text-normal section-heading"
+                        style="text-align: left;
+                               letter-spacing:0px">Festivals and other gigs</h2>
+                    <div class="text-block content-element text-normal">
+                      <div class="col-content">
+                        <p>
+                          Our gig group consists of a core of ukulelists playing rhythm, riffs, and shredding solos, backed by bass and cajón and led by strong vocalists and lush harmonies. Many of our members are multi-instrumentalists, so expect a melodica, saxophone, or tin whistle to make an appearance. We lean into songs you wouldn’t expect on the ukulele, getting audiences dancing with our high-energy covers.
+                        </p>
+                        <p>
+                          We customise sets to fit the event, from family-friendly afternoons to late-night sessions. We’re used to festival stages, tight changeovers, and shared equipment, but we’re also experienced setting up ourselves and can supply mics, stands, DI boxes or cables as needed.
+                        </p>
+                      </div>
+                    </div>
+                    <details class="offer-details">
+                      <summary>Practical details</summary>
+                      <dl class="offer-facts">
+                        <div>
+                          <dt>What to expect</dt>
+                          <dd>
+                            A full live band playing high-energy covers that get the crowd dancing.
+                          </dd>
+                        </div>
+                        <div>
+                          <dt>Set length</dt>
+                          <dd>
+                            30 to 60 minutes
+                          </dd>
+                        </div>
+                        <div>
+                          <dt>Where</dt>
+                          <dd>
+                            Ireland and abroad
+                          </dd>
+                        </div>
+                        <div>
+                          <dt>You provide</dt>
+                          <dd>
+                            A stage with room for 12 musicians, and a PA with vocal mics, DI inputs and monitors
+                          </dd>
+                        </div>
+                        <div>
+                          <dt>We provide</dt>
+                          <dd>
+                            Mics, stands, DI boxes or cables as needed
+                          </dd>
+                        </div>
+                        <div>
+                          <dt>Cost</dt>
+                          <dd>
+                            On enquiry
+                          </dd>
+                        </div>
+                      </dl>
+                    </details>
+                    <div class="text-block content-element text-normal">
+                      <div class="col-content">
+                        <p>
+                          Programming a stage and want something crowd-pleasing, a little unusual and instantly accessible? Fill in <a href="#enquire">the form below</a> and include your date, location and setup, and we’ll come back to you on availability and fees.
+                        </p>
+                        <p>
+                          Weddings and private parties aren’t usually our thing, but feel free to reach out and we’ll see if there’s a fit.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col col-6 col-media">
+                <div class="col-inner mt-15">
+                  <div class="col-content">
+                    <figure class="offer-media">
+                      <div class="video-embed youtube-embed">
+                        {{ youtube_video('t7B2ez6Uodk', 'Ukulele Tuesday playing Dreams live with Daniel Ho at Monopolele 2026') }}
+                      </div>
+                      <figcaption>
+                        Sharing the stage with six-time Grammy winner Daniel Ho: Dreams, live at Monopolele Festival 2026
+                      </figcaption>
+                    </figure>
+                  </div>
+                </div>
+              </div>
+              <div class="tt-shape tt-shape-top" data-negative="false"></div>
+              <div class="tt-shape tt-shape-bottom" data-negative="false"></div>
+            </div>
+            {# A better photo may exist for this one: ideally the crowd playing ukulele along with us, which is the offer; this one shows the stage and the screen. -#}
+            <div class="content-row mt-25 row-flex offer-row" id="play-along-session">
+              <div class="col col-6 col-media">
+                <div class="col-inner mt-15">
+                  <div class="col-content">
+                    <figure class="offer-media">
+                      <div class="image-block align-center img-border-green">
+                        <div class="image-wrapper">
+                          {{ content_picture("Ukulele-Tuesday-play-along-Monopolele-2023",
+                                                    "Ukulele Tuesday leading a play-along on the port of Monopoli at night: the band on stage, the chords on a big screen and a crowd playing along",
+                                                    667,
+                                                    "(max-width: 767px) 100vw, 555px") }}
+                        </div>
+                      </div>
+                      <figcaption>Leading a play-along on the port of Monopoli, Monopolele Festival 2023</figcaption>
+                    </figure>
+                  </div>
+                </div>
+              </div>
+              <div class="col col-6 col-copy">
+                <div class="col-inner">
+                  <div class="col-content">
+                    <h2 class="text-normal section-heading"
+                        style="text-align: left;
+                               letter-spacing:0px">A play-along session for your crowd</h2>
+                    <div class="text-block content-element text-normal">
+                      <div class="col-content">
+                        <p>
+                          Every Tuesday, we fill a room with people playing along to songs on a big screen, and we’d love to bring that same craic to your festival or event! We are happy to lead a jam session or play-along as part of your festival.
+                        </p>
+                        <p>
+                          This can be anything from a lightweight jam session to the full Tuesday experience with proper sound, face-melting solos, and a room playing and singing its head off.
+                        </p>
+                        <p>
+                          We build a songbook for your event from our classics, pitched at your crowd, like <a href="https://songbooks.ukuleletuesday.ie/ukulele-hooley-2026"
+    rel="noopener"
+    target="_blank">the one we made for the Ukulele Hooley 2026</a>. Attendees bring their own ukuleles.
+                        </p>
+                      </div>
+                    </div>
+                    <details class="offer-details">
+                      <summary>Practical details</summary>
+                      <dl class="offer-facts">
+                        <div>
+                          <dt>What to expect</dt>
+                          <dd>
+                            Your crowd plays along on a big screen, from a minimal jam to full sound.
+                          </dd>
+                        </div>
+                        <div>
+                          <dt>Set length</dt>
+                          <dd>
+                            1 to 2 hours
+                          </dd>
+                        </div>
+                        <div>
+                          <dt>You provide</dt>
+                          <dd>
+                            A venue for any size of crowd, a screen or projector if you have one, and a word on how experienced your crowd is
+                          </dd>
+                        </div>
+                        <div>
+                          <dt>We provide</dt>
+                          <dd>
+                            A custom songbook pitched at your crowd, shown on screen, with printed songbooks or a projector on request
+                          </dd>
+                        </div>
+                        <div>
+                          <dt>Cost</dt>
+                          <dd>
+                            On enquiry
+                          </dd>
+                        </div>
+                      </dl>
+                    </details>
+                    <div class="text-block content-element text-normal">
+                      <div class="col-content">
+                        <p>
+                          Interested? Fill in <a href="#enquire">the form below</a> and include details about the crowd, the room, and the date required.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tt-shape tt-shape-top" data-negative="false"></div>
+              <div class="tt-shape tt-shape-bottom" data-negative="false"></div>
+            </div>
+            {# No media for the next two offers yet (#200): the copy keeps the left two thirds. #}
+            <div class="content-row mt-25 row-flex offer-row" id="community-events">
+              <div class="col col-6 col-copy">
+                <div class="col-inner">
+                  <div class="col-content">
+                    <h2 class="text-normal section-heading"
+                        style="text-align: left;
+                               letter-spacing:0px">Live music for charity and community events</h2>
+                    <div class="text-block content-element text-normal">
+                      <div class="col-content">
+                        <p>
+                          We also play smaller events where live music makes a difference, like charity fundraisers, community meetups, and Christmas concerts.
+                        </p>
+                        <p>
+                          These are performed by members of the wider Ukulele Tuesday community. You’ll get a bigger, looser set with plenty of singing and a warm, informal tone rather than a polished show. It’s how our members share the session with their communities and give something back.
+                        </p>
+                      </div>
+                    </div>
+                    <details class="offer-details">
+                      <summary>Practical details</summary>
+                      <dl class="offer-facts">
+                        <div>
+                          <dt>What to expect</dt>
+                          <dd>
+                            A big, informal group of our members, fully acoustic or projected through a PA.
+                          </dd>
+                        </div>
+                        <div>
+                          <dt>Set length</dt>
+                          <dd>
+                            Typical maximum 90 minutes
+                          </dd>
+                        </div>
+                        <div>
+                          <dt>You provide</dt>
+                          <dd>
+                            Somewhere to play
+                          </dd>
+                        </div>
+                        <div>
+                          <dt>We provide</dt>
+                          <dd>
+                            Our own minimal PA if the set needs amplifying
+                          </dd>
+                        </div>
+                        <div>
+                          <dt>Cost</dt>
+                          <dd>
+                            Usually free for charities and good causes
+                          </dd>
+                        </div>
+                      </dl>
+                    </details>
+                    <div class="text-block content-element text-normal">
+                      <div class="col-content">
+                        <p>
+                          Organising a fundraiser, a community celebration or a local event? Use <a href="#enquire">the form below</a> and tell us about it.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col col-6 col-media">
+                <div class="col-inner mt-15">
+                  <div class="col-content">
+                    <figure class="offer-media">
+                      <div class="image-block align-center img-border-maroon">
+                        <div class="image-wrapper">
+                          {{ content_picture("Ukulele-Tuesday-community-group-Darkness-Into-Light",
+                                                    "Ukulele Tuesday's community group, about twenty people with ukuleles, in front of a lit gazebo at dawn in Marlay Park",
+                                                    667,
+                                                    "(max-width: 767px) 100vw, 555px") }}
+                        </div>
+                      </div>
+                      <figcaption>The community group playing for Pieta's Darkness Into Light walk at dawn in Marlay Park, 2025</figcaption>
+                    </figure>
+                  </div>
+                </div>
+              </div>
+              <div class="tt-shape tt-shape-top" data-negative="false"></div>
+              <div class="tt-shape tt-shape-bottom" data-negative="false"></div>
+            </div>
+            {# Workshops are new to us, so there is no settled format, length, group size or price to state
+               yet. That is why this section has no "Practical details" table: add one once
+               we have run enough workshops to know the facts. -#}
+            <div class="content-row mt-25 row-flex offer-row" id="workshops">
+              <div class="col col-6 col-media">
+                <div class="col-inner mt-15">
+                  <div class="col-content">
+                    <figure class="offer-media">
+                      <div class="image-block align-center img-border-yellow">
+                        <div class="image-wrapper">
+                          {{ content_picture("Ukulele-Tuesday-songwriting-workshop-Galway-Uke-Fest-2026",
+                                                    "One of our members leading a songwriting workshop in a striped festival tent, arms wide, in front of a seated group holding ukuleles",
+                                                    667,
+                                                    "(max-width: 767px) 100vw, 555px") }}
+                        </div>
+                      </div>
+                      <figcaption>One of our members running a songwriting workshop at Galway Uke Fest 2026</figcaption>
+                    </figure>
+                  </div>
+                </div>
+              </div>
+              <div class="col col-6 col-copy">
+                <div class="col-inner">
+                  <div class="col-content">
+                    <h2 class="text-normal section-heading"
+                        style="text-align: left;
+                               letter-spacing:0px">Workshops</h2>
+                    <div class="text-block content-element text-normal">
+                      <div class="col-content">
+                        <p>
+                          Thinking about booking Ukulele Tuesday for a festival? Consider adding a workshop! Our members have years of experience with performing, jamming, arranging, songwriting, and mixing music, and can turn any of it into a hands-on group class. Just mention what you’re looking for in <a href="#enquire">the form below</a>, and we’ll find the right fit in our community.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tt-shape tt-shape-top" data-negative="false"></div>
+              <div class="tt-shape tt-shape-bottom" data-negative="false"></div>
+            </div>
+            <div class="content-row section-maroon row-fill"
+                 data-vc-full-width="true"
+                 id="enquire">
+              <div class="col col-12">
+                <div class="col-inner">
+                  <div class="col-content">
+                    <h2 class="text-normal section-heading"
+                        style="font-size: 36px;
+                               color: #ffffff;
+                               line-height: 42px;
+                               text-align: left;
+                               letter-spacing:0px">Tell us about your event</h2>
+                    {% include "_partials/contact_form.html" %}
+                  </div>
+                </div>
+              </div>
+              <div class="tt-shape tt-shape-top" data-negative="false">{% include "_partials/shape-divider.html" %}</div>
+              <div class="tt-shape tt-shape-bottom" data-negative="false"></div>
+            </div>
+          </div>
+          <!-- .entry-content -->
+          <footer class="entry-footer">
+          </footer>
+        </article>
+      </div>
+    </div>
+  </main>
+{% endblock %}
+{% block extra_scripts %}<script defer src="/vendor/lite-youtube-embed/lite-yt-embed.js"></script>{% endblock %}

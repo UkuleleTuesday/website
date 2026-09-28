@@ -9,11 +9,10 @@ const baseUrl = process.env.BASE_URL || 'https://www.ukuleletuesday.ie';
 const expectedBreadcrumbs = {
     'index.html': [{ name: 'Home', url: '/' }],
     'code-of-conduct/index.html': [{ name: 'Home', url: '/' }, { name: 'Code Of Conduct', url: '/code-of-conduct/' }],
-    'concerts/index.html': [{ name: 'Home', url: '/' }, { name: 'Concerts', url: '/concerts/' }],
+    'book-us/index.html': [{ name: 'Home', url: '/' }, { name: 'Book Us', url: '/book-us/' }],
     'contact-us/index.html': [{ name: 'Home', url: '/' }, { name: 'Contact Us', url: '/contact-us/' }],
     'faq/index.html': [{ name: 'Home', url: '/' }, { name: 'Faq', url: '/faq/' }],
     'songbook/index.html': [{ name: 'Home', url: '/' }, { name: 'Songbook', url: '/songbook/' }],
-    'testimonials/index.html': [{ name: 'Home', url: '/' }, { name: 'Testimonials', url: '/testimonials/' }],
     'tuesday-session/index.html': [{ name: 'Home', url: '/' }, { name: 'Tuesday Session', url: '/tuesday-session/' }],
     'whatsapp/index.html': [{ name: 'Home', url: '/' }, { name: 'Whatsapp', url: '/whatsapp/' }],
 };
@@ -94,6 +93,23 @@ for (const templateFile of templateFiles) {
                     });
                 }
             });
+        });
+
+        test('should carry the MusicGroup schema on the Book Us page only', () => {
+            const band = jsonLdContent['@graph'].find(item => item['@type'] === 'MusicGroup');
+            if (templateFile !== 'book-us/index.html') {
+                expect(band, 'Only the Book Us page describes the band.').toBeUndefined();
+                return;
+            }
+            expect(band, 'The Book Us page should describe the band.').toBeDefined();
+            expect(band['@id']).toBe(`${baseUrl}/#band`);
+            expect(band.name).toBe('Ukulele Tuesday');
+            expect(band.url).toBe(`${baseUrl}/book-us/`);
+            expect(band.parentOrganization).toEqual({ '@id': `${baseUrl}/#organization` });
+            // The band links the same profiles as the Organization (one list, in _macros/social-icons.html).
+            const organization = jsonLdContent['@graph'].find(item => item['@type'] === 'Organization');
+            expect(band.sameAs).toEqual(organization.sameAs);
+            expect(band.sameAs).toContain('https://open.spotify.com/artist/1I58ohDDrb0BK55KuVvtjM');
         });
     });
 }
