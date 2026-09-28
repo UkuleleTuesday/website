@@ -107,7 +107,7 @@ test.describe('Calendar Netlify Function Tests', () => {
         
         // Test the fields parameter contains ONLY the required fields
         const fieldsParam = url.searchParams.get('fields');
-        expect(fieldsParam).toBe('items(summary,description,location,start(dateTime,date))');
+        expect(fieldsParam).toBe('items(summary,description,location,start(dateTime,date),end(dateTime,date))');
         
         // Verify it's requesting the essential fields
         expect(fieldsParam).toContain('summary');
@@ -157,7 +157,6 @@ test.describe('Calendar Netlify Function Tests', () => {
         expect(fieldsParam).not.toContain('creator');
         expect(fieldsParam).not.toContain('organizer');
         expect(fieldsParam).not.toContain('iCalUID');
-        expect(fieldsParam).not.toContain('end'); // We only need start time, not end time
         expect(fieldsParam).not.toContain('sequence');
         expect(fieldsParam).not.toContain('status');
         expect(fieldsParam).not.toContain('recurringEventId');

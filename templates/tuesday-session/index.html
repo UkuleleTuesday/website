@@ -269,4 +269,6 @@
     <!-- .container -->
   </main>
 {% endblock %}
-{% block extra_scripts %}{% endblock %}
+{% block extra_scripts %}
+  {% if calendar_enabled %}<script src="/js/calendar.js"></script>{% endif %}
+{% endblock %}

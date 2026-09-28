@@ -1,9 +1,17 @@
 {# Social icons macro using inline SVG markup (paths sourced from Simple Icons) #}
+{# Social profile URLs, shared by the icons below and the Organization sameAs in _partials/json_ld.html #}
+{% set social_profiles = {
+  "instagram": "https://www.instagram.com/ukuleletuesday/",
+  "facebook": "https://www.facebook.com/UkuleleTuesday",
+  "youtube": "https://www.youtube.com/c/UkuleleTuesday",
+  "spotify": "https://open.spotify.com/artist/1I58ohDDrb0BK55KuVvtjM",
+  "tripadvisor": "https://www.tripadvisor.com/Attraction_Review-g186605-d25399502-Reviews-Ukulele_Tuesday-Dublin_County_Dublin.html"
+} %}
 {% macro social_icons(variant="default") %}
   <span class="social-icons{% if variant == 'simple' %} social-icons--simple{% endif %}">
     <a aria-label="Instagram"
        class="social-icon social-icon--instagram"
-       href="https://www.instagram.com/ukuleletuesday/"
+       href="{{ social_profiles.instagram }}"
        rel="noopener noreferrer"
        target="_blank">
       <svg class="social-icon-svg"
@@ -16,7 +24,7 @@
     </a>
     <a aria-label="Facebook"
        class="social-icon social-icon--facebook"
-       href="https://www.facebook.com/UkuleleTuesday"
+       href="{{ social_profiles.facebook }}"
        rel="noopener noreferrer"
        target="_blank">
       <svg class="social-icon-svg"
@@ -40,7 +48,7 @@
     </a>
     <a aria-label="TripAdvisor"
        class="social-icon social-icon--tripadvisor"
-       href="https://www.tripadvisor.com/Attraction_Review-g186605-d25399502-Reviews-Ukulele_Tuesday-Dublin_County_Dublin.html"
+       href="{{ social_profiles.tripadvisor }}"
        rel="noopener noreferrer"
        target="_blank">
       <svg class="social-icon-svg"
@@ -53,7 +61,7 @@
     </a>
     <a aria-label="YouTube"
        class="social-icon social-icon--youtube"
-       href="https://www.youtube.com/c/UkuleleTuesday/videos"
+       href="{{ social_profiles.youtube }}"
        rel="noopener noreferrer"
        target="_blank">
       <svg class="social-icon-svg"
