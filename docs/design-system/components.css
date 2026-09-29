@@ -1,0 +1,223 @@
+/* Ukulele Tuesday: the target component styles (see README.md).
+   Every value is a token from tokens.json; static/css/custom.css declares them
+   as custom properties with the same names. The site doesn't load this file:
+   port a component into custom.css when a page first needs it. The fonts are
+   loaded by templates/_layouts/base.html (add Poppins 500 there for the header's
+   small button). */
+
+/* ---------- Base ---------- */
+body { color: var(--slate); font: 400 15px/24px var(--font-body); }
+a { color: var(--teal-deep); text-decoration: underline; text-underline-offset: 2px; transition: color 0.2s ease; }
+a:hover { color: var(--maroon); }
+::selection { background: var(--sun); color: var(--ink); }
+
+/* ---------- Prose ---------- */
+.prose {
+  max-width: var(--measure);
+  color: var(--slate);
+  font: 400 15px/24px var(--font-body);
+}
+.prose h2 { margin: 0 0 var(--space-3); font: 700 30px/36px var(--font-heading); color: var(--ink); }
+.prose h3 { margin: var(--space-3) 0 var(--space-1); font: 700 18px/27px var(--font-body); color: var(--ink); }
+.prose p, .prose ul { margin: 0 0 var(--space-2); }
+.prose ul { padding-left: 1.2em; list-style: disc; }
+.prose li { margin: 0 0 6px; }
+.prose .lead { font-size: 18px; line-height: 26px; }
+.prose a { color: var(--teal-deep); text-decoration: underline; text-underline-offset: 2px; transition: color 0.2s ease; }
+.prose a:hover { color: var(--maroon); }
+
+/* ---------- Focus ring ---------- */
+:focus-visible { outline: 2px solid var(--teal-deep); outline-offset: 2px; }
+.banner :focus-visible, .band--maroon :focus-visible, .site-header :focus-visible { outline-color: var(--surface); }
+.band:not(.band--maroon) :focus-visible { outline-color: var(--ink); }
+
+/* ---------- Button ---------- */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: var(--button-height);
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--sun);
+  box-shadow: var(--shadow-button);
+  color: var(--ink);
+  font: 700 16px/24px var(--font-body);
+  letter-spacing: 0;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+.button:hover { background: var(--teal-deep); box-shadow: none; color: var(--surface); }
+.button:focus-visible { outline: 2px solid var(--teal-deep); outline-offset: 2px; }
+.button--light { background: var(--surface); color: var(--slate); }
+.button--light:hover { background: var(--maroon); color: var(--surface); }
+.button--light:focus-visible { outline-color: var(--surface); }
+.button--small { min-width: 160px; min-height: var(--button-height-small); padding: 0 var(--space-3); box-shadow: none; font: 500 13px/20px var(--font-body); letter-spacing: 1px; }
+.button--block { display: flex; width: 100%; }
+.button-row { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
+
+/* ---------- Banner ---------- */
+.banner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6) var(--space-2);
+  overflow: hidden;
+  background-color: var(--maroon);
+  background-image: var(--banner-photo);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed; /* Decision 3: the photo stays still while the page scrolls */
+  color: var(--surface);
+  text-align: center;
+}
+.banner::after { content: ""; position: absolute; inset: 0; background: var(--maroon-wash); }
+.banner > * { position: relative; z-index: 1; }
+.banner h1 { margin: 0; font: 400 60px/72px var(--font-display); color: var(--surface); }
+.banner-subtitle { max-width: 640px; margin: var(--space-1) 0 0; font: 400 18px/26px var(--font-body); }
+.banner a:not(.button):not(.banner-pill) { color: var(--surface); text-decoration: underline; }
+.banner a:not(.button):not(.banner-pill):hover { color: var(--sun); }
+.banner .button-row { justify-content: center; margin-top: var(--space-3); }
+.banner--home { min-height: 600px; padding-top: var(--space-4); padding-bottom: var(--space-4); }
+.banner-pill {
+  display: block;
+  box-sizing: border-box;
+  width: min(360px, 100%);
+  margin-top: var(--space-3);
+  padding: var(--space-1) var(--space-2);
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  box-shadow: var(--shadow-raised);
+  color: var(--ink);
+  font: 600 15px/22px var(--font-body);
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.banner-pill:hover { color: var(--teal-deep); }
+@media (max-width: 767px) {
+  .banner .button-row { flex-direction: column; }
+}
+
+/* ---------- Band ---------- */
+.band {
+  position: relative;
+  padding: var(--space-5) var(--space-2) calc(var(--space-5) + 50px);
+  background: var(--teal);
+  color: var(--ink);
+  text-align: center;
+}
+.band--wave-top { padding-top: calc(var(--space-5) + 50px); padding-bottom: var(--space-5); }
+.band-text { max-width: var(--measure); margin: 0 auto; font: 700 30px/36px var(--font-heading); }
+.band-body { max-width: var(--measure); margin: 0 auto; text-align: left; }
+.band-body h2 { margin: 0 0 var(--space-3); font: 700 30px/36px var(--font-heading); color: inherit; }
+.band--maroon { background: var(--maroon); color: var(--surface); }
+.band--maroon a { color: var(--surface); text-decoration: underline; }
+.band--maroon a:hover { color: var(--sun); }
+.band-wave { position: absolute; left: 0; right: 0; bottom: -1px; line-height: 0; transform: rotate(180deg); }
+.band--wave-top .band-wave { top: -1px; bottom: auto; transform: none; }
+.band-wave svg { display: block; width: 100%; height: 50px; }
+.band-wave path { fill: var(--surface); }
+
+/* ---------- Frame ---------- */
+.frame { margin: 0 0 var(--space-3); }
+.frame-media {
+  box-sizing: border-box;
+  border: var(--frame-width) solid var(--teal-deep);
+  border-radius: var(--radius-md);
+  background: var(--surface-soft);
+  line-height: 0;
+}
+.frame-media img, .frame-media iframe, .frame-media lite-youtube { display: block; width: 100%; max-width: none; height: auto; }
+.frame-media iframe { aspect-ratio: 16 / 9; border: 0; }
+.frame--maroon .frame-media { border-color: var(--maroon); }
+.frame--sun .frame-media { border-color: var(--sun); }
+.frame figcaption {
+  margin-top: var(--space-1);
+  padding: 0 var(--space-2);
+  color: var(--slate);
+  font: italic 400 13px/19px var(--font-body);
+  text-align: center;
+}
+
+/* ---------- Callout ---------- */
+.callout {
+  box-sizing: border-box;
+  margin: 0 0 var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-left: 4px solid var(--teal);
+  border-radius: var(--radius-sm);
+  background: var(--surface-soft);
+  color: var(--ink);
+  font: 400 15px/22px var(--font-body);
+  text-align: left;
+  transition: box-shadow 0.2s ease;
+}
+.callout--play-along { border-left-color: var(--sun); }
+.callout--concert { border-left-color: var(--maroon); }
+.callout--play-along.callout--highlight { background: var(--sun-tint); }
+.callout--concert.callout--highlight { background: var(--maroon-tint); }
+.callout-meta { display: block; margin-bottom: 4px; font-size: 14px; font-weight: 600; }
+.callout-title { display: block; font: 700 18px/26px var(--font-body); }
+.callout-detail { display: block; }
+.callout[role="button"] { cursor: pointer; }
+.callout[role="button"]:hover { box-shadow: var(--shadow-raised); }
+
+/* ---------- Details ---------- */
+.details { margin: 0 0 var(--space-3); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); color: var(--slate); font: 400 15px/24px var(--font-body); }
+.details summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-1) 0;
+  font-weight: 700;
+  list-style: none;
+  cursor: pointer;
+}
+.details summary::-webkit-details-marker { display: none; }
+.details summary::after { content: "+"; margin-left: var(--space-2); color: var(--teal-deep); font-size: 22px; font-weight: 400; line-height: 1; }
+.details[open] summary::after { content: "\2212"; }
+.details summary:hover { color: var(--teal-deep); }
+.details summary:focus-visible { outline: 2px solid var(--teal-deep); outline-offset: 2px; }
+.details[open] summary { border-bottom: 1px solid var(--line); }
+.details-body { padding: var(--space-1) 0; }
+.details-body p { margin: 0 0 var(--space-1); }
+.facts { display: grid; grid-template-columns: minmax(auto, 10.5em) 1fr; column-gap: var(--space-2); margin: 0; }
+.facts > div { display: contents; }
+.facts dt, .facts dd { margin: 0; padding: var(--space-1) 0; border-bottom: 1px solid var(--line); }
+.facts dt { color: var(--slate); }
+.facts > div:last-child > * { border-bottom: 0; }
+
+/* ---------- Field ---------- */
+.field { display: block; margin: 0 0 var(--space-3); font-family: var(--font-body); }
+.field-label { display: block; margin-bottom: var(--space-1); color: var(--slate); font: 400 15px/22px var(--font-body); }
+.field-input {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--control-height);
+  padding: 8px var(--space-2);
+  border: 1px solid var(--slate);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--ink);
+  font: 400 15px/24px var(--font-body);
+}
+textarea.field-input { min-height: 160px; resize: vertical; }
+.field-input:focus-visible { border-color: var(--teal-deep); outline: 2px solid var(--teal-deep); outline-offset: 2px; }
+.field-hint { display: block; margin-top: 6px; color: var(--slate); font: 400 13px/19px var(--font-body); }
+.field-error { display: block; margin-top: 6px; color: var(--danger); font: 600 13px/19px var(--font-body); }
+.field-input[aria-invalid="true"] { border-color: var(--danger); }
+.field-check { display: flex; gap: var(--space-1); align-items: flex-start; color: var(--slate); font: 400 15px/24px var(--font-body); }
+.field-check input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--teal-deep); }
+.band--maroon .field-label, .band--maroon .field-check, .band--maroon .field-hint, .band--maroon .field-error { color: var(--surface); }
+.band--maroon .field-input:focus-visible { outline-color: var(--surface); }

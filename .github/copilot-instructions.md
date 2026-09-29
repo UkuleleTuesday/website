@@ -6,6 +6,8 @@ This repository contains a static website built with Python 3.12+, Jinja2 templa
 
 Before changing copy, navigation or page structure, read the **Purpose** section of `README.md`.
 
+Before changing styles, copy or markup, read `docs/design-system/README.md`. It describes the target look and voice; the templates still contain a lot of the old WordPress theme, so check `docs/design-system/retired.md` before copying anything from an existing page. Use the tokens (`var(--teal-deep)`, declared in `static/css/custom.css`) instead of raw values.
+
 ## Pre-configured Environment
 
 Your development environment is automatically configured with:

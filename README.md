@@ -21,6 +21,10 @@ Don't:
 - Add a page, section or menu item because the content exists.
 - Greet or be clever where a visitor needs a literal answer: the H1, a page title, a button label.
 
+## Design system
+
+[`docs/design-system/`](docs/design-system/README.md) describes how the site should look and sound: the voice and copy rules, colour, type, spacing, the eight components, and the decisions that still need someone to make them. It describes the target, not the current templates: where a template disagrees, the design system wins. Read it before changing styles, copy or markup, and check its [Retired](docs/design-system/retired.md) list before copying anything from an existing page.
+
 ## Overview
 
 The initial version of this site was created on WordPress.

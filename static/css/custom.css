@@ -1,3 +1,51 @@
+/* Design tokens: the values in docs/design-system/tokens.json, as custom
+   properties. Use var(--name) in new CSS instead of a raw value; change a
+   value in tokens.json and here together. See docs/design-system/README.md. */
+:root {
+  /* Colour */
+  --surface: #ffffff;
+  --surface-soft: #f9f9f9;
+  --ink: #293340;
+  --slate: #6d7783;
+  --line: #dfe3e6;
+  --teal: #1db1ad;
+  --teal-deep: #006566;
+  --maroon: #66023c;
+  --maroon-wash: rgba(102, 2, 60, 0.75);
+  --maroon-tint: #f7eef3;
+  --sun: #efa537;
+  --sun-tint: #fdf4e6;
+  --night: #1e2228;
+  --on-night: #aeb7c1;
+  --danger: #d32f2f;
+  /* Type */
+  --font-display: 'Pattaya', 'Quicksand', sans-serif;
+  --font-heading: 'Quicksand', 'Poppins', sans-serif;
+  --font-body: 'Poppins', system-ui, sans-serif;
+  /* Space */
+  --space-1: 10px;
+  --space-2: 15px;
+  --space-3: 25px;
+  --space-4: 40px;
+  --space-5: 60px;
+  --space-6: 90px;
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 10px;
+  --radius-lg: 20px;
+  --radius-pill: 100px;
+  /* Size */
+  --measure: 820px;
+  --page-max: 1250px;
+  --frame-width: 15px;
+  --button-height: 64px;
+  --button-height-small: 40px;
+  --control-height: 42px;
+  /* Shadow */
+  --shadow-button: 0 14px 28px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.05);
+  --shadow-raised: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
 /* Full-width rows */
 .content-row[data-vc-full-width="true"] {
   width: 100vw;
