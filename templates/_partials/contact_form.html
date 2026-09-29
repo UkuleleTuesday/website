@@ -7,6 +7,12 @@
   pages. Netlify Forms registers the fields from the built HTML, so both pages
   must post the same field names. The "enquiry-type" select is how booking
   demand gets counted by offer (issues #178 and #191).
+
+  There is no Subject field: the dropdown already says what the enquiry is
+  about. The hidden "subject" field sets the subject line of Netlify's
+  notification email instead, and /js/contact-form.js fills it in from the
+  dropdown and the sender's name when the form is sent. Without JavaScript the
+  static value stays, and the submission ID keeps each email in its own thread.
 #}
 <div class="contact-form contact-form-horizontal contact-form-md contact-form-btn contact-form-md-btn contact-form-fw-btn contact-form-regular contact-form-no-transform"
      id="contact-form-wrapper"
@@ -25,6 +31,9 @@
           netlify-honeypot="bot-field"
           id="contact">
       <input name="form-name" type="hidden" value="contact">
+      <input name="subject"
+             type="hidden"
+             value="Website enquiry (%{submissionId})">
       <p>
         <label>
           Your name
@@ -72,21 +81,6 @@
       </p>
       <p>
         <label>
-          Subject
-          <br>
-          <span class="wpcf7-form-control-wrap" data-name="your-subject">
-            <input aria-required="true"
-                   class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required"
-                   maxlength="400"
-                   name="your-subject"
-                   required
-                   size="40"
-                   type="text">
-          </span>
-        </label>
-      </p>
-      <p>
-        <label>
           Your message
           <br>
           <span class="wpcf7-form-control-wrap" data-name="your-message">
@@ -114,3 +108,4 @@
     </form>
   </div>
 </div>
+<script defer src="/js/contact-form.js"></script>
