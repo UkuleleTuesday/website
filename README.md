@@ -157,6 +157,29 @@ To run the hooks on all files at any time:
 uvx pre-commit run --all-files
 ```
 
+### Running the Tests
+
+The functional [Playwright](https://playwright.dev/) suites in `tests/` cover SEO data, mobile navigation, the calendar, the donate flow, YouTube embeds, analytics and a console-errors check on every page. CI runs them on every pull request in three projects: `chromium`, `Android (Chrome, Pixel 7)` and `iOS (Mobile Safari, iPhone 13)`.
+
+They test the built site in `public/`, so build it the way CI does first:
+
+```bash
+pnpm install                  # also installs the Playwright browsers
+uv run python build.py
+node optimize-images.mjs
+pnpm playwright test
+```
+
+`optimize-images.mjs` generates the AVIF and WebP variants the pages ask for; without them the console-errors and analytics tests fail on 404s. Playwright serves `public/` on port 8000 itself (see `playwright.config.ts`), or reuses a server already running there.
+
+To run one project, one file or one page:
+
+```bash
+pnpm playwright test --project="chromium" tests/seo.spec.ts --grep "index.html"
+```
+
+A full run takes a few minutes. It does not include the visual regression suite, described next.
+
 ### Visual Regression Testing (on demand)
 
 The [Playwright](https://playwright.dev/) suite in `tests/snapshots.spec.ts` takes full-page screenshots of every page and compares them against the baselines in `tests/snapshots.spec.ts-snapshots/`. It is **not part of pull request CI**: `playwright.config.ts` ignores it unless `VRT=1` is set, so `pnpm playwright test` only runs the functional suites (SEO, navigation, calendar, donate).
