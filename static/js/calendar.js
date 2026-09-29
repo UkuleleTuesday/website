@@ -16,6 +16,10 @@ const TIME_ZONE = 'Europe/Dublin';
 // The weekly session venue. Play-alongs held here are the routine Tuesday session.
 const SESSION_VENUE_PATTERN = /stag/i;
 
+// A cancelled week can be deleted from the calendar, or kept and renamed
+// ("Cancelled", "No session") or tagged #cancelled. All of these count as off.
+const CANCELLED_TITLE_PATTERN = /\b(cancell?ed|no session)\b/i;
+
 /**
  * Determine event type from hashtags in the description or summary
  *
@@ -125,7 +129,16 @@ function hasStarted(event, now) {
 function isRoutineSession(event) {
   return Boolean(event.start.dateTime) &&
     getEventType(event) === 'jam-session' &&
-    SESSION_VENUE_PATTERN.test(event.location || '');
+    SESSION_VENUE_PATTERN.test(event.location || '') &&
+    !isCancelled(event);
+}
+
+/**
+ * An event kept in the calendar but marked as not happening
+ */
+function isCancelled(event) {
+  return CANCELLED_TITLE_PATTERN.test(event.summary || '') ||
+    (event.description || '').toLowerCase().includes('#cancelled');
 }
 
 /**
@@ -187,10 +200,10 @@ function findNextSession(events, now) {
 }
 
 /**
- * The next concert that has not started yet, or null
+ * The next concert that has not started yet and is not cancelled, or null
  */
 function findNextGig(events, now) {
-  return events.find(event => getEventType(event) === 'concert' && !hasStarted(event, now)) || null;
+  return events.find(event => getEventType(event) === 'concert' && !isCancelled(event) && !hasStarted(event, now)) || null;
 }
 
 /**
@@ -473,7 +486,7 @@ function buildEventNode(event, organization, venue, image) {
     '@type': 'Event',
     name: event.summary || 'Untitled Event',
     startDate: event.start.dateTime || event.start.date,
-    eventStatus: 'https://schema.org/EventScheduled',
+    eventStatus: isCancelled(event) ? 'https://schema.org/EventCancelled' : 'https://schema.org/EventScheduled',
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode'
   };
 
