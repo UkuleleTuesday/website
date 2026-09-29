@@ -39,6 +39,15 @@ GitHub Copilot's cloud environment is prepared by `.github/workflows/copilot-set
 4. Look at the change in a browser, at phone width as well as desktop: pages load without 404s, styling and scripts work, the mobile menu opens, images scale. Use Netlify Dev when the page depends on the calendar, the donate redirects or the WhatsApp gate.
 5. Update `README.md` or `docs/` if the change affects anything they describe. If this file should change too, say so in the pull request description instead of editing it.
 
+## Pull request conventions
+
+When you write a pull request description:
+
+- Use concise English.
+- Explain why the change is made rather than how.
+- Keep it to 200 words at most.
+- Don't repeat what a reader can find by reading the diff.
+
 ## Issue tracker conventions
 
 When opening or editing issues, use the repo's canonical templates and labels; don't invent your own:
