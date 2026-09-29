@@ -25,7 +25,7 @@ Don't:
 
 The initial version of this site was created on WordPress.
 
-After being exported from its WordPress install, it is now maintained as a static site built with [Jinja2](https://pypi.org/project/Jinja2/) for better performance, security, and cost-effectiveness.
+After being exported from its WordPress install, it is now maintained as a static site built with [Jinja2](https://pypi.org/project/Jinja2/) for better performance, security, and cost-effectiveness. The WordPress-style URL structure is kept for SEO, and image files keep their WordPress names, flattened out of the date hierarchy. The legacy theme and plugin files were removed in [#147](https://github.com/UkuleleTuesday/website/pull/147); nothing under `static/` comes from WordPress any more.
 
 The rare dynamic parts of the site are handled via:
 * Netlify Forms for forms
@@ -127,9 +127,17 @@ Neither proxy exists on the local static server, so `tests/analytics.spec.ts` an
 
 YouTube videos are embedded with [lite-youtube-embed](https://github.com/paulirish/lite-youtube-embed) (`<lite-youtube>`, v0.3.4, copied unmodified to `static/vendor/lite-youtube-embed/` together with its licence). The page shows only the video's poster and a play button; the real player is created on the privacy-enhanced `youtube-nocookie.com` domain when the visitor presses play. A full YouTube player costs about 1 MB of third-party JavaScript per video and logs a stream of console warnings before anyone has pressed play ([#125](https://github.com/UkuleleTuesday/website/issues/125)). Use the `youtube_video(video_id, title)` macro from `templates/_macros/video.html` and include the library's stylesheet and script on the page (see the `extra_head` and `extra_scripts` blocks of `templates/book-us/index.html`). Without JavaScript the play button is a plain link to the video on YouTube. To upgrade the library, copy `src/lite-yt-embed.js`, `src/lite-yt-embed.css` and `LICENSE` from the new release and update the version here. If a video really has to autoplay, use a plain `<iframe>` on `https://www.youtube-nocookie.com/embed/...` as on the Play-Along Session page.
 
-### Automated Deployment
+### CI and Deployment
 
-The site is automatically built and deployed to Netlify on every push to the `main` branch. Preview environments are also created for every pull request.
+GitHub Actions (`.github/workflows/ci.yml`) runs these stages:
+
+1. **Build:** the pre-commit hooks on all files, `build.py`, then CSS and image optimisation
+2. **Test:** the functional Playwright tests in three browser projects, on pull requests (see [Running the Tests](#running-the-tests))
+3. **Deploy Preview:** a Netlify preview for each pull request, linked in a comment
+4. **Lighthouse:** Lighthouse CI against the built site, on pull requests (see below)
+5. **Deploy Production:** every push to `main` is built and deployed to Netlify
+
+The visual regression sweep runs on demand only (see [Visual Regression Testing](#visual-regression-testing-on-demand)).
 
 ### Lighthouse CI
 

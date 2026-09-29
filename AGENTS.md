@@ -1,10 +1,13 @@
 # Ukulele Tuesday Website: Agent Instructions
 
-This file is the one set of instructions for every coding agent working in this repository (Claude Code, GitHub Copilot, Codex and others). `CLAUDE.md` imports it and `.github/copilot-instructions.md` points to it, so change instructions here, not there.
+This file steers every coding agent working in this repository (Claude Code, GitHub Copilot, Codex and others). `CLAUDE.md` imports it and `.github/copilot-instructions.md` points to it, so it is the only agent instructions file to maintain.
 
-The site is static: Python 3.12+ renders Jinja2 templates into `public/`, which Netlify serves, with a few Netlify Functions and Edge Functions for the dynamic parts. It started as a WordPress export.
+**Rely on these instructions first.** Fall back to searching the code or running commands only when something here doesn't match what you find, and then report the mismatch rather than editing this file.
 
-**Rely on these instructions first.** Fall back to searching the code or running commands only when something here doesn't match what you find, and then fix this file.
+## Rules for this file
+
+- **Don't change `AGENTS.md` unless a human explicitly asks you to.** If something here looks wrong or out of date, say so in your reply or pull request description and leave the edit to them. The same applies to `CLAUDE.md` and `.github/copilot-instructions.md`, which only point here.
+- **This file is only for steering agents.** Anything people would find useful too, such as what the site is, how it works, or how to build, test and deploy it, belongs in `README.md` or under `docs/`, and this file only links to it. If a human asks you to add something like that here, propose the README or `docs/` instead.
 
 ## Always read the README section first
 
@@ -19,6 +22,7 @@ The site is static: Python 3.12+ renders Jinja2 templates into `public/`, which 
 | update or check screenshot baselines | [Visual Regression Testing](README.md#visual-regression-testing-on-demand) |
 | check a change in a browser, or work on the calendar, donate redirects or WhatsApp gate | [Running Locally](README.md#running-locally) |
 | change the promo banner, calendar, analytics or YouTube embeds | [Configuration](README.md#configuration) |
+| push, or look into a CI failure | [CI and Deployment](README.md#ci-and-deployment) |
 | work out why a build, test run or local server fails | [Troubleshooting](README.md#troubleshooting) |
 
 If a README command is wrong or missing, fix the README in the same pull request rather than working around it here.
@@ -33,7 +37,7 @@ GitHub Copilot's cloud environment is prepared by `.github/workflows/copilot-set
 2. Run the pre-commit hooks; CI runs them on every file.
 3. Run the functional tests that cover what you changed.
 4. Look at the change in a browser, at phone width as well as desktop: pages load without 404s, styling and scripts work, the mobile menu opens, images scale. Use Netlify Dev when the page depends on the calendar, the donate redirects or the WhatsApp gate.
-5. Update `README.md` if the change affects anything it describes, and this file if it changes how agents should work.
+5. Update `README.md` or `docs/` if the change affects anything they describe. If this file should change too, say so in the pull request description instead of editing it.
 
 ## Issue tracker conventions
 
@@ -43,21 +47,3 @@ When opening or editing issues, use the repo's canonical templates and labels; d
 - **Labels:** apply only those in `.github/labels.yml`, verbatim: one type (the template sets it) and zero or more `area:*`. New labels go in that file (synced by `.github/workflows/sync-labels.yml`), not onto GitHub directly.
 - **Never set or change a readiness label** (`ready-to-pull` / `needs-detail` / `needs-shaping`), `quickfix` or `possibly-stale`. They are the triage verdict, written only by the `issue-triager` agent (`.github/agents/issue-triager.md`) or a human. Leave `needs-triage` on a new issue so it gets picked up.
 - **Sub-issues:** when an issue is too broad for one pull request, split it into sub-issues (one deliverable each) linked to the parent.
-
-## CI/CD
-
-`.github/workflows/ci.yml` runs these stages:
-
-1. **Build:** pre-commit hooks on all files, `build.py`, then CSS and image optimisation
-2. **Test:** the functional Playwright tests in three browser projects (pull requests only)
-3. **Deploy Preview:** a Netlify preview for each pull request, linked in a comment
-4. **Lighthouse:** Lighthouse CI against the built site; the accessibility score is enforced
-5. **Deploy Production:** deploys `main` to Netlify
-
-The visual regression sweep and baseline regeneration run on demand only, via the **Visual Regression** workflow (`.github/workflows/visual-regression.yml`); they are not part of pull request CI.
-
-Check that your change passes these stages locally before you push.
-
-## Legacy notes
-
-The site originated from a WordPress export. The WordPress-style URL structure is kept for SEO and image files keep their WordPress names, flattened out of the date hierarchy. The legacy theme and plugin files were removed in #147; nothing under `static/` comes from WordPress any more.
