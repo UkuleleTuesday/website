@@ -54,10 +54,6 @@
                          line-height: 80px;
                          margin: 0;
                          text-shadow: 2px 2px 4px rgba(0,0,0,0.5)">Welcome to Ukulele Tuesday</h1>
-              <a class="next-session-pill"
-                 data-format="short"
-                 data-next-session
-                 href="#play-along">Every Tuesday from 8pm · The Stag's Head</a>
               <div class="hero-buttons">
                 <a class="rev-btn" href="/songbook/" target="_self">View Songbook</a>
                 <a class="rev-btn" href="/contact-us" target="_self">Get In touch</a>
@@ -86,9 +82,12 @@
                         data-min_size="18"
                         style="text-align: left;
                                letter-spacing:0px">Play Along With Us</h2>
-                    <p class="next-session" data-format="long" data-next-session>
-                      <strong class="next-session-headline">Every Tuesday from 8pm</strong>
-                      <span class="next-session-detail">Upstairs at The Stag's Head · Free · All levels welcome</span>
+                    <!-- New design element (#211, #215): the next-event box and its tinted
+                         background colours (#f0f6f6 teal, #f6f0f3 maroon) are not used anywhere
+                         else on the site. Review against the page design before reusing. -->
+                    <p class="next-event next-session" data-next-session>
+                      <strong class="next-event-headline">Every Tuesday from 8pm</strong>
+                      <span class="next-event-detail">Upstairs at The Stag's Head · Free · All levels welcome</span>
                     </p>
                     <div class="text-block content-element text-normal">
                       <div class="col-content">
@@ -173,8 +172,12 @@
                         style="text-align: left;
                                letter-spacing:0px">See Us Live</h2>
                     {% if calendar_enabled %}
-                      <p class="next-gig" data-next-gig hidden>
-                        <strong>Next gig:</strong> <span class="next-gig-detail"></span>
+                      <!-- New design element (#211, #215): the next-event box and its tinted
+                           background colours (#f0f6f6 teal, #f6f0f3 maroon) are not used anywhere
+                           else on the site. Review against the page design before reusing. -->
+                      <p class="next-event next-gig" data-next-gig hidden>
+                        <strong class="next-event-headline"></strong>
+                        <span class="next-event-detail"></span>
                       </p>
                     {% endif %}
                     <div class="text-block content-element text-normal">
