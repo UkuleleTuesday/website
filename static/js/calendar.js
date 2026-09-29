@@ -237,8 +237,7 @@ function formatDay(date, style) {
 }
 
 /**
- * Wording for the next-session slots. `headline` and `detail` fill the card;
- * `short` fills the one-line pill.
+ * Wording for the next-session card: a bold headline and a detail line.
  */
 function describeNextSession(next) {
   const start = eventStart(next.event);
@@ -250,27 +249,23 @@ function describeNextSession(next) {
       const until = next.event.end && next.event.end.dateTime ? ` until ${formatClockTime(eventEnd(next.event))}` : '';
       return {
         headline: `On now${until}`,
-        detail: `${venue} · Free · Come on up`,
-        short: `On now${until} · The Stag's Head`
+        detail: `${venue} · Free · Come on up`
       };
     }
     case 'tonight':
       return {
         headline: `Tonight from ${time}`,
-        detail: `${venue} · Free · All levels welcome`,
-        short: `Tonight from ${time} · The Stag's Head`
+        detail: `${venue} · Free · All levels welcome`
       };
     case 'skipped':
       return {
         headline: 'No session this Tuesday',
-        detail: `Next session: ${formatDay(start, 'long')}, ${time} · ${venue}`,
-        short: `No session this Tuesday · Next: ${formatDay(start, 'short')}`
+        detail: `Next session: ${formatDay(start, 'long')}, ${time} · ${venue}`
       };
     default:
       return {
         headline: `Next session: ${formatDay(start, 'long')}, ${time}`,
-        detail: `${venue} · Free · All levels welcome`,
-        short: `Next session: ${formatDay(start, 'short')}, ${time}`
+        detail: `${venue} · Free · All levels welcome`
       };
   }
 }
@@ -287,10 +282,6 @@ function renderNextSession(events, now) {
   const text = describeNextSession(next);
 
   document.querySelectorAll('[data-next-session]').forEach(slot => {
-    if (slot.dataset.format === 'short') {
-      slot.textContent = text.short;
-      return;
-    }
     const headline = slot.querySelector('.next-session-headline');
     const detail = slot.querySelector('.next-session-detail');
     if (headline) headline.textContent = text.headline;

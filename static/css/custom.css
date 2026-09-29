@@ -180,51 +180,9 @@
 }
 
 .hero-banner h1,
-.hero-banner .hero-buttons,
-.hero-banner .next-session-pill {
+.hero-banner .hero-buttons {
   position: relative;
   z-index: 1;
-}
-
-/* Next session (#187): one line under the hero heading, filled from the
-   calendar by static/js/calendar.js. Fixed width and a single line, so the
-   swap from the built-in "every Tuesday" text moves nothing on screen. */
-.next-session-pill {
-  display: block;
-  box-sizing: border-box;
-  width: min(360px, calc(100% - 32px));
-  margin-top: 28px;
-  padding: 10px 18px;
-  overflow: hidden;
-  border-radius: 100px;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: rgba(0, 0, 0, 0.2) 2px 2px 6px 0px;
-  color: #1f2933;
-  font-family: 'Poppins', sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 22px;
-  text-align: center;
-  text-decoration: none;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.next-session-pill:hover,
-.next-session-pill:focus-visible {
-  background: #ffffff;
-  color: #006566;
-}
-.next-session-pill + .hero-buttons {
-  margin-top: 28px;
-}
-@media (max-width: 520px) {
-  .next-session-pill {
-    margin-top: 20px;
-    font-size: 14px;
-  }
-  .next-session-pill + .hero-buttons {
-    margin-top: 20px;
-  }
 }
 
 /* Mobile Navigation Fix */
