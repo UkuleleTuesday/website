@@ -34,37 +34,6 @@ GitHub Copilot's cloud environment is prepared by `.github/workflows/copilot-set
 4. Look at the change in a browser, at phone width as well as desktop: pages load without 404s, styling and scripts work, the mobile menu opens, images scale. Use Netlify Dev when the page depends on the calendar, the donate redirects or the WhatsApp gate.
 5. Update `README.md` if the change affects anything it describes, and this file if it changes how agents should work.
 
-## Project map
-
-- `templates/`: Jinja2 templates, one directory per page (`book-us/`, `code-of-conduct/`, `contact-us/`, `songbook/`, `tuesday-session/`, `whatsapp/`) plus the homepage `index.html`
-  - `_layouts/`: base layouts
-  - `_partials/`: reusable components (header, footer, contact form, JSON-LD, promo banner)
-  - `_macros/`: template macros, such as `youtube_video` in `video.html`
-- `static/`: copied as is into `public/`
-  - `_redirects`: Netlify redirects, kept at the root
-  - `robots.txt`
-  - `assets/images/`: all images, flattened from the WordPress date hierarchy; `optimize-images.mjs` generates their AVIF and WebP variants into `public/` at build time
-  - `assets/`: PDFs and other documents
-  - `css/`: stylesheets
-  - `js/`: `calendar.js` (Events Calendar client), `mobile-menu.js` (mobile navigation), `whatsapp.js` (WhatsApp form), `mixpanel.js` (analytics loader, production builds only; see [Analytics](README.md#analytics-mixpanel))
-  - `vendor/`: third-party front-end libraries copied unmodified (`lite-youtube-embed/`)
-- `build.py`: renders the templates and generates the sitemaps into `public/sitemaps/`
-- `netlify/functions/`: `calendar.js` (Events Calendar), `whatsapp-gate.js` (WhatsApp group link)
-- `netlify/edge-functions/`: `donate.js` (`/donate`, `/donate-qr`, `/support-us` redirects)
-- `tests/`: Playwright suites; `snapshots.spec.ts` is the on-demand visual regression suite
-- `public/`: generated output (about 4 MB); never edit it by hand
-
-## Environment variables
-
-- `ENABLE_ANALYTICS=true`: include the Mixpanel module (production builds only)
-- `ENABLE_CALENDAR=false`: leave the calendar out of the build (it is on by default)
-- `BASE_URL`: base for canonical and other absolute URLs in SEO data; defaults to `https://www.ukuleletuesday.ie` (`www` is the canonical host)
-- `GOOGLE_CALENDAR_API_KEY`: Google Calendar API key, required by `netlify/functions/calendar.js`
-- `WHATSAPP_JOIN_LINK`: WhatsApp group invite URL, required by `netlify/functions/whatsapp-gate.js`
-- `BMC_URL`, `BMC_DEFAULT_UTMS`: Buy Me A Coffee redirect URL and default UTM parameters for `netlify/edge-functions/donate.js`; both have defaults
-
-`.env.example` lists the ones Netlify Dev needs locally.
-
 ## Issue tracker conventions
 
 When opening or editing issues, use the repo's canonical templates and labels; don't invent your own:
