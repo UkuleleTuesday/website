@@ -119,7 +119,7 @@ test.describe('Calendar Netlify Function Tests', () => {
         expect(url.searchParams.get('key')).toBe('test-api-key-12345');
         expect(url.searchParams.get('singleEvents')).toBe('true');
         expect(url.searchParams.get('orderBy')).toBe('startTime');
-        expect(url.searchParams.get('maxResults')).toBe('10');
+        expect(url.searchParams.get('maxResults')).toBe('50');
         expect(url.searchParams.has('timeMin')).toBe(true);
         
         // Verify the URL points to Google Calendar API

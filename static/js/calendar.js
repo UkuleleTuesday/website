@@ -6,15 +6,26 @@
 // Use Netlify function to fetch calendar data (handles API key)
 const CALENDAR_API_URL = '/.netlify/functions/calendar';
 
+// The function returns up to 50 events so the next gig is found even when weekly
+// sessions fill the next few months; the event list still shows this many.
+const EVENT_LIST_LENGTH = 10;
+
+// Times are shown in the venue's time zone, whatever the visitor's device says.
+const TIME_ZONE = 'Europe/Dublin';
+
+// The weekly session venue. Play-alongs held here are the routine Tuesday session.
+const SESSION_VENUE_PATTERN = /stag/i;
+
+// A cancelled week can be deleted from the calendar, or kept and renamed
+// ("Cancelled", "No session") or tagged #cancelled. All of these count as off.
+const CANCELLED_TITLE_PATTERN = /\b(cancell?ed|no session)\b/i;
+
 /**
- * Determine event type based on hashtags (primary) and keywords (fallback)
- * 
- * Classification rules:
- * - #jam or #playalong in description/summary → jam-session
- * - #concert in description/summary → concert
- * - Fallback: check for keywords "play-along", "jam" → jam-session
- * - No hashtags found → other (community group practices, etc.)
- * - Default: other (for events with unrecognized hashtags)
+ * Determine event type from hashtags in the description or summary
+ *
+ * - #jam or #playalong → jam-session
+ * - #concert → concert
+ * - anything else → other (community group practices, etc.)
  */
 function getEventType(event) {
   const description = (event.description || '').toLowerCase();
@@ -47,13 +58,17 @@ function formatEventDate(startDateTime, isAllDay) {
     day: 'numeric'
   };
   
+  // All-day events carry a bare date: format it as that date, not as midnight in Dublin
+  options.timeZone = isAllDay ? 'UTC' : TIME_ZONE;
+
   let formatted = start.toLocaleDateString('en-IE', options);
-  
+
   if (!isAllDay) {
     const timeOptions = {
       hour: '2-digit',
       minute: '2-digit',
-      hour12: false
+      hour12: false,
+      timeZone: TIME_ZONE
     };
     formatted += ' at ' + start.toLocaleTimeString('en-IE', timeOptions);
   }
@@ -73,12 +88,10 @@ async function fetchCalendarEvents() {
     const data = await response.json();
     let events = data.items || [];
     
-    // Filter to only include future events (past current date and time)
+    // Keep events that have not finished yet: a session in progress still answers
+    // "is it on?". The event list itself only shows events that have not started.
     const now = new Date();
-    events = events.filter(event => {
-      const eventStart = new Date(event.start.dateTime || event.start.date);
-      return eventStart > now;
-    });
+    events = events.filter(event => eventEnd(event) > now);
     
     // Sort events by start time (client-side sorting since we can't use orderBy=startTime without singleEvents=true)
     events.sort((a, b) => {
@@ -92,6 +105,219 @@ async function fetchCalendarEvents() {
     console.error('Error fetching calendar:', error);
     throw error;
   }
+}
+
+function eventStart(event) {
+  return new Date(event.start.dateTime || event.start.date);
+}
+
+/**
+ * When an event ends. Events without an end are treated as ending when they start.
+ */
+function eventEnd(event) {
+  const end = event.end && (event.end.dateTime || event.end.date);
+  return end ? new Date(end) : eventStart(event);
+}
+
+function hasStarted(event, now) {
+  return eventStart(event) <= now;
+}
+
+/**
+ * The routine weekly session: a timed play-along at the session venue
+ */
+function isRoutineSession(event) {
+  return Boolean(event.start.dateTime) &&
+    getEventType(event) === 'jam-session' &&
+    SESSION_VENUE_PATTERN.test(event.location || '') &&
+    !isCancelled(event);
+}
+
+/**
+ * An event kept in the calendar but marked as not happening
+ */
+function isCancelled(event) {
+  return CANCELLED_TITLE_PATTERN.test(event.summary || '') ||
+    (event.description || '').toLowerCase().includes('#cancelled');
+}
+
+/**
+ * Calendar date of a moment in Dublin, as { year, month, day } plus a sortable YYYY-MM-DD key
+ */
+function dublinDate(date) {
+  const parts = {};
+  new Intl.DateTimeFormat('en-GB', { timeZone: TIME_ZONE, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', hourCycle: 'h23' })
+    .formatToParts(date)
+    .forEach(part => { parts[part.type] = part.value; });
+  return {
+    year: Number(parts.year),
+    month: Number(parts.month),
+    day: Number(parts.day),
+    hour: Number(parts.hour),
+    key: `${parts.year}-${parts.month}-${parts.day}`
+  };
+}
+
+/**
+ * The Tuesday the next session is expected on: today if it is Tuesday and the
+ * session has not started yet, otherwise the next Tuesday.
+ */
+function expectedSessionTuesday(now) {
+  const today = dublinDate(now);
+  const todayUtc = Date.UTC(today.year, today.month - 1, today.day);
+  const weekday = new Date(todayUtc).getUTCDay(); // 0 = Sunday, 2 = Tuesday
+  let offset = (2 - weekday + 7) % 7;
+  if (offset === 0 && today.hour >= 20) {
+    // Past 8pm on a Tuesday with no session in progress: tonight's is over (or was not on)
+    offset = 7;
+  }
+  return new Date(todayUtc + offset * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+}
+
+/**
+ * The next routine session and how to describe it:
+ * 'now' (in progress), 'tonight', 'skipped' (none on the expected Tuesday) or 'upcoming'.
+ * Returns null when the calendar has no upcoming routine session.
+ */
+function findNextSession(events, now) {
+  const event = events.find(isRoutineSession);
+  if (!event) {
+    return null;
+  }
+
+  if (hasStarted(event, now)) {
+    return { state: 'now', event };
+  }
+
+  const sessionDay = dublinDate(eventStart(event)).key;
+  if (sessionDay === dublinDate(now).key) {
+    return { state: 'tonight', event };
+  }
+  if (sessionDay > expectedSessionTuesday(now)) {
+    return { state: 'skipped', event };
+  }
+  return { state: 'upcoming', event };
+}
+
+/**
+ * The next concert that has not started yet and is not cancelled, or null
+ */
+function findNextGig(events, now) {
+  return events.find(event => getEventType(event) === 'concert' && !isCancelled(event) && !hasStarted(event, now)) || null;
+}
+
+/**
+ * "8pm", "10:30pm"
+ */
+function formatClockTime(date) {
+  const parts = {};
+  new Intl.DateTimeFormat('en-GB', { timeZone: TIME_ZONE, hour: 'numeric', minute: '2-digit', hourCycle: 'h23' })
+    .formatToParts(date)
+    .forEach(part => { parts[part.type] = part.value; });
+  const hour = Number(parts.hour);
+  const suffix = hour < 12 ? 'am' : 'pm';
+  const hour12 = hour % 12 === 0 ? 12 : hour % 12;
+  return parts.minute === '00' ? `${hour12}${suffix}` : `${hour12}:${parts.minute}${suffix}`;
+}
+
+/**
+ * "Tuesday 6 October" (long) or "Tue 6 Oct" (short)
+ */
+function formatDay(date, style) {
+  const options = style === 'long'
+    ? { weekday: 'long', day: 'numeric', month: 'long' }
+    : { weekday: 'short', day: 'numeric', month: 'short' };
+  options.timeZone = TIME_ZONE;
+  // Assemble the parts ourselves: browsers disagree on the punctuation ("Tue, 6 Oct")
+  const parts = {};
+  new Intl.DateTimeFormat('en-IE', options)
+    .formatToParts(date)
+    .forEach(part => { parts[part.type] = part.value; });
+  return `${parts.weekday} ${parts.day} ${parts.month}`;
+}
+
+/**
+ * Wording for the next-session slots. `headline` and `detail` fill the card;
+ * `short` fills the one-line pill.
+ */
+function describeNextSession(next) {
+  const start = eventStart(next.event);
+  const time = formatClockTime(start);
+  const venue = 'Upstairs at The Stag\'s Head';
+
+  switch (next.state) {
+    case 'now': {
+      const until = next.event.end && next.event.end.dateTime ? ` until ${formatClockTime(eventEnd(next.event))}` : '';
+      return {
+        headline: `On now${until}`,
+        detail: `${venue} · Free · Come on up`,
+        short: `On now${until} · The Stag's Head`
+      };
+    }
+    case 'tonight':
+      return {
+        headline: `Tonight from ${time}`,
+        detail: `${venue} · Free · All levels welcome`,
+        short: `Tonight from ${time} · The Stag's Head`
+      };
+    case 'skipped':
+      return {
+        headline: 'No session this Tuesday',
+        detail: `Next session: ${formatDay(start, 'long')}, ${time} · ${venue}`,
+        short: `No session this Tuesday · Next: ${formatDay(start, 'short')}`
+      };
+    default:
+      return {
+        headline: `Next session: ${formatDay(start, 'long')}, ${time}`,
+        detail: `${venue} · Free · All levels welcome`,
+        short: `Next session: ${formatDay(start, 'short')}, ${time}`
+      };
+  }
+}
+
+/**
+ * Fill every [data-next-session] slot. Slots keep their built-in "every Tuesday"
+ * text when the calendar has no upcoming session.
+ */
+function renderNextSession(events, now) {
+  const next = findNextSession(events, now);
+  if (!next) {
+    return;
+  }
+  const text = describeNextSession(next);
+
+  document.querySelectorAll('[data-next-session]').forEach(slot => {
+    if (slot.dataset.format === 'short') {
+      slot.textContent = text.short;
+      return;
+    }
+    const headline = slot.querySelector('.next-session-headline');
+    const detail = slot.querySelector('.next-session-detail');
+    if (headline) headline.textContent = text.headline;
+    if (detail) detail.textContent = text.detail;
+  });
+}
+
+/**
+ * Fill and reveal every [data-next-gig] slot; they stay hidden when no gig is announced.
+ */
+function renderNextGig(events, now) {
+  const gig = findNextGig(events, now);
+  if (!gig) {
+    return;
+  }
+
+  const title = (gig.summary || '').trim();
+  const place = (gig.location || '').split(',')[0].trim();
+  const parts = [formatDay(eventStart(gig), 'short')];
+  if (title) parts.push(title);
+  if (place && place.toLowerCase() !== title.toLowerCase()) parts.push(place);
+
+  document.querySelectorAll('[data-next-gig]').forEach(slot => {
+    const detail = slot.querySelector('.next-gig-detail');
+    if (detail) detail.textContent = parts.join(' · ');
+    slot.hidden = false;
+  });
 }
 
 /**
@@ -260,7 +486,7 @@ function buildEventNode(event, organization, venue, image) {
     '@type': 'Event',
     name: event.summary || 'Untitled Event',
     startDate: event.start.dateTime || event.start.date,
-    eventStatus: 'https://schema.org/EventScheduled',
+    eventStatus: isCancelled(event) ? 'https://schema.org/EventCancelled' : 'https://schema.org/EventScheduled',
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode'
   };
 
@@ -273,7 +499,7 @@ function buildEventNode(event, organization, venue, image) {
     node.description = description;
   }
 
-  if (venue && /stag/i.test(event.location)) {
+  if (venue && SESSION_VENUE_PATTERN.test(event.location)) {
     // The weekly session venue: use its full address and mark the session free
     node.location = venue;
     node.isAccessibleForFree = true;
@@ -340,8 +566,8 @@ function addEventsToStructuredData(events) {
 }
 
 /**
- * Initialize the calendar. The event list is rendered when the page has one;
- * the structured data is added either way.
+ * Initialize the calendar: the event list when the page has one, the next-session
+ * and next-gig lines wherever they appear, and the structured data.
  */
 async function initCalendar(containerId) {
   const container = document.getElementById(containerId);
@@ -353,10 +579,15 @@ async function initCalendar(containerId) {
 
   try {
     const events = await fetchCalendarEvents();
+    const now = new Date();
+    const notStarted = events.filter(event => !hasStarted(event, now));
+
     if (container) {
-      renderEvents(events, containerId);
+      renderEvents(notStarted.slice(0, EVENT_LIST_LENGTH), containerId);
     }
-    addEventsToStructuredData(events);
+    renderNextSession(events, now);
+    renderNextGig(events, now);
+    addEventsToStructuredData(notStarted);
   } catch (error) {
     if (container) {
       container.innerHTML = '<p class="error-events">Unable to load events. Please try again later.</p>';
