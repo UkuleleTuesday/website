@@ -1,19 +1,19 @@
 {% extends "_layouts/base.html" %}
 {% block title %}Ukulele Tuesday Contact Form{% endblock %}
 {% block description %}
-  The Ukulele Tuesday contact form can be found here. We also monitor our social channels, but if you want to book a ukulele band, this page is your best bet.
+  Contact Ukulele Tuesday: book the band or a jam session for your event, ask about the Tuesday session in Dublin, or request accessibility help. Volunteers reply within a few days.
 {% endblock %}
 {% block canonical_url %}/contact-us/{% endblock %}
 {% block og_title %}Ukulele Tuesday Contact Form{% endblock %}
 {% block og_description %}
-  The Ukulele Tuesday contact form can be found here. We also monitor our social channels, but if you want to book a ukulele band, this page is your best bet.
+  Contact Ukulele Tuesday: book the band or a jam session for your event, ask about the Tuesday session in Dublin, or request accessibility help. Volunteers reply within a few days.
 {% endblock %}
 {% block og_url %}/contact-us/{% endblock %}
 {% block article_modified_time %}2022-08-15T21:41:51+00:00{% endblock %}
 {% block og_image %}/assets/images/Ukulele-Tuesday-Band-playing.jpg{% endblock %}
 {% block twitter_title %}Ukulele Tuesday Contact Form{% endblock %}
 {% block twitter_description %}
-  The Ukulele Tuesday contact form can be found here. We also monitor our social channels, but if you want to book a ukulele band, this page is your best bet.
+  Contact Ukulele Tuesday: book the band or a jam session for your event, ask about the Tuesday session in Dublin, or request accessibility help. Volunteers reply within a few days.
 {% endblock %}
 {% block twitter_image %}/assets/images/Ukulele-Tuesday-Band-playing.jpg{% endblock %}
 {% block twitter_reading_time %}1 minute{% endblock %}
@@ -27,6 +27,7 @@
   <style>
   #contact-form-wrapper input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]),
         #contact-form-wrapper textarea,#contact-form-wrapper select{border-radius:20px;}#contact-form-wrapper input[type="submit"]{border-radius:100px;}
+  #contact-form-wrapper select{width:100%;}
   </style>
 {% endblock %}
 {% block content %}
@@ -54,110 +55,41 @@
               <div class="col col-6">
                 <div class="col-inner">
                   <div class="col-content">
-                    <div class="contact-form contact-form-horizontal contact-form-md contact-form-btn contact-form-md-btn contact-form-fw-btn slideInRight contact-form-regular contact-form-no-transform slideInRight"
-                         data-delay="15"
-                         id="contact-form-wrapper"
-                         style="font-weight:400;
-                                margin-top:0px;
-                                margin-bottom:40px">
-                      <div class="wpcf7 no-js"
-                           data-wpcf7-id="8"
-                           dir="ltr"
-                           id="wpcf7-f8-p20-o1"
-                           lang="en-US">
-                        <div class="screen-reader-response">
-                          <p aria-atomic="true" aria-live="polite" role="status"></p>
-                        </div>
-                        <form aria-label="Contact form"
-                              class="wpcf7-form init"
-                              data-netlify="true"
-                              data-status="init"
-                              method="post"
-                              name="contact"
-                              netlify-honeypot="bot-field"
-                              id="contact">
-                          <input class="wpcf7-form-control wpcf7-hidden"
-                                 name="form-name"
-                                 type="hidden"
-                                 value="contact">
-                          <p>
-                            <label>
-                              Your name
-                              <br>
-                              <span class="wpcf7-form-control-wrap" data-name= "your-name">
-                                <input aria-invalid="false"
-                                       aria-required="true"
-                                       class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required"
-                                       maxlength="400"
-                                       name="your-name"
-                                       required
-                                       size="40"
-                                       type="text"
-                                       value="">
-                              </span>
-                            </label>
-                          </p>
-                          <p>
-                            <label>
-                              Your email
-                              <br>
-                              <span class="wpcf7-form-control-wrap" data-name= "your-email">
-                                <input aria-invalid="false"
-                                       aria-required="true"
-                                       class="wpcf7-form-control wpcf7-email wpcf7-validates-as-required wpcf7-text wpcf7-validates-as-email"
-                                       maxlength="400"
-                                       name="your-email"
-                                       required
-                                       size="40"
-                                       type="email"
-                                       value="">
-                              </span>
-                            </label>
-                          </p>
-                          <p>
-                            <label>
-                              Subject
-                              <br>
-                              <span class="wpcf7-form-control-wrap" data-name= "your-subject">
-                                <input aria-invalid="false"
-                                       aria-required="true"
-                                       class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required"
-                                       maxlength="400"
-                                       name="your-subject"
-                                       required
-                                       size="40"
-                                       type="text"
-                                       value="">
-                              </span>
-                            </label>
-                          </p>
-                          <p>
-                            <label>
-                              Your message (optional)
-                              <br>
-                              <span class="wpcf7-form-control-wrap" data-name="your-message">
-                                <textarea aria-invalid="false"
-                                          class="wpcf7-form-control wpcf7-textarea"
-                                          cols="40"
-                                          maxlength="2000"
-                                          name="your-message"
-                                          rows="10"></textarea></span>
-                            </label>
-                          </p>
-                          <br>
-                          <input class="wpcf7-form-control wpcf7-submit has-spinner"
-                                 type="submit"
-                                 value="Submit">
-                          <div aria-hidden="true" class="wpcf7-response-output"></div>
-                          <p class="hidden">
-                            <label>
-                              Don’t fill this out if you’re human:
-                              <input name="bot-field" type="text">
-                            </label>
-                          </p>
-                        </form>
-                      </div>
+                    <div class="text-block content-element text-normal" id="contact-intro">
+                      <p>
+                        Use this form to book us for a performance or a jam session at your
+                        event, to ask about the Tuesday session, to tell us about any
+                        accessibility needs, or for anything else.
+                      </p>
+                      <p>
+                        Ukulele Tuesday is run by volunteers, and one of our organisers reads
+                        every message. We usually reply by email within a few days; if your
+                        event is soon, say so in your message.
+                      </p>
+                      <h2 style="font-size:20px;line-height:28px;margin-bottom:12px">Other ways to reach us</h2>
+                      <ul>
+                        <li>
+                          <strong>Borrowing a ukulele on the night:</strong> send us a DM on
+                          <a href="https://www.instagram.com/ukuleletuesday/">Instagram</a> or
+                          <a href="https://www.facebook.com/UkuleleTuesday/">Facebook</a> and
+                          we’ll set a house uke aside for you.
+                        </li>
+                        <li>
+                          <strong>Regulars:</strong> join our
+                          <a href="/whatsapp/">WhatsApp community</a> for session news and chat.
+                        </li>
+                      </ul>
                     </div>
+                    {% set enquiry_options = [
+                      "Performance booking",
+                      "Jam session or workshop at my event",
+                      "Tuesday session question",
+                      "Accessibility",
+                      "Press",
+                      "Other"
+                    ] %}
+                    {% set form_margin_bottom = "40px" %}
+                    {% include "_partials/contact_form.html" %}
                   </div>
                 </div>
               </div>
