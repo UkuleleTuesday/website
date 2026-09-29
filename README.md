@@ -71,46 +71,20 @@ Remove all content from `templates/_partials/promo_banner.html`, or comment it o
 
 #### Events Calendar
 
-The homepage features a dynamic calendar that displays upcoming events like our regular Tuesday play-along sessions, concerts, and festival appearances. Events are fetched from the "Ukulele Tuesday Public Events" Google Calendar using the Google Calendar API.
+The homepage lists upcoming events from the "Ukulele Tuesday Public Events" Google Calendar, which Executive Committee members can edit. Changes show on the site within a few minutes.
 
-To add or edit events, Executive Committee members have been granted edit access to the "Ukulele Tuesday Public Events" Google Calendar. Events are automatically displayed on the homepage once added to the calendar.
+When adding an event:
 
-**Enabling/disabling the calendar:**
+- Tag it in the description: `#playalong` (or `#jam`) for a play-along, `#concert` for a gig. Anything else shows as "Other".
+- The weekly session needs `#playalong` and the Stag's Head as its location; the homepage's next-session box relies on both.
+- To cancel a week or a gig, delete it, or put "Cancelled" in its title.
+- Google Calendar event colours are ignored ([#107](https://github.com/UkuleleTuesday/website/issues/107)).
 
-The calendar is enabled by default. To disable it (e.g. for local development where the Netlify function is not available), set the `ENABLE_CALENDAR` environment variable to `false` before building:
+The calendar function needs `GOOGLE_CALENDAR_API_KEY`. CI copies it from the repository secret into Netlify; for Netlify Dev, set it in `.env`. To build without the calendar, for example on a plain static server:
 
 ```bash
 ENABLE_CALENDAR=false uv run python build.py
 ```
-
-When disabled, the calendar section and its JavaScript are completely omitted from the built HTML, so no calendar-related errors will appear in the browser console.
-
-**Technical details:**
-- The calendar data is fetched via a Netlify function (`netlify/functions/calendar.js`) which uses the Google Calendar API with an API key stored in environment variables
-- The API request uses field filtering to reduce payload size by ~80-85% (from ~15KB to ~2-3KB for 10 events), requesting only the fields actually used by the frontend
-- The function returns up to 50 upcoming events; the JavaScript client (`static/js/calendar.js`) lists the first 10 under "All Upcoming Events" and uses the rest to find the next gig
-- The calendar automatically updates as new events are added to the Google Calendar (with a 2-minute cache)
-- The `GOOGLE_CALENDAR_API_KEY` environment variable must be set in Netlify (or GitHub repository secrets) for the calendar to work
-- **Event descriptions can be viewed by clicking/tapping on events** - descriptions are initially hidden and toggle on/off when the event is clicked or activated with keyboard (Enter/Space)
-- Events with descriptions display a cursor pointer and support keyboard navigation for accessibility
-
-**Event Classification:**
-Events are automatically color-coded by type using hashtags in the event description or title:
-- **#jam** or **#playalong** → Play-Along (orange border)
-- **#concert** → Concert (maroon border)
-- anything else → Other (teal border), for example community group practices
-
-To classify an event, add the appropriate hashtag to the event description when creating or editing events in Google Calendar.
-
-**Next session and next gig:**
-The same calendar data answers "is it on this Tuesday?" and "where can I see you next?" without scrolling ([#187](https://github.com/UkuleleTuesday/website/issues/187)):
-- A card at the top of "Play Along With Us" on the homepage shows the next routine session. A routine session is a play-along (`#jam` or `#playalong`) whose location mentions the Stag's Head. The wording follows the calendar: "Tonight from 8pm", "On now until 10:30pm", "Next session: Tuesday 6 October, 8pm", or "No session this Tuesday" when the calendar has no session on the coming Tuesday. **To cancel a week, either delete that week's occurrence in Google Calendar, or keep it and put "Cancelled" (or "No session") in its title, or add `#cancelled` to its description.** The site then says so and gives the next date. A gig marked the same way is skipped for the "Next gig" line, and any cancelled event is marked as cancelled in the page's structured data so search results don't advertise it.
-- A "Next gig" line in "See Us Live" shows the next `#concert` event: its date, title and the first part of its location. It stays hidden when no concert is in the calendar.
-- Without the calendar (disabled, or the function failing) the slots keep their built-in "Every Tuesday from 8pm" text.
-- Times are shown in Dublin time whatever the visitor's device is set to.
-
-To add or edit events, Executive Committee members have been granted edit access to the "Ukulele Tuesday Public Events" Google Calendar. Event colour-coding is not supported, since it is visible only to those logged into
-the Ukulele Tuesday Google account (see https://github.com/UkuleleTuesday/website/issues/107).
 
 #### Analytics (Mixpanel)
 
