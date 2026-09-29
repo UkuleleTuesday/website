@@ -1,12 +1,21 @@
 import os
+import re
 import shutil
 import sys
+from pathlib import Path
+from xml.sax.saxutils import escape
 from jinja2 import Environment, FileSystemLoader
 
 # --- Configuration ---
 STATIC_DIR = 'static'
 TEMPLATES_DIR = 'templates'
 OUTPUT_DIR = 'public'
+SITEMAPS_DIR = 'sitemaps'
+
+ARTICLE_MODIFIED_TIME_PATTERN = re.compile(
+    r'{%\s*block article_modified_time\s*%}\s*(.*?)\s*{%\s*endblock\s*%}',
+    re.DOTALL,
+)
 
 
 def generate_breadcrumbs(path):
@@ -30,6 +39,81 @@ def generate_breadcrumbs(path):
     return breadcrumbs
 
 
+def get_template_files(env):
+    return sorted(
+        t for t in env.list_templates()
+        if t.endswith('.html') and not t.startswith('_') and not t.startswith('.')
+    )
+
+
+def extract_article_modified_time(template_file):
+    template_path = Path(TEMPLATES_DIR, template_file)
+    content = template_path.read_text(encoding='utf-8')
+    match = ARTICLE_MODIFIED_TIME_PATTERN.search(content)
+    if match:
+        return match.group(1).strip()
+    return None
+
+
+def write_text_file(path, content):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write(content)
+
+
+def generate_sitemaps(template_files, base_url):
+    page_entries = []
+    for template_file in template_files:
+        page_url = generate_breadcrumbs(template_file)[-1]['url']
+        page_entry = {
+            'loc': f"{base_url.rstrip('/')}{page_url}",
+            'lastmod': extract_article_modified_time(template_file),
+        }
+        page_entries.append(page_entry)
+
+    latest_lastmod = max(
+        (entry['lastmod'] for entry in page_entries if entry['lastmod']),
+        default=None,
+    )
+
+    page_sitemap_lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ]
+    for entry in page_entries:
+        page_sitemap_lines.extend([
+            '  <url>',
+            f"    <loc>{escape(entry['loc'])}</loc>",
+        ])
+        if entry['lastmod']:
+            page_sitemap_lines.append(f"    <lastmod>{escape(entry['lastmod'])}</lastmod>")
+        page_sitemap_lines.append('  </url>')
+    page_sitemap_lines.append('</urlset>')
+
+    sitemap_loc = f"{base_url.rstrip('/')}/sitemaps/page-sitemap.xml"
+    sitemap_index_lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+        '  <sitemap>',
+        f'    <loc>{escape(sitemap_loc)}</loc>',
+    ]
+    if latest_lastmod:
+        sitemap_index_lines.append(f'    <lastmod>{escape(latest_lastmod)}</lastmod>')
+    sitemap_index_lines.extend([
+        '  </sitemap>',
+        '</sitemapindex>',
+    ])
+
+    output_sitemaps_dir = os.path.join(OUTPUT_DIR, SITEMAPS_DIR)
+    write_text_file(
+        os.path.join(output_sitemaps_dir, 'page-sitemap.xml'),
+        '\n'.join(page_sitemap_lines) + '\n',
+    )
+    sitemap_index_content = '\n'.join(sitemap_index_lines) + '\n'
+    write_text_file(os.path.join(output_sitemaps_dir, 'sitemap.xml'), sitemap_index_content)
+    write_text_file(os.path.join(output_sitemaps_dir, 'sitemap_index.xml'), sitemap_index_content)
+
+
 def build():
     """
     Builds the static site by copying static files and rendering Jinja2 templates.
@@ -51,10 +135,7 @@ def build():
     env = Environment(loader=FileSystemLoader(TEMPLATES_DIR), autoescape=True)
 
     # Get all templates, but filter out partials and layouts
-    template_files = [
-        t for t in env.list_templates()
-        if not t.startswith('_') and not t.startswith('.')
-    ]
+    template_files = get_template_files(env)
 
     # Enable analytics only in production builds
     analytics_enabled = os.environ.get('ENABLE_ANALYTICS') == 'true'
@@ -110,6 +191,7 @@ def build():
         print(f"\nBuild failed with {len(errors)} error(s).")
         sys.exit(1)
 
+    generate_sitemaps(template_files, base_url)
     print("Templates rendered successfully.")
     print("Build process completed.")
 

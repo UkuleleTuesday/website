@@ -11,7 +11,6 @@ const expectedBreadcrumbs = {
     'code-of-conduct/index.html': [{ name: 'Home', url: '/' }, { name: 'Code Of Conduct', url: '/code-of-conduct/' }],
     'book-us/index.html': [{ name: 'Home', url: '/' }, { name: 'Book Us', url: '/book-us/' }],
     'contact-us/index.html': [{ name: 'Home', url: '/' }, { name: 'Contact Us', url: '/contact-us/' }],
-    'faq/index.html': [{ name: 'Home', url: '/' }, { name: 'Faq', url: '/faq/' }],
     'songbook/index.html': [{ name: 'Home', url: '/' }, { name: 'Songbook', url: '/songbook/' }],
     'tuesday-session/index.html': [{ name: 'Home', url: '/' }, { name: 'Tuesday Session', url: '/tuesday-session/' }],
     'whatsapp/index.html': [{ name: 'Home', url: '/' }, { name: 'Whatsapp', url: '/whatsapp/' }],

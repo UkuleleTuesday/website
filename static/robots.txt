@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://www.ukuleletuesday.ie/sitemaps/sitemap.xml
