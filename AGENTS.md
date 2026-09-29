@@ -19,6 +19,7 @@ The site is static: Python 3.12+ renders Jinja2 templates into `public/`, which 
 | update or check screenshot baselines | [Visual Regression Testing](README.md#visual-regression-testing-on-demand) |
 | check a change in a browser, or work on the calendar, donate redirects or WhatsApp gate | [Running Locally](README.md#running-locally) |
 | change the promo banner, calendar, analytics or YouTube embeds | [Configuration](README.md#configuration) |
+| work out why a build, test run or local server fails | [Troubleshooting](README.md#troubleshooting) |
 
 If a README command is wrong or missing, fix the README in the same pull request rather than working around it here.
 
@@ -56,14 +57,6 @@ When opening or editing issues, use the repo's canonical templates and labels; d
 The visual regression sweep and baseline regeneration run on demand only, via the **Visual Regression** workflow (`.github/workflows/visual-regression.yml`); they are not part of pull request CI.
 
 Check that your change passes these stages locally before you push.
-
-## Troubleshooting
-
-- **Tests fail with 404s for `.avif` or `.webp` images:** the image variants weren't generated; see [Running the Tests](README.md#running-the-tests).
-- **Tests or the local server can't find pages:** `public/` is missing or stale; rebuild the site.
-- **Pre-commit fails:** run `uvx pre-commit run --all-files` to see the formatting issues; the djLint hook reformats templates in place.
-- **Server won't start:** check that port 8888 (Netlify Dev) or 8000 (static server) is free.
-- **Netlify Dev: calendar not loading:** set `GOOGLE_CALENDAR_API_KEY` and check the browser console for errors from `/.netlify/functions/calendar`.
 
 ## Legacy notes
 

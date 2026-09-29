@@ -254,3 +254,11 @@ uv run poe serve
 The site will be available at `http://localhost:8000`.
 
 > **Note:** This server does **not** run Netlify Functions or Edge Functions, so features like the Events Calendar, WhatsApp gate, and donate redirects will **not** work.
+
+### Troubleshooting
+
+- **Tests fail with 404s for `.avif` or `.webp` images:** the image variants weren't generated; run `node optimize-images.mjs` after the build (see [Running the Tests](#running-the-tests)).
+- **Tests or the local server can't find pages:** `public/` is missing or stale; rebuild the site.
+- **Pre-commit fails:** run `uvx pre-commit run --all-files` to see the formatting issues; the djLint hook reformats templates in place.
+- **Server won't start:** check that port 8888 (Netlify Dev) or 8000 (static server) is free.
+- **Netlify Dev: calendar not loading:** set `GOOGLE_CALENDAR_API_KEY` in `.env` and check the browser console for errors from `/.netlify/functions/calendar`.
