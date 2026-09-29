@@ -167,7 +167,7 @@ uvx pre-commit run --all-files
 
 ### Running the Tests
 
-The functional [Playwright](https://playwright.dev/) suites in `tests/` cover SEO data, mobile navigation, the calendar, the donate flow, YouTube embeds, analytics and a console-errors check on every page. CI runs them on every pull request in three projects: `chromium`, `Android (Chrome, Pixel 7)` and `iOS (Mobile Safari, iPhone 13)`.
+The functional [Playwright](https://playwright.dev/) suites in `tests/` cover SEO data, mobile navigation, the calendar, the donate flow, the contact form, YouTube embeds, analytics and a console-errors check on every page. CI runs them on every pull request in three projects: `chromium`, `Android (Chrome, Pixel 7)` and `iOS (Mobile Safari, iPhone 13)`.
 
 They test the built site in `public/`, so build it the way CI does first:
 
