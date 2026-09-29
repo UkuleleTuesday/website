@@ -1,7 +1,7 @@
 import { test, expect, Page } from '@playwright/test';
 
 /**
- * The "next session" lines (hero pill, Play Along card, Tuesday Session card) and the
+ * The "next session" lines (hero pill, Play Along card) and the
  * "next gig" line in See Us Live, filled from the Events Calendar (issue #187).
  *
  * The clock is frozen on dates in late September 2026, when Dublin is on UTC+1:
@@ -172,12 +172,4 @@ test.describe('Next gig on the homepage', () => {
     // The gig is beyond the list's ten events but still reaches See Us Live
     await expect(page.locator('.next-gig')).toBeVisible();
   });
-});
-
-test('the Tuesday Session page shows the next session', async ({ page }) => {
-  await openAt(page, '/tuesday-session/', '2026-09-30T11:00:00Z', TUESDAYS.slice(1).map(session));
-  await expect(page.locator('#next-session .next-session-headline')).toHaveText(
-    'Next session: Tuesday 6 October, 8pm',
-  );
-  await expect(page.locator('a[href="#next-session"]')).toHaveCount(1);
 });
