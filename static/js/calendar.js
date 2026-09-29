@@ -281,12 +281,39 @@ function renderNextSession(events, now) {
   }
   const text = describeNextSession(next);
 
-  document.querySelectorAll('[data-next-session]').forEach(slot => {
-    const headline = slot.querySelector('.next-session-headline');
-    const detail = slot.querySelector('.next-session-detail');
-    if (headline) headline.textContent = text.headline;
-    if (detail) detail.textContent = text.detail;
-  });
+  document.querySelectorAll('[data-next-session]').forEach(slot => fillNextEvent(slot, text));
+}
+
+/**
+ * Write a headline and a detail line into a next-event box
+ */
+function fillNextEvent(slot, text) {
+  const headline = slot.querySelector('.next-event-headline');
+  const detail = slot.querySelector('.next-event-detail');
+  if (headline) headline.textContent = text.headline;
+  if (detail) detail.textContent = text.detail;
+}
+
+/**
+ * Wording for the next-gig box, in the same shape as the next-session card:
+ * the date and time as the headline, what and where as the detail line.
+ */
+function describeNextGig(gig, now) {
+  const start = eventStart(gig);
+  const time = gig.start.dateTime ? formatClockTime(start) : '';
+  const isToday = dublinDate(start).key === dublinDate(now).key;
+  const day = isToday ? 'today' : formatDay(start, 'long');
+
+  const title = (gig.summary || '').trim();
+  const place = (gig.location || '').split(',')[0].trim();
+  const details = [];
+  if (title) details.push(title);
+  if (place && place.toLowerCase() !== title.toLowerCase()) details.push(place);
+
+  return {
+    headline: `Next gig: ${day}${time ? `, ${time}` : ''}`,
+    detail: details.join(' · ')
+  };
 }
 
 /**
@@ -298,15 +325,10 @@ function renderNextGig(events, now) {
     return;
   }
 
-  const title = (gig.summary || '').trim();
-  const place = (gig.location || '').split(',')[0].trim();
-  const parts = [formatDay(eventStart(gig), 'short')];
-  if (title) parts.push(title);
-  if (place && place.toLowerCase() !== title.toLowerCase()) parts.push(place);
+  const text = describeNextGig(gig, now);
 
   document.querySelectorAll('[data-next-gig]').forEach(slot => {
-    const detail = slot.querySelector('.next-gig-detail');
-    if (detail) detail.textContent = parts.join(' · ');
+    fillNextEvent(slot, text);
     slot.hidden = false;
   });
 }

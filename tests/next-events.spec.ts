@@ -1,8 +1,8 @@
 import { test, expect, Page } from '@playwright/test';
 
 /**
- * The "next session" card in Play Along With Us and the
- * "next gig" line in See Us Live, filled from the Events Calendar (issue #187).
+ * The "next session" box in Play Along With Us and the
+ * "next gig" box in See Us Live, filled from the Events Calendar (issue #187).
  *
  * The clock is frozen on dates in late September 2026, when Dublin is on UTC+1:
  * a session from 20:00 to 22:30 in Dublin is 19:00 to 21:30 UTC.
@@ -47,31 +47,31 @@ const card = (page: Page) => page.locator('#play-along .next-session');
 test.describe('Next session on the homepage', () => {
   test('on a Tuesday morning it says tonight', async ({ page }) => {
     await openAt(page, '/', '2026-09-29T09:00:00Z', TUESDAYS.map(session));
-    await expect(card(page).locator('.next-session-headline')).toHaveText('Tonight from 8pm');
-    await expect(card(page).locator('.next-session-detail')).toHaveText(
+    await expect(card(page).locator('.next-event-headline')).toHaveText('Tonight from 8pm');
+    await expect(card(page).locator('.next-event-detail')).toHaveText(
       "Upstairs at The Stag's Head · Free · All levels welcome",
     );
   });
 
   test('during the session it says it is on now', async ({ page }) => {
     await openAt(page, '/', '2026-09-29T20:00:00Z', TUESDAYS.map(session));
-    await expect(card(page).locator('.next-session-headline')).toHaveText('On now until 10:30pm');
+    await expect(card(page).locator('.next-event-headline')).toHaveText('On now until 10:30pm');
   });
 
   test('after the session it gives next week, not "no session"', async ({ page }) => {
     await openAt(page, '/', '2026-09-29T22:00:00Z', TUESDAYS.slice(1).map(session));
-    await expect(card(page).locator('.next-session-headline')).toHaveText('Next session: Tuesday 6 October, 8pm');
+    await expect(card(page).locator('.next-event-headline')).toHaveText('Next session: Tuesday 6 October, 8pm');
   });
 
   test('later in the week it gives the coming Tuesday', async ({ page }) => {
     await openAt(page, '/', '2026-09-30T11:00:00Z', [festivalPlayAlong, ...TUESDAYS.slice(1).map(session)]);
-    await expect(card(page).locator('.next-session-headline')).toHaveText('Next session: Tuesday 6 October, 8pm');
+    await expect(card(page).locator('.next-event-headline')).toHaveText('Next session: Tuesday 6 October, 8pm');
   });
 
   test('a Tuesday with no session in the calendar is called out', async ({ page }) => {
     await openAt(page, '/', '2026-09-30T11:00:00Z', TUESDAYS.slice(2).map(session));
-    await expect(card(page).locator('.next-session-headline')).toHaveText('No session this Tuesday');
-    await expect(card(page).locator('.next-session-detail')).toHaveText(
+    await expect(card(page).locator('.next-event-headline')).toHaveText('No session this Tuesday');
+    await expect(card(page).locator('.next-event-detail')).toHaveText(
       "Next session: Tuesday 13 October, 8pm · Upstairs at The Stag's Head",
     );
   });
@@ -80,13 +80,13 @@ test.describe('Next session on the homepage', () => {
     await page.route('**/.netlify/functions/calendar', (route) => route.fulfill({ status: 500, json: {} }));
     await page.goto('/');
     await expect(page.locator('.error-events')).toBeVisible();
-    await expect(card(page).locator('.next-session-headline')).toHaveText('Every Tuesday from 8pm');
+    await expect(card(page).locator('.next-event-headline')).toHaveText('Every Tuesday from 8pm');
     await expect(page.locator('.next-gig')).toBeHidden();
   });
 
   test('the hero carries no next-session line', async ({ page }) => {
     await openAt(page, '/', '2026-09-30T11:00:00Z', TUESDAYS.slice(1).map(session));
-    await expect(card(page).locator('.next-session-headline')).toHaveText('Next session: Tuesday 6 October, 8pm');
+    await expect(card(page).locator('.next-event-headline')).toHaveText('Next session: Tuesday 6 October, 8pm');
     await expect(page.locator('.hero-banner [data-next-session]')).toHaveCount(0);
     await expect(page.locator('[data-next-session]')).toHaveCount(1);
   });
@@ -100,7 +100,7 @@ test.describe('A week kept in the calendar but marked as cancelled', () => {
       renamed('2026-10-06', 'CANCELLED: Ukulele Tuesday Session'),
       ...TUESDAYS.slice(2).map(session),
     ]);
-    await expect(card(page).locator('.next-session-headline')).toHaveText('No session this Tuesday');
+    await expect(card(page).locator('.next-event-headline')).toHaveText('No session this Tuesday');
   });
 
   test('"No session" in the title on the day itself', async ({ page }) => {
@@ -108,8 +108,8 @@ test.describe('A week kept in the calendar but marked as cancelled', () => {
       renamed('2026-09-29', 'No session (bank holiday)'),
       ...TUESDAYS.slice(1).map(session),
     ]);
-    await expect(card(page).locator('.next-session-headline')).toHaveText('No session this Tuesday');
-    await expect(card(page).locator('.next-session-detail')).toHaveText(
+    await expect(card(page).locator('.next-event-headline')).toHaveText('No session this Tuesday');
+    await expect(card(page).locator('.next-event-detail')).toHaveText(
       "Next session: Tuesday 6 October, 8pm · Upstairs at The Stag's Head",
     );
   });
@@ -119,7 +119,7 @@ test.describe('A week kept in the calendar but marked as cancelled', () => {
       { ...session('2026-10-06'), description: '#playalong #cancelled' },
       ...TUESDAYS.slice(2).map(session),
     ]);
-    await expect(card(page).locator('.next-session-headline')).toHaveText('No session this Tuesday');
+    await expect(card(page).locator('.next-event-headline')).toHaveText('No session this Tuesday');
   });
 
   test('a cancelled gig is skipped for the next one', async ({ page }) => {
@@ -128,7 +128,8 @@ test.describe('A week kept in the calendar but marked as cancelled', () => {
       { ...gig, summary: 'Harvest Fair (cancelled)', start: { dateTime: '2026-10-24T15:00:00Z' } },
       gig,
     ]);
-    await expect(page.locator('.next-gig')).toHaveText('Next gig: Sat 14 Nov · Ukulele Hooley · Dún Laoghaire');
+    await expect(page.locator('.next-gig .next-event-headline')).toHaveText('Next gig: Saturday 14 November, 3pm');
+    await expect(page.locator('.next-gig .next-event-detail')).toHaveText('Ukulele Hooley · Dún Laoghaire');
   });
 
   test('structured data marks the cancelled session as cancelled', async ({ page }) => {
@@ -136,7 +137,7 @@ test.describe('A week kept in the calendar but marked as cancelled', () => {
       renamed('2026-10-06', 'CANCELLED: Ukulele Tuesday Session'),
       ...TUESDAYS.slice(2).map(session),
     ]);
-    await expect(card(page).locator('.next-session-headline')).toHaveText('No session this Tuesday');
+    await expect(card(page).locator('.next-event-headline')).toHaveText('No session this Tuesday');
     const raw = await page.locator('script[type="application/ld+json"]').textContent();
     const events = JSON.parse(raw!)['@graph'].filter((node: any) => node['@type'] === 'Event');
     expect(events[0].eventStatus).toBe('https://schema.org/EventCancelled');
@@ -147,14 +148,42 @@ test.describe('A week kept in the calendar but marked as cancelled', () => {
 test.describe('Next gig on the homepage', () => {
   test('shows the next concert in See Us Live', async ({ page }) => {
     await openAt(page, '/', '2026-09-30T11:00:00Z', [...TUESDAYS.slice(1).map(session), gig]);
-    const line = page.locator('.next-gig');
-    await expect(line).toBeVisible();
-    await expect(line).toHaveText('Next gig: Sat 14 Nov · Ukulele Hooley · Dún Laoghaire');
+    const box = page.locator('.next-gig');
+    await expect(box).toBeVisible();
+    await expect(box.locator('.next-event-headline')).toHaveText('Next gig: Saturday 14 November, 3pm');
+    await expect(box.locator('.next-event-detail')).toHaveText('Ukulele Hooley · Dún Laoghaire');
+  });
+
+  test('a gig on the day itself says today', async ({ page }) => {
+    await openAt(page, '/', '2026-11-14T09:00:00Z', [gig]);
+    await expect(page.locator('.next-gig .next-event-headline')).toHaveText('Next gig: today, 3pm');
+  });
+
+  test('renders like the next-session card, in its own section colour', async ({ page }) => {
+    await openAt(page, '/', '2026-09-30T11:00:00Z', [...TUESDAYS.slice(1).map(session), gig]);
+    await expect(page.locator('.next-gig')).toBeVisible();
+    const look = (selector: string) =>
+      page.locator(selector).evaluate((box) => {
+        const style = (el: Element) => getComputedStyle(el);
+        const headline = box.querySelector('.next-event-headline')!;
+        const detail = box.querySelector('.next-event-detail')!;
+        return {
+          padding: style(box).padding,
+          headline: [style(headline).fontSize, style(headline).fontWeight],
+          detail: style(detail).fontSize,
+          border: style(box).borderLeftColor,
+        };
+      });
+    const sessionBox = await look('#play-along .next-session');
+    const gigBox = await look('.next-gig');
+    expect({ ...gigBox, border: null }).toEqual({ ...sessionBox, border: null });
+    expect(sessionBox.border).toBe('rgb(0, 101, 102)');
+    expect(gigBox.border).toBe('rgb(102, 2, 60)');
   });
 
   test('stays hidden when no concert is announced', async ({ page }) => {
     await openAt(page, '/', '2026-09-30T11:00:00Z', [festivalPlayAlong, ...TUESDAYS.slice(1).map(session)]);
-    await expect(card(page).locator('.next-session-headline')).toHaveText('Next session: Tuesday 6 October, 8pm');
+    await expect(card(page).locator('.next-event-headline')).toHaveText('Next session: Tuesday 6 October, 8pm');
     await expect(page.locator('.next-gig')).toBeHidden();
   });
 
