@@ -30,7 +30,8 @@ exports.handler = async (event) => {
   }
 
   const CALENDAR_ID = '3a583720ada6b96add65d4dc75539408da8d79876140c012f4eb81b8b7fd1bb1@group.calendar.google.com';
-  const MAX_RESULTS = 10;
+  // Enough to reach past a few months of weekly sessions to the next gig
+  const MAX_RESULTS = 50;
   
   // Get current time in RFC3339 format
   const timeMin = new Date().toISOString();

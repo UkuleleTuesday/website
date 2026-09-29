@@ -54,6 +54,10 @@
                          line-height: 80px;
                          margin: 0;
                          text-shadow: 2px 2px 4px rgba(0,0,0,0.5)">Welcome to Ukulele Tuesday</h1>
+              <a class="next-session-pill"
+                 data-format="short"
+                 data-next-session
+                 href="#play-along">Every Tuesday from 8pm · The Stag's Head</a>
               <div class="hero-buttons">
                 <a class="rev-btn" href="/songbook/" target="_self">View Songbook</a>
                 <a class="rev-btn" href="/contact-us" target="_self">Get In touch</a>
@@ -72,7 +76,8 @@
               <div class="tt-shape tt-shape-bottom" data-negative="false">{% include "_partials/shape-divider.html" %}</div>
             </div>
             <div class="row-full-width clearfix"></div>
-            <div class="content-row mt-25 row-content-middle row-flex media-after-heading">
+            <div class="content-row mt-25 row-content-middle row-flex media-after-heading"
+                 id="play-along">
               <div class="col col-6 col-copy">
                 <div class="col-inner">
                   <div class="col-content">
@@ -81,6 +86,10 @@
                         data-min_size="18"
                         style="text-align: left;
                                letter-spacing:0px">Play Along With Us</h2>
+                    <p class="next-session" data-format="long" data-next-session>
+                      <strong class="next-session-headline">Every Tuesday from 8pm</strong>
+                      <span class="next-session-detail">Upstairs at The Stag's Head · Free · All levels welcome</span>
+                    </p>
                     <div class="text-block content-element text-normal">
                       <div class="col-content">
                         <p style="text-align: left;">
@@ -163,6 +172,11 @@
                         data-min_size="18"
                         style="text-align: left;
                                letter-spacing:0px">See Us Live</h2>
+                    {% if calendar_enabled %}
+                      <p class="next-gig" data-next-gig hidden>
+                        <strong>Next gig:</strong> <span class="next-gig-detail"></span>
+                      </p>
+                    {% endif %}
                     <div class="text-block content-element text-normal">
                       <div class="col-content">
                         <p style="text-align: left;">
@@ -217,7 +231,7 @@
               <h2 class="text-normal section-heading"
                   data-max_size=""
                   data-min_size="18"
-                  id="upcoming-events">Upcoming Events</h2>
+                  id="upcoming-events">All Upcoming Events</h2>
               <p>See what’s coming up — Tuesday play-along sessions, gigs, and festival shows.</p>
               <div class="calendar-legend">
                 <div class="legend-item">

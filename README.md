@@ -88,20 +88,26 @@ When disabled, the calendar section and its JavaScript are completely omitted fr
 **Technical details:**
 - The calendar data is fetched via a Netlify function (`netlify/functions/calendar.js`) which uses the Google Calendar API with an API key stored in environment variables
 - The API request uses field filtering to reduce payload size by ~80-85% (from ~15KB to ~2-3KB for 10 events), requesting only the fields actually used by the frontend
-- The JavaScript client (`static/js/calendar.js`) renders the next 20 upcoming events returned by the API
-- The calendar automatically updates as new events are added to the Google Calendar (with a 5-minute cache)
+- The function returns up to 50 upcoming events; the JavaScript client (`static/js/calendar.js`) lists the first 10 under "All Upcoming Events" and uses the rest to find the next gig
+- The calendar automatically updates as new events are added to the Google Calendar (with a 2-minute cache)
 - The `GOOGLE_CALENDAR_API_KEY` environment variable must be set in Netlify (or GitHub repository secrets) for the calendar to work
 - **Event descriptions can be viewed by clicking/tapping on events** - descriptions are initially hidden and toggle on/off when the event is clicked or activated with keyboard (Enter/Space)
 - Events with descriptions display a cursor pointer and support keyboard navigation for accessibility
 
 **Event Classification:**
-Events are automatically color-coded by type using hashtags in the event description:
-- **#jam** → Play-Along Session (orange border)
-- **#concert** → Concert (teal border)
+Events are automatically color-coded by type using hashtags in the event description or title:
+- **#jam** or **#playalong** → Play-Along (orange border)
+- **#concert** → Concert (maroon border)
+- anything else → Other (teal border), for example community group practices
 
-For backwards compatibility, events without hashtags are classified by detecting some basic keywords ("play-along", "jam", → Play-Along Session Session; otherwise → Concert) but it's very easy to trip this up, we don't recommend relying on this approach.
+To classify an event, add the appropriate hashtag to the event description when creating or editing events in Google Calendar.
 
-To reliably classify an event, add the appropriate hashtag to the event description when creating or editing events in Google Calendar.
+**Next session and next gig:**
+The same calendar data answers "is it on this Tuesday?" and "where can I see you next?" without scrolling ([#187](https://github.com/UkuleleTuesday/website/issues/187)):
+- A pill under the homepage heading, a card at the top of "Play Along With Us" and a card near the top of the Tuesday Session page show the next routine session. A routine session is a play-along (`#jam` or `#playalong`) whose location mentions the Stag's Head. The wording follows the calendar: "Tonight from 8pm", "On now until 10:30pm", "Next session: Tuesday 6 October, 8pm", or "No session this Tuesday" when the calendar has no session on the coming Tuesday. **To cancel a week, delete that week's occurrence in Google Calendar**; the site then says so and gives the next date. No extra hashtag is needed.
+- A "Next gig" line in "See Us Live" shows the next `#concert` event: its date, title and the first part of its location. It stays hidden when no concert is in the calendar.
+- Without the calendar (disabled, or the function failing) the slots keep their built-in "Every Tuesday from 8pm" text.
+- Times are shown in Dublin time whatever the visitor's device is set to.
 
 To add or edit events, Executive Committee members have been granted edit access to the "Ukulele Tuesday Public Events" Google Calendar. Event colour-coding is not supported, since it is visible only to those logged into
 the Ukulele Tuesday Google account (see https://github.com/UkuleleTuesday/website/issues/107).
