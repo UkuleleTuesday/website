@@ -69,6 +69,12 @@ Remove all content from `templates/_partials/promo_banner.html`, or comment it o
 
 **Styling:** The banner uses the `.promo-bar` CSS class defined in `static/css/custom.css` with the site's maroon color scheme (#66023c).
 
+#### WhatsApp community
+
+`features.json` switches the WhatsApp community on and off for the whole site. With `"whatsapp": false` the WhatsApp icon and the Contact Us link are hidden, `/whatsapp/` says joining online is paused instead of showing the join form, and the gate function (`netlify/functions/whatsapp-gate.js`) refuses to return the invite link. Set it back to `true` and redeploy to reopen joining. The build and the function both read the file, so the one change covers both.
+
+With joining on, the gate returns the invite link from `WHATSAPP_JOIN_LINK` to anyone who agrees to the Code of Conduct. CI copies it from the repository secret into Netlify; for Netlify Dev, set it in `.env`.
+
 #### Events Calendar
 
 The homepage lists upcoming events from the "Ukulele Tuesday Public Events" Google Calendar, which Executive Committee members can edit. Changes show on the site within a few minutes.
@@ -141,7 +147,7 @@ uvx pre-commit run --all-files
 
 ### Running the Tests
 
-The functional [Playwright](https://playwright.dev/) suites in `tests/` cover SEO data, mobile navigation, the calendar, the donate flow, the contact form, YouTube embeds, analytics and a console-errors check on every page. CI runs them on every pull request in three projects: `chromium`, `Android (Chrome, Pixel 7)` and `iOS (Mobile Safari, iPhone 13)`.
+The functional [Playwright](https://playwright.dev/) suites in `tests/` cover SEO data, mobile navigation, the calendar, the donate flow, the contact form, the WhatsApp switch, YouTube embeds, analytics and a console-errors check on every page. CI runs them on every pull request in three projects: `chromium`, `Android (Chrome, Pixel 7)` and `iOS (Mobile Safari, iPhone 13)`.
 
 They test the built site in `public/`, so build it the way CI does first:
 
