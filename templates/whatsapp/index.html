@@ -88,13 +88,21 @@
                   <div class="col-content">
                     <div class="text-block content-element text-normal">
                       <div class="col-content">
-                        <p data-min_size="18">
-                          Join 100+ members of our community! Stay up to date with the latest events and
-                          upcoming play-along sessions and gigs, chat with the members, buy and sell ukes, or
-                          join play-along sessions organised by our community members. We&rsquo;ve got groups
-                          for all of that in our Whatsapp community. Start by joining the &ldquo;General Chat&rdquo;
-                          group and saying hi! &#x1F44B;
-                        </p>
+                        {% if whatsapp_enabled %}
+                          <p data-min_size="18">
+                            Join 100+ members of our community! Stay up to date with the latest events and
+                            upcoming play-along sessions and gigs, chat with the members, buy and sell ukes, or
+                            join play-along sessions organised by our community members. We&rsquo;ve got groups
+                            for all of that in our Whatsapp community. Start by joining the &ldquo;General Chat&rdquo;
+                            group and saying hi! &#x1F44B;
+                          </p>
+                        {% else %}
+                          <p data-min_size="18" id="whatsapp-paused">
+                            Joining our WhatsApp community online is paused for now. If you&rsquo;d like to join,
+                            come along to a <a href="/tuesday-session/">Tuesday session</a> and ask one of the
+                            organisers.
+                          </p>
+                        {% endif %}
                       </div>
                     </div>
                   </div>
@@ -131,76 +139,77 @@
               <div class="tt-shape tt-shape-top" data-negative="false"></div>
               <div class="tt-shape tt-shape-bottom" data-negative="false"></div>
             </div>
-            <div class="content-row">
-              <div class="col col-2">
-                <div class="col-inner">
-                  <div class="col-content"></div>
+            {% if whatsapp_enabled %}
+              <div class="content-row">
+                <div class="col col-2">
+                  <div class="col-inner">
+                    <div class="col-content"></div>
+                  </div>
                 </div>
-              </div>
-              <div class="col col-8">
-                <div class="col-inner">
-                  <div class="col-content">
-                    <div class="contact-form contact-form-vertical contact-form-md contact-form-btn contact-form-sm-btn contact-form-regular contact-form-no-transform"
-                         data-delay="0"
-                         id="contact-form-wrapper"
-                         style="font-weight:400;
-                                margin-top:0px;
-                                margin-bottom:0px">
-                      <div class="wpcf7 no-js"
-                           data-wpcf7-id="306"
-                           dir="ltr"
-                           id="wpcf7-f306-p247-o1"
-                           lang="en-GB">
-                        <div class="screen-reader-response">
-                          <p aria-atomic="true" aria-live="polite" role="status"></p>
+                <div class="col col-8">
+                  <div class="col-inner">
+                    <div class="col-content">
+                      <div class="contact-form contact-form-vertical contact-form-md contact-form-btn contact-form-sm-btn contact-form-regular contact-form-no-transform"
+                           data-delay="0"
+                           id="contact-form-wrapper"
+                           style="font-weight:400;
+                                  margin-top:0px;
+                                  margin-bottom:0px">
+                        <div class="wpcf7 no-js"
+                             data-wpcf7-id="306"
+                             dir="ltr"
+                             id="wpcf7-f306-p247-o1"
+                             lang="en-GB">
+                          <div class="screen-reader-response">
+                            <p aria-atomic="true" aria-live="polite" role="status"></p>
+                          </div>
+                          <form aria-label="Contact form"
+                                class="wpcf7-form init"
+                                data-status="init"
+                                id="whatsapp-form"
+                                method="post"
+                                name="whatsapp"
+                                novalidate="novalidate">
+                            <input class="wpcf7-form-control wpcf7-hidden"
+                                   name="form-name"
+                                   type="hidden"
+                                   value="whatsapp">
+                            <p>
+                              <span class="wpcf7-form-control-wrap" data-name= "test-accept"><span class= "wpcf7-form-control wpcf7-acceptance"><span class= "wpcf7-list-item">
+                                <label>
+                                  <input aria-invalid="false" name= "test-accept" type="checkbox" value="1">
+                                  <span class= "wpcf7-list-item-label">By joining, I agree to follow the <a href= "/code-of-conduct/" target="_blank">Code of
+                                  Conduct</a>.</span>
+                                </label>
+                              </span></span></span>
+                            </p>
+                            <br>
+                            <input class="wpcf7-form-control wpcf7-submit has-spinner"
+                                   type="submit"
+                                   value="Join Community">
+                            <div aria-hidden="true" class="wpcf7-response-output"></div>
+                          </form>
+                          <div id="form-result"></div>
                         </div>
-                        <form aria-label="Contact form"
-                              class="wpcf7-form init"
-                              data-status="init"
-                              id="whatsapp-form"
-                              method="post"
-                              name="whatsapp"
-                              novalidate="novalidate">
-                          <input class="wpcf7-form-control wpcf7-hidden"
-                                 name="form-name"
-                                 type="hidden"
-                                 value="whatsapp">
-                          <p>
-                            <span class="wpcf7-form-control-wrap" data-name= "test-accept"><span class= "wpcf7-form-control wpcf7-acceptance"><span class= "wpcf7-list-item">
-                              <label>
-                                <input aria-invalid="false" name= "test-accept" type="checkbox" value="1">
-                                <span class= "wpcf7-list-item-label">By joining, I agree to follow the <a href= "/code-of-conduct/" target="_blank">Code of
-                                Conduct</a>.</span>
-                              </label>
-                            </span></span></span>
-                          </p>
-                          <br>
-                          <input class="wpcf7-form-control wpcf7-submit has-spinner"
-                                 type="submit"
-                                 value="Join Community">
-                          <div aria-hidden="true" class="wpcf7-response-output"></div>
-                        </form>
-                        <div id="form-result"></div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="col col-2">
-                <div class="col-inner">
-                  <div class="col-content"></div>
+                <div class="col col-2">
+                  <div class="col-inner">
+                    <div class="col-content"></div>
+                  </div>
                 </div>
+                <div class="tt-shape tt-shape-top" data-negative="false"></div>
+                <div class="tt-shape tt-shape-bottom" data-negative="false"></div>
               </div>
-              <div class="tt-shape tt-shape-top" data-negative="false"></div>
-              <div class="tt-shape tt-shape-bottom" data-negative="false"></div>
-            </div>
-            <div class="content-row">
-              <div class="col col-12">
-                <div class="col-inner">
-                  <div class="col-content">
-                    <div class="raw-html-block raw-js-block">
-                      <div class="col-content">
-                        <script>
+              <div class="content-row">
+                <div class="col col-12">
+                  <div class="col-inner">
+                    <div class="col-content">
+                      <div class="raw-html-block raw-js-block">
+                        <div class="col-content">
+                          <script>
                       document.addEventListener('wpcf7mailsent', function(e) {
                       // grab the invite URL from the CF7 payload
                       const url = e.detail.apiResponse.message.trim();
@@ -215,15 +224,16 @@
                       // send them straight to WhatsApp
                       window.location.href = url;
                       }, false);
-                        </script>
+                          </script>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
+                <div class="tt-shape tt-shape-top" data-negative="false"></div>
+                <div class="tt-shape tt-shape-bottom" data-negative="false"></div>
               </div>
-              <div class="tt-shape tt-shape-top" data-negative="false"></div>
-              <div class="tt-shape tt-shape-bottom" data-negative="false"></div>
-            </div>
+            {% endif %}
           </div>
           <!-- .entry-content -->
           <footer class="entry-footer">
@@ -235,4 +245,6 @@
     <!-- .container -->
   </main>
 {% endblock %}
-{% block extra_scripts %}<script defer="true" src="/js/whatsapp.js"></script>{% endblock %}
+{% block extra_scripts %}
+  {% if whatsapp_enabled %}<script defer="true" src="/js/whatsapp.js"></script>{% endif %}
+{% endblock %}

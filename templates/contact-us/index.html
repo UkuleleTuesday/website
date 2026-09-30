@@ -74,10 +74,12 @@
                           <a href="https://www.facebook.com/UkuleleTuesday/">Facebook</a> and
                           we’ll set a house uke aside for you.
                         </li>
-                        <li>
-                          <strong>Regulars:</strong> join our
-                          <a href="/whatsapp/">WhatsApp community</a> for session news and chat.
-                        </li>
+                        {% if whatsapp_enabled %}
+                          <li>
+                            <strong>Regulars:</strong> join our
+                            <a href="/whatsapp/">WhatsApp community</a> for session news and chat.
+                          </li>
+                        {% endif %}
                       </ul>
                     </div>
                     {% set enquiry_options = [

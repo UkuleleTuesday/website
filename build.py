@@ -1,3 +1,4 @@
+import json
 import os
 import re
 import shutil
@@ -11,6 +12,8 @@ STATIC_DIR = 'static'
 TEMPLATES_DIR = 'templates'
 OUTPUT_DIR = 'public'
 SITEMAPS_DIR = 'sitemaps'
+# Feature switches shared with the Netlify functions (see README "Configuration")
+FEATURES_FILE = 'features.json'
 
 ARTICLE_MODIFIED_TIME_PATTERN = re.compile(
     r'{%\s*block article_modified_time\s*%}\s*(.*?)\s*{%\s*endblock\s*%}',
@@ -150,6 +153,15 @@ def build():
         print("Calendar will be enabled for this build.")
     else:
         print("Calendar will be disabled for this build.")
+
+    # WhatsApp community links and join form, switched in features.json. A global rather
+    # than a render variable, so the imported social icons macro can see it too.
+    features = json.loads(Path(FEATURES_FILE).read_text(encoding='utf-8'))
+    env.globals['whatsapp_enabled'] = features['whatsapp']
+    if features['whatsapp']:
+        print("WhatsApp joining will be enabled for this build.")
+    else:
+        print("WhatsApp joining will be disabled for this build.")
 
     # Base URL for absolute paths in SEO data.
     # Use BASE_URL, with a sane default.
