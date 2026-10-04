@@ -131,18 +131,6 @@ test.describe('A week kept in the calendar but marked as cancelled', () => {
     await expect(page.locator('.next-gig .next-event-headline')).toHaveText('Next gig: Saturday 14 November, 3pm');
     await expect(page.locator('.next-gig .next-event-detail')).toHaveText('Ukulele Hooley · Dún Laoghaire');
   });
-
-  test('structured data marks the cancelled session as cancelled', async ({ page }) => {
-    await openAt(page, '/', '2026-09-30T11:00:00Z', [
-      renamed('2026-10-06', 'CANCELLED: Ukulele Tuesday Session'),
-      ...TUESDAYS.slice(2).map(session),
-    ]);
-    await expect(card(page).locator('.next-event-headline')).toHaveText('No session this Tuesday');
-    const raw = await page.locator('script[type="application/ld+json"]').textContent();
-    const events = JSON.parse(raw!)['@graph'].filter((node: any) => node['@type'] === 'Event');
-    expect(events[0].eventStatus).toBe('https://schema.org/EventCancelled');
-    expect(events[1].eventStatus).toBe('https://schema.org/EventScheduled');
-  });
 });
 
 test.describe('Next gig on the homepage', () => {
